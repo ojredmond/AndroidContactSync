@@ -1,4 +1,4 @@
-package uk.me.redmonds.myapplication;
+package uk.me.redmonds.contactsync;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;
