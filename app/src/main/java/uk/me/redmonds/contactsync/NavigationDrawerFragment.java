@@ -1,4 +1,4 @@
-package uk.me.redmonds.myapplication;
+package uk.me.redmonds.contactsync;
 
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
