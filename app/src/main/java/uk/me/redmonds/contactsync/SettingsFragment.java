@@ -1,6 +1,7 @@
 package uk.me.redmonds.contactsync;
 
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceCategory;
 
 public static class SettingsFragment extends PreferenceFragment {
 
