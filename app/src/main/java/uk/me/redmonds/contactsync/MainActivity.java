@@ -38,6 +38,8 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        
+        mSettingsFragment = new SettingsFragment();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -56,7 +58,7 @@ public class MainActivity extends ActionBarActivity
         switch (position) {
             case 1:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new SettingsFragment())
+                        .replace(R.id.container, mSettingsFragment)
                         .commit();
                 break;
             default:
