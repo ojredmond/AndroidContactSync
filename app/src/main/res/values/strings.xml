@@ -2,11 +2,12 @@
 <resources>
 
     <string name="app_name">Contact Sync</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="navigation_drawer_open">Open settings drawer</string>
-    <string name="navigation_drawer_close">Close settings drawer</string>
+    <string name="title_section1">Settings</string>
+    <string name="title_section2">Sync Accounts</string>
+    <string name="title_section3">Logs</string>
+    <string name="title_section3">Results</string>
+    <string name="navigation_drawer_open">Open menu drawer</string>
+    <string name="navigation_drawer_close">Close menu drawer</string>
     <string name="action_example">Example action</string>
     <string name="action_settings">Settings</string>
 
