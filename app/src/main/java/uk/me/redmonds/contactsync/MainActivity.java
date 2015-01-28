@@ -3,8 +3,8 @@ package uk.me.redmonds.contactsync;
 import android.app.Activity;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +18,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.preference.PreferenceFragment;
+import android.widget.Toast;
 
 
 public class MainActivity extends ActionBarActivity
@@ -27,7 +28,6 @@ public class MainActivity extends ActionBarActivity
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment mNavigationDrawerFragment;
-    private SettingsFragment mSettingsFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -39,10 +39,8 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
-        mSettingsFragment = new SettingsFragment();
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+                getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
 
         // Set up the drawer.
@@ -54,11 +52,16 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
+            case 0:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new SettingsFragment())
+                        .commit();
+                break;
             case 1:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, mSettingsFragment)
+                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                         .commit();
                 break;
             default:
@@ -93,7 +96,7 @@ public class MainActivity extends ActionBarActivity
     }
 
 
-    @Override
+    /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
             // Only show items in the action bar relevant to this screen
@@ -119,7 +122,7 @@ public class MainActivity extends ActionBarActivity
         }
 
         return super.onOptionsItemSelected(item);
-    }
+    }*/
 
     /**
      * A placeholder fragment containing a simple view.
@@ -169,16 +172,6 @@ public class MainActivity extends ActionBarActivity
         
                 // Load the preferences from an XML resource
                 addPreferencesFromResource(R.layout.settings_fragment);
-        }
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            return rootView;
-        }
-        @Override
-        public void onAttach(Activity activity) {
-            super.onAttach(activity);
         }
     }
 }
