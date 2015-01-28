@@ -38,9 +38,6 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSettingsFragment = (SettingsFragment)
-                getSupportFragmentManager().findFragmentById(R.id.);
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -161,4 +158,14 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    public class SettingsFragment extends PreferenceFragment {
+
+        @Override
+        public void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+        
+                // Load the preferences from an XML resource
+                addPreferencesFromResource(R.layout.settings_fragment);
+        }
+    }
 }
