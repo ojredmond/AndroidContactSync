@@ -1,5 +1,7 @@
 package uk.me.redmonds.contactsync;
 
+import android.preference.PreferenceFragment;
+
 public static class SettingsFragment extends PreferenceFragment {
 
     @Override
