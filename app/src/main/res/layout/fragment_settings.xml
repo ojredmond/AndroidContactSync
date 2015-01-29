@@ -12,9 +12,7 @@
 
         <ListPreference
             android:key="account2"
-            android:title="@string/account2"
-            android:entries="@array/planets_array"
-            android:entryValues="@array/planets_array" />
+            android:title="@string/account2" />
 
     </PreferenceCategory>
 

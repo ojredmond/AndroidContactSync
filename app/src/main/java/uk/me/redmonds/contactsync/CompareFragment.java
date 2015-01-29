@@ -40,8 +40,8 @@ public class CompareFragment extends Fragment
         String listItem = args.getString("listItem");
         String selected = args.getString("selected");
 
-        main.hideMenuIcon();
-        main.getActionBar().hide();
+        //main.hideMenuIcon();
+        //main.getActionBar().hide();
 
         mTabsAdapter = new TabsAdapter(main, mViewPager, mTabsHost, screenWidth);
         SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
