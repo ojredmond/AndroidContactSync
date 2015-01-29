@@ -1,25 +1,46 @@
 <PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent">
 
     <PreferenceCategory
-            android:title="@string/inline_preferences">
+        android:title="@string/account1">
 
-        <CheckBoxPreference
-                android:key="checkbox_preference"
-                android:title="@string/title_checkbox_preference"
-                android:summary="@string/summary_checkbox_preference" />
+        <Spinner
+            android:id="@+id/account1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-            android:title="@string/dialog_based_preferences">
+        android:title="@string/account2">
 
-        <EditTextPreference
-                android:key="edittext_preference"
-                android:title="@string/title_edittext_preference"
-                android:summary="@string/summary_edittext_preference"
-                android:dialogTitle="@string/dialog_title_edittext_preference" />
+        <!--<Spinner
+            android:id="@+id/account2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />-->
 
     </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/options">
+
+        <!-- <Switch
+            android:id="@+id/groups"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_gap"
+            android:text="@string/groups" />
+
+        <Switch
+            android:id="@+id/photos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/medium_gap"
+            android:text="@string/photos" /> -->
+
+    </PreferenceCategory>
+
 
 </PreferenceScreen>
