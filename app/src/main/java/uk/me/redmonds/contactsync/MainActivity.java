@@ -1,6 +1,12 @@
 package uk.me.redmonds.contactsync;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.preference.PreferenceFragment;
+import android.preference.Preference.OnPreferenceChangeListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.app.Fragment;
@@ -15,11 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
-import android.preference.PreferenceFragment;
+//import android.widget.ArrayAdapter;
+//import android.widget.AdapterView;
+//import android.widget.AdapterView.OnItemSelectedListener;
+//import android.widget.TextView;
 import android.widget.Toast;
-
+//import android.widget.Spinner;
+import android.accounts.*;
+import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -38,7 +47,12 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        
+
+        /*SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        String account1Value = sharedPref.getString("account1", "");
+        String account2Value = sharedPref.getString("account2", "");
+        Toast.makeText(getApplicationContext(), account1Value, Toast.LENGTH_LONG).show();*/
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -164,14 +178,104 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    public class SettingsFragment extends PreferenceFragment {
+    public static class SettingsFragment extends PreferenceFragment
+            implements SharedPreferences.OnSharedPreferenceChangeListener {
 
         @Override
         public void onCreate(Bundle savedInstanceState) {
-                super.onCreate(savedInstanceState);
-        
-                // Load the preferences from an XML resource
-                addPreferencesFromResource(R.layout.settings_fragment);
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.layout.settings_fragment);
+
+            //get the account saved variable
+            ListPreference account1Pref = (ListPreference) findPreference("account1");
+            ListPreference account2Pref = (ListPreference) findPreference("account2");
+
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            AccountManager accounts = AccountManager.get(this.getActivity());
+
+            Account accountsList[] = accounts.getAccountsByType(null);
+            ArrayList<CharSequence> list = new ArrayList<CharSequence>();
+
+            for (Account a : accountsList) {
+                list.add(a.name);
+            }
+
+            list.add("test");
+            CharSequence[] listArray = list.toArray(new String[list.size()]);
+
+            account1Pref.setEntries(listArray);
+            account1Pref.setEntryValues(listArray);
+
+            //set saved values to summary
+            ListPreference listPref = (ListPreference) account1Pref;
+            account1Pref.setSummary(listPref.getEntry());
+            listPref = (ListPreference) account2Pref;
+            account2Pref.setSummary(listPref.getEntry());
+        }
+
+        @Override
+        public void onResume() {
+            super.onResume();
+            getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onPause() {
+            super.onPause();
+            getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(this);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Preference pref = findPreference(key);
+
+            if (pref instanceof ListPreference) {
+                ListPreference listPref = (ListPreference) pref;
+                pref.setSummary(listPref.getEntry());
+            }
         }
     }
+
+
+        /*@Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            View rootView = inflater.inflate(R.layout.settings_fragment, container, false);
+
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            AccountManager accounts = AccountManager.get(this.getActivity());
+
+            Account accountsList[] = accounts.getAccountsByType("com.google");
+            ArrayList<String> list = new ArrayList<String>();
+
+            for (Account a : accountsList) {
+                list.add(a.name);
+            }
+
+            Spinner account1 = (Spinner) findViewById(R.id.account1);
+            //Spinner account2 = (Spinner) findViewById(R.id.account2);
+
+            // Create an ArrayAdapter using the string array and a default spinner layout
+            ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.getActivity(),
+                R.array.planets_array, android.R.layout.simple_spinner_item);
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            // Apply the adapter to the spinner
+            account1.setAdapter(adapter);
+            //account2.setAdapter(adapter);
+
+            account1.setOnItemSelectedListener(this);
+
+            return rootView;
+        }
+
+        public void onItemSelected(AdapterView<?> parent, View view,
+                                   int pos, long id) {
+            // An item was selected. You can retrieve the selected item using
+            // parent.getItemAtPosition(pos)
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {
+            // Another interface callback
+        }*/
 }

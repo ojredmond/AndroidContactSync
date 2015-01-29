@@ -4,41 +4,32 @@
     android:layout_height="match_parent">
 
     <PreferenceCategory
-        android:title="@string/account1">
+        android:title="@string/accounts">
 
-        <Spinner
-            android:id="@+id/account1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+        <ListPreference
+            android:key="account1"
+            android:title="@string/account1" />
 
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:title="@string/account2">
-
-        <!--<Spinner
-            android:id="@+id/account2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />-->
+        <ListPreference
+            android:key="account2"
+            android:title="@string/account2"
+            android:entries="@array/planets_array"
+            android:entryValues="@array/planets_array" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
         android:title="@string/options">
 
-        <!-- <Switch
-            android:id="@+id/groups"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/medium_gap"
-            android:text="@string/groups" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="GroupsOnOff"
+            android:title="@string/groups" />
 
-        <Switch
-            android:id="@+id/photos"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/medium_gap"
-            android:text="@string/photos" /> -->
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="PicturesOnOff"
+            android:title="@string/photos" />
 
     </PreferenceCategory>
 
