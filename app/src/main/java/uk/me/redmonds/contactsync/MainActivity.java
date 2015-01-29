@@ -48,11 +48,6 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        String account1Value = sharedPref.getString("account1", "");
-        String account2Value = sharedPref.getString("account2", "");
-        Toast.makeText(getApplicationContext(), account1Value, Toast.LENGTH_LONG).show();*/
-
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();

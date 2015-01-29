@@ -1,6 +1,7 @@
 package uk.me.redmonds.contactsync;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -68,7 +69,7 @@ public class CompareFragment extends Fragment
 
                 //set the text colour of the tab
                 final TextView tv = (TextView) tabWidget.getChildAt(mTabsAdapter.getCount()-1).findViewById(android.R.id.title);
-                tv.setTextColor(this.getResources().getColorStateList(R.color.text_tab));
+                //tv.setTextColor(this.getResources().getColorStateList(R.color.));
                 tv.setFocusableInTouchMode(true);
 
                 if (name.equals(selected))

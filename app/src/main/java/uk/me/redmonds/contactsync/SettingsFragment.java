@@ -31,14 +31,14 @@ public class SettingsFragment extends PreferenceFragment
         // Create an ArrayAdapter using the string array and a default spinner layout
         AccountManager accounts = AccountManager.get(this.getActivity());
 
-        Account accountsList[] = accounts.getAccountsByType("com.google");
-        ArrayList<CharSequence> list = new ArrayList<CharSequence>();
+        Account accountsList[] = accounts.getAccountsByType(getString(R.string.type));
+        ArrayList<CharSequence> list = new ArrayList<>();
 
         for (Account a : accountsList) {
             list.add(a.name);
         }
 
-        CharSequence[] listArray = list.toArray(new String[list.size()]);
+        CharSequence[] listArray = list.toArray(new CharSequence[list.size()]);
 
         account1Pref.setEntries(listArray);
         account1Pref.setEntryValues(listArray);

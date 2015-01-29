@@ -30,6 +30,6 @@
     <string name="drawer_open">Open settings drawer</string>
     <string name="drawer_close">Close settings drawer</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="type">com.google</string>
 
 </resources>
