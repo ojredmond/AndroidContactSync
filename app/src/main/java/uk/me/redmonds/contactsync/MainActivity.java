@@ -193,14 +193,13 @@ public class MainActivity extends ActionBarActivity
             // Create an ArrayAdapter using the string array and a default spinner layout
             AccountManager accounts = AccountManager.get(this.getActivity());
 
-            Account accountsList[] = accounts.getAccountsByType(null);
+            Account accountsList[] = accounts.getAccountsByType("com.google");
             ArrayList<CharSequence> list = new ArrayList<CharSequence>();
 
             for (Account a : accountsList) {
                 list.add(a.name);
             }
 
-            list.add("test");
             CharSequence[] listArray = list.toArray(new String[list.size()]);
 
             account1Pref.setEntries(listArray);
