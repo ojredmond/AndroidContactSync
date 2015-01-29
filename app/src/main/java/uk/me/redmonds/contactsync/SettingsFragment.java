@@ -9,10 +9,6 @@ import android.app.Fragment;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
@@ -26,7 +22,7 @@ public class SettingsFragment extends PreferenceFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addPreferencesFromResource(R.layout.settings_fragment);
+        addPreferencesFromResource(R.layout.fragment_settings);
 
         //get the account saved variable
         ListPreference account1Pref = (ListPreference) findPreference("account1");
