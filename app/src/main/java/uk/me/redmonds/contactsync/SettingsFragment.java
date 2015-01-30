@@ -25,8 +25,8 @@ public class SettingsFragment extends PreferenceFragment
         addPreferencesFromResource(R.layout.fragment_settings);
 
         //get the account saved variable
-        ListPreference account1Pref = (ListPreference) findPreference("account1");
-        ListPreference account2Pref = (ListPreference) findPreference("account2");
+        ListPreference account1Pref = (ListPreference) findPreference(MainActivity.ACCOUNT1);
+        ListPreference account2Pref = (ListPreference) findPreference(MainActivity.ACCOUNT2);
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         AccountManager accounts = AccountManager.get(this.getActivity());

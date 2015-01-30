@@ -52,8 +52,8 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
 
     public static final String TYPE = "com.google";
-    public static final String ACCOUNT1 = "contact_syncAccount1";
-    public static final String ACCOUNT2 = "contact_syncAccount2";
+    public static final String ACCOUNT1 = "account1";
+    public static final String ACCOUNT2 = "account2";
     //private SharedPreferences settings;
     private String account1Name;
     private String account2Name;
@@ -105,9 +105,7 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, new SyncFragment())
-                        .commit();
+                showResults();
                 break;
             default:
                 fragmentManager.beginTransaction()

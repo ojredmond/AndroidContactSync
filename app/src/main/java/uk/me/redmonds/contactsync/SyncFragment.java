@@ -52,13 +52,13 @@ public class SyncFragment extends ListFragment {
         list_item = args.getString("list_item", null);
 
         main = (MainActivity)this.getActivity();
-        main.showMenuIcon();
+        //main.showMenuIcon();
         ActionBar actionBar = main.getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.show();
+        //actionBar.setDisplayHomeAsUpEnabled(true);
+        //actionBar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
+        //actionBar.setDisplayShowTitleEnabled(true);
+        //actionBar.setDisplayShowHomeEnabled(true);
+        //actionBar.show();
 
         pref = main.getPreferences(Context.MODE_PRIVATE);
         settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
@@ -71,9 +71,9 @@ public class SyncFragment extends ListFragment {
         dup1Name = (HashSet<String>)pref.getStringSet(dup1, null);
         dup2Name = (HashSet<String>)pref.getStringSet(dup2, null);
 
-        if (list_type == OPTIONS || !pref.getBoolean(Match.SYNCMATCHED,false)) {
-            actionBar.setTitle(R.string.title_activity_main);
-            actionBar.setDisplayHomeAsUpEnabled(false);
+        if (list_type.equals(OPTIONS) || !pref.getBoolean(Match.SYNCMATCHED,false)) {
+            //actionBar.setTitle(title);
+            //actionBar.setDisplayHomeAsUpEnabled(false);
             value = new HashMap <String, String>();
             value.put(NAME,MATCH);
             if (account1Name == null || account2Name == null) {
@@ -91,8 +91,8 @@ public class SyncFragment extends ListFragment {
                 value.put(NAME,LAST);
                 values.add(value);
             }
-        } else if (list_type == SUMMARY) {
-            actionBar.setTitle(R.string.title_activity_results);
+        } else if (list_type.equals(SUMMARY)) {
+            //actionBar.setTitle(R.string.title_activity_results);
             if (list_item != null && list_item.startsWith("dup")) {
                 showDuplicates(list_item);
             } else {

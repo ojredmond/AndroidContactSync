@@ -50,7 +50,7 @@ public class CompareFragment extends android.app.Fragment
         StringList list = new StringList(pref, listItem);
         final TabWidget tabWidget = (TabWidget)((HorizontalScrollView)((LinearLayout)mTabsHost.getChildAt(0)).getChildAt(0)).getChildAt(0);
 
-        if (list != null) {
+        if (!list.equals(null)) {
             SparseArray<String> contacts = list.getSparseArray();
             for (int i=0; i<contacts.size(); i++)
             {
