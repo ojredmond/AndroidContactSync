@@ -80,7 +80,7 @@ public class Match
             cursor = mContentResolver.query(
                     RawContacts.CONTENT_URI,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
-                    RawContacts.ACCOUNT_TYPE + " == '" + getString(R.string.type) + "'"
+                    RawContacts.ACCOUNT_TYPE + " == '" + MainActivity.TYPE + "'"
                             + " AND " + RawContacts.ACCOUNT_NAME + " == '" + account1Name + "' "
                             + " AND " + RawContacts.DELETED + " == 0",
                     null, RawContacts.DISPLAY_NAME_PRIMARY);

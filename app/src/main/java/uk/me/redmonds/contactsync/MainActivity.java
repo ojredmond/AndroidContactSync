@@ -28,6 +28,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.widget.Toast;
 //import android.widget.Spinner;
 import android.accounts.*;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
@@ -43,6 +48,15 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
+    public static final String TYPE = "com.google";
+    public static final String ACCOUNT1 = "contact_syncAccount1";
+    public static final String ACCOUNT2 = "contact_syncAccount2";
+    //private SharedPreferences settings;
+    private String account1Name;
+    private String account2Name;
+    private String syncType = "";
+    public Menu mainMenu;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +70,24 @@ public class MainActivity extends ActionBarActivity
         mNavigationDrawerFragment.setUp(
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
+
+        String trace = "";
+        String line;
+        try {
+            BufferedReader reader = new BufferedReader(
+                    new InputStreamReader(this.openFileInput("stack.trace")));
+            while((line = reader.readLine()) != null) {
+                trace += line+"\n";
+            }
+        } catch(FileNotFoundException fnfe) {
+            return;
+        } catch(IOException ioe) {
+            return;
+        }
+
+        TopExceptionHandler.sendReport (this, trace);
+
+        this.deleteFile("stack.trace");
     }
 
     @Override
@@ -104,6 +136,177 @@ public class MainActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
+    public void syncStatus (String type) {
+        syncType = type;
+
+        // rest stored results and sync matched to enable full sync to be run
+        if (syncType == SyncFragment.FULL) {
+
+        }
+    }
+
+    public void matchStatus (String type) {
+        // get accounts to matched
+        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
+        //String account1Name = pref.getString(SettingsFragment.ACCOUNT1, null);
+        //String account2Name = pref.getString(SettingsFragment.ACCOUNT2, null);
+        SharedPreferences.Editor results = getPreferences(Context.MODE_PRIVATE).edit();
+        results.putBoolean(Match.SYNCMATCHED, false);
+        results.remove(Match.DUPKEY + account1Name);
+        results.remove(Match.DUPKEY + account2Name);
+        results.remove(Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name);
+        results.remove(Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name);
+        results.remove(Match.MATCHEDKEY + account1Name + ":" + account2Name);
+        results.remove(Match.MATCHEDKEY + account2Name + ":" + account1Name);
+        results.remove(Match.ACCOUNTKEY + account1Name + ":" + account2Name);
+        results.remove(Match.ACCOUNTKEY + account2Name + ":" + account1Name);
+        results.commit();
+
+        // Create fragment and give it an argument specifying the article it should show
+        StatusFragment newFragment = new StatusFragment();
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+
+        // Replace whatever is in the fragment_container view with this fragment,
+        // and add the transaction to the back stack so the user can navigate back
+        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.addToBackStack(null);
+
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    public void onViewCreated(View statusView) {
+        Match m = new Match();
+        m.startMatch(this, statusView, syncType);
+    }
+
+    /*public void setMenuIcon () {
+        //set icon dependent on visibility of settings screen
+        FragmentManager fragMan = getSupportFragmentManager();
+        SettingsFragment s = (SettingsFragment)fragMan.findFragmentByTag("com.redmonds.contactsync-settings");
+        if (s != null && s.isAdded()) {
+            mainMenu.findItem(R.id.settings).setIcon(CLOSE_ICON);
+        } else {
+            mainMenu.findItem(R.id.settings).setIcon(SETTINGS_ICON);
+        }
+    }*/
+
+    public void hideMenuIcon () {
+        if (mainMenu != null) {
+            //mainMenu.findItem(R.id.settings).setVisible(false);
+        }
+    }
+
+    public void showMenuIcon () {
+        if (mainMenu != null) {
+            //mainMenu.findItem(R.id.settings).setVisible(true);
+        }
+    }
+
+    public void showResults () {
+        showResults(null);
+    }
+
+    public void showResults (String item) {
+        FragmentManager fragMan = getFragmentManager();
+        FragmentTransaction transaction = fragMan.beginTransaction();
+        SyncFragment newFragment = new SyncFragment();
+
+        // Pass what list to show
+        Bundle args = new Bundle();
+        args.putString("list_type", SyncFragment.SUMMARY);
+        if (item != null) {
+            args.putString("list_item", item);
+        }
+        newFragment.setArguments(args);
+
+        // Add the fragment to the 'fragment_container' FrameLayout
+        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    public void Compare (String listType, String listItem, String selected) {
+        FragmentManager fragMan = getSupportFragmentManager();
+        FragmentTransaction transaction = fragMan.beginTransaction();
+        CompareFragment newFragment = new CompareFragment();
+
+        // Pass what list to show
+        Bundle args = new Bundle();
+        if (listType != null) {
+            args.putString("listType", listType);
+        }
+        if (listItem != null) {
+            args.putString("listItem", listItem);
+        }
+        if (selected != null) {
+            args.putString("selected", selected);
+        }
+        newFragment.setArguments(args);
+
+        // Add the fragment to the 'fragment_container' FrameLayout
+        transaction.replace(R.id.fragment_container, newFragment, "com.redmonds.contactsync-compare");
+
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    public void Merge (String name, ArrayList<String> ids, String listItem) {
+        FragmentManager fragMan = getSupportFragmentManager();
+        FragmentTransaction transaction = fragMan.beginTransaction();
+        MergeFragment newFragment = new MergeFragment();
+
+        // Pass what list to show
+        Bundle args = new Bundle();
+        if (name != null) {
+            args.putString("name", name);
+        }
+        if (ids != null) {
+            args.putStringArrayList("ids", ids);
+        }
+        if (listItem != null) {
+            args.putString("listItem", listItem);
+        }
+
+        SharedPreferences.Editor pref = getPreferences(Context.MODE_PRIVATE).edit();
+        pref.remove("contactMerge");
+        pref.remove("contactsMerge");
+        pref.commit();
+
+        newFragment.setArguments(args);
+
+        // Add the fragment to the 'fragment_container' FrameLayout
+        transaction.replace(R.id.fragment_container, newFragment, "uk.me.redmonds.contactsync-merge");
+
+        //remove sub fragments
+        for (Fragment f : getActiveFragments()) {
+            if (f.getTag() == null)
+                transaction.remove(f);
+        }
+
+        transaction.addToBackStack(null);
+
+        transaction.commit();
+    }
+
+    @Override
+    public void onAttachFragment (Fragment fragment) {
+        fragList.add(new WeakReference(fragment));
+    }
+
+    public ArrayList<Fragment> getActiveFragments() {
+        ArrayList<Fragment> ret = new ArrayList<Fragment>();
+        for(WeakReference<Fragment> ref : fragList) {
+            Fragment f = ref.get();
+            if(f != null && f.isVisible()) {
+                ret.add(f);
+            }
+        }
+        return ret;
+    }
 
     /*@Override
     public boolean onCreateOptionsMenu(Menu menu) {
