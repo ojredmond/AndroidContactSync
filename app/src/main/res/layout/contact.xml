@@ -12,37 +12,26 @@
         android:orientation="horizontal"
         >
 
-        <ImageButton
-            android:id="@+id/delete_contact"
+        <Button
+            android:id="@+id/contact_cancel"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/delete_contact"
-            android:src="@drawable/ic_menu_delete"
             android:layout_weight="1"
-            />
+            android:text="@string/cancel"
+            android:textColor="@android:color/white" />
 
-        <ImageButton
-            android:id="@+id/merge_contact"
+        <Button
+            android:id="@+id/contact_confirm"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/merge_contacts"
-            android:src="@drawable/ic_menu_allfriends"
             android:layout_weight="1"
-            />
-
-        <ImageButton
-            android:id="@+id/unmatched_contact"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:contentDescription="@string/add_to_unmatched"
-            android:src="@drawable/ic_menu_invite"
-            android:layout_weight="1"
-            />
+            android:text="@string/confirm"
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/comp_scroll"
+        android:id="@+id/contact_scroll"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:fillViewport="true"
@@ -50,12 +39,11 @@
         android:layout_above="@id/button_bar"
         >
 
-        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/compare"
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/contact"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            />
+            android:orientation="vertical" />
 
     </ScrollView>
 

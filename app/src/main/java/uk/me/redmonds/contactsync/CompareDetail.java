@@ -184,7 +184,7 @@ public class CompareDetail extends Fragment {
                 compareDetail.setTag(account);
                 compareDetail.setTextIsSelectable(false);
                 compareDetail.setOnTouchListener(ContactTouch);
-                compareDetail.setBackgroundResource(R.drawable.border);
+                //compareDetail.setBackgroundResource(R.drawable.border);
                 compareDetail.setPadding(10, 10, 10, 10);
                 compareDetail.setText(contact);
                 if (layout.getOrientation() == layout.HORIZONTAL)
@@ -208,13 +208,13 @@ public class CompareDetail extends Fragment {
             String id = String.valueOf(v.getId());
             if (selected != null && selected.contains(id)) {
                 selected.remove(id);
-                v.setBackgroundResource(R.drawable.border);
+                //v.setBackgroundResource(R.drawable.border);
             } else {
                 if (selected == null) {
                     selected = new HashSet<String>();
                 }
                 selected.add(id);
-                v.setBackgroundResource(R.drawable.borderhighlight);
+                //v.setBackgroundResource(R.drawable.borderhighlight);
             }
 
             return false;
