@@ -9,7 +9,7 @@ import android.view.*;
 import android.widget.*;
 import java.util.*;
 
-import android.support.v4.app.ListFragment;
+import android.app.ListFragment;
 
 public class SyncFragment extends ListFragment {
     //private ArrayList<String> values = new ArrayList<String>();

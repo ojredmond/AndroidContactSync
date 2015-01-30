@@ -1,7 +1,7 @@
 package uk.me.redmonds.contactsync;
 
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.view.*;
 import android.view.View.OnClickListener;
 import android.os.*;
@@ -250,7 +250,7 @@ public class MergeFragment extends Fragment
                     }
                     break;
                 case R.id.contact_cancel:
-                    FragmentManager fragMan = main.getSupportFragmentManager();
+                    FragmentManager fragMan = main.getFragmentManager();
                     if (fragMan.getBackStackEntryCount() > 0) {
                         fragMan.popBackStack();
                     }

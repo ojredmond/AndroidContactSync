@@ -1,6 +1,7 @@
 package uk.me.redmonds.contactsync;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.preference.ListPreference;
 import android.preference.Preference;
@@ -33,7 +34,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
 import java.io.FileNotFoundException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -56,6 +59,7 @@ public class MainActivity extends ActionBarActivity
     private String account2Name;
     private String syncType = "";
     public Menu mainMenu;
+    private List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,7 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 1:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                        .replace(R.id.container, new SyncFragment())
                         .commit();
                 break;
             default:
@@ -165,11 +169,11 @@ public class MainActivity extends ActionBarActivity
         // Create fragment and give it an argument specifying the article it should show
         StatusFragment newFragment = new StatusFragment();
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.replace(R.id.container, newFragment);
         transaction.addToBackStack(null);
 
         // Commit the transaction
@@ -222,14 +226,14 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.fragment_container, newFragment);
+        transaction.replace(R.id.container, newFragment);
         transaction.addToBackStack(null);
 
         transaction.commit();
     }
 
     public void Compare (String listType, String listItem, String selected) {
-        FragmentManager fragMan = getSupportFragmentManager();
+        FragmentManager fragMan = getFragmentManager();
         FragmentTransaction transaction = fragMan.beginTransaction();
         CompareFragment newFragment = new CompareFragment();
 
@@ -247,7 +251,7 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.fragment_container, newFragment, "com.redmonds.contactsync-compare");
+        transaction.replace(R.id.container, newFragment, "com.redmonds.contactsync-compare");
 
         transaction.addToBackStack(null);
 
@@ -255,7 +259,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void Merge (String name, ArrayList<String> ids, String listItem) {
-        FragmentManager fragMan = getSupportFragmentManager();
+        FragmentManager fragMan = getFragmentManager();
         FragmentTransaction transaction = fragMan.beginTransaction();
         MergeFragment newFragment = new MergeFragment();
 
@@ -279,7 +283,7 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.fragment_container, newFragment, "uk.me.redmonds.contactsync-merge");
+        transaction.replace(R.id.container, newFragment, "uk.me.redmonds.contactsync-merge");
 
         //remove sub fragments
         for (Fragment f : getActiveFragments()) {

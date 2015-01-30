@@ -5,6 +5,7 @@ import java.util.List;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
+import android.app.Activity;
 import android.content.*;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,7 +20,7 @@ import android.widget.TabHost.TabContentFactory;
 import android.view.*;
 import android.util.*;
 
-public class CompareFragment extends Fragment
+public class CompareFragment extends android.app.Fragment
 {
     private MainActivity main;
     private ViewPager mViewPager;

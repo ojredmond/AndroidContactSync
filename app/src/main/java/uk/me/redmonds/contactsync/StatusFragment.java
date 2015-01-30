@@ -3,7 +3,7 @@ package uk.me.redmonds.contactsync;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.os.*;
-import android.support.v4.app.Fragment;
+import android.app.Fragment;
 import android.view.*;
 
 public class StatusFragment extends Fragment {
