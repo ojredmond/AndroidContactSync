@@ -3,22 +3,15 @@ package uk.me.redmonds.contactsync;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceFragment;
-import android.preference.Preference.OnPreferenceChangeListener;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
@@ -26,9 +19,7 @@ import android.support.v4.widget.DrawerLayout;
 //import android.widget.AdapterView;
 //import android.widget.AdapterView.OnItemSelectedListener;
 //import android.widget.TextView;
-import android.widget.Toast;
 //import android.widget.Spinner;
-import android.accounts.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -39,12 +30,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements StatusFragment.OnViewCreatedListener,
+        NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    NavigationDrawerFragment mNavigationDrawerFragment;
 
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
@@ -105,7 +97,15 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-                showResults();
+                SyncFragment sF = new SyncFragment();
+
+                // Pass what list to show
+                Bundle args = new Bundle();
+                args.putString("list_type", SyncFragment.OPTIONS);
+                sF.setArguments(args);
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, sF)
+                        .commit();
                 break;
             default:
                 fragmentManager.beginTransaction()
@@ -150,8 +150,8 @@ public class MainActivity extends ActionBarActivity
     public void matchStatus (String type) {
         // get accounts to matched
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        //String account1Name = pref.getString(SettingsFragment.ACCOUNT1, null);
-        //String account2Name = pref.getString(SettingsFragment.ACCOUNT2, null);
+        String account1Name = pref.getString(ACCOUNT1, null);
+        String account2Name = pref.getString(ACCOUNT2, null);
         SharedPreferences.Editor results = getPreferences(Context.MODE_PRIVATE).edit();
         results.putBoolean(Match.SYNCMATCHED, false);
         results.remove(Match.DUPKEY + account1Name);

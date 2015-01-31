@@ -297,8 +297,8 @@ public class Match
         status = (TextView)statusView.findViewById(R.id.statuslog);
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-        account1Name = settings.getString("account1", null);
-        account2Name = settings.getString("account2", null);
+        account1Name = settings.getString(MainActivity.ACCOUNT1, null);
+        account2Name = settings.getString(MainActivity.ACCOUNT2, null);
 
         MatchContacts task = new MatchContacts();
         task.execute();

@@ -32,7 +32,7 @@ public class StatusFragment extends Fragment {
 
         View statusView = inflater.inflate(R.layout.status, container, false);
 
-        MainActivity main = (MainActivity)this.getActivity();
+        /*MainActivity main = (MainActivity)this.getActivity();
         main.showMenuIcon();
         ActionBar actionBar = main.getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -40,7 +40,7 @@ public class StatusFragment extends Fragment {
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         actionBar.show();
-        actionBar.setTitle(R.string.title_activity_main);
+        actionBar.setTitle(R.string.title_activity_main);*/
 
         mCallback.onViewCreated(statusView);
 
