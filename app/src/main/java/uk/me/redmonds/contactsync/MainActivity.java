@@ -107,6 +107,14 @@ public class MainActivity extends ActionBarActivity
                         .replace(R.id.container, sF)
                         .commit();
                 break;
+            case 2:
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, new StatusFragment())
+                        .commit();
+                break;
+            case 3:
+                showResults();
+                break;
             default:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
@@ -154,6 +162,8 @@ public class MainActivity extends ActionBarActivity
         String account2Name = pref.getString(ACCOUNT2, null);
         SharedPreferences.Editor results = getPreferences(Context.MODE_PRIVATE).edit();
         results.putBoolean(Match.SYNCMATCHED, false);
+        results.remove(Match.NUMCONTACTS + account1Name);
+        results.remove(Match.NUMCONTACTS + account2Name);
         results.remove(Match.DUPKEY + account1Name);
         results.remove(Match.DUPKEY + account2Name);
         results.remove(Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name);

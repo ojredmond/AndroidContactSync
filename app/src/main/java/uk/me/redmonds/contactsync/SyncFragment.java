@@ -65,6 +65,10 @@ public class SyncFragment extends ListFragment {
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
 
+        // get he number of contacts in each account to chek they are not both empty
+        int account1Count = pref.getInt(Match.NUMCONTACTS + account1Name, -1);
+        int account2Count = pref.getInt(Match.NUMCONTACTS + account2Name, -1);
+
         //get duplicate lists for display desicisions
         dup1 = Match.DUPKEY + account1Name;
         dup2 = Match.DUPKEY + account2Name;
@@ -95,10 +99,16 @@ public class SyncFragment extends ListFragment {
             //actionBar.setTitle(R.string.title_activity_results);
             if (list_item != null && list_item.startsWith("dup")) {
                 showDuplicates(list_item);
+            } else if (account1Count == 0 && account2Count == 0) {
+                value = new HashMap <String, String>();
+                value.put(NAME, "ERROR");
+                value.put(DESCRIPTION, "Their are no contacts in either account");
+                values.add(value);
             } else {
                 showSummary();
             }
         }
+
 
         if (account1Name != null && account2Name != null
                 && !account1Name.equals(account2Name)

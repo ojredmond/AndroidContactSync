@@ -35,9 +35,11 @@ public class Match
     public static final String UNMATCHNAMEKEY = "unmatchedName:";
     public static final String MATCHEDKEY = "matched:";
     public static final String ACCOUNTKEY = "account:";
+    public static final String NUMCONTACTS = "count:";
 
     private class MatchContacts extends AsyncTask <Void, String, String> {
-        private int numContacts = -1;
+        private int numContactsAccount1 = -1;
+        private int numContactsAccount2 = -1;
         private String lastContactName = "";
         private String tempContactName = "";
         private int tempContactId = 0;
@@ -86,7 +88,7 @@ public class Match
                     null, RawContacts.DISPLAY_NAME_PRIMARY);
 
             cursor.moveToFirst();
-            numContacts = cursor.getCount();
+            numContactsAccount1 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
                 tempContactName = cursor.getString(1);
@@ -117,7 +119,7 @@ public class Match
             cursor.close();
 
             message = "Loaded Account 1: "
-                    + String.valueOf(numContacts)
+                    + String.valueOf(numContactsAccount1)
                     + " contacts\n";
             message += "Account 1 Duplicates: " + String.valueOf(dupCount1) + "\n";
             message += "Loading Account 2\n";
@@ -132,7 +134,7 @@ public class Match
                     null, RawContacts.DISPLAY_NAME_PRIMARY);
 
             cursor.moveToFirst();
-            numContacts = cursor.getCount();
+            numContactsAccount2 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
                 tempContactName = cursor.getString(1);
@@ -174,7 +176,7 @@ public class Match
             cursor.close();
 
             message = "Loaded Account 2: "
-                    + String.valueOf(numContacts)
+                    + String.valueOf(numContactsAccount2)
                     + " contacts\n";
             message += "Account 2 Duplicates: " + String.valueOf(dupCount2) + "\n";
             publishProgress(new String[] {message});
@@ -215,6 +217,11 @@ public class Match
             }
 
             SharedPreferences.Editor results = mainActivity.getPreferences(Context.MODE_PRIVATE).edit();
+
+            //store the number of contacts i each account so that can display results even if no contacts
+            results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
+            results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
+            results.commit();
 
             HashSet<String> dup1Name = new HashSet<String>();
             for (int i=0; i < dup1.size(); i++) {
