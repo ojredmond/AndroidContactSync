@@ -96,7 +96,7 @@ public class MainActivity extends ActionBarActivity
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new SettingsFragment())
-						.addToBackStack(getString(R.string.title_settings))
+			.addToBackStack(getString(R.string.title_settings))
                         .commit();
                 break;
             case 1:
@@ -108,8 +108,8 @@ public class MainActivity extends ActionBarActivity
                 sF.setArguments(args);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, sF)
-					.addToBackStack(getString(R.string.title_sync))
-					.commit();
+			.addToBackStack(getString(R.string.title_sync))
+			.commit();
                 break;
             case 2:
                 fragmentManager.beginTransaction()
@@ -242,6 +242,9 @@ public class MainActivity extends ActionBarActivity
         transaction.addToBackStack(getString(R.string.title_results));
 
         transaction.commit();
+        
+        //update the navigation drawer
+        mNavigationDrawerFragment.changeItem(0);
     }
 
     public void Compare (String listType, String listItem, String selected) {
