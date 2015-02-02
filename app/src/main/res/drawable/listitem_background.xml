@@ -8,5 +8,5 @@
           android:drawable="@color/material_orange_A200"/> <!-- focused -->
     <item android:state_selected="true"
           android:drawable="@color/material_orange_A200"/> <!-- focused -->
-    <item android:drawable="@color/material_orange_A100"/> <!-- default -->
+    <item android:drawable="@color/material_orange_50"/> <!-- default -->
 </selector>
