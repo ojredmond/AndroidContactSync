@@ -169,10 +169,14 @@ public class NavigationDrawerFragment extends Fragment {
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
 				
-				FragmentManager fragMan = getActivity().getFragmentManager();
-				String fragName = fragMan.getBackStackEntryAt(fragMan.getBackStackEntryCount() - 1).getName();
-				Toast.makeText(getActivity(), fragName, Toast.LENGTH_LONG).show();
-
+				//FragmentManager fragMan = getActivity().getFragmentManager();
+				//Integer count = fragMan.getBackStackEntryCount();
+				//if (count > 0 ) {
+				//String fragName = fragMan.getBackStackEntryAt(count - 1).getName();
+				//Toast.makeText(getActivity(), fragName, Toast.LENGTH_LONG).show();
+				//
+				//}
+				
                 //getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
         };

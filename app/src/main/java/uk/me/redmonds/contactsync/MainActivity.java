@@ -57,7 +57,9 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+		
+		Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
+		
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
         mTitle = getTitle();
@@ -94,6 +96,7 @@ public class MainActivity extends ActionBarActivity
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new SettingsFragment())
+						.addToBackStack(getString(R.string.title_settings))
                         .commit();
                 break;
             case 1:
@@ -105,7 +108,8 @@ public class MainActivity extends ActionBarActivity
                 sF.setArguments(args);
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, sF)
-                        .commit();
+					.addToBackStack(getString(R.string.title_sync))
+					.commit();
                 break;
             case 2:
                 fragmentManager.beginTransaction()
@@ -235,7 +239,7 @@ public class MainActivity extends ActionBarActivity
 
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment);
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(getString(R.string.title_results));
 
         transaction.commit();
     }
