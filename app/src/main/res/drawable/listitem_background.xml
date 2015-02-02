@@ -5,5 +5,5 @@
     <item android:state_focused="true" android:drawable="@drawable/list_selector_pressed" />
     <item android:state_activated="true" android:drawable="@drawable/list_selector_pressed" />
     <item android:state_single="true" android:drawable="@drawable/list_selector_pressed" />
-    <item android:state_focused="false" android:color="#ccc" />
+    <item android:state_focused="false" android:drawable="@drawable/normal" />
 </selector>
