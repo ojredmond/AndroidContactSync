@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/material_orange_A200" />
+    <item android:state_pressed="true">
+        <shape xmlns:android="http://schemas.android.com/apk/res/android"> 
+            <solid android:color="#FF1A47"/>
+        </shape>
+    </item>
 </selector>
