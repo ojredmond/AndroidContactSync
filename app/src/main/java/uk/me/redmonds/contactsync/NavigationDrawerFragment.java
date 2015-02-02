@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
+import android.app.*;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -167,6 +168,10 @@ public class NavigationDrawerFragment extends Fragment {
                             .getDefaultSharedPreferences(getActivity());
                     sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
                 }
+				
+				FragmentManager fragMan = getActivity().getFragmentManager();
+				String fragName = fragMan.getBackStackEntryAt(fragMan.getBackStackEntryCount() - 1).getName();
+				Toast.makeText(getActivity(), fragName, Toast.LENGTH_LONG).show();
 
                 //getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
