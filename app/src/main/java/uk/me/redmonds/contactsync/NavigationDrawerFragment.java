@@ -253,7 +253,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return getActivity()).getActionBar();
+        return getActivity().getActionBar();
     }
 
     /**
