@@ -19,12 +19,12 @@ public class CompareFragment2 extends android.app.Fragment {
     // representing an object in the collection.
     DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
     ViewPager mViewPager;
-    MainActivity main;
+    FragmentActivity main;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        main = (MainActivity)this.getActivity();
+        main = (FragmentActivity)this.getActivity();
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
         mDemoCollectionPagerAdapter =
