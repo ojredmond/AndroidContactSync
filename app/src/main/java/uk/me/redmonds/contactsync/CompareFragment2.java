@@ -72,7 +72,7 @@ public class CompareFragment2 extends android.app.Fragment {
             // The last two arguments ensure LayoutParams are inflated
             // properly.
             View rootView = inflater.inflate(
-                    R.layout.fragment_collection_object, container, false);
+                    android.R.layout.simple_list_item_1, container, false);
             Bundle args = getArguments();
             ((TextView) rootView.findViewById(android.R.id.text1)).setText(
                     Integer.toString(args.getInt(ARG_OBJECT)));
