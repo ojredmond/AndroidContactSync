@@ -1,6 +1,7 @@
 package uk.me.redmonds.contactsync;
 
 import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
