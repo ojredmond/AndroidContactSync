@@ -1,6 +1,5 @@
 package uk.me.redmonds.contactsync;
 
-import android.app.ActionBarActivity;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
@@ -254,7 +253,7 @@ public class NavigationDrawerFragment extends Fragment {
     }
 
     private ActionBar getActionBar() {
-        return ((ActionBarActivity) getActivity()).getActionBar();
+        return getActivity()).getActionBar();
     }
 
     /**
