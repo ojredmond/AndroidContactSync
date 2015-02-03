@@ -22,7 +22,7 @@ import java.util.*;
 import android.preference.*;
 
 public class CompareDetail extends Fragment {
-    private MainActivity main;
+    private FragmentActivity main;
     private HashSet<String> selected;
     private String name;
     private LinearLayout layout;
@@ -51,7 +51,7 @@ public class CompareDetail extends Fragment {
         bUn.setOnTouchListener(buttonTouch);
         bUn.setOnClickListener(ButtonClick);
 
-        main = (MainActivity)this.getActivity();
+        main = (FragmentActivity)this.getActivity();
 
         Bundle args = getArguments();
         if (args == null) {
@@ -255,7 +255,7 @@ public class CompareDetail extends Fragment {
                     fillLayout();
                     break;
                 case R.id.merge_contact:
-                    main.Merge(name, ids, listItem);
+                    MainAcivity.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
                     for (int i=0; i < ids.size(); i++) {
