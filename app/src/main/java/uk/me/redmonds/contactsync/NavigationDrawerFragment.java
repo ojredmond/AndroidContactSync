@@ -149,6 +149,7 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
+                getActionBar().setIcon(R.drawable.ic_drawer);
 
                 //getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
             }
@@ -159,6 +160,8 @@ public class NavigationDrawerFragment extends Fragment {
                 if (!isAdded()) {
                     return;
                 }
+
+                getActionBar().setIcon(R.drawable.ic_action_back);
 
                 if (!mUserLearnedDrawer) {
                     // The user manually opened the drawer; store this flag to prevent auto-showing
