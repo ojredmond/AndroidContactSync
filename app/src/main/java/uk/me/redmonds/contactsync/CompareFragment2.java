@@ -28,7 +28,7 @@ public class CompareFragment2 extends android.app.Fragment {
         // fragments, so use getSupportFragmentManager.
         mDemoCollectionPagerAdapter =
                 new DemoCollectionPagerAdapter(
-                        main.getFragmentManager());
+                        getSupportFragmentManager());
         mViewPager = (ViewPager) main.findViewById(R.id.pager);
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
 
