@@ -2,7 +2,7 @@ package uk.me.redmonds.contactsync;
 
 import android.content.*;
 import android.os.*;
-import android.app.*;
+import android.support.v4.app.*;
 import android.view.*;
 import android.widget.*;
 import java.util.*;
@@ -48,7 +48,7 @@ public class MatchContact extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        main = (MainActivity) this.getActivity();
+        main = getActivity();
 
         Bundle args = getArguments();
         listItem = args.getString("listItem");
