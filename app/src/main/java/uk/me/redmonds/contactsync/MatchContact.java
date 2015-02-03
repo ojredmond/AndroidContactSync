@@ -2,7 +2,7 @@ package uk.me.redmonds.contactsync;
 
 import android.content.*;
 import android.os.*;
-import android.support.v4.app.*;
+import android.app.*;
 import android.view.*;
 import android.widget.*;
 import java.util.*;
