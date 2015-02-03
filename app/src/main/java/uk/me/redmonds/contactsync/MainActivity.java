@@ -28,7 +28,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity
+public class MainActivity extends Activity
         implements StatusFragment.OnViewCreatedListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks {
 
