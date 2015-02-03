@@ -22,7 +22,7 @@ import android.util.*;
 
 public class CompareFragment extends android.app.Fragment
 {
-    private MainActivity main;
+    private FragmentActivity main;
     private ViewPager mViewPager;
     private TabsAdapter mTabsAdapter;
     private TabHost mTabsHost;
@@ -32,7 +32,7 @@ public class CompareFragment extends android.app.Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        main = (MainActivity)this.getActivity();
+        main = getActivity();
         screenWidth = main.getWindowManager().getDefaultDisplay().getWidth();
         mTabsHost = (TabHost)inflater.inflate(R.layout.tabs, container, false);
         mTabsHost.setup();
