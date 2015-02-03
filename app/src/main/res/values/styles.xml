@@ -5,7 +5,6 @@
         <item name="colorPrimary">@color/material_orange_500</item>
         <item name="colorPrimaryDark">@color/material_orange_700</item>
         <item name="colorAccent">@color/material_orange_A200</item>
-        <!--<item name="listChoiceBackgroundIndicator">@drawable/listitem_background</item>-->
         <item name="android:activatedBackgroundIndicator">@drawable/activatedbackground</item>
 </style>
 
