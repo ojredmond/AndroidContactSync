@@ -256,7 +256,7 @@ public class CompareDetail extends Fragment {
                     fillLayout();
                     break;
                 case R.id.merge_contact:
-                    MainAcivity.Merge(name, ids, listItem);
+                    MainActivity.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
                     for (int i=0; i < ids.size(); i++) {
