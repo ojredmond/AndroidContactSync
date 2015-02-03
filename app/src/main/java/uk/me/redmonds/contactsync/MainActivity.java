@@ -1,15 +1,16 @@
 package uk.me.redmonds.contactsync;
 
 import android.app.Activity;
-import android.support.v4.app.FragmentActivity;
+//import android.support.v4.app.FragmentActivity;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.app.ActionBar;
+import android.support.v7.app.ActionBar;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
@@ -29,7 +30,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity
+public class MainActivity extends ActionBarActivity
         implements StatusFragment.OnViewCreatedListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -57,7 +58,9 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-		
+
+        ActionBar actionBar = getSupportActionBar();
+
 		Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
 		
         mNavigationDrawerFragment = (NavigationDrawerFragment)
@@ -65,7 +68,7 @@ public class MainActivity extends Activity
         mTitle = getTitle();
 
         // Set up the drawer.
-        mNavigationDrawerFragment.setUp(
+        mNavigationDrawerFragment.setUp(actionBar,
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
@@ -144,7 +147,7 @@ public class MainActivity extends Activity
     }
 
     public void restoreActionBar() {
-        ActionBar actionBar = getActionBar();
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         actionBar.setDisplayShowTitleEnabled(true);
         actionBar.setTitle(mTitle);
