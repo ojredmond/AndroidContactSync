@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.app.ActionBar;
 import android.app.Fragment;
-import android.app.FragmentActivity;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.os.Bundle;
