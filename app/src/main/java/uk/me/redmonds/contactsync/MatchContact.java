@@ -13,7 +13,7 @@ public class MatchContact extends Fragment
 {
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
-    private Activity main;
+    private FragmentActivity main;
     private SparseArray<String> unmatchedList;
     private SparseArray<String> matchedList;
     private int id;
