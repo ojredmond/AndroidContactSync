@@ -12,31 +12,23 @@ android:layout_height="fill_parent" >
     android:orientation="horizontal"
     >
 
-    <ImageButton
+    <Button
         android:id="@+id/delete_contact"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/delete_contact"
-        android:src="@drawable/ic_menu_delete"
-        android:layout_weight="1"
+        android:text="@string/delete_contact"
         />
 
-    <ImageButton
+    <Button
         android:id="@+id/merge_contact"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/merge_contacts"
-        android:src="@drawable/ic_menu_allfriends"
-        android:layout_weight="1"
+        android:text="@string/merge_contacts"
         />
 
-    <ImageButton
+    <Button
         android:id="@+id/unmatched_contact"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/add_to_unmatched"
-        android:src="@drawable/ic_menu_invite"
-        android:layout_weight="1"
+        android:text="@string/add_to_unmatched"
         />
 
 </LinearLayout>
