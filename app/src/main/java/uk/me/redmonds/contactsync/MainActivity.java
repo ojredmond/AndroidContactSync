@@ -103,21 +103,21 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-                Fragment sF = new SyncFragment();
+                Fragment syncF = new SyncFragment();
 
                 // Pass what list to show
                 Bundle args = new Bundle();
                 args.putString("list_type", SyncFragment.OPTIONS);
-                sF.setArguments(args);
+                syncF.setArguments(args);
                 fragmentManager.beginTransaction()
-                    .replace(R.id.container, sF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                    .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
                     .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
                     .commit();
                 break;
             case 2:
             	Toast.makeText(this, "count" + fragmentManager.getBackStackEntryCount(), Toast.LENGTH_LONG).show();
-            	Fragment sF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_logs));
-            	if (sF != null) {Toast.makeText(this, "Tag:" + fragmentManager.getTag(), Toast.LENGTH_LONG).show();}
+            	Fragment statusF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_logs));
+            	if (statusF != null) {Toast.makeText(this, "Tag:" + statusF.getTag(), Toast.LENGTH_LONG).show();}
 
                 /*fragmentManager.beginTransaction()
                     .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
