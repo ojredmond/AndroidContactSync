@@ -236,4 +236,11 @@ public class SyncFragment extends ListFragment {
         StringList dup = new StringList(pref, item);
         //values.addAll(dup.getHashSet());
     }
+    
+    @Override
+    public void onAttach (Activity activity) {
+        super.onAttach (activity);
+        //set actionbar title
+        ((MainActivity)activity).onSectionAttached(getString(R.string.app_name));
+    }
 }
