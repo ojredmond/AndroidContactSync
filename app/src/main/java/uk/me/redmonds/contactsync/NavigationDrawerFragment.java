@@ -142,36 +142,14 @@ public class NavigationDrawerFragment extends Fragment {
                 mDrawerLayout,                    /* DrawerLayout object */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        )/* {
-            @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
-
-                //getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
+        ){
+            public void onDrawerClosed(View view) {
+                ((MainActivty)getActivity()).onSectionAttached(mTitle);
             }
-
-            @Override
+ 
             public void onDrawerOpened(View drawerView) {
-                super.onDrawerOpened(drawerView);
-                if (!isAdded()) {
-                    return;
-                }
-
-                if (!mUserLearnedDrawer) {
-                    // The user manually opened the drawer; store this flag to prevent auto-showing
-                    // the navigation drawer automatically in the future.
-                    mUserLearnedDrawer = true;
-                    SharedPreferences sp = PreferenceManager
-                            .getDefaultSharedPreferences(getActivity());
-                    sp.edit().putBoolean(PREF_USER_LEARNED_DRAWER, true).apply();
-                }
-				
-                //getActivity().supportInvalidateOptionsMenu(); // calls onPrepareOptionsMenu()
-            }
-        }*/;
+                getActionBar().setTitle(getString(R.string.app_name));
+            };
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
