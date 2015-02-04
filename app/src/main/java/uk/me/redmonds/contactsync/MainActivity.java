@@ -115,10 +115,8 @@ public class MainActivity extends ActionBarActivity
                     .commit();
                 break;
             case 2:
-            	Toast.makeText(this, "count" + fragmentManager.getBackStackEntryCount(), Toast.LENGTH_LONG).show();
             	Fragment statusF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_logs));
             	if (statusF == null) statusF = new StatusFragment();
-            	else Toast.makeText(this, "Tag:" + statusF.toString(), Toast.LENGTH_LONG).show();
 
                 fragmentManager.beginTransaction()
                     .replace(R.id.container, statusF, PACKAGE_NAME + "-" + getString(R.string.title_logs))
@@ -149,6 +147,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_results);
                 break;
         }
+        actionBar.setTitle(mTitle);
     }
 
     public void restoreActionBar() {
