@@ -17,7 +17,6 @@ android:layout_height="match_parent" >
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="88dp"
-        android:textColor="@drawable/flat_selector"
         android:text="@string/delete_contact" />
       
     <Button
@@ -25,7 +24,6 @@ android:layout_height="match_parent" >
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="88dp"
-        android:textColor="@drawable/flat_selector"
         android:text="@string/merge_contacts" />
       
     <Button
@@ -33,7 +31,6 @@ android:layout_height="match_parent" >
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="88dp"
-        android:textColor="@drawable/flat_selector"
         android:text="@string/add_to_unmatched" />
 
 </LinearLayout>
