@@ -125,10 +125,6 @@ public class MainActivity extends ActionBarActivity
             case 3:
                 showResults();
                 break;
-            default:
-                fragmentManager.beginTransaction()
-                        .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                        .commit();
         }
     }
 
