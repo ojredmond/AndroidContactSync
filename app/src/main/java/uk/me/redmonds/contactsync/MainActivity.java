@@ -103,22 +103,25 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-            	Fragment sF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_sync));
-                if (sF == null ) { Toast.makeText(getApplicationContext(), "new", Toast.LENGTH_LONG).show(); sF = new SyncFragment(); }
+            	Fragment sF = fragmentManager.popBackStack (PACKAGE_NAME + "-" + getString(R.string.title_sync),0);
+                if (sF == null ) { 
+                Toast.makeText(getApplicationContext(), "new", Toast.LENGTH_LONG).show(); 
+                sF = new SyncFragment();
 
                 // Pass what list to show
                 Bundle args = new Bundle();
                 args.putString("list_type", SyncFragment.OPTIONS);
                 sF.setArguments(args);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, sF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
-			.addToBackStack(null)
-			.commit();
+                    .replace(R.id.container, sF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                    .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                    .commit();
+                }
                 break;
             case 2:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
-                        .commit();
+                    .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
+                    .commit();
                 break;
             case 3:
                 showResults();
