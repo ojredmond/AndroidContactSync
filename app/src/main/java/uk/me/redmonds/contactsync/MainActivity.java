@@ -97,7 +97,7 @@ public class MainActivity extends ActionBarActivity
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new SettingsFragment())
+                        .replace(R.id.container, new SettingsFragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
 			.addToBackStack(getString(R.string.title_settings))
                         .commit();
                 break;
@@ -109,13 +109,13 @@ public class MainActivity extends ActionBarActivity
                 args.putString("list_type", SyncFragment.OPTIONS);
                 sF.setArguments(args);
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, sF)
-			.addToBackStack(getString(R.string.title_sync))
+                        .replace(R.id.container, sF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
+			.addToBackStack(null)
 			.commit();
                 break;
             case 2:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new StatusFragment())
+                        .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
                         .commit();
                 break;
             case 3:
@@ -187,7 +187,7 @@ public class MainActivity extends ActionBarActivity
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.container, newFragment);
+        transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_status));
         transaction.addToBackStack(null);
 
         // Commit the transaction
@@ -217,8 +217,8 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.container, newFragment, );
-        transaction.addToBackStack(getString(R.string.title_results));
+        transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_results));
+        transaction.addToBackStack(null);
 
         transaction.commit();
         
@@ -245,7 +245,7 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.container, newFragment, "uk.me.redmonds.contactsync-compare");
+        transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-compare");
 
         transaction.addToBackStack(null);
 
@@ -277,7 +277,7 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.container, newFragment, "uk.me.redmonds.contactsync-merge");
+        transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-merge");
 
         //remove sub fragments
         for (Fragment f : getActiveFragments()) {
