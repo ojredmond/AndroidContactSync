@@ -57,14 +57,16 @@ public class SettingsFragment extends PreferenceFragment
     @Override
     public void onAttach (Activity activity) {
         super.onAttach (activity);
-        //set actionbar title
-        ((MainActivity)activity).onSectionAttached(getString(R.string.title_settings));
     }
     
     @Override
     public void onResume() {
         super.onResume();
+        
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
+        
+        //set actionbar title
+        ((MainActivity)getActivity).onSectionAttached(getString(R.string.title_settings));
     }
 
     @Override
