@@ -116,6 +116,8 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 2:
             	Toast.makeText(this, "count" + fragmentManager.getBackStackEntryCount(), Toast.LENGTH_LONG).show();
+            	Fragment sF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_logs));
+            	if (sF != null) {Toast.makeText(this, "Tag:" + fragmentManager.getTag(), Toast.LENGTH_LONG).show();}
 
                 /*fragmentManager.beginTransaction()
                     .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
