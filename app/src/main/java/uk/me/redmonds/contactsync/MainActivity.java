@@ -364,7 +364,7 @@ public class MainActivity extends ActionBarActivity
          * The action bar home/up action should open or close the drawer.
          * mDrawerToggle will take care of this.
          */
-        if (mDrawerToggle.onOptionsItemSelected(item)) {
+        if (mNavigationDrawerFragment.mDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
         return super.onOptionsItemSelected(item);
