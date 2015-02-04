@@ -42,6 +42,8 @@ public class MainActivity extends ActionBarActivity
     public static final String TYPE = "com.google";
     public static final String ACCOUNT1 = "account1";
     public static final String ACCOUNT2 = "account2";
+    public static String PACKAGE_NAME;
+    
     //private SharedPreferences settings;
     private String account1Name;
     private String account2Name;
@@ -54,6 +56,8 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        PACKAGE_NAME = getApplicationContext().getPackageName();
+	
         ActionBar actionBar = getSupportActionBar();
 
 		Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
@@ -213,7 +217,7 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.container, newFragment);
+        transaction.replace(R.id.container, newFragment, );
         transaction.addToBackStack(getString(R.string.title_results));
 
         transaction.commit();
@@ -241,7 +245,7 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.container, newFragment, "com.redmonds.contactsync-compare");
+        transaction.replace(R.id.container, newFragment, "uk.me.redmonds.contactsync-compare");
 
         transaction.addToBackStack(null);
 
