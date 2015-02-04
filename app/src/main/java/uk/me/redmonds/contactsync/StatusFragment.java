@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.*;
 import android.app.Fragment;
 import android.view.*;
+import android.widget.TextView;
 
 public class StatusFragment extends Fragment {
     private OnViewCreatedListener mCallback;
