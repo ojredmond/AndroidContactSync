@@ -62,6 +62,6 @@ public class StatusFragment extends Fragment {
 
         TextView log = (TextView)getView().findViewById(R.id.statuslog);
         outState.putString("log", ((String)log.getText()));
-        Toast.makeText(getActivity().getApplicationContext(), "log", Toast.LENGTH_LONG ).show();
+        Toast.makeText(getActivity(), "log", Toast.LENGTH_LONG ).show();
     }
 }
