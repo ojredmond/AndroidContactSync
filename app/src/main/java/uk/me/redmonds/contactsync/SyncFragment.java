@@ -238,9 +238,10 @@ public class SyncFragment extends ListFragment {
     }
     
     @Override
-    public void onAttach (Activity activity) {
-        super.onAttach (activity);
+    public void onResume() {
+        super.onResume();
+        
         //set actionbar title
-        ((MainActivity)activity).onSectionAttached(getString(R.string.app_name));
+        ((MainActivity)getActivity()).onSectionAttached(getString(R.string.title_logs));
     }
 }
