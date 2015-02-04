@@ -44,7 +44,20 @@ public class StatusFragment extends Fragment {
 
         mCallback.onViewCreated(statusView);
 
+        if (savedInstanceState != null) {
+            // Restore last state for checked position.
+            TextView log = statusView.findViewById(R.id.statuslog);
+            log.setText (savedInstanceState.getString("log", "0""));
+        }
+
         // Inflate the layout for this fragment
         return statusView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        TextView log = getView().findViewById(R.id.statuslog);
+        outState.putString("log", log.getText());
     }
 }
