@@ -42,10 +42,10 @@ public class CompareDetail extends Fragment {
 
         // add listener to buttons
         ButtonTouch buttonTouch = new ButtonTouch();
-        ImageButton bDel = (ImageButton)compareView.findViewById(R.id.delete_contact);
+        Button bDel = (Button)compareView.findViewById(R.id.delete_contact);
         ImageButton bMerge = (ImageButton)compareView.findViewById(R.id.merge_contact);
         ImageButton bUn = (ImageButton)compareView.findViewById(R.id.unmatched_contact);
-        bDel.setOnTouchListener(buttonTouch);
+        //bDel.setOnTouchListener(buttonTouch);
         bDel.setOnClickListener(ButtonClick);
         bMerge.setOnTouchListener(buttonTouch);
         bMerge.setOnClickListener(ButtonClick);
