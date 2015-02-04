@@ -129,7 +129,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void onSectionAttached(String title) {
-    	mTitle = title;
+    	if (title != "") mTitle = title;
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);
     }
