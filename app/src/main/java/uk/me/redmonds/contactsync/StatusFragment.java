@@ -6,6 +6,7 @@ import android.os.*;
 import android.app.Fragment;
 import android.view.*;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StatusFragment extends Fragment {
     private OnViewCreatedListener mCallback;
@@ -60,5 +61,6 @@ public class StatusFragment extends Fragment {
         super.onSaveInstanceState(outState);
         TextView log = getView().findViewById(R.id.statuslog);
         outState.putString("log", log.getText());
+        Toast.makeText(getActivity().getContext(), "log", Toast.LENGTH_LONG );
     }
 }
