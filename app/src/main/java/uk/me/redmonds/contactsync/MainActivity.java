@@ -103,7 +103,7 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-            	Fragment sF = FragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_sync));
+            	Fragment sF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_sync));
                 if (sF == null ) { Toast.makeText(getApplicationContext(), "new", Toast.LENGTH_LONG).show(); sF = new SyncFragment(); }
 
                 // Pass what list to show
