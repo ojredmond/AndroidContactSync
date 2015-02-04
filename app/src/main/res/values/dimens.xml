@@ -13,6 +13,12 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
 
     <!-- Buttons -->
-    <dimen name="corner_radius">4dp</dimen>
-    <dimen name="layer_padding">3dp</dimen>
+    <dimen name="button__bar_top_padding">24dp</dimen>
+    <dimen name="button__bar_bottom_padding">24dp</dimen>
+    <dimen name="button__bar_left_padding">16dp</dimen>
+    <dimen name="button__bar_right_padding">16dp</dimen>
+    <dimen name="button__bar_height">48dp</dimen>
+    <dimen name="button_padding">8dp</dimen>
+    <dimen name="button_min_width">68dp</dimen>
+    <dimen name="button_height">36dp</dimen>
 </resources>
