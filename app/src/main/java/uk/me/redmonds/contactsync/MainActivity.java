@@ -115,9 +115,11 @@ public class MainActivity extends ActionBarActivity
                     .commit();
                 break;
             case 2:
-                fragmentManager.beginTransaction()
+            	Toast.makeText(this, fragmentManager.getBackStackEntryCount().toString(), Toast.LENGTH_LONG).show();
+
+                /*fragmentManager.beginTransaction()
                     .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
-                    .commit();
+                    .commit();*/
                 break;
             case 3:
                 showResults();
