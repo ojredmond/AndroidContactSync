@@ -14,6 +14,8 @@ android:layout_height="fill_parent" >
 
     <Button
         android:id="@+id/delete_contact"
+        android:layout_width="88dp"
+        android:layout_height="36dp"
         android:text="@string/delete_contact"
         />
 
