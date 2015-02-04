@@ -103,10 +103,10 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-            	Fragment sF = fragmentManager.popBackStack (PACKAGE_NAME + "-" + getString(R.string.title_sync),0);
-                if (sF == null ) { 
+            	if (fragmentManager.popBackStackImmediate(PACKAGE_NAME + "-" + getString(R.string.title_sync),0)) {
+                //if (sF == null ) { 
                 Toast.makeText(getApplicationContext(), "new", Toast.LENGTH_LONG).show(); 
-                sF = new SyncFragment();
+                Fragment sF = new SyncFragment();
 
                 // Pass what list to show
                 Bundle args = new Bundle();
