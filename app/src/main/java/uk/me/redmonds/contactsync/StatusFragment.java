@@ -47,7 +47,7 @@ public class StatusFragment extends Fragment {
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            TextView log = statusView.findViewById(R.id.statuslog);
+            TextView log = (TextView)statusView.findViewById(R.id.statuslog);
             log.setText (savedInstanceState.getString("log", ""));
         }
 
@@ -58,7 +58,7 @@ public class StatusFragment extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        TextView log = getView().findViewById(R.id.statuslog);
-        outState.putString("log", log.getText());
+        TextView log = (TextView)getView().findViewById(R.id.statuslog);
+        outState.putString("log", ((String)log.getText()));
     }
 }
