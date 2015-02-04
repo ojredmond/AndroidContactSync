@@ -19,6 +19,9 @@ public class StatusFragment extends Fragment {
     @Override
     public void onAttach (Activity activity) {
         super.onAttach(activity);
+        
+        //set actionbar title
+        ((MainActivity)activity).onSectionAttached(getString(R.string.title_logs));
 
         // make sure activity has implemented callback interface
         try {
