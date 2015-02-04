@@ -147,6 +147,7 @@ public class MainActivity extends ActionBarActivity
                 mTitle = getString(R.string.title_results);
                 break;
         }
+        ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);
     }
 
