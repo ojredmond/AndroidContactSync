@@ -47,7 +47,7 @@ public class StatusFragment extends Fragment {
         if (savedInstanceState != null) {
             // Restore last state for checked position.
             TextView log = statusView.findViewById(R.id.statuslog);
-            log.setText (savedInstanceState.getString("log", "0""));
+            log.setText (savedInstanceState.getString("log", ""));
         }
 
         // Inflate the layout for this fragment
