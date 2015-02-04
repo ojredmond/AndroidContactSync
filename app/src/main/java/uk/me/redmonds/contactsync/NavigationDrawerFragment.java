@@ -149,7 +149,8 @@ public class NavigationDrawerFragment extends Fragment {
  
             public void onDrawerOpened(View drawerView) {
                 getActionBar().setTitle(getString(R.string.app_name));
-            };
+            }
+        };
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
