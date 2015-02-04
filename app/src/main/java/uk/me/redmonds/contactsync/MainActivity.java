@@ -1,7 +1,6 @@
 package uk.me.redmonds.contactsync;
 
 import android.app.Activity;
-//import android.support.v4.app.FragmentActivity;
 import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -16,11 +15,6 @@ import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-//import android.widget.ArrayAdapter;
-//import android.widget.AdapterView;
-//import android.widget.AdapterView.OnItemSelectedListener;
-//import android.widget.TextView;
-//import android.widget.Spinner;
 import android.view.MenuItem;
 
 import java.io.BufferedReader;
@@ -201,29 +195,6 @@ public class MainActivity extends ActionBarActivity
         m.startMatch(this, statusView, syncType);
     }
 
-    /*public void setMenuIcon () {
-        //set icon dependent on visibility of settings screen
-        FragmentManager fragMan = getSupportFragmentManager();
-        SettingsFragment s = (SettingsFragment)fragMan.findFragmentByTag("com.redmonds.contactsync-settings");
-        if (s != null && s.isAdded()) {
-            mainMenu.findItem(R.id.settings).setIcon(CLOSE_ICON);
-        } else {
-            mainMenu.findItem(R.id.settings).setIcon(SETTINGS_ICON);
-        }
-    }*/
-
-    public void hideMenuIcon () {
-        if (mainMenu != null) {
-            //mainMenu.findItem(R.id.settings).setVisible(false);
-        }
-    }
-
-    public void showMenuIcon () {
-        if (mainMenu != null) {
-            //mainMenu.findItem(R.id.settings).setVisible(true);
-        }
-    }
-
     public void showResults () {
         showResults(null);
     }
@@ -330,34 +301,6 @@ public class MainActivity extends ActionBarActivity
         }
         return ret;
     }
-
-    /*@Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (!mNavigationDrawerFragment.isDrawerOpen()) {
-            // Only show items in the action bar relevant to this screen
-            // if the drawer is not showing. Otherwise, let the drawer
-            // decide what to show in the action bar.
-            getMenuInflater().inflate(R.menu.main, menu);
-            restoreActionBar();
-            return true;
-        }
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
