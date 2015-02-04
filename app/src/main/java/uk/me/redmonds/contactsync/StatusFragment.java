@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 public class StatusFragment extends Fragment {
     private OnViewCreatedListener mCallback;
+    private TextView log;
 
     //Container Activity must implement this interface
     public interface OnViewCreatedListener {
@@ -53,10 +54,10 @@ public class StatusFragment extends Fragment {
         actionBar.setTitle(R.string.title_activity_main);*/
 
         mCallback.onViewCreated(statusView);
+        log = (TextView)statusView.findViewById(R.id.statuslog);
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            TextView log = (TextView)statusView.findViewById(R.id.statuslog);
             log.setText (savedInstanceState.getString("log", ""));
         }
 
@@ -68,7 +69,6 @@ public class StatusFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        TextView log = (TextView)getView().findViewById(R.id.statuslog);
         outState.putString("log", ((String)log.getText()));
         Toast.makeText(getActivity(), "log", Toast.LENGTH_LONG ).show();
     }
