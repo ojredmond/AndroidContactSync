@@ -113,7 +113,6 @@ public class MainActivity extends ActionBarActivity
                     .replace(R.id.container, sF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
                     .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
                     .commit();
-                }
                 break;
             case 2:
                 fragmentManager.beginTransaction()
