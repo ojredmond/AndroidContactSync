@@ -20,15 +20,20 @@ public class StatusFragment extends Fragment {
     public void onAttach (Activity activity) {
         super.onAttach(activity);
         
-        //set actionbar title
-        ((MainActivity)activity).onSectionAttached(getString(R.string.title_logs));
-
         // make sure activity has implemented callback interface
         try {
             mCallback = (OnViewCreatedListener)activity;
         } catch (ClassCastException e) {
             throw new ClassCastException (activity.toString() + " must implement OnViewCreatedListener");
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        
+        //set actionbar title
+        ((MainActivity)getActivity()).onSectionAttached(getString(R.string.title_logs));
     }
 
     @Override
