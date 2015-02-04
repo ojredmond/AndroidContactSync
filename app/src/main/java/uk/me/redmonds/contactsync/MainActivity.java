@@ -99,7 +99,7 @@ public class MainActivity extends ActionBarActivity
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new SettingsFragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
-			.addToBackStack(getString(R.string.title_settings))
+			.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_settings))
                         .commit();
                 break;
             case 1:
@@ -189,7 +189,7 @@ public class MainActivity extends ActionBarActivity
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_logs));
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_logs));
 
         // Commit the transaction
         transaction.commit();
@@ -219,7 +219,7 @@ public class MainActivity extends ActionBarActivity
 
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_results));
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_results));
 
         transaction.commit();
         
@@ -248,7 +248,7 @@ public class MainActivity extends ActionBarActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-compare");
 
-        transaction.addToBackStack(null);
+        transaction.addToBackStack(PACKAGE_NAME + "-compare");
 
         transaction.commit();
     }
