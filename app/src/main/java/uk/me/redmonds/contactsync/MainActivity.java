@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity
                     .commit();
                 break;
             case 2:
-            	Toast.makeText(this, fragmentManager.getBackStackEntryCount().toString(), Toast.LENGTH_LONG).show();
+            	Toast.makeText(this, "count" + fragmentManager.getBackStackEntryCount().toString(), Toast.LENGTH_LONG).show();
 
                 /*fragmentManager.beginTransaction()
                     .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
