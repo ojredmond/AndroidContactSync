@@ -41,10 +41,9 @@ public class CompareDetail extends Fragment {
         compareView = inflater.inflate(R.layout.compare, container, false);
 
         // add listener to buttons
-        ButtonTouch buttonTouch = new ButtonTouch();
         Button bDel = (Button)compareView.findViewById(R.id.delete_contact);
-        ImageButton bMerge = (ImageButton)compareView.findViewById(R.id.merge_contact);
-        ImageButton bUn = (ImageButton)compareView.findViewById(R.id.unmatched_contact);
+        Button bMerge = (Button)compareView.findViewById(R.id.merge_contact);
+        Button bUn = (Button)compareView.findViewById(R.id.unmatched_contact);
         //bDel.setOnTouchListener(buttonTouch);
         bDel.setOnClickListener(ButtonClick);
         bMerge.setOnTouchListener(buttonTouch);
