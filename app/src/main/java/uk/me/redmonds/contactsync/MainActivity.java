@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -102,8 +103,8 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-            	SyncFragment sF = FragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_sync));
-                if (sF == null ) { Toast.makeText(this, "new", Toast.LENGTH_LONG).show(); sF = new SyncFragment(); }
+            	Fragment sF = FragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_sync));
+                if (sF == null ) { Toast.makeText(getApplicationContext(), "new", Toast.LENGTH_LONG).show(); sF = new SyncFragment(); }
 
                 // Pass what list to show
                 Bundle args = new Bundle();
