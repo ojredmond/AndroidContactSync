@@ -46,9 +46,9 @@ public class CompareDetail extends Fragment {
         Button bUn = (Button)compareView.findViewById(R.id.unmatched_contact);
         //bDel.setOnTouchListener(buttonTouch);
         bDel.setOnClickListener(ButtonClick);
-        bMerge.setOnTouchListener(buttonTouch);
+        //bMerge.setOnTouchListener(buttonTouch);
         bMerge.setOnClickListener(ButtonClick);
-        bUn.setOnTouchListener(buttonTouch);
+        //bUn.setOnTouchListener(buttonTouch);
         bUn.setOnClickListener(ButtonClick);
 
         main = (FragmentActivity)this.getActivity();
