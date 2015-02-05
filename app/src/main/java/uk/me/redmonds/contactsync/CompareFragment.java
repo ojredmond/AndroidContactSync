@@ -19,7 +19,7 @@ import android.content.Context;
 public class CompareFragment extends android.app.Fragment {
     // When requested, this adapter returns a DemoObjectFragment,
     // representing an object in the collection.
-    DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
+    TabsAdapter mTabsAdapter;
     ViewPager mViewPager;
     FragmentActivity main;
 
@@ -29,23 +29,23 @@ public class CompareFragment extends android.app.Fragment {
         main = (FragmentActivity)this.getActivity();
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
-        mDemoCollectionPagerAdapter =
-                new DemoCollectionPagerAdapter(
+        mTabsAdapter =
+                new TabsAdapter(
                         main.getSupportFragmentManager());
 
         View tabs = inflater.inflate(R.layout.fragment_pager, container, false);
 
         mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
-        mViewPager.setAdapter(mDemoCollectionPagerAdapter);
+        mViewPager.setAdapter(mTabsAdapter);
 
         return mViewPager;
     }
 
-    public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
+    public class TabsAdapter extends FragmentStatePagerAdapter {
         private SparseArray<String> contacts;
         private String listItem;
         
-        public DemoCollectionPagerAdapter(FragmentManager fm) {
+        public TabsAdapter(FragmentManager fm) {
             super(fm);
 
             //get data to display
@@ -59,24 +59,17 @@ public class CompareFragment extends android.app.Fragment {
             //if list not empty add tab for each contact
             if (!list.equals(null)) {
                 contacts = list.getSparseArray();
-                /*for (int i=0; i<contacts.size(); i++)
-                {
-                    String name = contacts.valueAt(i);
-                    int id = contacts.keyAt(i);
-                    Bundle argsDetail = new Bundle();
-                    argsDetail.putString("listItem", listItem);
-                    argsDetail.putString("name", name);
-                    argsDetail.putInt("id", id);
-    
-                    if (listItem.startsWith(Match.UNMATCHNAMEKEY))
-                        mTabsAdapter.addTab(tab, MatchContact.class, argsDetail);
-                    else
-                        mTabsAdapter.addTab(tab, CompareDetail.class, argsDetail);
-    
-                    if (name.equals(selected))
-                        mTabsHost.setCurrentTab(mTabsAdapter.getCount()-1);
-                }*/
             }
+
+            if (savedInstanceState != null) {
+                this.setCurrentItem(savedInstanceState.getInt("tab", 0));
+            }
+        }
+
+        @Override
+        public void onSaveInstanceState(Bundle outState) {
+            outState.putInt("tab", this.getCurrentItem());
+            super.onSaveInstanceState(outState);
         }
 
         @Override
@@ -108,25 +101,6 @@ public class CompareFragment extends android.app.Fragment {
         @Override
         public CharSequence getPageTitle(int position) {
             return contacts.valueAt(position);
-        }
-    }
-
-    // Instances of this class are fragments representing a single
-// object in our collection.
-    public static class DemoObjectFragment extends Fragment {
-        public static final String ARG_OBJECT = "object";
-
-        @Override
-        public View onCreateView(LayoutInflater inflater,
-                                 ViewGroup container, Bundle savedInstanceState) {
-            // The last two arguments ensure LayoutParams are inflated
-            // properly.
-            View rootView = inflater.inflate(
-                    android.R.layout.simple_list_item_1, container, false);
-            Bundle args = getArguments();
-            ((TextView) rootView.findViewById(android.R.id.text1)).setText(
-                    Integer.toString(args.getInt(ARG_OBJECT)));
-            return rootView;
         }
     }
 }
