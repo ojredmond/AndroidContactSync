@@ -208,7 +208,7 @@ public class CompareDetail extends Fragment {
                 params.setMargins(5, 5, 5, 0);
                 layout.addView(compareDetail, params);
             }
-        //}
+        }
         return true;
     }
 
