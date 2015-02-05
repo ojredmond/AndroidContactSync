@@ -278,14 +278,14 @@ public class Match
             results.commit();
 
             HashSet<String> account1Set = new HashSet<String>();
-            for (Map.Entry <String, Integer> e : account1.entrySet()) {
+            for (Map.Entry <String, Long> e : account1.entrySet()) {
                 account1Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
             }
             results.putStringSet(ACCOUNTKEY + account1Name, account1Set);
             results.commit();
 
             HashSet<String> account2Set = new HashSet<String>();
-            for (Map.Entry <String, Integer> e : account2.entrySet()) {
+            for (Map.Entry <String, Long> e : account2.entrySet()) {
                 account2Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
             }
             results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
