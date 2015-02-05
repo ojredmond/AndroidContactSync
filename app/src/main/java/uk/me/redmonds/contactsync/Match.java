@@ -248,7 +248,7 @@ public class Match
             results.commit();
 
             HashSet<String> unmatched1Name = new HashSet<String>();
-            for (Map.Entry <Long, Long> e : unmatched1.entrySet()) {
+            for (Map.Entry <String, Long> e : unmatched1.entrySet()) {
                 unmatched1Name.add(e.getKey() + ":" + e.getValue());
             }
             results.putStringSet(UNMATCHNAMEKEY + account1Name + ":" + account2Name, unmatched1Name);
@@ -256,7 +256,7 @@ public class Match
             results.commit();
 
             HashSet<String> unmatched2Name = new HashSet<String>();
-            for (Map.Entry <Long, Long> e : unmatched2.entrySet()) {
+            for (Map.Entry <String, Long> e : unmatched2.entrySet()) {
                 unmatched2Name.add(e.getKey() + ":" + e.getValue());
             }
             results.putStringSet(UNMATCHNAMEKEY + account2Name + ":" + account1Name, unmatched2Name);
