@@ -44,7 +44,7 @@ public class Match
         private int numContactsAccount2 = -1;
         private String lastContactName = "";
         private String tempContactName = "";
-        private int tempContactId = 0;
+        private Long tempContactId = 0;
         private Boolean dup = false;
         private Boolean syncStarted = false;
 
@@ -52,8 +52,8 @@ public class Match
         protected String doInBackground (Void... params) {
             String message;
 
-            account1 = new HashMap<String, Integer> ();
-            account2 = new HashMap<String, Integer> ();
+            account1 = new HashMap<String, Long> ();
+            account2 = new HashMap<String, Long> ();
             dup1List = new HashMap<String, String> ();
             dup2List = new HashMap<String, String> ();
             dup1 = new SparseArray<String>();
@@ -69,7 +69,7 @@ public class Match
             int dupCount2 = 0;
             int unmatchedCount1 = 0;
             int unmatchedCount2 = 0;
-            int contactId;
+            Long contactId;
 
             // get sync status
             SharedPreferences status = mainActivity.getPreferences(Context.MODE_PRIVATE);
@@ -96,7 +96,7 @@ public class Match
 
             while (!cursor.isAfterLast()) {
                 tempContactName = cursor.getString(1);
-                tempContactId = cursor.getInt(0);
+                tempContactId = cursor.getLong(0);
 
                 if (lastContactName.equals(tempContactName)) {
                     dup = true;
@@ -114,9 +114,9 @@ public class Match
                     dupCount1++;
                     dup1.put(tempContactId, tempContactName);
                     if (dup1List.containsKey(tempContactName))
-                        dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Integer.toString(tempContactId));
+                        dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
                     else
-                        dup1List.put(tempContactName, Integer.toString(tempContactId));
+                        dup1List.put(tempContactName, Long.toString(tempContactId));
                 } else {
                     account1.put(tempContactName, tempContactId);
                 }
@@ -146,7 +146,7 @@ public class Match
 
             while (!cursor.isAfterLast()) {
                 tempContactName = cursor.getString(1);
-                tempContactId = cursor.getInt(0);
+                tempContactId = cursor.getLong(0);
 
                 if (lastContactName.equals(tempContactName)) {
                     dup = true;
