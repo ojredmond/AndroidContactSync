@@ -79,10 +79,19 @@ public class CompareFragment extends android.app.Fragment {
 
         @Override
         public Fragment getItem(int i) {
-            Fragment fragment = new DemoObjectFragment();
-            Bundle args = new Bundle();
-            // Our object is just an integer :-P
-            args.putInt(DemoObjectFragment.ARG_OBJECT, i + 1);
+            String name = contacts.valueAt(i);
+            int id = contacts.keyAt(i);
+            Bundle argsDetail = new Bundle();
+            argsDetail.putString("listItem", listItem);
+            argsDetail.putString("name", name);
+            argsDetail.putInt("id", id);
+            
+            Fragment fragment;
+            if (listItem.startsWith(Match.UNMATCHNAMEKEY))
+                fragment = new MatchContact();
+            else
+                fragment = new CompareDetail();
+
             fragment.setArguments(args);
             return fragment;
         }
