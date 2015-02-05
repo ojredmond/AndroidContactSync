@@ -78,7 +78,7 @@ public class CompareDetail extends Fragment {
         // To get the Iterator use the iterator() operation
         Iterator dupIt = dupSet.iterator();
         while(dupIt.hasNext()) {
-            String[] itemArray = dupIt.next().split(":");
+            String[] itemArray = ((String)dupIt.next()).split(":");
             dupList.put(itemArray[0], itemArray[1]);
         }
 
