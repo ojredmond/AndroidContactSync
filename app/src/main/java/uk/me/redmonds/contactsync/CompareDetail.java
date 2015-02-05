@@ -73,7 +73,7 @@ public class CompareDetail extends Fragment {
         //dup = new StringList(pref, listItem);
         //dupList = dup.getSparseArray();
         
-        HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(Match.DUPKEY + listItem, null);
+        HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(listItem, null);
         HashMap<String,String> dupList = new HashMap<String, String> ();
         // To get the Iterator use the iterator() operation
         Iterator dupIt = dupSet.iterator();
@@ -84,11 +84,11 @@ public class CompareDetail extends Fragment {
 
         layout.removeAllViews();
 
-        String contact = "";
         LinearLayout.LayoutParams params;
         Uri rawContactUri;
         Uri entityUri;
-        //String account = "";
+        String account = listItem.subString(Match.DUPKEY.length());
+        String contact = "account:\t\t" + account + "\n";
         Cursor c;
         //for (int i=0; i < dupList.size(); i++) {
             //if (dupList.valueAt(i).equals(name)) {
@@ -192,8 +192,7 @@ public class CompareDetail extends Fragment {
                 TextView compareDetail = new TextView(main);
                 //compareDetail.setId(dupList.keyAt(i));
                 compareDetail.setId(1);
-                //compareDetail.setTag(account);
-                compareDetail.setTag(listItem);
+                compareDetail.setTag(account);
                 compareDetail.setTextIsSelectable(false);
                 compareDetail.setOnTouchListener(ContactTouch);
                 //compareDetail.setBackgroundResource(R.drawable.border);
