@@ -14,9 +14,9 @@ public class MatchContact extends Fragment
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
     private FragmentActivity main;
-    private SparseArray<String> unmatchedList;
-    private SparseArray<String> matchedList;
-    private int id;
+    //private SparseArray<String> unmatchedList;
+    //private SparseArray<String> matchedList;
+    private Long id;
     private String listItem;
     private String name;
     private SharedPreferences pref;
@@ -24,9 +24,9 @@ public class MatchContact extends Fragment
     public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5)
     {
         if (p3 == 0) {
-            Toast.makeText(main, "click " + unmatchedList.valueAt(p4), Toast.LENGTH_SHORT).show();
+            Toast.makeText(main, "click p3 = 0" + p4, Toast.LENGTH_SHORT).show();
         } else if (p3 == 1) {
-            Toast.makeText(main, "click " + matchedList.valueAt(p4), Toast.LENGTH_SHORT).show();
+            Toast.makeText(main, "click p3 = 1 " + p4, Toast.LENGTH_SHORT).show();
         }
 
         return false;
@@ -35,11 +35,11 @@ public class MatchContact extends Fragment
     public void onClick(View p1)
     {
         if (p1.getId() == R.id.delete_contact) {
-            StringList um = new StringList(pref, listItem);
+            /*StringList um = new StringList(pref, listItem);
             HashSet<String> list = new HashSet<String>();
             list.add(String.valueOf(id));
             Contacts contacts = new Contacts(main, list, um);
-            contacts.deleteContacts();
+            contacts.deleteContacts();*/
             Toast.makeText(main, "Deleted " + this.getActivity().getClass(), Toast.LENGTH_SHORT).show();
         }
 
@@ -53,7 +53,6 @@ public class MatchContact extends Fragment
         Bundle args = getArguments();
         listItem = args.getString("listItem");
         name = args.getString("name");
-        id = args.getInt("id");
         String accountSelected = listItem.split(":")[1];
         String accountOther = listItem.split(":")[2];
 
@@ -72,14 +71,16 @@ public class MatchContact extends Fragment
         curGroupMap1.put(DESCRIPTION, accountOther);
 
         pref = main.getPreferences(Context.MODE_PRIVATE);
-        StringList um = new StringList(pref, Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected);
-
-        List<Map<String, String>> children = new ArrayList<Map<String, String>>();
-        Map<String, String> contactMap;
-        unmatchedList = um.getSparseArray();
-        for (int i=0; i < unmatchedList.size(); i++) {
+        HashSet<String> um = (HashSet<String>)pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
+        HashMap<String,String> unmatchedList = new HashMap<String, String> ();
+        children = new ArrayList<Map<String, String>>();
+        // To get the Iterator use the iterator() operation
+        Iterator umIt = um.iterator();
+        while(umIt.hasNext()) {
+            String[] itemArray = ((String)dupIt.next()).split(":");
+            unmatchedList.put(itemArray[0], itemArray[1]);
             contactMap = new HashMap<String, String> ();
-            contactMap.put(NAME, unmatchedList.valueAt(i));
+            contactMap.put(NAME, itemArray[0]);
             children.add(contactMap);
         }
         childData.add(children);
@@ -89,17 +90,19 @@ public class MatchContact extends Fragment
         curGroupMap2.put(NAME, "Matched");
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
 
-        StringList md = new StringList(pref, Match.MATCHEDKEY + accountSelected + ":" + accountOther);
-
+        HashSet<String> md = (HashSet<String>)pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
+        HashMap<String,String> matchedList = new HashMap<String, String> ();
         children = new ArrayList<Map<String, String>>();
-        matchedList = md.getSparseArray();
-        for (int i=0; i < matchedList.size(); i++) {
+        // To get the Iterator use the iterator() operation
+        Iterator umIt = um.iterator();
+        while(umIt.hasNext()) {
+            String[] itemArray = ((String)dupIt.next()).split(":");
+            matchedList.put(itemArray[0], itemArray[1]);
             contactMap = new HashMap<String, String> ();
-            contactMap.put(NAME, matchedList.valueAt(i));
+            contactMap.put(NAME, itemArray[0]);
             children.add(contactMap);
         }
         childData.add(children);
-
 
         // Set up our adapter
         SimpleExpandableListAdapter mAdapter = new SimpleExpandableListAdapter(
