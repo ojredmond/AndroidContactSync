@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.Context;
 import java.util.HashSet;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Created by oli on 31/01/15.
