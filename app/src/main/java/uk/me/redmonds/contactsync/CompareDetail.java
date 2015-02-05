@@ -75,8 +75,8 @@ public class CompareDetail extends Fragment {
         
         HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(Match.DUPKEY + listItem, null);
         HashMap<String,String> dupList = new HashMap<String, String> ();
-        for (String item : dupSet) {
-            String[] itemArray = item.split(":");
+        while(dupSet.hasNext())
+            String[] itemArray = dupSet.Next().split(":");
             dupList.put(itemArray[0], itemArray[1]);
         }
 
