@@ -29,7 +29,7 @@ public class CompareDetail extends Fragment {
     private LinearLayout layout;
     private StringList dup;
     private String listItem;
-    private SparseArray<String> dupList;
+    //private SparseArray<String> dupList;
     private SharedPreferences pref;
 
     private View compareView;
@@ -70,8 +70,15 @@ public class CompareDetail extends Fragment {
     }
 
     private Boolean fillLayout () {
-        dup = new StringList(pref, listItem);
-        dupList = dup.getSparseArray();
+        //dup = new StringList(pref, listItem);
+        //dupList = dup.getSparseArray();
+        
+        HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(Match.DUPKEY + listItem, null);
+        HashMap<String,String> dupList;
+        for (String item : dupSet) {
+            String[] itemArray = item.split()
+            dupList.put(itemArray[0], itemArray[1]);
+        }
 
         layout.removeAllViews();
 
@@ -79,11 +86,12 @@ public class CompareDetail extends Fragment {
         LinearLayout.LayoutParams params;
         Uri rawContactUri;
         Uri entityUri;
-        String account = "";
+        //String account = "";
         Cursor c;
-        for (int i=0; i < dupList.size(); i++) {
-            if (dupList.valueAt(i).equals(name)) {
-                rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, dupList.keyAt(i));
+        //for (int i=0; i < dupList.size(); i++) {
+            //if (dupList.valueAt(i).equals(name)) {
+            if (dup1List.containsKey(name)) {
+                /*rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, dupList.keyAt(i));
                 c = main.getContentResolver().query(rawContactUri,
                         new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
                         null, null, null);
@@ -177,11 +185,13 @@ public class CompareDetail extends Fragment {
                     }
                 } finally {
                     c.close();
-                }
+                }*/
 
                 TextView compareDetail = new TextView(main);
-                compareDetail.setId(dupList.keyAt(i));
-                compareDetail.setTag(account);
+                //compareDetail.setId(dupList.keyAt(i));
+                compareDetail.setId(1);
+                //compareDetail.setTag(account);
+                compareDetail.setTag(listItem);
                 compareDetail.setTextIsSelectable(false);
                 compareDetail.setOnTouchListener(ContactTouch);
                 //compareDetail.setBackgroundResource(R.drawable.border);
@@ -194,7 +204,7 @@ public class CompareDetail extends Fragment {
                 params.setMargins(5, 5, 5, 0);
                 layout.addView(compareDetail, params);
             }
-        }
+        //}
         return true;
     }
 
