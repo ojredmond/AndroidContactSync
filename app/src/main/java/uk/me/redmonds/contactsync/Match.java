@@ -21,6 +21,8 @@ public class Match
     private String syncType = "";
     private HashMap<String, Integer> account1;
     private HashMap<String, Integer> account2;
+    private HashMap<String, String> dup1List;
+    private HashMap<String, String> dup2List;
     private SparseArray<String> dup1;
     private SparseArray<String> dup2;
     private SparseArray<String> unmatched1;
@@ -52,6 +54,8 @@ public class Match
 
             account1 = new HashMap<String, Integer> ();
             account2 = new HashMap<String, Integer> ();
+            dup1List = new HashMap<String, String> ();
+            dup2List = new HashMap<String, String> ();
             dup1 = new SparseArray<String>();
             dup2 = new SparseArray<String>();
             unmatched1 = new SparseArray<String>();
@@ -109,6 +113,10 @@ public class Match
                 if (dup) {
                     dupCount1++;
                     dup1.put(tempContactId, tempContactName);
+                    if (dup1List.containsKey(tempContactName))
+                        dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + tempContactId);
+                    else
+                        dup1List.put(tempContactName, tempContactId);
                 } else {
                     account1.put(tempContactName, tempContactId);
                 }
@@ -224,9 +232,13 @@ public class Match
             results.commit();
 
             HashSet<String> dup1Name = new HashSet<String>();
-            for (int i=0; i < dup1.size(); i++) {
+            /*for (int i=0; i < dup1.size(); i++) {
                 dup1Name.add(String.valueOf(dup1.keyAt(i)) + ":"
                         + dup1.valueAt(i));
+            }*/
+            for (int i=0; i < dup1List.size(); i++) {
+                dup1Name.add(String.valueOf(dup1List.keyAt(i)) + ":"
+                        + dup1Name.valueAt(i));
             }
             results.putStringSet(DUPKEY + account1Name, dup1Name);
             results.commit();
