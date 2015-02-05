@@ -77,7 +77,7 @@ public class MatchContact extends Fragment
         // To get the Iterator use the iterator() operation
         Iterator umIt = um.iterator();
         while(umIt.hasNext()) {
-            String[] itemArray = ((String)dupIt.next()).split(":");
+            String[] itemArray = ((String)umIt.next()).split(":");
             unmatchedList.put(itemArray[0], itemArray[1]);
             contactMap = new HashMap<String, String> ();
             contactMap.put(NAME, itemArray[0]);
@@ -94,9 +94,9 @@ public class MatchContact extends Fragment
         HashMap<String,String> matchedList = new HashMap<String, String> ();
         children = new ArrayList<Map<String, String>>();
         // To get the Iterator use the iterator() operation
-        Iterator umIt = um.iterator();
-        while(umIt.hasNext()) {
-            String[] itemArray = ((String)dupIt.next()).split(":");
+        Iterator mdIt = um.iterator();
+        while(mdIt.hasNext()) {
+            String[] itemArray = ((String)mdIt.next()).split(":");
             matchedList.put(itemArray[0], itemArray[1]);
             contactMap = new HashMap<String, String> ();
             contactMap.put(NAME, itemArray[0]);
