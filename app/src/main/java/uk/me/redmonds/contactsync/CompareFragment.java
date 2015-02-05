@@ -40,8 +40,36 @@ public class CompareFragment extends android.app.Fragment {
     }
 
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
+        private SparseArray<String> contacts;
         public DemoCollectionPagerAdapter(FragmentManager fm) {
             super(fm);
+
+            //get data to display
+            Bundle args = getArguments();
+            String listItem = args.getString("listItem");
+            String selected = args.getString("selected");
+    
+            //if list not empty add tab for each contact
+            if (!list.equals(null)) {
+                contacts = list.getSparseArray();
+                /*for (int i=0; i<contacts.size(); i++)
+                {
+                    String name = contacts.valueAt(i);
+                    int id = contacts.keyAt(i);
+                    Bundle argsDetail = new Bundle();
+                    argsDetail.putString("listItem", listItem);
+                    argsDetail.putString("name", name);
+                    argsDetail.putInt("id", id);
+    
+                    if (listItem.startsWith(Match.UNMATCHNAMEKEY))
+                        mTabsAdapter.addTab(tab, MatchContact.class, argsDetail);
+                    else
+                        mTabsAdapter.addTab(tab, CompareDetail.class, argsDetail);
+    
+                    if (name.equals(selected))
+                        mTabsHost.setCurrentTab(mTabsAdapter.getCount()-1);
+                }*/
+            }
         }
 
         @Override
@@ -56,7 +84,7 @@ public class CompareFragment extends android.app.Fragment {
 
         @Override
         public int getCount() {
-            return 100;
+            return contacts.size();
         }
 
         @Override
