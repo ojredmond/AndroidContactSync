@@ -114,9 +114,9 @@ public class Match
                     dupCount1++;
                     dup1.put(tempContactId, tempContactName);
                     if (dup1List.containsKey(tempContactName))
-                        dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + tempContactId);
+                        dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Integer.toString(tempContactId));
                     else
-                        dup1List.put(tempContactName, tempContactId);
+                        dup1List.put(tempContactName, Integer.toString(tempContactId));
                 } else {
                     account1.put(tempContactName, tempContactId);
                 }
@@ -236,9 +236,8 @@ public class Match
                 dup1Name.add(String.valueOf(dup1.keyAt(i)) + ":"
                         + dup1.valueAt(i));
             }*/
-            for (int i=0; i < dup1List.size(); i++) {
-                dup1Name.add(String.valueOf(dup1List.keyAt(i)) + ":"
-                        + dup1Name.valueAt(i));
+            for (Map.Entry <String, String> e : dup1List.entrySet()) {
+                dup1Name.add(String.valueOf(e.getValue()) + ":" + e.getKey());
             }
             results.putStringSet(DUPKEY + account1Name, dup1Name);
             results.commit();
