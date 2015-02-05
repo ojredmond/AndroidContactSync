@@ -38,8 +38,17 @@ public class CompareFragment extends android.app.Fragment {
         mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
 
+		if (savedInstanceState != null) {
+			mViewPager.setCurrentItem(savedInstanceState.getInt("tab", 0));
+		}
         return mViewPager;
     }
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		outState.putInt("tab", mViewPager.getCurrentItem());
+		super.onSaveInstanceState(outState);
+	}
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private SparseArray<String> contacts;
@@ -60,16 +69,6 @@ public class CompareFragment extends android.app.Fragment {
             if (!list.equals(null)) {
                 contacts = list.getSparseArray();
             }
-
-            if (savedInstanceState != null) {
-                this.setCurrentItem(savedInstanceState.getInt("tab", 0));
-            }
-        }
-
-        @Override
-        public void onSaveInstanceState(Bundle outState) {
-            outState.putInt("tab", this.getCurrentItem());
-            super.onSaveInstanceState(outState);
         }
 
         @Override
