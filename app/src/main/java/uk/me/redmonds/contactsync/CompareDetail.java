@@ -18,8 +18,8 @@ import android.widget.*;
 import android.net.Uri;
 import android.database.Cursor;
 import android.provider.ContactsContract.*;
-
 import java.util.*;
+import java.lang.Long;
 import android.preference.*;
 
 public class CompareDetail extends Fragment {
@@ -195,8 +195,7 @@ public class CompareDetail extends Fragment {
 
                 TextView compareDetail = new TextView(main);
                 //compareDetail.setId(dupList.keyAt(i));
-                compareDetail.setId(ids[i]);
-                compareDetail.setTag(account);
+                compareDetail.setTag(account + ":" + ids[i]);
                 compareDetail.setTextIsSelectable(false);
                 compareDetail.setOnTouchListener(ContactTouch);
                 //compareDetail.setBackgroundResource(R.drawable.border);
