@@ -13,6 +13,9 @@ import android.widget.TextView;
 import android.util.SparseArray;
 import android.content.SharedPreferences;
 import android.content.Context;
+import java.util.HashSet;
+import java.util.ArrayList;
+
 /**
  * Created by oli on 31/01/15.
  */
@@ -51,7 +54,7 @@ public class CompareFragment extends android.app.Fragment {
 	}
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
-        private HashSet<String> contacts;
+        private ArrayList<String> contacts;
         private String listItem;
         
         public TabsAdapter(FragmentManager fm) {
@@ -63,7 +66,13 @@ public class CompareFragment extends android.app.Fragment {
             String selected = args.getString("selected");
     
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
-            contacts = (HashSet<String>)pref.getStringSet(listItem, null);
+            contacts = new ArraryList<String>();
+            HashSet set = (HashSet<String>)pref.getStringSet(listItem, null);
+            Iterator dupIt = set.iterator();
+            while(dupIt.hasNext()) {
+                contacts.add(dupIt.next());
+            }
+
             /*StringList list = new StringList(pref, listItem);
 
             //if list not empty add tab for each contact
@@ -74,15 +83,11 @@ public class CompareFragment extends android.app.Fragment {
 
         @Override
         public Fragment getItem(int i) {
-            String name = contacts.valueAt(i);
-            int id = contacts.keyAt(i);
-            
             //pass contact information to Fragment
             Bundle argsDetail = new Bundle();
             argsDetail.putString("listItem", listItem);
-            argsDetail.putString("name", name);
-            argsDetail.putInt("id", id);
-            
+            argsDetail.putString("name", contacts.get(i));
+
             Fragment fragment;
             if (listItem.startsWith(Match.UNMATCHNAMEKEY))
                 fragment = new MatchContact();
@@ -100,7 +105,7 @@ public class CompareFragment extends android.app.Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return contacts.valueAt(position);
+            return contacts.get(position);
         }
     }
 }
