@@ -77,7 +77,7 @@ public class CompareDetail extends Fragment {
         HashMap<String,String> dupList = new HashMap<String, String> ();
         // To get the Iterator use the iterator() operation
         Iterator dupIt = hashSet.iterator();
-        while(dupIt.hasNext())
+        while(dupIt.hasNext()) {
             String[] itemArray = dupIt.Next().split(":");
             dupList.put(itemArray[0], itemArray[1]);
         }
