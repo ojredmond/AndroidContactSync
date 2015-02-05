@@ -64,6 +64,8 @@ public class MatchContact extends Fragment
 
         List<Map<String, String>> groupData = new ArrayList<Map<String, String>>();
         List<List<Map<String, String>>> childData = new ArrayList<List<Map<String, String>>>();
+        List<Map<String, String>> children = new ArrayList<Map<String, String>>();
+        Map<String, String> contactMap;
 
         Map<String, String> curGroupMap1 = new HashMap<String, String>();
         groupData.add(curGroupMap1);
