@@ -74,9 +74,9 @@ public class CompareDetail extends Fragment {
         //dupList = dup.getSparseArray();
         
         HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(Match.DUPKEY + listItem, null);
-        HashMap<String,String> dupList;
+        HashMap<String,String> dupList = new HashMap<String, String> ();
         for (String item : dupSet) {
-            String[] itemArray = item.split()
+            String[] itemArray = item.split();
             dupList.put(itemArray[0], itemArray[1]);
         }
 
@@ -90,7 +90,7 @@ public class CompareDetail extends Fragment {
         Cursor c;
         //for (int i=0; i < dupList.size(); i++) {
             //if (dupList.valueAt(i).equals(name)) {
-            if (dup1List.containsKey(name)) {
+            if (dupList.containsKey(name)) {
                 /*rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, dupList.keyAt(i));
                 c = main.getContentResolver().query(rawContactUri,
                         new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
