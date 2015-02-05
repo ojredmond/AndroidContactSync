@@ -87,7 +87,7 @@ public class CompareDetail extends Fragment {
         LinearLayout.LayoutParams params;
         Uri rawContactUri;
         Uri entityUri;
-        String account = listItem.subString(Match.DUPKEY.length());
+        String account = listItem.substring(Match.DUPKEY.length());
         String contact = "account:\t\t" + account + "\n";
         Cursor c;
         //for (int i=0; i < dupList.size(); i++) {
