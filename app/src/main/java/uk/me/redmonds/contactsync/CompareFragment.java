@@ -31,9 +31,9 @@ public class CompareFragment extends android.app.Fragment {
                 new DemoCollectionPagerAdapter(
                         main.getSupportFragmentManager());
 
-        Fragment f = inflater.inflate(R.layout.tabs, container, false);
+        View tabs = inflater.inflate(R.layout.fragment_pager, container, false);
 
-        mViewPager = (ViewPager) f.findViewById(R.id.fragment_pager);
+        mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mDemoCollectionPagerAdapter);
 
         return mViewPager;
