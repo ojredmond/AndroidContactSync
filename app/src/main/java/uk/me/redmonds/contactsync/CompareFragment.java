@@ -10,7 +10,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.util.SparseArray;
+import android.content.SharedPreferences;
+import android.content.Context;
 /**
  * Created by oli on 31/01/15.
  */
