@@ -237,7 +237,7 @@ public class Match
                         + dup1.valueAt(i));
             }*/
             for (Map.Entry <String, String> e : dup1List.entrySet()) {
-                dup1Name.add(String.valueOf(e.getValue()) + ":" + e.getKey());
+                dup1Name.add(String.valueOf(e.getKey()) + ":" + e.getValue());
             }
             results.putStringSet(DUPKEY + account1Name, dup1Name);
             results.commit();
