@@ -14,7 +14,7 @@ import android.widget.TextView;
 /**
  * Created by oli on 31/01/15.
  */
-public class CompareFragment2 extends android.app.Fragment {
+public class CompareFragment extends android.app.Fragment {
     // When requested, this adapter returns a DemoObjectFragment,
     // representing an object in the collection.
     DemoCollectionPagerAdapter mDemoCollectionPagerAdapter;
