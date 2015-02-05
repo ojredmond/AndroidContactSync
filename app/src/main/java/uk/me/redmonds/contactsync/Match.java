@@ -19,16 +19,14 @@ public class Match
     private MainActivity mainActivity = null;
     private TextView status = null;
     private String syncType = "";
-    private HashMap<String, Integer> account1;
-    private HashMap<String, Integer> account2;
+    private HashMap<String, Long> account1;
+    private HashMap<String, Long> account2;
     private HashMap<String, String> dup1List;
     private HashMap<String, String> dup2List;
-    private SparseArray<String> dup1;
-    private SparseArray<String> dup2;
-    private SparseArray<String> unmatched1;
-    private SparseArray<String> unmatched2;
-    private SparseIntArray matched1;
-    private SparseIntArray matched2;
+    private HashMap<String, Long> unmatched1;
+    private HashMap<String, Long> unmatched2;
+    private HashMap<Long, Long>  matched1;
+    private HashMap<Long, Long>  matched2;
     private String account1Name;
     private String account2Name;
     private Boolean syncMatched;
@@ -44,7 +42,7 @@ public class Match
         private int numContactsAccount2 = -1;
         private String lastContactName = "";
         private String tempContactName = "";
-        private Long tempContactId = 0;
+        private Long tempContactId;
         private Boolean dup = false;
         private Boolean syncStarted = false;
 
@@ -56,12 +54,10 @@ public class Match
             account2 = new HashMap<String, Long> ();
             dup1List = new HashMap<String, String> ();
             dup2List = new HashMap<String, String> ();
-            dup1 = new SparseArray<String>();
-            dup2 = new SparseArray<String>();
-            unmatched1 = new SparseArray<String>();
-            unmatched2 = new SparseArray<String>();
-            matched1 = new SparseIntArray();
-            matched2 = new SparseIntArray();
+            unmatched1 = new HashMap<String, Long> ();
+            unmatched2 = new HashMap<String, Long> ();
+            matched1 = new HashMap<Long, Long> ();
+            matched2 = new HashMap<Long, Long> ();
 
             Cursor cursor;
             int matches = 0;
@@ -112,7 +108,6 @@ public class Match
 
                 if (dup) {
                     dupCount1++;
-                    dup1.put(tempContactId, tempContactName);
                     if (dup1List.containsKey(tempContactName))
                         dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
                     else
@@ -131,7 +126,11 @@ public class Match
                     + " contacts\n";
             message += "Account 1 Duplicates: " + String.valueOf(dupCount1) + "\n";
             message += "Loading Account 2\n";
-            publishProgress(new String[] {message});
+            
+            if (account2Name.equals(account1Name))
+                return message;
+            else
+                publishProgress(new String[] {message});
 
             cursor = mContentResolver.query(
                     RawContacts.CONTENT_URI,
@@ -162,7 +161,10 @@ public class Match
 
                 if (dup) {
                     dupCount2++;
-                    dup2.put(tempContactId, tempContactName);
+                    if (dup2List.containsKey(tempContactName))
+                        dup2List.put(tempContactName, dup2List.get(tempContactName) + "," + Long.toString(tempContactId));
+                    else
+                        dup2List.put(tempContactName, Long.toString(tempContactId));
                 } else {
                     account2.put(tempContactName, tempContactId);
 
@@ -174,7 +176,7 @@ public class Match
                         matched2.put(tempContactId, contactId);
                     } else {
                         unmatchedCount2++;
-                        unmatched2.put(tempContactId, tempContactName);
+                        unmatched2.put(tempContactName, tempContactId );
                     }
                 }
                 lastContactName = tempContactName;
@@ -189,10 +191,10 @@ public class Match
             message += "Account 2 Duplicates: " + String.valueOf(dupCount2) + "\n";
             publishProgress(new String[] {message});
 
-            for (HashMap.Entry<String, Integer> entry : account1.entrySet()) {
+            for (HashMap.Entry<String, Long> entry : account1.entrySet()) {
                 if (!account2.containsKey(entry.getKey())) {
                     unmatchedCount1++;
-                    unmatched1.put(entry.getValue(), entry.getKey());
+                    unmatched1.put(entry.getKey(), entry.getValue());
                 }
             }
 
@@ -232,10 +234,6 @@ public class Match
             results.commit();
 
             HashSet<String> dup1Name = new HashSet<String>();
-            /*for (int i=0; i < dup1.size(); i++) {
-                dup1Name.add(String.valueOf(dup1.keyAt(i)) + ":"
-                        + dup1.valueAt(i));
-            }*/
             for (Map.Entry <String, String> e : dup1List.entrySet()) {
                 dup1Name.add(e.getKey() + ":" + e.getValue());
             }
@@ -243,45 +241,38 @@ public class Match
             results.commit();
 
             HashSet<String> dup2Name = new HashSet<String>();
-            for (int i=0; i < dup2.size(); i++) {
-                dup2Name.add(String.valueOf(dup2.keyAt(i)) + ":"
-                        + dup2.valueAt(i));
+            for (Map.Entry <String, String> e : dup2List.entrySet()) {
+                dup2Name.add(e.getKey() + ":" + e.getValue());
             }
             results.putStringSet(DUPKEY + account2Name, dup2Name);
             results.commit();
 
             HashSet<String> unmatched1Name = new HashSet<String>();
-
-            for (int i=0; i < unmatched1.size(); i++) {
-                unmatched1Name.add(String.valueOf(unmatched1.keyAt(i)) + ":"
-                        + unmatched1.valueAt(i));
+            for (Map.Entry <Long, Long> e : unmatched1.entrySet()) {
+                unmatched1Name.add(e.getKey() + ":" + e.getValue());
             }
             results.putStringSet(UNMATCHNAMEKEY + account1Name + ":" + account2Name, unmatched1Name);
 
             results.commit();
 
             HashSet<String> unmatched2Name = new HashSet<String>();
-
-            for (int i=0; i < unmatched2.size(); i++) {
-                unmatched2Name.add(String.valueOf(unmatched2.keyAt(i)) + ":"
-                        + unmatched2.valueAt(i));
+            for (Map.Entry <Long, Long> e : unmatched2.entrySet()) {
+                unmatched2Name.add(e.getKey() + ":" + e.getValue());
             }
             results.putStringSet(UNMATCHNAMEKEY + account2Name + ":" + account1Name, unmatched2Name);
 
             results.commit();
 
             HashSet<String> matched1Name = new HashSet<String>();
-            for (int i=0; i < matched1.size(); i++) {
-                matched1Name.add(String.valueOf(matched1.keyAt(i))
-                        + ":" + String.valueOf(matched1.valueAt(i)));
+            for (Map.Entry <Long, Long> e : matched1.entrySet()) {
+                matched1Name.add(e.getKey() + ":" + e.getValue());
             }
             results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name);
             results.commit();
 
             HashSet<String> matched2Name = new HashSet<String>();
-            for (int i=0; i < matched2.size(); i++) {
-                matched2Name.add(String.valueOf(matched2.keyAt(i))
-                        + ":" + String.valueOf(matched2.valueAt(i)));
+            for (Map.Entry <Long, Long> e : matched2.entrySet()) {
+                matched2Name.add(e.getKey() + ":" + e.getValue());
             }
             results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name);
             results.commit();
