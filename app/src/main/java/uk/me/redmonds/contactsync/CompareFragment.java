@@ -43,12 +43,14 @@ public class CompareFragment extends android.app.Fragment {
 
     public class DemoCollectionPagerAdapter extends FragmentStatePagerAdapter {
         private SparseArray<String> contacts;
+        private String listItem;
+        
         public DemoCollectionPagerAdapter(FragmentManager fm) {
             super(fm);
 
             //get data to display
             Bundle args = getArguments();
-            String listItem = args.getString("listItem");
+            listItem = args.getString("listItem");
             String selected = args.getString("selected");
     
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
@@ -81,6 +83,8 @@ public class CompareFragment extends android.app.Fragment {
         public Fragment getItem(int i) {
             String name = contacts.valueAt(i);
             int id = contacts.keyAt(i);
+            
+            //pass contact information to Fragment
             Bundle argsDetail = new Bundle();
             argsDetail.putString("listItem", listItem);
             argsDetail.putString("name", name);
@@ -92,7 +96,7 @@ public class CompareFragment extends android.app.Fragment {
             else
                 fragment = new CompareDetail();
 
-            fragment.setArguments(args);
+            fragment.setArguments(argsDetail);
             return fragment;
         }
 
