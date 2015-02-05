@@ -49,6 +49,9 @@ public class CompareFragment extends android.app.Fragment {
             String listItem = args.getString("listItem");
             String selected = args.getString("selected");
     
+            SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
+            StringList list = new StringList(pref, listItem);
+
             //if list not empty add tab for each contact
             if (!list.equals(null)) {
                 contacts = list.getSparseArray();
