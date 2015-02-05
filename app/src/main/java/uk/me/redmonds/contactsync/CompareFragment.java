@@ -51,7 +51,7 @@ public class CompareFragment extends android.app.Fragment {
 	}
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
-        private SparseArray<String> contacts;
+        private HashSet<String> contacts;
         private String listItem;
         
         public TabsAdapter(FragmentManager fm) {
@@ -63,12 +63,13 @@ public class CompareFragment extends android.app.Fragment {
             String selected = args.getString("selected");
     
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
-            StringList list = new StringList(pref, listItem);
+            contacts = (HashSet<String>)pref.getStringSet(listItem, null);
+            /*StringList list = new StringList(pref, listItem);
 
             //if list not empty add tab for each contact
             if (!list.equals(null)) {
                 contacts = list.getSparseArray();
-            }
+            }*/
         }
 
         @Override
