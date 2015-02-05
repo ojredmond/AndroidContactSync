@@ -37,13 +37,7 @@ public class MergeFragment extends Fragment
         main = (MainActivity)this.getActivity();
         //main.showMenuIcon();
 
-        ActionBar actionBar = main.getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.show();
-        actionBar.setTitle(name);
+        main.onSectionAttached(name);
 
         // get stored contact enables rotate top not lose any changes
         SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
@@ -56,12 +50,9 @@ public class MergeFragment extends Fragment
 
         View contactView = inflater.inflate(R.layout.contact, container, false);
         // add listeners to buttons
-        ButtonTouch buttonTouch = new ButtonTouch();
         Button cancel = (Button)contactView.findViewById(R.id.contact_cancel);
-        cancel.setOnTouchListener(buttonTouch);
         cancel.setOnClickListener(ButtonClick);
         Button confirm = (Button)contactView.findViewById(R.id.contact_confirm);
-        confirm.setOnTouchListener(buttonTouch);
         confirm.setOnClickListener(ButtonClick);
 
         layout = (RelativeLayout)contactView.findViewById(R.id.contact);

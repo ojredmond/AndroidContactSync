@@ -9,8 +9,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.util.SparseArray;
 import android.content.SharedPreferences;
 import android.content.Context;
 import java.util.HashSet;
@@ -56,6 +54,7 @@ public class CompareFragment extends android.app.Fragment {
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private ArrayList<String> contacts;
+        private ArrayList<String> contactsids;
         private String listItem;
         
         public TabsAdapter(FragmentManager fm) {
@@ -68,18 +67,14 @@ public class CompareFragment extends android.app.Fragment {
     
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<String>();
+            contactsids = new ArrayList<String>();
             HashSet set = (HashSet<String>)pref.getStringSet(listItem, null);
-            Iterator dupIt = set.iterator();
-            while(dupIt.hasNext()) {
-                contacts.add(((String)dupIt.next()).split(":")[0]);
+            Iterator setIt = set.iterator();
+            while(setIt.hasNext()) {
+                String contact[] = ((String)setIt.next()).split(":");
+                contacts.add(contact[0]);
+                contactsids.add(contact[1]);
             }
-
-            /*StringList list = new StringList(pref, listItem);
-
-            //if list not empty add tab for each contact
-            if (!list.equals(null)) {
-                contacts = list.getSparseArray();
-            }*/
         }
 
         @Override
@@ -88,6 +83,7 @@ public class CompareFragment extends android.app.Fragment {
             Bundle argsDetail = new Bundle();
             argsDetail.putString("listItem", listItem);
             argsDetail.putString("name", contacts.get(i));
+            argsDetail.putString("id", contactsids.get(i));
 
             Fragment fragment;
             if (listItem.startsWith(Match.UNMATCHNAMEKEY))
