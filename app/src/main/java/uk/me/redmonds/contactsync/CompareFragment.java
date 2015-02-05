@@ -66,7 +66,7 @@ public class CompareFragment extends android.app.Fragment {
             String selected = args.getString("selected");
     
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
-            contacts = new ArraryList<String>();
+            contacts = new ArrayList<String>();
             HashSet set = (HashSet<String>)pref.getStringSet(listItem, null);
             Iterator dupIt = set.iterator();
             while(dupIt.hasNext()) {
