@@ -76,9 +76,9 @@ public class CompareDetail extends Fragment {
         HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(Match.DUPKEY + listItem, null);
         HashMap<String,String> dupList = new HashMap<String, String> ();
         // To get the Iterator use the iterator() operation
-        Iterator dupIt = hashSet.iterator();
+        Iterator dupIt = dupSet.iterator();
         while(dupIt.hasNext()) {
-            String[] itemArray = dupIt.Next().split(":");
+            String[] itemArray = dupIt.next().split(":");
             dupList.put(itemArray[0], itemArray[1]);
         }
 
