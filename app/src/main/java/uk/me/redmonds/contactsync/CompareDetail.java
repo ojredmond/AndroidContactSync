@@ -88,14 +88,15 @@ public class CompareDetail extends Fragment {
         Uri rawContactUri;
         Uri entityUri;
         String account = listItem.substring(Match.DUPKEY.length());
-        String contact = "account:\t\t" + account + "\n";
+        String contact;
         Cursor c;
         //for (int i=0; i < dupList.size(); i++) {
             //if (dupList.valueAt(i).equals(name)) {
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
             for (int i = 0; i < ids.length; i++) {
-            contact += "id:\t\t" + ids[i];
+                contact = "account:\t\t" + account + "\n";
+                contact += "id:\t\t" + ids[i];
                 /*rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, dupList.keyAt(i));
                 c = main.getContentResolver().query(rawContactUri,
                         new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
@@ -111,8 +112,8 @@ public class CompareDetail extends Fragment {
                 } finally {
                     c.close();
                 }
-                contact += "id:\t\t" + dupList.keyAt(i);
-                rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, dupList.keyAt(i));
+                contact += "id:\t\t" + dupList.keyAt(i);*/
+                rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, ids[i]);
                 entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
                 c = main.getContentResolver().query(entityUri,
                         new String[]{RawContacts._ID,
@@ -190,11 +191,11 @@ public class CompareDetail extends Fragment {
                     }
                 } finally {
                     c.close();
-                }*/
+                }
 
                 TextView compareDetail = new TextView(main);
                 //compareDetail.setId(dupList.keyAt(i));
-                compareDetail.setId(1);
+                compareDetail.setId(ids[i]);
                 compareDetail.setTag(account);
                 compareDetail.setTextIsSelectable(false);
                 compareDetail.setOnTouchListener(ContactTouch);
