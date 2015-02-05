@@ -20,7 +20,7 @@ import android.widget.TabHost.TabContentFactory;
 import android.view.*;
 import android.util.*;
 
-public class CompareFragment extends android.app.Fragment
+public class CompareFragmentOld extends android.app.Fragment
 {
     private FragmentActivity main;
     private ViewPager mViewPager;
