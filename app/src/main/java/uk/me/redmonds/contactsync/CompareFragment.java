@@ -71,7 +71,7 @@ public class CompareFragment extends android.app.Fragment {
             HashSet set = (HashSet<String>)pref.getStringSet(listItem, null);
             Iterator dupIt = set.iterator();
             while(dupIt.hasNext()) {
-                contacts.add((String)dupIt.next());
+                contacts.add(((String)dupIt.next()).split(":")[0]);
             }
 
             /*StringList list = new StringList(pref, listItem);
