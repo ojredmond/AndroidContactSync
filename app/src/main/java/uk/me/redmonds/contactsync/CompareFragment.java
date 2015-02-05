@@ -94,7 +94,7 @@ public class CompareFragment extends android.app.Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return "OBJECT " + (position + 1);
+            return contacts.valueAt(position);
         }
     }
 
