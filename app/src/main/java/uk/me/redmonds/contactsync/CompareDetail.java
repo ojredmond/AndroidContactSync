@@ -113,7 +113,7 @@ public class CompareDetail extends Fragment {
                     c.close();
                 }
                 contact += "id:\t\t" + dupList.keyAt(i);*/
-                rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, ids[i]);
+                rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long(ids[i]));
                 entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
                 c = main.getContentResolver().query(entityUri,
                         new String[]{RawContacts._ID,
