@@ -93,7 +93,7 @@ public class CompareDetail extends Fragment {
         //for (int i=0; i < dupList.size(); i++) {
             //if (dupList.valueAt(i).equals(name)) {
         if (dupList.containsKey(name)) {
-            Integer ids[] = dupList.get(name).split(",");
+            String ids[] = dupList.get(name).split(",");
             for (int i = 0; i < ids.length; i++) {
             contact += "id:\t\t" + ids[i];
                 /*rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, dupList.keyAt(i));
