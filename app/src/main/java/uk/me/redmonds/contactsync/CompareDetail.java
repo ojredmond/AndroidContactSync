@@ -34,6 +34,7 @@ public class CompareDetail extends Fragment {
     private SharedPreferences pref;
     private ViewGroup layoutContainer;
     private View compareView;
+    private final static String NAME = "Name";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,8 +90,12 @@ public class CompareDetail extends Fragment {
         String account = listItem.substring(Match.DUPKEY.length());
         String contact;
         Cursor c;
-        //for (int i=0; i < dupList.size(); i++) {
-            //if (dupList.valueAt(i).equals(name)) {
+
+        List<Map<String, String>> groupData = new ArrayList<>();
+        List<List<Map<String, String>>> childData = new ArrayList<>();
+        Map<String, Integer> index = new HashMap<>();
+        Map<String, String> item;
+
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
             for (int i = 0; i < ids.length; i++) {
@@ -110,67 +115,112 @@ public class CompareDetail extends Fragment {
                     while (c.moveToNext()) {
                         if (!c.isNull(0) && !c.isNull(2)
                                 && !c.getString(2).equals("")) {
+                            String group = c.getString(1).split("/",2)[1];
+                            String child = "";
+
                             contact += "\n" + c.getString(1).split("/",2)[1];
                             if (!c.isNull(3) && ((c.getString(1).endsWith("email_v2") && c.getInt(3) == 0) || c.getInt(3) != 0)) {
                                 contact += "(";
                                 if (c.getString(1).endsWith("email_v2")) {
+                                    group = "Email";
+                                    child += CommonDataKinds.Email.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4)) + ":";
                                     contact += CommonDataKinds.Email.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4));
                                 } else if (c.getString(1).endsWith("phone_v2")) {
+                                    group = "Phone";
+                                    child += CommonDataKinds.Phone.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4)) + ":";
                                     contact += CommonDataKinds.Phone.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4));
                                 } else if (c.getString(1).endsWith("organization")) {
+                                    group = "Organizations";
+                                    child += CommonDataKinds.Organization.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4)) + ":";
                                     contact += CommonDataKinds.Organization.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4));
                                 } else if (c.getString(1).endsWith("relation")) {
+                                    group = "Relation";
+                                    child += CommonDataKinds.Relation.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4)) + ":";
                                     contact += CommonDataKinds.Relation.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4));
                                 } else if (c.getString(1).endsWith("sipaddress")) {
+                                    group = "SIP";
+                                    child += CommonDataKinds.SipAddress.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4)) + ":";
                                     contact += CommonDataKinds.SipAddress.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4));
                                 } else if (c.getString(1).endsWith("postal-address_v2")) {
+                                    group = "Address";
+                                    child += CommonDataKinds.StructuredPostal.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4)) + ":";
                                     contact += CommonDataKinds.StructuredPostal.getTypeLabel(main.getResources(), c.getInt(3), c.getString(4));
                                 } else if (c.getString(1).endsWith("contact_event")) {
+                                    group = "Events";
                                     switch (c.getInt(3)) {
                                         case CommonDataKinds.Event.TYPE_ANNIVERSARY:
+                                            child += "Anniversary" + ":";
                                             contact += "Anniversary";
                                             break;
                                         case CommonDataKinds.Event.TYPE_BIRTHDAY:
+                                            child += "Birthday" + ":";
                                             contact += "Birthday";
                                             break;
                                         case CommonDataKinds.Event.TYPE_OTHER:
+                                            child += "Other" + ":";
                                             contact += "Other";
                                             break;
                                         default:
+                                            child += c.getString(4) + ":";
                                             contact += c.getString(4);
                                     }
                                 } else if (c.getString(1).endsWith("website")) {
+                                    group = "Websites";
                                     switch (c.getInt(3)) {
                                         case CommonDataKinds.Website.TYPE_BLOG:
+                                            child += "Blog" + ":";
                                             contact += "Blog";
                                             break;
                                         case CommonDataKinds.Website.TYPE_FTP:
+                                            child += "Ftp" + ":";
                                             contact += "Ftp";
                                             break;
                                         case CommonDataKinds.Website.TYPE_HOME:
+                                            child += "Home" + ":";
                                             contact += "Home";
                                             break;
                                         case CommonDataKinds.Website.TYPE_HOMEPAGE:
+                                            child += "Homepage" + ":";
                                             contact += "Homepage";
                                             break;
                                         case CommonDataKinds.Website.TYPE_OTHER:
+                                            child += "Other" + ":";
                                             contact += "Other";
                                             break;
                                         case CommonDataKinds.Website.TYPE_PROFILE:
+                                            child += "Profile" + ":";
                                             contact += "Profile";
                                             break;
                                         case CommonDataKinds.Website.TYPE_WORK:
+                                            child += "Work" + ":";
                                             contact += "Work";
                                             break;
                                         default:
+                                            child += c.getString(4) + ":";
                                             contact += c.getString(4);
                                     }
                                 } else {
+                                    group = "Other";
+                                    child += c.getInt(3) + ":";
                                     contact += c.getInt(3);
                                 }
                                 contact += ")";
                             }
                             contact += ":\t\t" + c.getString(2);
+                            child += c.getString(2);
+                            item = new HashMap<>();
+                            item.put(NAME, group);
+                            if (!group.equals("name") && !groupData.contains(item)) {
+                                index.put(group, groupData.size());
+                                groupData.add(item);
+                                childData.add(new ArrayList<Map<String, String>>());
+                            }
+                            //exclude name
+                            if (!group.equals("name")) {
+                                HashMap<String, String> childMap = new HashMap<>();
+                                childMap.put(NAME, child);
+                                childData.get(index.get(group)).add(childMap);
+                            }
                         }
                     }
                 } finally {
@@ -192,8 +242,24 @@ public class CompareDetail extends Fragment {
                 // create a new view
                 View contactView = LayoutInflater.from(main)
                            .inflate(R.layout.contact, layoutContainer, false);
-                TextView contactInfo = (TextView)contactView.findViewById(R.id.contact_info);
-                contactInfo.setText(contact);
+                //TextView contactInfo = (TextView)contactView.findViewById(R.id.contact_info);
+                //contactInfo.setText(contact);
+
+                ExpandableListView contactInfo = (ExpandableListView) contactView.findViewById(R.id.contact_info);
+
+                // Set up our adapter
+                SimpleExpandableListAdapter mAdapter = new SimpleExpandableListAdapter(
+                        main,
+                        groupData,
+                        android.R.layout.simple_expandable_list_item_1,
+                        new String[] { NAME },
+                        new int[] { android.R.id.text1, android.R.id.text2 },
+                        childData,
+                        R.layout.listdetail,
+                        new String[] { NAME },
+                        new int[] { android.R.id.text1, android.R.id.text2 }
+                );
+                contactInfo.setAdapter(mAdapter);
 
                 layout.addView(contactView);
             }
