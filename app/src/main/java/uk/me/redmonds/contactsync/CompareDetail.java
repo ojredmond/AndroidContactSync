@@ -235,7 +235,7 @@ public class CompareDetail extends Fragment {
         }
     };
 
-    OnClickListener ButtonClick = new OnClickListener() {
+    private OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1)
         {
