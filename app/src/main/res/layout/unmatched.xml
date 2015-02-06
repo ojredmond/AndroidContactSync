@@ -2,32 +2,33 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/button_bar"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/button__bar_height"
-    android:layout_alignParentBottom="true"
-    android:orientation="horizontal"
-    android:background="@drawable/border_top"
-    >
-
-    <Button
-        android:id="@+id/delete_contact_um"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="@dimen/button_min_width"
-        android:background="@drawable/button"
-        android:textColor="@color/material_orange_500"
-        android:text="@string/delete_contact" />
-      
-</LinearLayout>
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/button_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button__bar_height"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="@drawable/border_top"
+        >
+    
+        <Button
+            android:id="@+id/delete_contact_um"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:minWidth="@dimen/button_min_width"
+            android:background="@drawable/button"
+            android:layout_weight="1"
+            android:textColor="@color/material_orange_500"
+            android:text="@string/delete_contact" />
+          
+    </LinearLayout>
 
     <ExpandableListView android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/list"
         android:layout_alignParentTop="true"
-        android:layout_above="@id/delete_contact"
+        android:layout_above="@id/button_bar"
         />
 
 </RelativeLayout>
