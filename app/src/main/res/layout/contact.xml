@@ -4,7 +4,7 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:id="@+id/contact"
     android:layout_gravity="center"
-    android:layout_width="match+parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     card_view:cardCornerRadius="4dp">
 
