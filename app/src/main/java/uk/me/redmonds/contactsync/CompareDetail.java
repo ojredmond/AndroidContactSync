@@ -275,7 +275,7 @@ public class CompareDetail extends Fragment {
                     dupList.remove(name);
                     for (int i=0; i < ids.size(); i++) {
                         contacts = new Contacts(main, new HashSet<String>(ids));
-                        contacts.addToUnmatched(ids.get(i), accounts.get(i));
+                        contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
                     }
 
                     break;
