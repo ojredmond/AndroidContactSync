@@ -27,6 +27,7 @@ public class CompareDetail extends Fragment {
     private HashSet<String> selected;
     private String name;
     private LinearLayout layout;
+    private HashMap<String,String> dupList;
     //private StringList dup;
     private String listItem;
     //private SparseArray<String> dupList;
@@ -44,11 +45,8 @@ public class CompareDetail extends Fragment {
         Button bDel = (Button)compareView.findViewById(R.id.delete_contact);
         Button bMerge = (Button)compareView.findViewById(R.id.merge_contact);
         Button bUn = (Button)compareView.findViewById(R.id.unmatched_contact);
-        //bDel.setOnTouchListener(buttonTouch);
         bDel.setOnClickListener(ButtonClick);
-        //bMerge.setOnTouchListener(buttonTouch);
         bMerge.setOnClickListener(ButtonClick);
-        //bUn.setOnTouchListener(buttonTouch);
         bUn.setOnClickListener(ButtonClick);
 
         main = (FragmentActivity)this.getActivity();
@@ -74,7 +72,7 @@ public class CompareDetail extends Fragment {
         //dupList = dup.getSparseArray();
         
         HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(listItem, null);
-        HashMap<String,String> dupList = new HashMap<String, String> ();
+        dupList = new HashMap<String, String> ();
         // To get the Iterator use the iterator() operation
         Iterator dupIt = dupSet.iterator();
         while(dupIt.hasNext()) {
@@ -254,8 +252,8 @@ public class CompareDetail extends Fragment {
                         return;
                     }
 
-                    //contacts = new Contacts(main, selected, dup);
-                    //contacts.deleteContacts();
+                    contacts = new Contacts(main, selected);
+                    contacts.deleteContacts();
 
                     //remove duplicate
                     dupList.removeEntry(name);
