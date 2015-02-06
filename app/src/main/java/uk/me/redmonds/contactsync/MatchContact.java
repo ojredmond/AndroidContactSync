@@ -43,7 +43,7 @@ public class MatchContact extends Fragment
         public void onClick(View p1)
         {
             Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
-            if (p1.getId() == R.id.delete_contact) {
+            if (p1.getId() == R.id.delete_contact_um) {
                 /*StringList um = new StringList(pref, listItem);
                 HashSet<String> list = new HashSet<String>();
                 list.add(String.valueOf(id));
@@ -68,7 +68,7 @@ public class MatchContact extends Fragment
         String accountOther = listItem.split(":")[2];
 
         View view = inflater.inflate(R.layout.unmatched, container, false);
-        Button btn = (Button) view.findViewById(R.id.delete_contact);
+        Button btn = (Button) view.findViewById(R.id.delete_contact_um);
         btn.setOnClickListener(ButtonClick);
 
         ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.list);
