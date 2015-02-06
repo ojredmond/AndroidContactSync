@@ -249,6 +249,7 @@ public class CompareDetail extends Fragment {
                 case R.id.delete_contact:
                     if (selected == null) {
                         //add code for none selected
+                        Toast.makeText(main, "No contact selected for " + name, Toast.LENGTH_LONG).show();
                         return;
                     }
 
