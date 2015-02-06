@@ -254,8 +254,8 @@ public class CompareDetail extends Fragment {
                         return;
                     }
 
-                    contacts = new Contacts(main, selected, dup);
-                    contacts.deleteContacts();
+                    //contacts = new Contacts(main, selected, dup);
+                    //contacts.deleteContacts();
 
                     //remove duplicate
                     dupList.removeEntry(name);
