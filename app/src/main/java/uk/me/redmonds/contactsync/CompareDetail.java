@@ -189,7 +189,7 @@ public class CompareDetail extends Fragment {
                     params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
                 params.setMargins(5, 5, 5, 0);*/
                 // create a new view
-                View contactView = LayoutInflater.from(parent.getContext())
+                View contactView = LayoutInflater.from(main)
                            .inflate(R.layout.contact, parent, false);
                 TextView contactInfo = contactView.findViewById(R.id.contact_info);
                 contactInfo.setText(contact);
