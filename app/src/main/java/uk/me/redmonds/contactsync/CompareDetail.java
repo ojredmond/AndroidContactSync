@@ -95,22 +95,7 @@ public class CompareDetail extends Fragment {
             for (int i = 0; i < ids.length; i++) {
                 contact = "account:\t\t" + account + "\n";
                 contact += "id:\t\t" + ids[i];
-                /*rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, dupList.keyAt(i));
-                c = main.getContentResolver().query(rawContactUri,
-                        new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
-                        null, null, null);
 
-                try {
-                    while (c.moveToNext()) {
-                        if (!c.isNull(0) && !c.isNull(1)) {
-                            account = c.getString(0);
-                            contact = "account:\t\t" + account + "\n";
-                        }
-                    }
-                } finally {
-                    c.close();
-                }
-                contact += "id:\t\t" + dupList.keyAt(i);*/
                 rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, new Long(ids[i]));
                 entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
                 c = main.getContentResolver().query(entityUri,
