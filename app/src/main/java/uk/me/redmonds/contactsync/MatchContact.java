@@ -40,6 +40,7 @@ public class MatchContact extends Fragment
 
     public void onClick(View p1)
     {
+        Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
         if (p1.getId() == R.id.delete_contact) {
             /*StringList um = new StringList(pref, listItem);
             HashSet<String> list = new HashSet<String>();
