@@ -7,7 +7,7 @@
     android:layout_gravity="center"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    card_view:cardElevation="14.5sp"
+    card_view:cardElevation="5.0sp"
     >
     <TextView
         android:id="@+id/contact_info"
