@@ -119,7 +119,7 @@ public class Contacts {
         }
 
         for (String i : list) {
-            rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Integer.parseInt(i));
+            rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
             c = main.getContentResolver().query(rawContactUri,
                     new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
                     null, null, null);
@@ -199,7 +199,8 @@ public class Contacts {
             //add id to unmatched
             //remove from list delete other contacts
             if (accounts.size() == 1) {
-                addToUnmatched(id, accounts.iterator().next());
+                //add name
+                addToUnmatched(id, "", accounts.iterator().next());
                 return deleteContacts();
             }
         }
@@ -271,7 +272,7 @@ public class Contacts {
         return opBuilder;
     }
 
-    public static Boolean removeEntry (String listName, String id, String name) {
+    public Boolean removeEntry (String listName, String id, String name) {
         HashSet set = (HashSet<String>)pref.getStringSet(listName, null);
         set.remove(name + ":" + id);
         SharedPreferences.Editor e = pref.edit();
@@ -279,7 +280,7 @@ public class Contacts {
         return true;
     }
 
-    public static Boolean addEntry (String listName, String id, String name) {
+    public Boolean addEntry (String listName, String id, String name) {
         HashSet set = (HashSet<String>)pref.getStringSet(listName, null);
         set.add(name + ":" + id);
         SharedPreferences.Editor e = pref.edit();
