@@ -195,7 +195,7 @@ public class CompareDetail extends Fragment {
                 TextView contactInfo = (TextView)contactView.findViewById(R.id.contact_info);
                 contactInfo.setText(contact);
 
-                layout.addView(contactView, null);
+                layout.addView(contactView);
             }
         }
         return true;
