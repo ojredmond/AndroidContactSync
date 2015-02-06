@@ -68,7 +68,7 @@ public class MatchContact extends Fragment
 
         View view = inflater.inflate(R.layout.unmatched, container, false);
         Button btn = (Button) view.findViewById(R.id.delete_contact);
-        btn.setOnClickListener(this);
+        btn.setOnClickListener(ButtonClick);
 
         ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.list);
 
