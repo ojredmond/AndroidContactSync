@@ -39,7 +39,7 @@ public class MatchContact extends Fragment
         return false;
     }
 
-    OnClickListener ButtonClick = new OnClickListener() {
+    private OnClickListener ButtonClick = new OnClickListener() {
         public void onClick(View p1)
         {
             Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
