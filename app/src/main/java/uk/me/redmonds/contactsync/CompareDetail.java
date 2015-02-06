@@ -176,8 +176,7 @@ public class CompareDetail extends Fragment {
                     c.close();
                 }
 
-                TextView compareDetail = new TextView(main);
-                //compareDetail.setId(dupList.keyAt(i));
+                /*TextView compareDetail = new TextView(main);
                 compareDetail.setTag(account + ":" + ids[i]);
                 compareDetail.setTextIsSelectable(false);
                 compareDetail.setOnTouchListener(ContactTouch);
@@ -188,8 +187,14 @@ public class CompareDetail extends Fragment {
                     params = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
                 else
                     params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-                params.setMargins(5, 5, 5, 0);
-                layout.addView(compareDetail, params);
+                params.setMargins(5, 5, 5, 0);*/
+                // create a new view
+                View contactView = LayoutInflater.from(parent.getContext())
+                           .inflate(R.layout.contact, parent, false);
+                TextView contactInfo = contactView.findViewById(R.id.contact_info);
+                contactInfo.setText(contact);
+
+                layout.addView(contactView, params);
             }
         }
         return true;
