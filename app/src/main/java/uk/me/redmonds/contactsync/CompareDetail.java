@@ -32,12 +32,13 @@ public class CompareDetail extends Fragment {
     private String listItem;
     //private SparseArray<String> dupList;
     private SharedPreferences pref;
-
+    private ViewGroup layoutContainer;
     private View compareView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        layoutContainer = container;
 
         compareView = inflater.inflate(R.layout.compare, container, false);
 
@@ -190,8 +191,8 @@ public class CompareDetail extends Fragment {
                 params.setMargins(5, 5, 5, 0);*/
                 // create a new view
                 View contactView = LayoutInflater.from(main)
-                           .inflate(R.layout.contact, parent, false);
-                TextView contactInfo = contactView.findViewById(R.id.contact_info);
+                           .inflate(R.layout.contact, layoutContainer, false);
+                TextView contactInfo = (TextView)contactView.findViewById(R.id.contact_info);
                 contactInfo.setText(contact);
 
                 layout.addView(contactView, params);
