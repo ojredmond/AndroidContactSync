@@ -148,6 +148,9 @@ public class NavigationDrawerFragment extends Fragment {
             }
  
             public void onDrawerOpened(View drawerView) {
+                if (!isAdded()) {
+                    return;
+                }
                 mActionBar.setTitle(getString(R.string.app_name));
             }
         };
