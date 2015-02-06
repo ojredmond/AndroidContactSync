@@ -256,12 +256,12 @@ public class CompareDetail extends Fragment {
                     contacts.deleteContacts();
 
                     //remove duplicate
-                    dupList.removeEntry(name);
+                    dupList.remove(name);
 
                     if ((ids.size() - selected.size()) == 1) {
                         for (int i=0; i < ids.size(); i++) {
                             if (!selected.contains(ids.get(i))) {
-                                contacts.addToUnmatched(ids.get(i),accounts.get(i));
+                                contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
                             }
                         }
                     }
@@ -272,9 +272,9 @@ public class CompareDetail extends Fragment {
                     //MainActivity.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
-                    dupList.removeEntry(name);
+                    dupList.remove(name);
                     for (int i=0; i < ids.size(); i++) {
-                        contacts = new Contacts(main, new HashSet<String>(ids), dup);
+                        contacts = new Contacts(main, new HashSet<String>(ids));
                         contacts.addToUnmatched(ids.get(i), accounts.get(i));
                     }
 
