@@ -21,19 +21,19 @@ public class Contacts {
     private HashSet<String> list;
     private Activity main;
     private HashSet<String> contacts = null;
-    private StringList storedList;
+    private SharedPreferences pref;
 
-    Contacts (Activity m, HashSet<String> ids, StringList l) {
+    Contacts (Activity m, HashSet<String> ids) {
         main = m;
         list = ids;
-        storedList = l;
+        pref = main.getPreferences(Context.MODE_PRIVATE);
     }
 
-    Contacts (Activity m, HashSet<String> ids, StringList l, HashSet<String> c) {
+    Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
         main = m;
         list = ids;
-        storedList = l;
         contacts = c;
+        pref = main.getPreferences(Context.MODE_PRIVATE);
     }
 
     public HashSet<String> getContacts() {
@@ -53,7 +53,6 @@ public class Contacts {
             ops.add(ContentProviderOperation.newDelete(RawContacts.CONTENT_URI)
                     .withSelection(where, params)
                     .build());
-            storedList.removeEntry(id);
         }
 
         if (ops != null) {
@@ -209,9 +208,7 @@ public class Contacts {
     }
 
     public void addToUnmatched (String id, String account) {
-        SparseArray<String> namesArray = storedList.getSparseArray();
         list.remove(id);
-        storedList.removeEntry(id);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         String account1Name = settings.getString("account1", null);
         String account2Name = settings.getString("account2", null);
@@ -223,9 +220,7 @@ public class Contacts {
             uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
         }
 
-        SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
-        StringList unMatched = new StringList(pref, uName);
-        unMatched.addEntry(id, namesArray.get(Integer.parseInt(id)));
+        addEntry(id, namesArray.get(Integer.parseInt(id)));
     }
 
 
@@ -274,5 +269,21 @@ public class Contacts {
                     .withValue(CommonDataKinds.Identity.NAMESPACE, type.split("/")[1]);
         }
         return opBuilder;
+    }
+
+    public static Boolean removeEntry (String listName, String id, String name) {
+        HashSet set = (HashSet<String>)pref.getStringSet(listName, null);
+        set.remove(name + ":" + id);
+        SharedPreferences.Editor e = pref.edit();
+        e.putStringSet(listName,set);
+        return true;
+    }
+
+    public static Boolean addEntry (String listName, String id, String name) {
+        HashSet set = (HashSet<String>)pref.getStringSet(listName, null);
+        set.add(name + ":" + id);
+        SharedPreferences.Editor e = pref.edit();
+        e.putStringSet(listName,set);
+        return e.commit();
     }
 }
