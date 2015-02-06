@@ -9,7 +9,7 @@ import java.util.*;
 import android.util.*;
 
 public class MatchContact extends Fragment
-        implements ExpandableListView.OnChildClickListener, ImageButton.OnClickListener
+        implements ExpandableListView.OnChildClickListener, Button.OnClickListener
 {
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
@@ -64,7 +64,7 @@ public class MatchContact extends Fragment
         String accountOther = listItem.split(":")[2];
 
         View view = inflater.inflate(R.layout.unmatched, container, false);
-        ImageButton btn = (ImageButton) view.findViewById(R.id.delete_contact);
+        Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(this);
 
         ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.list);
