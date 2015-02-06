@@ -10,7 +10,7 @@ android:layout_height="match_parent" >
     android:layout_height="@dimen/button__bar_height"
     android:layout_alignParentBottom="true"
     android:orientation="horizontal"
-	android:background="@drawable/border_top"
+    android:background="@drawable/border_top"
     >
 
     <Button
@@ -18,9 +18,9 @@ android:layout_height="match_parent" >
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="@dimen/button_min_width"
-		android:layout_weight="1"
-		android:background="@drawable/button"
-		android:textColor="@color/material_orange_500"
+        android:layout_weight="1"
+        android:background="@drawable/button"
+        android:textColor="@color/material_orange_500"
         android:text="@string/delete_contact" />
       
     <Button
@@ -28,9 +28,9 @@ android:layout_height="match_parent" >
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:minWidth="@dimen/button_min_width"
-		android:layout_weight="1"
-		android:background="@drawable/button"
-		android:textColor="@color/material_orange_500"
+        android:layout_weight="1"
+        android:background="@drawable/button"
+        android:textColor="@color/material_orange_500"
         android:text="@string/merge_contacts" />
       
     <Button
