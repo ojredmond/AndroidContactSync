@@ -45,8 +45,8 @@ public class MergeFragment extends Fragment
         contacts = (HashSet<String>)pref.getStringSet("contactsMerge", null);
 
         //create contacts object
-        StringList l = new StringList(pref, listItem);
-        cObject = new Contacts(main, new HashSet<String>(ids), l);
+        //StringList l = new StringList(pref, listItem);
+        cObject = new Contacts(main, new HashSet<String>(ids));
 
         View contactView = inflater.inflate(R.layout.contact, container, false);
         // add listeners to buttons
