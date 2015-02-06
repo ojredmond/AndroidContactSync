@@ -6,6 +6,7 @@
     android:layout_gravity="center"
     android:layout_width="200dp"
     android:layout_height="200dp"
+    card_view:cardElevation="14.5sp"
     >
 
     <TextView
