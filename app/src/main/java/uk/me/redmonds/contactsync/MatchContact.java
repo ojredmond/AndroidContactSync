@@ -9,7 +9,7 @@ import java.util.*;
 import android.util.*;
 
 public class MatchContact extends Fragment
-        implements ExpandableListView.OnChildClickListener, Button.OnClickListener
+        implements ExpandableListView.OnChildClickListener
 {
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
@@ -38,19 +38,21 @@ public class MatchContact extends Fragment
         return false;
     }
 
-    public void onClick(View p1)
-    {
-        Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
-        if (p1.getId() == R.id.delete_contact) {
-            /*StringList um = new StringList(pref, listItem);
-            HashSet<String> list = new HashSet<String>();
-            list.add(String.valueOf(id));
-            Contacts contacts = new Contacts(main, list, um);
-            contacts.deleteContacts();*/
+    OnClickListener ButtonClick = new OnClickListener() {
+        public void onClick(View p1)
+        {
             Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
+            if (p1.getId() == R.id.delete_contact) {
+                /*StringList um = new StringList(pref, listItem);
+                HashSet<String> list = new HashSet<String>();
+                list.add(String.valueOf(id));
+                Contacts contacts = new Contacts(main, list, um);
+                contacts.deleteContacts();*/
+                Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
+            }
+    
         }
-
-    }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
