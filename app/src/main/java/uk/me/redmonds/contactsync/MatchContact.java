@@ -7,6 +7,7 @@ import android.view.*;
 import android.widget.*;
 import java.util.*;
 import android.util.*;
+import android.view.View.OnClickListener;
 
 public class MatchContact extends Fragment
         implements ExpandableListView.OnChildClickListener
