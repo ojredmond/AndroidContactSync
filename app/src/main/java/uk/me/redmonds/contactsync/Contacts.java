@@ -207,7 +207,7 @@ public class Contacts {
         return true;
     }
 
-    public void addToUnmatched (String id, String account) {
+    public void addToUnmatched (String id, String name, String account) {
         list.remove(id);
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         String account1Name = settings.getString("account1", null);
@@ -220,7 +220,7 @@ public class Contacts {
             uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
         }
 
-        addEntry(id, namesArray.get(Integer.parseInt(id)));
+        addEntry(uName, id, name);
     }
 
 
