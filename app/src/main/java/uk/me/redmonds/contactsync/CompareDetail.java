@@ -27,7 +27,7 @@ public class CompareDetail extends Fragment {
     private HashSet<String> selected;
     private String name;
     private LinearLayout layout;
-    private StringList dup;
+    //private StringList dup;
     private String listItem;
     //private SparseArray<String> dupList;
     private SharedPreferences pref;
@@ -272,9 +272,9 @@ public class CompareDetail extends Fragment {
                     //MainActivity.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
+                    dupList.removeEntry(name));
                     for (int i=0; i < ids.size(); i++) {
                         contacts = new Contacts(main, new HashSet<String>(ids), dup);
-                        dup.removeEntry(ids.get(i));
                         contacts.addToUnmatched(ids.get(i), accounts.get(i));
                     }
 
