@@ -101,8 +101,19 @@ public class CompareDetail extends Fragment {
                 List<Map<String, String>> groupData = new ArrayList<>();
                 List<List<View>> childData = new ArrayList<>();
                 Map<String, Integer> index = new HashMap<>();
-                //contact = "account:\t\t" + account + "\n";
-                //contact += "id:\t\t" + ids[i];
+                item = new HashMap<>();
+                item.put(NAME, "account");
+                groupData.add(item);
+                childData.add(new ArrayList<View>());
+                groupHeader = LayoutInflater.from(main)
+                        .inflate(R.layout.list_row_1, layoutContainer, false);
+                ((TextView)groupHeader.findViewById(R.id.value)).setText("Account\n" + account);
+                ((TextView)groupHeader.findViewById(R.id.value)).setBackgroundColor(getResources().getColor(R.color.nav_background));
+                childData.add(new ArrayList<View>());
+                groupHeader = LayoutInflater.from(main)
+                        .inflate(R.layout.list_row_2, layoutContainer, false);
+                ((TextView)groupHeader.findViewById(R.id.type)).setText("ID");
+                ((TextView)groupHeader.findViewById(R.id.value)).setText(ids[i]);
 
                 rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, new Long(ids[i]));
                 entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
@@ -194,10 +205,11 @@ public class CompareDetail extends Fragment {
                             }
 
                             ((TextView)child.findViewById(R.id.value)).setText(c.getString(2));
-                            item = new HashMap<>();
-                            item.put(NAME, group);
+
                             if (!group.equals("name") && !groupData.contains(item)) {
                                 index.put(group, groupData.size());
+                                item = new HashMap<>();
+                                item.put(NAME, group);
                                 groupData.add(item);
                                 childData.add(new ArrayList<View>());
                                 groupHeader = LayoutInflater.from(main)
