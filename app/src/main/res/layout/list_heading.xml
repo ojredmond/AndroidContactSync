@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:id="@+id/heading">
+    android:layout_width="wrap_content" android:layout_height="match_parent"
+    android:id="@+id/heading"
+	android:background="@color/material_orange_500"
+	android:textColor="@android:color/white"
+	android:padding="@dimen/medium_gap"
+	>
 
 </TextView>

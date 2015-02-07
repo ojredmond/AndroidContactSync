@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/contact_info"
         android:layout_alignParentTop="true"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+		>
 
     </LinearLayout>
 
