@@ -91,16 +91,16 @@ public class CompareDetail extends Fragment {
         String contactDetail;
         Cursor c;
 
-        List<Map<String, String>> groupData = new ArrayList<>();
-        List<List<View>> childData = new ArrayList<>();
         View child;
         View groupHeader;
-        Map<String, Integer> index = new HashMap<>();
         Map<String, String> item;
 
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
             for (int i = 0; i < ids.length; i++) {
+                List<Map<String, String>> groupData = new ArrayList<>();
+                List<List<View>> childData = new ArrayList<>();
+                Map<String, Integer> index = new HashMap<>();
                 //contact = "account:\t\t" + account + "\n";
                 //contact += "id:\t\t" + ids[i];
 
@@ -234,10 +234,15 @@ public class CompareDetail extends Fragment {
                 //contactInfo.setText(contact);
 
                 LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
+                //ArrayList<View> childItems = new ArrayList<>();
+
                 for (List<View> l: childData)
                     for (View childItem: l)
+                        //childItems.add(childItem);
                         contactInfo.addView(childItem);
 
+                /*for (View childItem: childItems)
+                    contactInfo.addView(childItem);*/
 
                 layout.addView(contactView);
             }

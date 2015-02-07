@@ -18,12 +18,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_heading.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_row_1.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_row_2.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/libraries/cardview_v7_21_0_3.xml" afterPath="$PROJECT_DIR$/.idea/libraries/cardview_v7_21_0_3.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/contact.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/contact.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Contact Sync.iws" />
@@ -50,15 +45,15 @@
       <file leaf-file-name="CompareDetail.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.22070844" vertical-offset="1413" max-vertical-offset="4635">
-              <caret line="125" column="138" selection-start-line="125" selection-start-column="138" selection-end-line="125" selection-end-column="138" />
+            <state vertical-scroll-proportion="0.55741626" vertical-offset="3127" max-vertical-offset="4710">
+              <caret line="244" column="53" selection-start-line="244" selection-start-column="53" selection-end-line="244" selection-end-column="53" />
               <folding>
-                <element signature="e#12537#13234#0" expanded="true" />
-                <element signature="e#13227#13228#0" expanded="true" />
-                <element signature="e#13279#15300#0" expanded="true" />
-                <element signature="e#13431#13439#0" expanded="true" />
-                <element signature="e#13497#13505#0" expanded="true" />
-                <element signature="e#15293#15294#0" expanded="true" />
+                <element signature="e#12786#13483#0" expanded="true" />
+                <element signature="e#13476#13477#0" expanded="true" />
+                <element signature="e#13528#15549#0" expanded="true" />
+                <element signature="e#13680#13688#0" expanded="true" />
+                <element signature="e#13746#13754#0" expanded="true" />
+                <element signature="e#15542#15543#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1089,7 +1084,11 @@
       <created>1423175510392</created>
       <updated>1423175510392</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="adding functionality">
+      <created>1423327683671</created>
+      <updated>1423327683671</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1109,7 +1108,7 @@
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4152431" sideWeight="0.5003349" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.325887" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4152431" sideWeight="0.4996651" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4152431" sideWeight="0.4996651" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.24983256" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1193,20 +1192,8 @@
           <properties />
           <option name="timeStamp" value="30" />
         </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java</url>
-          <line>230</line>
-          <properties />
-          <option name="timeStamp" value="44" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java</url>
-          <line>119</line>
-          <properties />
-          <option name="timeStamp" value="46" />
-        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="47" />
+      <option name="time" value="58" />
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
@@ -1628,15 +1615,15 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.22070844" vertical-offset="1413" max-vertical-offset="4635">
-          <caret line="125" column="138" selection-start-line="125" selection-start-column="138" selection-end-line="125" selection-end-column="138" />
+        <state vertical-scroll-proportion="0.55741626" vertical-offset="3127" max-vertical-offset="4710">
+          <caret line="244" column="53" selection-start-line="244" selection-start-column="53" selection-end-line="244" selection-end-column="53" />
           <folding>
-            <element signature="e#12537#13234#0" expanded="true" />
-            <element signature="e#13227#13228#0" expanded="true" />
-            <element signature="e#13279#15300#0" expanded="true" />
-            <element signature="e#13431#13439#0" expanded="true" />
-            <element signature="e#13497#13505#0" expanded="true" />
-            <element signature="e#15293#15294#0" expanded="true" />
+            <element signature="e#12786#13483#0" expanded="true" />
+            <element signature="e#13476#13477#0" expanded="true" />
+            <element signature="e#13528#15549#0" expanded="true" />
+            <element signature="e#13680#13688#0" expanded="true" />
+            <element signature="e#13746#13754#0" expanded="true" />
+            <element signature="e#15542#15543#0" expanded="true" />
           </folding>
         </state>
       </provider>
