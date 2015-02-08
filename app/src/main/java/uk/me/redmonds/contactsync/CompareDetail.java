@@ -23,7 +23,7 @@ import java.lang.Long;
 import android.preference.*;
 
 public class CompareDetail extends Fragment {
-    private FragmentActivity main;
+    private MainActivity main;
     private HashSet<String> selected;
     private String name;
     private LinearLayout layout;
@@ -51,7 +51,8 @@ public class CompareDetail extends Fragment {
         bMerge.setOnClickListener(ButtonClick);
         bUn.setOnClickListener(ButtonClick);
 
-        main = (FragmentActivity)this.getActivity();
+        main = (MainActivity)this.getActivity();
+        main.onSectionAttached(getString(R.string.title_activity_dup));
 
         Bundle args = getArguments();
         if (args == null) {
@@ -98,6 +99,11 @@ public class CompareDetail extends Fragment {
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
             for (int i = 0; i < ids.length; i++) {
+                // create a new view for the contact
+                View contactView = LayoutInflater.from(main)
+                        .inflate(R.layout.contact, layoutContainer, false);
+
+                contactView.setTag(account + ":" + ids[i]);
                 List<Map<String, String>> groupData = new ArrayList<>();
                 List<List<View>> childData = new ArrayList<>();
                 Map<String, Integer> index = new HashMap<>();
@@ -106,16 +112,19 @@ public class CompareDetail extends Fragment {
                 groupData.add(item);
                 childData.add(new ArrayList<View>());
                 groupHeader = LayoutInflater.from(main)
-                        .inflate(R.layout.list_row_1, layoutContainer, false);
-                ((TextView)groupHeader.findViewById(R.id.value)).setText("Account\n" + account);
-                ((TextView)groupHeader.findViewById(R.id.value)).setBackgroundColor(getResources().getColor(R.color.nav_background));
-                childData.add(new ArrayList<View>());
+                        .inflate(R.layout.list_row_2, layoutContainer, false);
+                ((TextView)groupHeader.findViewById(R.id.type)).setText("Account");
+                ((TextView)groupHeader.findViewById(R.id.value)).setText(account);
+                ((GridLayout)groupHeader.findViewById(R.id.row)).setBackgroundColor(getResources().getColor(R.color.nav_background));
+                childData.get(0).add(groupHeader);
+
                 groupHeader = LayoutInflater.from(main)
                         .inflate(R.layout.list_row_2, layoutContainer, false);
                 ((TextView)groupHeader.findViewById(R.id.type)).setText("ID");
                 ((TextView)groupHeader.findViewById(R.id.value)).setText(ids[i]);
+                childData.get(0).add(groupHeader);
 
-                rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, new Long(ids[i]));
+                rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.valueOf(ids[i]));
                 entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
                 c = main.getContentResolver().query(entityUri,
                         new String[]{RawContacts._ID,
@@ -206,10 +215,10 @@ public class CompareDetail extends Fragment {
 
                             ((TextView)child.findViewById(R.id.value)).setText(c.getString(2));
 
+                            item = new HashMap<>();
+                            item.put(NAME, group);
                             if (!group.equals("name") && !groupData.contains(item)) {
                                 index.put(group, groupData.size());
-                                item = new HashMap<>();
-                                item.put(NAME, group);
                                 groupData.add(item);
                                 childData.add(new ArrayList<View>());
                                 groupHeader = LayoutInflater.from(main)
@@ -239,9 +248,7 @@ public class CompareDetail extends Fragment {
                 else
                     params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
                 params.setMargins(5, 5, 5, 0);*/
-                // create a new view
-                View contactView = LayoutInflater.from(main)
-                           .inflate(R.layout.contact, layoutContainer, false);
+
                 //TextView contactInfo = (TextView)contactView.findViewById(R.id.contact_info);
                 //contactInfo.setText(contact);
 
@@ -293,8 +300,9 @@ public class CompareDetail extends Fragment {
             ArrayList<String> ids = new ArrayList<String>();
             ArrayList<String> accounts = new ArrayList<String>();
             for (int i=0; i < layout.getChildCount(); i++) {
-                ids.add(String.valueOf(layout.getChildAt(i).getId()));
-                accounts.add((String)layout.getChildAt(i).getTag());
+                String contact[] = ((String)layout.getChildAt(i).getTag()).split(":");
+                ids.add(contact[1]);
+                accounts.add(contact[0]);
             }
 
             switch (p1.getId()) {
