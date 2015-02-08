@@ -22,13 +22,13 @@ public class MergeFragment extends Fragment
     private Contacts cObject;
     private static final Integer[] LABEL_VALUES = new Integer[] {1,101,201,301,401,501};
     private String listItem;
-
+    private ViewGroup layoutContainer;
     private String listType;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
+        layoutContainer = container;
         Bundle args = getArguments();
         listType = args.getString("listType");
         listItem = args.getString("listItem");
@@ -101,12 +101,14 @@ public class MergeFragment extends Fragment
 
         for (int i=0; i < display.length; i++) {
             if (display[i].size() > 0) {
-                contactHeading = new TextView(main);
+                contactHeading = (TextView)LayoutInflater.from(main)
+                        .inflate(R.layout.list_heading, layoutContainer, false);
+                //contactHeading = new TextView(main);
                 contactHeading.setId(LABEL_VALUES[i]);
                 //contactHeading.setTextColor(getResources().getColor(R.color.pressed_redmond));
                 //contactHeading.setTextAppearance(main, R.style.LabelText);
                 contactHeading.setTextIsSelectable(true);
-                contactHeading.setPadding(10, 10, 10, 10);
+                //contactHeading.setPadding(10, 10, 10, 10);
                 switch (i) {
                     case 0:
                         label = "Name";
@@ -209,7 +211,7 @@ public class MergeFragment extends Fragment
         SharedPreferences.Editor pref = main.getPreferences(Context.MODE_PRIVATE).edit();
         pref.putStringSet("contactMerge", contact);
         pref.putStringSet("contactsMerge", cObject.getContacts());
-        pref.commit();
+        pref.apply();
     }
 
     OnClickListener ButtonClick = new OnClickListener() {

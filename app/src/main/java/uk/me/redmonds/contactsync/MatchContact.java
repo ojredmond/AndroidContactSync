@@ -6,7 +6,7 @@ import android.support.v4.app.*;
 import android.view.*;
 import android.widget.*;
 import java.util.*;
-import android.util.*;
+
 import android.view.View.OnClickListener;
 
 public class MatchContact extends Fragment
@@ -24,7 +24,7 @@ public class MatchContact extends Fragment
 
     public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5)
     {
-        //unmatched list
+        //fragment_unmatched list
         if (p3 == 0) {
             String linkName = (String) ((TextView)p2).getText();
             ArrayList<String> ids = new ArrayList<>();
@@ -67,7 +67,7 @@ public class MatchContact extends Fragment
         String accountSelected = listItem.split(":")[1];
         String accountOther = listItem.split(":")[2];
 
-        View view = inflater.inflate(R.layout.unmatched, container, false);
+        View view = inflater.inflate(R.layout.fragment_unmatched, container, false);
         Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(ButtonClick);
 

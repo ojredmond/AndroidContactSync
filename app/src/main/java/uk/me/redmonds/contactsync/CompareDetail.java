@@ -5,22 +5,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.view.ViewGroup.*;
 import android.widget.*;
 import android.net.Uri;
 import android.database.Cursor;
 import android.provider.ContactsContract.*;
 import java.util.*;
 import java.lang.Long;
-import android.preference.*;
 
 public class CompareDetail extends Fragment {
     private MainActivity main;
@@ -71,11 +67,8 @@ public class CompareDetail extends Fragment {
     }
 
     private Boolean fillLayout () {
-        //dup = new StringList(pref, listItem);
-        //dupList = dup.getSparseArray();
-        
         HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(listItem, null);
-        dupList = new HashMap<String, String> ();
+        dupList = new HashMap<> ();
         // To get the Iterator use the iterator() operation
         Iterator dupIt = dupSet.iterator();
         while(dupIt.hasNext()) {
@@ -236,32 +229,11 @@ public class CompareDetail extends Fragment {
                     c.close();
                 }
 
-                /*TextView compareDetail = new TextView(main);
-                compareDetail.setTag(account + ":" + ids[i]);
-                compareDetail.setTextIsSelectable(false);
-                compareDetail.setOnTouchListener(ContactTouch);
-                //compareDetail.setBackgroundResource(R.drawable.border);
-                compareDetail.setPadding(10, 10, 10, 10);
-                compareDetail.setText(contact);
-                if (layout.getOrientation() == layout.HORIZONTAL)
-                    params = new LinearLayout.LayoutParams(0, LayoutParams.WRAP_CONTENT, 1);
-                else
-                    params = new LinearLayout.LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
-                params.setMargins(5, 5, 5, 0);*/
-
-                //TextView contactInfo = (TextView)contactView.findViewById(R.id.contact_info);
-                //contactInfo.setText(contact);
-
                 LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
-                //ArrayList<View> childItems = new ArrayList<>();
 
                 for (List<View> l: childData)
                     for (View childItem: l)
-                        //childItems.add(childItem);
                         contactInfo.addView(childItem);
-
-                /*for (View childItem: childItems)
-                    contactInfo.addView(childItem);*/
 
                 layout.addView(contactView);
             }
