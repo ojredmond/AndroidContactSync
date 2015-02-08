@@ -330,7 +330,7 @@ public class CompareDetail extends Fragment {
                     fillLayout();
                     break;
                 case R.id.merge_contact:
-                    //MainActivity.Merge(name, ids, listItem);
+                    main.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
                     dupList.remove(name);

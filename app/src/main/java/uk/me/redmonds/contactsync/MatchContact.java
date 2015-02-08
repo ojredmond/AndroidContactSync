@@ -122,13 +122,13 @@ public class MatchContact extends Fragment
         SimpleExpandableListAdapter mAdapter = new SimpleExpandableListAdapter(
                 main,
                 groupData,
-                android.R.layout.simple_expandable_list_item_2,
+                R.layout.list_heading_2,
                 new String[] { NAME, DESCRIPTION },
                 new int[] { android.R.id.text1, android.R.id.text2 },
                 childData,
-                R.layout.listdetail,
+                R.layout.list_detail,
                 new String[] { NAME },
-                new int[] { android.R.id.text1, android.R.id.text2 }
+                new int[] { R.id.value }
         );
 
         listView.setAdapter(mAdapter);
