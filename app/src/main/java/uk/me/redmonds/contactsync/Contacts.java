@@ -21,12 +21,14 @@ public class Contacts {
     private HashSet<String> list;
     private Activity main;
     private HashSet<String> contactsOld = null;
+    private HashMap<String,HashMap<String,String>> contacts = new HashSet<>();
     private SharedPreferences pref;
 
     Contacts (Activity m, HashSet<String> ids) {
         main = m;
         list = ids;
         pref = main.getPreferences(Context.MODE_PRIVATE);
+        createContacts();
     }
 
     Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
@@ -34,6 +36,46 @@ public class Contacts {
         list = ids;
         contactsOld = c;
         pref = main.getPreferences(Context.MODE_PRIVATE);
+        createContacts();
+    }
+    
+    private createContacts () {
+        String ids = new String();
+        
+        for (String i : list) {
+            contacts.put(i,new HashMap<>());
+            ids += i + ",";
+        }
+        if (ids.length() > 0)
+            ids = ids.substring(0, ids.length()-1);
+
+        Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
+            new String[] {
+                Data.RAW_CONTACT_ID,
+                Data._ID,
+                Data.MIMETYPE,
+                Data.DATA1,
+                Data.DATA2,
+                Data.DATA3
+            },
+            Data.RAW_CONTACT_ID + " IN (" + ids + ")",
+            null, null);
+
+        try {
+            while (c.moveToNext()) {
+                HashMap<String,String> contact = new HashMap();
+                //contact.put(Data.RAW_CONTACT_ID, c.getString(0));
+                contact = contacts.get(c.getString(0));
+                if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
+                    contact.put(Data.MIMETYPE, c.getString(2));
+                    contact.put(Data.DATA1, c.getString(3));
+                    contact.put(Data.DATA2, c.getString(4));
+                    contact.put(Data.DATA3, c.getString(5));
+                }
+            }
+        } finally {
+            c.close();
+        }
     }
 
     public HashSet<String> getContacts() {
@@ -68,47 +110,11 @@ public class Contacts {
     }
 
     public HashSet<String> mergeContact () {
-        String ids = new String();
-        
-        for (String i : list)
-            ids += i + ",";
-        if (ids.length() > 0)
-            ids = ids.substring(0, ids.length()-1);
-		Toast.makeText(main, "test " + ids, Toast.LENGTH_SHORT).show();
-		
-        Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
-            new String[] {
-                Data.RAW_CONTACT_ID,
-                Data._ID,
-                Data.MIMETYPE,
-                Data.DATA1,
-                Data.DATA2,
-                Data.DATA3
-            },
-            Data.RAW_CONTACT_ID + " IN (" + ids + ")",
-            null, null);
-
-            try {
-                while (c.moveToNext()) {
-                String rawId = c.getString(0);
-                String dataId = c.getString(0);
-                    if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
-                        String mimeType = c.getString(2);
-                        String data = c.getString(3);
-                        String type = c.getString(4);
-                        String type_label = c.getString(5);
-                    	Toast.makeText(main, rawId + ":" + dataId + "-" + mimeType + "," + data, Toast.LENGTH_LONG).show();
-                    }
-                }
-            } finally {
-                c.close();
-            }
-
-        HashSet<String> contact = new HashSet<String>();
+        HashSet<String> contactOld = new HashSet<String>();
         for (String i : list) {
-            contact.addAll((HashSet<String>)getContact(i, "String"));
+            contactOld.addAll((HashSet<String>)getContact(i, "String"));
         }
-        return contact;
+        return contactOld;
     }
 
     public HashSet<Object> getContact (String id, String objectType) {
