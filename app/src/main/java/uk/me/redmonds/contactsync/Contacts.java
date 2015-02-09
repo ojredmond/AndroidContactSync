@@ -72,32 +72,39 @@ public class Contacts {
         Uri entityUri;
         Cursor c;
 
+        HashSet<String> contact;
+        for (String i : list) {
+            contact = getContact("String");
+        }
+        return contact;
+    }
+
+    public HashSet<> getContact (String objectType) {
         HashSet<String> contact = new HashSet<String> ();
         contacts = new HashSet<String> ();
-        for (String i : list) {
-            rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Integer.parseInt(i));
-            entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
-            c = main.getContentResolver().query(entityUri,
-                    new String[]{RawContacts.Entity.DATA_ID, RawContacts.Entity.MIMETYPE, RawContacts.Entity.DATA1, RawContacts.Entity.DATA2},
-                    null, null, null);
+        rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.ValuOf(i));
+        entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
+        c = main.getContentResolver().query(entityUri,
+                new String[]{RawContacts.Entity.DATA_ID, RawContacts.Entity.MIMETYPE, RawContacts.Entity.DATA1, RawContacts.Entity.DATA2},
+                null, null, null);
 
-            try {
-                while (c.moveToNext()) {
-                    if (!c.isNull(0) && !c.isNull(2)
-                            && !c.getString(2).equals("")) {
-                        contact.add(c.getString(1).split("/",2)[1]
-                                + "/" + c.getString(3)
-                                + ";" + c.getString(2)
-                                + ";" + c.getString(2));
-                        contacts.add(String.valueOf(i) + "/" + c.getString(1).split("/",2)[1]
-                                + "/" + c.getString(3)
-                                + ";" + c.getString(2));
-                    }
+        try {
+            while (c.moveToNext()) {
+                if (!c.isNull(0) && !c.isNull(2)
+                        && !c.getString(2).equals("")) {
+                    contact.add(c.getString(1).split("/",2)[1]
+                            + "/" + c.getString(3)
+                            + ";" + c.getString(2)
+                            + ";" + c.getString(2));
+                    contacts.add(String.valueOf(i) + "/" + c.getString(1).split("/",2)[1]
+                            + "/" + c.getString(3)
+                            + ";" + c.getString(2));
                 }
-            } finally {
-                c.close();
             }
+        } finally {
+            c.close();
         }
+        
         return contact;
     }
 
