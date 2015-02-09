@@ -70,6 +70,12 @@ public class Contacts {
     public HashSet<String> mergeContact () {
         Uri rawContactUri;
         Uri entityUri;
+        String ids = new String();
+        
+        for (String i : list)
+            ids += i + ",";
+        if (ids.length() > 0)
+            ids = ids.substring(0, ids.length()-1);
 
         Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
             new String[] {
@@ -81,7 +87,7 @@ public class Contacts {
                 Data.DATA3
             },
             Data.RAW_CONTACT_ID + " IN (?)",
-            new String[]{list.toString()});
+            new String[]{ids});
 
             try {
                 while (c.moveToNext()) {
@@ -105,7 +111,7 @@ public class Contacts {
         return contact;
     }
 
-    public HashSet<> getContact (String objectType) {
+    public HashSet<Object> getContact (String objectType) {
         HashSet<String> contact = new HashSet<String> ();
         contacts = new HashSet<String> ();
         rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.ValuOf(i));
