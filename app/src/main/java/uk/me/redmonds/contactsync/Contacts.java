@@ -73,12 +73,12 @@ public class Contacts {
 
         Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
             new String[] {
-                RawContactsEntity.SOURCE_ID,
-                RawContactsEntity.DATA_ID,
-                RawContactsEntity.MIMETYPE,
-                RawContactsEntity.DATA1,
-                RawContactsEntity.DATA2,
-                RawContactsEntity.DATA3
+                Data.SOURCE_ID,
+                Data.DATA_ID,
+                Data.MIMETYPE,
+                Data.DATA1,
+                Data.DATA2,
+                Data.DATA3
             },
             Data.RAW_CONTACT_ID + " IN (?)",
             new String[]{ids});
