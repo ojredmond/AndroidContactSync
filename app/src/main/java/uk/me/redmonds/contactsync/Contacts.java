@@ -70,10 +70,10 @@ public class Contacts {
                     if(!contact.containsKey(Data.MIMETYPE))
                         contact.put(Data.MIMETYPE, new ArrayList<>());
                     ArrayList<HashMap<String,String>> field = contact.get(Data.MIMETYPE);
-                    field.add(new HashMap("group", getGroupName(c.getString(2))));
-                    field.add(new HashMap(Data.DATA1, c.getString(3)));
-                    field.add(new HashMap(Data.DATA2, c.getString(4)));
-                    field.add(new HashMap(Data.DATA3, c.getString(5)));
+                    field.add(new HashMap<String,String>("group", getGroupName(c.getString(2))));
+                    field.add(new HashMap<String,String>(Data.DATA1, c.getString(3)));
+                    field.add(new HashMap<String,String>(Data.DATA2, c.getString(4)));
+                    field.add(new HashMap<String,String>(Data.DATA3, c.getString(5)));
                 }
             }
         } finally {
