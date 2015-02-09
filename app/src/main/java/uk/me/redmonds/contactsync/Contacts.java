@@ -165,10 +165,11 @@ public class Contacts {
     }
 
     public HashSet<String> mergeContact () {
-        HashMap<String,String> contact = (HashMap<String,String>)contacts.values();
-        for(String key: contact.keySet()) {
+        HashMap<String,String> contact = new HashMap<>();
+        for(HashMap<String,String> values: contacts.values())
+            contact.put(values);
+        for(String key: contact.keySet())
             Toast.makeText(main, key + ":" + contact.get(key), Toast.LENGTH_SHORT).show();
-        }
 
         HashSet<String> contactOld = new HashSet<String>();
         for (String i : list) {
