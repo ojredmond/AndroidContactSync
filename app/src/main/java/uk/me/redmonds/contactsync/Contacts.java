@@ -76,7 +76,8 @@ public class Contacts {
                 RawContactsEntity.SOURCE_ID,
                 RawContactsEntity.DATA_ID,
                 RawContactsEntity.MIMETYPE,
-                RawContactsEntity.DATA1
+                RawContactsEntity.DATA1,
+                RawContactsEntity.DATA2,
                 RawContactsEntity.DATA3
             },
             Data.RAW_CONTACT_ID + " IN (?)",
@@ -88,7 +89,8 @@ public class Contacts {
                     if (!c.isNull(1)) {
                         String mimeType = c.getString(2);
                         String data = c.getString(3);
-                        String add_data = c.getString(4);
+                        String type = c.getString(4);
+                        String type_other = c.getString(5);
                     }
                 }
             } finally {
