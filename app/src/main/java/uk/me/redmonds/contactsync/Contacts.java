@@ -168,7 +168,7 @@ public class Contacts {
         HashSet<String> contact = new HashSet<>();
         for(String key1: contacts.keySet()) {
             for(String key2: contacts.get(key1).keySet()) {
-                    contact.add(contacts.get(key1).get(key2));
+                    contact.addAll(contacts.get(key1).get(key2));
             }
         }
         for(String value: contact)
