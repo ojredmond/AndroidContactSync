@@ -68,7 +68,7 @@ public class Contacts {
                 HashMap<String,HashMap<String,String>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
                     if(!contact.containsKey(Data.MIMETYPE))
-                        contact.put(Data.MIMETYPE, new HashMap<>())
+                        contact.put(Data.MIMETYPE, new HashMap<>());
                     HashMap<String,String> field = contact.get(Data.MIMETYPE);
                     field.put("group", getGroupName(c.getString(2)));
                     field.put(Data.DATA1, c.getString(3));
