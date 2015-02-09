@@ -71,7 +71,7 @@ public class Contacts {
         Uri rawContactUri;
         Uri entityUri;
 
-        Cursor c = getContentResolver().query(
+        Cursor c = main.getContentResolver().query(
             // Uri maps to the table in the provider named table_name.
             Data.CONTENT_URI,
             // Projection is an array of columns that should be included for each row retrieved.
