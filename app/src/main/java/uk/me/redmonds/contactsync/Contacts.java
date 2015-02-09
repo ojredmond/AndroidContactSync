@@ -23,7 +23,7 @@ public class Contacts {
     private HashSet<String> list;
     private Activity main;
     private HashSet<String> contactsOld = null;
-    private HashMap<String,HashMap<String,String>> contacts = new HashMap<>();
+    private HashMap<String,HashMap<String,HashMap<String,String>>> contacts = new HashMap<>();
     private SharedPreferences pref;
 
     Contacts (Activity m, HashSet<String> ids) {
@@ -65,15 +65,15 @@ public class Contacts {
 
         try {
             while (c.moveToNext()) {
-                HashMap<String,String> contact = new HashMap();
-                //contact.put(Data.RAW_CONTACT_ID, c.getString(0));
                 contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
-                    contact.put(Data.MIMETYPE, c.getString(2));
-                    contact.put("group", getGroupName(c.getString(2)));
-                    contact.put(Data.DATA1, c.getString(3));
-                    contact.put(Data.DATA2, c.getString(4));
-                    contact.put(Data.DATA3, c.getString(5));
+                    if(!contact.containsKey(Data.MIMETYPE))
+                        contact.contact.put(Data.MIMETYPE, new HashMap<>())
+                    field = contact.get(Data.MIMETYPE);
+                    field.put("group", getGroupName(c.getString(2)));
+                    field.put(Data.DATA1, c.getString(3));
+                    field.put(Data.DATA2, c.getString(4));
+                    field.put(Data.DATA3, c.getString(5));
                 }
             }
         } finally {
