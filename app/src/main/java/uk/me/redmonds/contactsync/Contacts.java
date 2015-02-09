@@ -73,8 +73,8 @@ public class Contacts {
 
         Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
             new String[] {
-                Data.SOURCE_ID,
-                Data.DATA_ID,
+                Data.RAW_CONTACT_ID,
+                Data._ID,
                 Data.MIMETYPE,
                 Data.DATA1,
                 Data.DATA2,
@@ -85,7 +85,8 @@ public class Contacts {
 
             try {
                 while (c.moveToNext()) {
-                String sourceId = c.getString(0);
+                String rawId = c.getString(0);
+                String dataId = c.getString(0);
                     if (!c.isNull(1)) {
                         String mimeType = c.getString(2);
                         String data = c.getString(3);
