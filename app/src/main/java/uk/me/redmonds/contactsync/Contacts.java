@@ -22,7 +22,7 @@ public class Contacts {
     private HashSet<String> list;
     private Activity main;
     private HashSet<String> contactsOld = null;
-    private HashMap<String,HashMap<String,String>> contacts = new HashSet<>();
+    private HashMap<String,HashMap<String,String>> contacts = new HashMap<>();
     private SharedPreferences pref;
 
     Contacts (Activity m, HashSet<String> ids) {
