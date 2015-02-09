@@ -65,7 +65,7 @@ public class Contacts {
 
         try {
             while (c.moveToNext()) {
-                contact = contacts.get(c.getString(0));
+                HashMap<String,HashMap<String,String>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
                     if(!contact.containsKey(Data.MIMETYPE))
                         contact.contact.put(Data.MIMETYPE, new HashMap<>())
