@@ -106,7 +106,7 @@ public class Contacts {
 
         HashSet<String> contact;
         for (String i : list) {
-            contact = getContact("String");
+            contact = (HashSet<String>)getContact("String");
         }
         return contact;
     }
