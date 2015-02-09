@@ -3,7 +3,6 @@ package uk.me.redmonds.contactsync;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
@@ -167,9 +166,8 @@ public class Contacts {
 
     public HashSet<String> mergeContact () {
         HashMap<String,String> contact = (HashMap<String,String>)contacts.values();
-        Iterator it = contact.iterator();
-        while (it.hasNext()) {
-            Toast.makeText(main, it.next(), Toast.LENGTH_SHORT).show();
+        for(String key: contact.keySet()) {
+            Toast.makeText(main, key + ":" + contact(key), Toast.LENGTH_SHORT).show();
         }
 
         HashSet<String> contactOld = new HashSet<String>();
