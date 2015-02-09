@@ -39,7 +39,7 @@ public class Contacts {
         createContacts();
     }
     
-    private createContacts () {
+    private void createContacts () {
         String ids = new String();
         
         for (String i : list) {
@@ -68,6 +68,7 @@ public class Contacts {
                 contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
                     contact.put(Data.MIMETYPE, c.getString(2));
+                    contact.put("group", getGroupName(c.getString(2)));
                     contact.put(Data.DATA1, c.getString(3));
                     contact.put(Data.DATA2, c.getString(4));
                     contact.put(Data.DATA3, c.getString(5));
@@ -78,6 +79,58 @@ public class Contacts {
         }
     }
 
+    private String getGroupName (String mime) {
+        String group;
+    	switch (mime) {
+    		case StructuredName.CONTENT_ITEM_TYPE:
+    		    group = "Name";
+    		    break;
+    		case Phone.CONTENT_ITEM_TYPE:
+    		    group = "Number";
+    		    break;
+    		case Email.CONTENT_ITEM_TYPE:
+    		    group = "Email";
+    		    break;
+    		case Photo.CONTENT_ITEM_TYPE:
+    		    group = "Photo";
+    		    break;
+    		case Organization.CONTENT_ITEM_TYPE:
+    		    group = "Organization";
+    		    break;
+    		case Im.CONTENT_ITEM_TYPE:
+    		    group = "IM";
+    		    break;
+    		case Nickname.CONTENT_ITEM_TYPE:
+    		    group = "Nickname";
+    		    break;
+    		case Note.CONTENT_ITEM_TYPE:
+    		    group = "Note";
+    		    break;
+    		case StructuredPostal.CONTENT_ITEM_TYPE:
+    		    group = "Address";
+    		    break;
+    		case GroupMembership.CONTENT_ITEM_TYPE:
+    		    group = "Group";
+    		    break;
+    		case Website.CONTENT_ITEM_TYPE:
+    		    group = "Sites";
+    		    break;
+    		case Event.CONTENT_ITEM_TYPE:
+    		    group = "Event";
+    		    break;
+    		case Relation.CONTENT_ITEM_TYPE:
+    		    group = "Relation";
+    		    break;
+    		case SipAddress.CONTENT_ITEM_TYPE:
+    		    group = "SIP";
+    		    break;
+    		default:
+    		    group = "Other";
+    	}
+    	
+    	return group;
+    }
+    
     public HashSet<String> getContacts() {
         return contactsOld;
     }
@@ -110,11 +163,14 @@ public class Contacts {
     }
 
     public HashSet<String> mergeContact () {
-        HashSet<String> contactOld = new HashSet<String>();
+        /*HashSet<String> contactOld = new HashSet<String>();
         for (String i : list) {
             contactOld.addAll((HashSet<String>)getContact(i, "String"));
         }
-        return contactOld;
+        return contactOld;*/
+        HashMap<String,String> contact = new HashMap<>();
+        for(HashMap<String,String> c: contacts)
+            contact.putAll(c);
     }
 
     public HashSet<Object> getContact (String id, String objectType) {
