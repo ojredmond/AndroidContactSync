@@ -67,9 +67,9 @@ public class Contacts {
             while (c.moveToNext()) {
                 HashMap<String,ArrayList<HashMap<String,String>>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
-                    if(!contact.containsKey(Data.MIMETYPE))
-                        contact.put(Data.MIMETYPE, new ArrayList<>());
-                    ArrayList<HashMap<String,String>> field = contact.get(Data.MIMETYPE);
+                    if(!contact.containsKey(c.getString(2)))
+                        contact.put(c.getString(2), new ArrayList<>());
+                    ArrayList<HashMap<String,String>> field = contact.get(c.getString(2));
                     HashMap<String,String> item = new HashMap<> ();
                     item.put("group", getGroupName(c.getString(2)));
                     item.put(Data.DATA1, c.getString(3));
