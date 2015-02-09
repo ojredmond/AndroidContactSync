@@ -81,7 +81,7 @@ public class Contacts {
                 Data.DATA3
             },
             Data.RAW_CONTACT_ID + " IN (?)",
-            new String[]{ids});
+            new String[]{list.toString()});
 
             try {
                 while (c.moveToNext()) {
@@ -91,7 +91,7 @@ public class Contacts {
                         String mimeType = c.getString(2);
                         String data = c.getString(3);
                         String type = c.getString(4);
-                        String type_other = c.getString(5);
+                        String type_label = c.getString(5);
                     }
                 }
             } finally {
