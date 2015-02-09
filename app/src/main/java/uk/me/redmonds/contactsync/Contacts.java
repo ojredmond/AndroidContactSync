@@ -23,7 +23,7 @@ public class Contacts {
     private HashSet<String> contactsOld = null;
     private SharedPreferences pref;
 
-    contacts (Activity m, HashSet<String> ids) {
+    Contacts (Activity m, HashSet<String> ids) {
         main = m;
         list = ids;
         pref = main.getPreferences(Context.MODE_PRIVATE);
