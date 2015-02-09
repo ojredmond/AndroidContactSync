@@ -3,6 +3,7 @@ package uk.me.redmonds.contactsync;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
