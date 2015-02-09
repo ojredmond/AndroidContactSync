@@ -168,11 +168,11 @@ public class Contacts {
         HashSet<String> contact = new HashSet<>();
         for(String key1: contacts.keySet()) {
             for(String key2: contacts.get(key1).keySet()) {
-                    contact.add(value);
+                    contact.add(contacts.get(key1).get(key2));
             }
         }
         for(String value: contact)
-            Toast.makeText(main, key2 + ":" + value, Toast.LENGTH_SHORT).show();
+            Toast.makeText(main, value, Toast.LENGTH_SHORT).show();
 
         HashSet<String> contactOld = new HashSet<String>();
         for (String i : list) {
