@@ -165,7 +165,7 @@ public class Contacts {
     }
 
     public HashSet<String> mergeContact () {
-        HashSet<String> contact = new Hashset<>();
+        HashSet<String> contact = new HashSet<>();
         for(String key1: contacts.keySet()) {
             for(String key2: contacts.get(key1).keySet()) {
                     contact.add(value);
