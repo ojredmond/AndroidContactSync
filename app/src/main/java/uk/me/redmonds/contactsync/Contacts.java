@@ -71,8 +71,7 @@ public class Contacts {
         Uri rawContactUri;
         Uri entityUri;
 
-        Cursor c = main.getContentResolver().query(
-            Data.CONTENT_URI,
+        Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
             new String[] {
                 RawContactsEntity.SOURCE_ID,
                 RawContactsEntity.DATA_ID,
