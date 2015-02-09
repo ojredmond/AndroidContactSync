@@ -18,7 +18,7 @@ public class MergeFragment extends Fragment
     private MainActivity main;
     private HashSet<String> contact;
     private HashSet<String> contacts;
-    private RelativeLayout layout;
+    private LinearLayout layout;
     private Contacts cObject;
     private static final Integer[] LABEL_VALUES = new Integer[] {1,101,201,301,401,501};
     private String listItem;
@@ -55,7 +55,7 @@ public class MergeFragment extends Fragment
         Button confirm = (Button)contactView.findViewById(R.id.contact_confirm);
         confirm.setOnClickListener(ButtonClick);
 
-        layout = (RelativeLayout)contactView.findViewById(R.id.contact);
+        layout = (LinearLayout)contactView.findViewById(R.id.contact_info);
 
         // merge contact if no contact stored
         if (contact == null) {
@@ -126,15 +126,15 @@ public class MergeFragment extends Fragment
                         label = "Other";
                 }
                 contactHeading.setText(label);
-                params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
-                        RelativeLayout.LayoutParams.WRAP_CONTENT);
-                if (lastId != -1) {
-                    params.addRule(RelativeLayout.BELOW, lastId);
-                }
+                //params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                //        RelativeLayout.LayoutParams.WRAP_CONTENT);
+                //if (lastId != -1) {
+                //    params.addRule(RelativeLayout.BELOW, lastId);
+                //}
 
                 lastId = LABEL_VALUES[i];
                 id = lastId;
-                layout.addView(contactHeading, params);
+                layout.addView(contactHeading);
 
                 line = new View(main);
                 //line.setBackgroundColor(getResources().getColor(R.color.pressed_redmond));
