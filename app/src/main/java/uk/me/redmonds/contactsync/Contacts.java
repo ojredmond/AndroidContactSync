@@ -92,7 +92,7 @@ public class Contacts {
                 while (c.moveToNext()) {
                 String rawId = c.getString(0);
                 String dataId = c.getString(0);
-                    if (!c.isNull(1)) {
+                    if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
                         String mimeType = c.getString(2);
                         String data = c.getString(3);
                         String type = c.getString(4);
