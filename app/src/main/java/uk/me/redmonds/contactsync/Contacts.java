@@ -169,7 +169,7 @@ public class Contacts {
         for(String key1: contacts.keySet()) {
             for(String key2: contacts.get(key1).keySet()) {
                 for(String value: contacts.get(key1).get(key2))
-                    Toast.makeText(main, key2 + ":" + value.get(Data.DATA1), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(main, key2 + ":" + value, Toast.LENGTH_SHORT).show();
                     //contact.putAll(values);
             }
         }
