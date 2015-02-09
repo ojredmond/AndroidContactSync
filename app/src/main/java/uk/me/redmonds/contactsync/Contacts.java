@@ -20,10 +20,10 @@ import android.util.*;
 public class Contacts {
     private HashSet<String> list;
     private Activity main;
-    private HashSet<String> contacts = null;
+    private HashSet<String> contactsOld = null;
     private SharedPreferences pref;
 
-    Contacts (Activity m, HashSet<String> ids) {
+    contacts (Activity m, HashSet<String> ids) {
         main = m;
         list = ids;
         pref = main.getPreferences(Context.MODE_PRIVATE);
@@ -32,12 +32,12 @@ public class Contacts {
     Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
         main = m;
         list = ids;
-        contacts = c;
+        contactsOld = c;
         pref = main.getPreferences(Context.MODE_PRIVATE);
     }
 
     public HashSet<String> getContacts() {
-        return contacts;
+        return contactsOld;
     }
 
     public Boolean deleteContacts () {
@@ -116,7 +116,7 @@ public class Contacts {
         Uri entityUri;
         HashSet<Object> contact = new HashSet<Object> ();
 		
-        contacts = new HashSet<String> ();
+        contactsOld = new HashSet<String> ();
         rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.valueOf(id));
         entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
         Cursor c = main.getContentResolver().query(entityUri,
@@ -131,7 +131,7 @@ public class Contacts {
                             + "/" + c.getString(3)
                             + ";" + c.getString(2)
                             + ";" + c.getString(2));
-                    contacts.add(id + "/" + c.getString(1).split("/",2)[1]
+                    contactsOld.add(id + "/" + c.getString(1).split("/",2)[1]
                             + "/" + c.getString(3)
                             + ";" + c.getString(2));
                 }
@@ -154,7 +154,7 @@ public class Contacts {
         String origValue;
         HashSet<String> accounts = new HashSet<String>();
 
-        if (contacts == null) {
+        if (contactsOld == null) {
             // send error report
             TopExceptionHandler.sendReport (main, TopExceptionHandler.generateReport(new Exception("Contacts Variable not created")));
             return false;
@@ -190,16 +190,16 @@ public class Contacts {
                 origValue = item[1];
                 value = item[2];
 
-                if (contacts.contains(id + "/" + type)
+                if (contactsOld.contains(id + "/" + type)
                         && !origValue.equals(value)) {
-                    contacts.remove(id + "/" + type);
+                    contactsOld.remove(id + "/" + type);
                     opBuilder = ContentProviderOperation.newUpdate(Data.CONTENT_URI);
                     where = Data.RAW_CONTACT_ID + " = " + id;
-                } else if (!contacts.contains(id + "/" + type)) {
+                } else if (!contactsOld.contains(id + "/" + type)) {
                     opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
                             .withValue(Data.RAW_CONTACT_ID, id);
                 } else {
-                    contacts.remove(id + "/" + type);
+                    contactsOld.remove(id + "/" + type);
                     opBuilder = null;
                 }
 
@@ -215,7 +215,7 @@ public class Contacts {
                 }
             }
             // remove any deleted elements
-            for (String s : contacts) {
+            for (String s : contactsOld) {
                 if (s.startsWith(id)) {
                     value = s.split(";",2)[1];
                     type = s.split(";",2)[0].split("/",2)[1];
