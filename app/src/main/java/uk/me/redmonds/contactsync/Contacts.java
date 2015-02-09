@@ -169,7 +169,7 @@ public class Contacts {
         for(String key1: contacts.keySet()) {
                     contact.putAll(contacts.get(key1));
         }
-        for(String value: contact.getValues())
+        for(String value: contact.values())
             Toast.makeText(main, value, Toast.LENGTH_SHORT).show();
 
         HashSet<String> contactOld = new HashSet<String>();
