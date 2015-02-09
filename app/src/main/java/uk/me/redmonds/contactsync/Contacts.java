@@ -72,9 +72,7 @@ public class Contacts {
         Uri entityUri;
 
         Cursor c = main.getContentResolver().query(
-            // Uri maps to the table in the provider named table_name.
             Data.CONTENT_URI,
-            // Projection is an array of columns that should be included for each row retrieved.
             new String[] {
                 RawContactsEntity.SOURCE_ID,
                 RawContactsEntity.DATA_ID,  //null if no data
