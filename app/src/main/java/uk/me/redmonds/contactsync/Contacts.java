@@ -96,7 +96,7 @@ public class Contacts {
                         String data = c.getString(3);
                         String type = c.getString(4);
                         String type_label = c.getString(5);
-                    	Toast.makeText(main, rawId + ":" + dataId + "-" + mimeType + "," + data, duration).show();
+                    	Toast.makeText(main, rawId + ":" + dataId + "-" + mimeType + "," + data, Toast.LENGTH_LONG).show();
                     }
                 }
             } finally {
