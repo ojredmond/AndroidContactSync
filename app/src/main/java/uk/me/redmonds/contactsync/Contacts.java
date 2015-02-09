@@ -72,10 +72,8 @@ public class Contacts {
                     contact.put(Data.MIMETYPE, c.getString(2));
                     contact.put("group", getGroupName(c.getString(2)));
                     contact.put(Data.DATA1, c.getString(3));
-                    if(!c.isNull(4) && !c.getString(4).equals(""))
-                        contact.put(Data.DATA2, c.getString(4));
-                    if(!c.isNull(5) && !c.getString(5).equals(""))
-                        contact.put(Data.DATA3, c.getString(5));
+                    contact.put(Data.DATA2, c.getString(4));
+                    contact.put(Data.DATA3, c.getString(5));
                 }
             }
         } finally {
@@ -167,12 +165,17 @@ public class Contacts {
     }
 
     public HashSet<String> mergeContact () {
-        /*HashSet<String> contactOld = new HashSet<String>();
+        HashMap<String,String> contact = (HashMap<String,String>)contacts.values();
+        Iterator it = contact.iterator();
+        while (it.hasNext()) {
+            Toast.makeText(main, it.next(), Toast.LENGTH_SHORT).show();
+        }
+
+        HashSet<String> contactOld = new HashSet<String>();
         for (String i : list) {
             contactOld.addAll((HashSet<String>)getContact(i, "String"));
         }
-        return contactOld;*/
-        HashMap<String,String> contact = (HashMap<String,String>)contacts.values();
+        return contactOld;
     }
 
     public HashSet<Object> getContact (String id, String objectType) {
