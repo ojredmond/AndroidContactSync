@@ -68,8 +68,6 @@ public class Contacts {
     }
 
     public HashSet<String> mergeContact () {
-        Uri rawContactUri;
-        Uri entityUri;
         String ids = new String();
         
         for (String i : list)
@@ -104,17 +102,20 @@ public class Contacts {
                 c.close();
             }
 
-        HashSet<String> contact;
+        HashSet<String> contact = new HashSet<String>();
         for (String i : list) {
-            contact = (HashSet<String>)getContact("String");
+            contact.addAll((HashSet<String>)getContact(i, "String"));
         }
         return contact;
     }
 
-    public HashSet<Object> getContact (String objectType) {
-        HashSet<String> contact = new HashSet<String> ();
+    public HashSet<Object> getContact (String id, String objectType) {
+		Uri rawContactUri;
+        Uri entityUri;
+        HashSet<Object> contact = new HashSet<Object> ();
+		
         contacts = new HashSet<String> ();
-        rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.ValuOf(i));
+        rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.valueOf(id));
         entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
         Cursor c = main.getContentResolver().query(entityUri,
                 new String[]{RawContacts.Entity.DATA_ID, RawContacts.Entity.MIMETYPE, RawContacts.Entity.DATA1, RawContacts.Entity.DATA2},
@@ -128,7 +129,7 @@ public class Contacts {
                             + "/" + c.getString(3)
                             + ";" + c.getString(2)
                             + ";" + c.getString(2));
-                    contacts.add(String.valueOf(i) + "/" + c.getString(1).split("/",2)[1]
+                    contacts.add(id + "/" + c.getString(1).split("/",2)[1]
                             + "/" + c.getString(3)
                             + ";" + c.getString(2));
                 }
