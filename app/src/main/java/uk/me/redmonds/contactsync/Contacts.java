@@ -87,7 +87,7 @@ public class Contacts {
                 Data.DATA3
             },
             Data.RAW_CONTACT_ID + " IN (?)",
-            new String[]{ids});
+            new String[]{ids}, null);
 
             try {
                 while (c.moveToNext()) {
@@ -106,7 +106,7 @@ public class Contacts {
 
         HashSet<String> contact;
         for (String i : list) {
-            contact = getContact("String");
+            contact = (HashSet<String>)getContact("String");
         }
         return contact;
     }
