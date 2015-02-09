@@ -74,7 +74,8 @@ public class Contacts {
             ids += i + ",";
         if (ids.length() > 0)
             ids = ids.substring(0, ids.length()-1);
-
+		Toast.makeText(main, "test " + ids, Toast.LENGTH_SHORT).show();
+		
         Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
             new String[] {
                 Data.RAW_CONTACT_ID,
@@ -84,8 +85,8 @@ public class Contacts {
                 Data.DATA2,
                 Data.DATA3
             },
-            Data.RAW_CONTACT_ID + " IN (?)",
-            new String[]{ids}, null);
+            Data.RAW_CONTACT_ID + " IN (" + ids + ")",
+            null, null);
 
             try {
                 while (c.moveToNext()) {
