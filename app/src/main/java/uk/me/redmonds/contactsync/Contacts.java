@@ -168,7 +168,7 @@ public class Contacts {
 
     public HashSet<String> mergeContact () {
         //HashMap<String,String> contact = new HashMap<>();
-        for(String key1: contact.keySet()) {
+        for(String key1: contacts.keySet()) {
             for(String key2: contacts.get(key1).keySet() {
                 for(HashMap<String,String> values: contacts.get(key1).get(key2))
                     Toast.makeText(main, key2 + ":" + values.get(Data.DATA1), Toast.LENGTH_SHORT).show();
