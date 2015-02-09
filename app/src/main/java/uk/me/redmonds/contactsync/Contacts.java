@@ -23,7 +23,7 @@ public class Contacts {
     private HashSet<String> list;
     private Activity main;
     private HashSet<String> contactsOld = null;
-    private HashMap<String,HashMap<String,ArrayList<HashMap<String,String>>>> contacts = new HashMap<>();
+    private HashMap<String,HashMap<String,HashSet<String>>> contacts = new HashMap<>();
     private SharedPreferences pref;
 
     Contacts (Activity m, HashSet<String> ids) {
@@ -68,14 +68,12 @@ public class Contacts {
                 HashMap<String,ArrayList<HashMap<String,String>>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
                     if(!contact.containsKey(c.getString(2)))
-                        contact.put(c.getString(2), new ArrayList<>());
-                    ArrayList<HashMap<String,String>> field = contact.get(c.getString(2));
-                    HashMap<String,String> item = new HashMap<> ();
-                    item.put("group", getGroupName(c.getString(2)));
-                    item.put(Data.DATA1, c.getString(3));
-                    item.put(Data.DATA2, c.getString(4));
-                    item.put(Data.DATA3, c.getString(5));
-                    field.add(item);
+                        contact.put(c.getString(2), new HashSet<>());
+                    HashSet<String>> field = contact.get(c.getString(2));
+                    field.add(getGroupName(c.getString(2)) + ":"
+                        c.getString(3) + ":"
+                        c.getString(4) + ":"
+                        c.getString(5));
                 }
             }
         } finally {
@@ -170,8 +168,8 @@ public class Contacts {
         //HashMap<String,String> contact = new HashMap<>();
         for(String key1: contacts.keySet()) {
             for(String key2: contacts.get(key1).keySet()) {
-                for(HashMap<String,String> values: contacts.get(key1).get(key2))
-                    Toast.makeText(main, key2 + ":" + values.get(Data.DATA1), Toast.LENGTH_SHORT).show();
+                for(String value: contacts.get(key1).get(key2))
+                    Toast.makeText(main, key2 + ":" + value.get(Data.DATA1), Toast.LENGTH_SHORT).show();
                     //contact.putAll(values);
             }
         }
