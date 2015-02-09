@@ -79,7 +79,6 @@ public class Contacts {
                 RawContactsEntity.DATA1
                 RawContactsEntity.DATA3
             },
-            // Selection specifies the criteria for selecting rows.
             Data.RAW_CONTACT_ID + " IN (?)",
             new String[]{ids});
 
