@@ -70,7 +70,34 @@ public class Contacts {
     public HashSet<String> mergeContact () {
         Uri rawContactUri;
         Uri entityUri;
-        Cursor c;
+
+        Cursor c = getContentResolver().query(
+            // Uri maps to the table in the provider named table_name.
+            Data.CONTENT_URI,
+            // Projection is an array of columns that should be included for each row retrieved.
+            new String[] {
+                RawContactsEntity.SOURCE_ID,
+                RawContactsEntity.DATA_ID,  //null if no data
+                RawContactsEntity.MIMETYPE,
+                RawContactsEntity.DATA1  //e.g. Phone number
+                RawContactsEntity.DATA3  //e.g. label when Mime Type is Other
+            },
+            // Selection specifies the criteria for selecting rows.
+            Data.RAW_CONTACT_ID + " IN (?)",
+            new String[]{ids});
+
+            try {
+                while (c.moveToNext()) {
+                String sourceId = c.getString(0);
+                    if (!c.isNull(1)) {
+                        String mimeType = c.getString(2);
+                        String data = c.getString(3);
+                        String add_data = c.getString(4);
+                    }
+                }
+            } finally {
+                c.close();
+            }
 
         HashSet<String> contact;
         for (String i : list) {
@@ -84,7 +111,7 @@ public class Contacts {
         contacts = new HashSet<String> ();
         rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.ValuOf(i));
         entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
-        c = main.getContentResolver().query(entityUri,
+        Cursor c = main.getContentResolver().query(entityUri,
                 new String[]{RawContacts.Entity.DATA_ID, RawContacts.Entity.MIMETYPE, RawContacts.Entity.DATA1, RawContacts.Entity.DATA2},
                 null, null, null);
 
