@@ -75,10 +75,10 @@ public class Contacts {
             Data.CONTENT_URI,
             new String[] {
                 RawContactsEntity.SOURCE_ID,
-                RawContactsEntity.DATA_ID,  //null if no data
+                RawContactsEntity.DATA_ID,
                 RawContactsEntity.MIMETYPE,
-                RawContactsEntity.DATA1  //e.g. Phone number
-                RawContactsEntity.DATA3  //e.g. label when Mime Type is Other
+                RawContactsEntity.DATA1
+                RawContactsEntity.DATA3
             },
             // Selection specifies the criteria for selecting rows.
             Data.RAW_CONTACT_ID + " IN (?)",
