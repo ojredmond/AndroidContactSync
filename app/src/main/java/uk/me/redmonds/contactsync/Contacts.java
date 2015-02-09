@@ -70,9 +70,9 @@ public class Contacts {
                     if(!contact.containsKey(c.getString(2)))
                         contact.put(c.getString(2), new HashSet<>());
                     HashSet<String> field = contact.get(c.getString(2));
-                    field.add(getGroupName(c.getString(2)) + ":"
-                        c.getString(3) + ":"
-                        c.getString(4) + ":"
+                    field.add(getGroupName(c.getString(2)) + ":" +
+                        c.getString(3) + ":" +
+                        c.getString(4) + ":" +
                         c.getString(5));
                 }
             }
