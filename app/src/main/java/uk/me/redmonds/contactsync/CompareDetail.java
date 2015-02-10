@@ -91,9 +91,9 @@ public class CompareDetail extends Fragment {
 
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
-            Contacts cObj = new Contacts(ids);
+            Contacts cObj = new Contacts(main, ids);
             HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = cObj.getContacts();
-            for (Integer id: ids) {
+            for (String id: ids) {
                 HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
                 for(String type: Contacts.types) {
                     if(contact.get(type) != null 
