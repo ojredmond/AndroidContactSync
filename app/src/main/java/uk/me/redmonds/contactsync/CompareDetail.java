@@ -100,6 +100,13 @@ public class CompareDetail extends Fragment {
                 contactView.setTag(account + ":" + id);
                 layout.addView(contactView);
                 LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
+                View accountInfo = LayoutInflater.from(main)
+                        .inflate(R.layout.list_row_2, layoutContainer, false);
+                ((TextView)accountInfo.findViewById(R.id.type)).setText("Account");
+                ((TextView)accountInfo.findViewById(R.id.value)).setText(account);
+                ((LinearLayout)accountInfo.findViewById(R.id.row)).setBackgroundColor(getResources().getColor(R.color.nav_background));
+                contactInfo.addView(accountInfo);
+
                 HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
                 for(String type: Contacts.types) {
                     if(contact.get(type) != null 
