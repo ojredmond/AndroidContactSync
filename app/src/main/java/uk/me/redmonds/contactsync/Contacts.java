@@ -185,14 +185,14 @@ public class Contacts {
     public HashMap<String,HashSet<HashMap<String,String>>> mergeContact () {
         HashMap<String,HashSet<HashMap<String,String>>> contact = new HashMap<>();
         for(String type: types) {
-			HashSet<HashMap<String,String>> values = new HashSet<>();
-			for(String id: contacts.keySet())
-				if(contacts.get(id).get(type) != null 
-					&& contacts.get(id).get(type).size() > 0)
-                	values.addAll(contacts.get(id).get(type));
-					
-			if(values.size() > 0)
-				contact.put(type, values);
+            HashSet<HashMap<String,String>> values = new HashSet<>();
+            for(String id: contacts.keySet())
+                if(contacts.get(id).get(type) != null 
+                    && contacts.get(id).get(type).size() > 0)
+                    values.addAll(contacts.get(id).get(type));
+
+            if(values.size() > 0)
+                contact.put(type, values);
         }
         
         return contact;
