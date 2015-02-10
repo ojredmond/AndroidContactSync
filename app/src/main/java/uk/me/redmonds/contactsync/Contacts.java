@@ -152,7 +152,7 @@ public class Contacts {
     	return group;
     }
     
-    private static String getTypeLabel (String mime, String label) {
+    private String getTypeLabel (Integer mime, CharSequence label) {
     	switch (mime) {
     		case StructuredName.CONTENT_ITEM_TYPE:
     		    label = null;
