@@ -76,7 +76,7 @@ public class MergeFragment extends Fragment
                 contactHeading.setText(Contacts.getGroupName(type));
                 layout.addView(contactHeading);
                 for(HashMap<String,String> item: contact.get(type)) {
-                    if(item.get("data2") == null) {
+                    if(item.get("label") == null) {
                         TextView contactValue = (TextView)LayoutInflater.from(main)
                             .inflate(R.layout.list_row_1, layoutContainer, false);
                         contactValue.setText(item.get("data1"));
@@ -85,7 +85,7 @@ public class MergeFragment extends Fragment
                         GridLayout rowLayout = (GridLayout)LayoutInflater.from(main)
                             .inflate(R.layout.list_row_2, layoutContainer, false);
                         ((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("data1"));
-                        ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("data2"));
+                        ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
                         layout.addView(rowLayout);
                     }
                 }
