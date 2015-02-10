@@ -152,7 +152,7 @@ public class Contacts {
     	return group;
     }
     
-    private CharSequence getTypeLabel (String mime, Integer type, CharSequence label) {
+    private String getTypeLabel (String mime, Integer type, CharSequence label) {
     	switch (mime) {
     		case StructuredName.CONTENT_ITEM_TYPE:
     		    label = null;
@@ -189,7 +189,7 @@ public class Contacts {
     		    break;
     	}
     	
-    	return label;
+    	return (String)label;
     }
 
     public HashSet<String> getContacts() {
