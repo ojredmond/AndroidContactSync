@@ -217,7 +217,17 @@ public class Contacts {
                 }
                 break;
             case Event.CONTENT_ITEM_TYPE:
-                label = Event.getTypeLabel(main.getResources(), type, label);
+                switch (type) {
+                    case CommonDataKinds.Event.TYPE_ANNIVERSARY:
+                        label = "Anniversary";
+                        break;
+                    case CommonDataKinds.Event.TYPE_BIRTHDAY:
+                        label = "Birthday";
+                        break;
+                    case CommonDataKinds.Event.TYPE_OTHER:
+                        label = "Other";
+                        break;
+                }
                 break;
             case Relation.CONTENT_ITEM_TYPE:
                 label = Relation.getTypeLabel(main.getResources(), type, label);
