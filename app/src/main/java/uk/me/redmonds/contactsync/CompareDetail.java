@@ -108,7 +108,7 @@ public class CompareDetail extends Fragment {
                         .inflate(R.layout.list_row_2, layoutContainer, false);
                 ((TextView)groupHeader.findViewById(R.id.type)).setText("Account");
                 ((TextView)groupHeader.findViewById(R.id.value)).setText(account);
-                ((GridLayout)groupHeader.findViewById(R.id.row)).setBackgroundColor(getResources().getColor(R.color.nav_background));
+                ((LinearLayout)groupHeader.findViewById(R.id.row)).setBackgroundColor(getResources().getColor(R.color.nav_background));
                 childData.get(0).add(groupHeader);
 
                 groupHeader = LayoutInflater.from(main)
