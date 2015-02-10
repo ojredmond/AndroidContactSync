@@ -91,15 +91,14 @@ public class CompareDetail extends Fragment {
 
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
-            // create a new view for the contact
-            View contactView = LayoutInflater.from(main)
-                    .inflate(R.layout.contact, layoutContainer, false);
-
-            contactView.setTag(account + ":" + id);
-
             Contacts cObj = new Contacts(main, ids);
             HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = cObj.getContacts();
             for (String id: ids) {
+                // create a new view for the contact
+                View contactView = LayoutInflater.from(main)
+                        .inflate(R.layout.contact, layoutContainer, false);
+                contactView.setTag(account + ":" + id);
+                layout.addView(contactView);
                 LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
                 HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
                 for(String type: Contacts.types) {
@@ -263,8 +262,8 @@ public class CompareDetail extends Fragment {
                 for (List<View> l: childData)
                     for (View childItem: l)
                         contactInfo.addView(childItem);
-*/
-                layout.addView(contactView);
+
+                layout.addView(contactView);*/
             }
         }
         return true;
