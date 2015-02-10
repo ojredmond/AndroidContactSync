@@ -22,6 +22,7 @@ import android.util.*;
 
 public class Contacts {
     private HashSet<String> list;
+    private HashMap<String,String> accounts;
     private Activity main;
     private HashSet<String> contactsOld = null;
     private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
@@ -66,16 +67,31 @@ public class Contacts {
     }*/
     
     private void createContacts () {
+        Cursor c
         String ids = new String();
         
         for (String i : list) {
             contacts.put(i,new HashMap<>());
             ids += i + ",";
+            rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
+            c = main.getContentResolver().query(rawContactUri,
+                    new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
+                    null, null, null);
+
+            try {
+                while (c.moveToNext()) {
+                    if (!c.isNull(0) && !c.isNull(1)) {
+                        accounts.put(i, c.getString(0));
+                    }
+                }
+            } finally {
+                c.close();
+            }
         }
         if (ids.length() > 0)
             ids = ids.substring(0, ids.length()-1);
 
-        Cursor c = main.getContentResolver().query(Data.CONTENT_URI,
+        c = main.getContentResolver().query(Data.CONTENT_URI,
             new String[] {
                 Data.RAW_CONTACT_ID,
                 Data._ID,
@@ -347,7 +363,7 @@ public class Contacts {
             return false;
         }
 
-        for (String id : new ArrayList<String>(list)) {
+        for (String id : list) {
             ops = new ArrayList<ContentProviderOperation> ();
             for (String[] item : contactItems) {
                 opBuilder = null;
