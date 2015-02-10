@@ -182,7 +182,7 @@ public class Contacts {
         return true;
     }
 
-    public HashSet<String> mergeContact () {
+    public HashMap<String,HashSet<HashMap<String,String>>> mergeContact () {
         HashMap<String,HashSet<HashMap<String,String>>> contact = new HashMap<>();
         for(String type: types) {
 			HashSet<HashMap<String,String>> values = new HashSet<>();
@@ -194,7 +194,9 @@ public class Contacts {
 			if(values.size() > 0)
 				contact.put(type, values);
         }
-        for(HashSet<HashMap<String,String>> values: contact.values())
+        
+        return contact;
+        /*for(HashSet<HashMap<String,String>> values: contact.values())
 		    for(HashMap<String,String> value:values)
 				Toast.makeText(main, value.toString(), Toast.LENGTH_SHORT).show();
 
@@ -202,7 +204,7 @@ public class Contacts {
         for (String i : list) {
             contactOld.addAll((HashSet<String>)getContact(i, "String"));
         }
-        return contactOld;
+        return contactOld;*/
     }
 
     public HashSet<Object> getContact (String id, String objectType) {
