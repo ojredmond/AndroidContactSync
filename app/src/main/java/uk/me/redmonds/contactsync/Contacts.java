@@ -26,22 +26,22 @@ public class Contacts {
     private HashSet<String> contactsOld = null;
     private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
     private SharedPreferences pref;
-	public String[] types = {
-		StructuredName.CONTENT_ITEM_TYPE,
-		Phone.CONTENT_ITEM_TYPE,
-		Email.CONTENT_ITEM_TYPE,
-		Photo.CONTENT_ITEM_TYPE,
-		Organization.CONTENT_ITEM_TYPE,
-		Im.CONTENT_ITEM_TYPE,
-		Nickname.CONTENT_ITEM_TYPE,
-		Note.CONTENT_ITEM_TYPE,
-		StructuredPostal.CONTENT_ITEM_TYPE,
-		GroupMembership.CONTENT_ITEM_TYPE,
-		Website.CONTENT_ITEM_TYPE,
-		Event.CONTENT_ITEM_TYPE,
-		Relation.CONTENT_ITEM_TYPE,
-		SipAddress.CONTENT_ITEM_TYPE
-	};
+    public static final String[] types = {
+        StructuredName.CONTENT_ITEM_TYPE,
+        Phone.CONTENT_ITEM_TYPE,
+        Email.CONTENT_ITEM_TYPE,
+        Photo.CONTENT_ITEM_TYPE,
+        Organization.CONTENT_ITEM_TYPE,
+        Im.CONTENT_ITEM_TYPE,
+        Nickname.CONTENT_ITEM_TYPE,
+        Note.CONTENT_ITEM_TYPE,
+        StructuredPostal.CONTENT_ITEM_TYPE,
+        GroupMembership.CONTENT_ITEM_TYPE,
+        Website.CONTENT_ITEM_TYPE,
+        Event.CONTENT_ITEM_TYPE,
+        Relation.CONTENT_ITEM_TYPE,
+        SipAddress.CONTENT_ITEM_TYPE
+    };
 
     Contacts (Activity m, HashSet<String> ids) {
         main = m;
