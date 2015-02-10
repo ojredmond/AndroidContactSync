@@ -80,7 +80,7 @@ public class MergeFragment extends Fragment
                         .inflate(R.layout.list_row_1, layoutContainer, false);
                     contactList.setText(item.get("data1"));
                     Toast.makeText(main, item.get("data1"), Toast.LENGTH_SHORT).show();
-                    //layout.addView(contactHeading);
+                    layout.addView(contactHeading);
                 }
             }
         }
