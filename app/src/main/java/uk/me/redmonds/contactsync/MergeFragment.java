@@ -16,7 +16,7 @@ public class MergeFragment extends Fragment
     private String name;
     private ArrayList<String> ids;
     private MainActivity main;
-    private HashSet<String> contact;
+    private HashMap<String,HashSet<HashMap<String,String>>> contact;
     private HashSet<String> contacts;
     private LinearLayout layout;
     private Contacts cObject;
@@ -40,9 +40,9 @@ public class MergeFragment extends Fragment
         main.onSectionAttached(name);
 
         // get stored contact enables rotate top not lose any changes
-        SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
-        contact = (HashSet<String>)pref.getStringSet("contactMerge", null);
-        contacts = (HashSet<String>)pref.getStringSet("contactsMerge", null);
+        //SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
+        //contact = (HashSet<String>)pref.getStringSet("contactMerge", null);
+        //contacts = (HashSet<String>)pref.getStringSet("contactsMerge", null);
 
         //create contacts object
         //StringList l = new StringList(pref, listItem);
@@ -68,7 +68,19 @@ public class MergeFragment extends Fragment
     }
 
     public void displayMergedContact () {
-        ArrayList<String>[] display = new ArrayList[5];
+        for(String type: types) {
+            contactHeading = (TextView)LayoutInflater.from(main)
+                        .inflate(R.layout.list_heading, layoutContainer, false);
+            contactHeading.setText(Contact.getGroupName(type));
+            layout.addView(contactHeading);
+            for(HashMap<String,String> item: contact.get(type)) {
+                contactList = (TextView)LayoutInflater.from(main)
+                            .inflate(R.layout.list_row_1, layoutContainer, false);
+                contactList.setText(item.get("data1"));
+                layout.addView(contactHeading);
+            }
+        }
+        /*ArrayList<String>[] display = new ArrayList[5];
         display[0] = new ArrayList<String> ();
         display[1] = new ArrayList<String> ();
         display[2] = new ArrayList<String> ();
@@ -192,11 +204,11 @@ public class MergeFragment extends Fragment
                     layout.addView(closeButton, params);
                 }
             }
-        }
+        }*/
     }
 
     public void onDestroyView() {
-        super.onDestroyView();
+        /*super.onDestroyView();
 
         contact = new HashSet<String> ();
         View view;
@@ -206,12 +218,12 @@ public class MergeFragment extends Fragment
                 contact.add(view.getContentDescription()
                         + ";" + ((EditText)view).getText());
             }
-        }
+        }*/
 
-        SharedPreferences.Editor pref = main.getPreferences(Context.MODE_PRIVATE).edit();
-        pref.putStringSet("contactMerge", contact);
-        pref.putStringSet("contactsMerge", cObject.getContacts());
-        pref.apply();
+        //SharedPreferences.Editor pref = main.getPreferences(Context.MODE_PRIVATE).edit();
+        //pref.putStringSet("contactMerge", contact);
+        //pref.putStringSet("contactsMerge", cObject.getContacts());
+        //pref.apply();
     }
 
     OnClickListener ButtonClick = new OnClickListener() {
