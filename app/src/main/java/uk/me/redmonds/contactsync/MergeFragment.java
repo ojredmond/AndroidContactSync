@@ -68,14 +68,14 @@ public class MergeFragment extends Fragment
     }
 
     public void displayMergedContact () {
-        for(String type: types) {
+        for(String type: Contacts.types) {
             contactHeading = (TextView)LayoutInflater.from(main)
-                        .inflate(R.layout.list_heading, layoutContainer, false);
-            contactHeading.setText(Contact.getGroupName(type));
+                .inflate(R.layout.list_heading, layoutContainer, false);
+            contactHeading.setText(Contacts.getGroupName(type));
             layout.addView(contactHeading);
             for(HashMap<String,String> item: contact.get(type)) {
                 contactList = (TextView)LayoutInflater.from(main)
-                            .inflate(R.layout.list_row_1, layoutContainer, false);
+                    .inflate(R.layout.list_row_1, layoutContainer, false);
                 contactList.setText(item.get("data1"));
                 layout.addView(contactHeading);
             }
