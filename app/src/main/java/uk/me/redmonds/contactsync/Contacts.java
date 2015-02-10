@@ -66,7 +66,7 @@ public class Contacts {
             contacts.put(i,new HashMap<>());
             ids += i + ",";
             Toast.makeText(main, i, Toast.LENGTH_SHORT).show();
-            /*Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
+            Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
             c = main.getContentResolver().query(rawContactUri,
                     new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
                     null, null, null);
@@ -79,7 +79,7 @@ public class Contacts {
                 }
             } finally {
                 c.close();
-            }*/
+            }
         }
         if (ids.length() > 0)
             ids = ids.substring(0, ids.length()-1);
