@@ -3,6 +3,7 @@ package uk.me.redmonds.contactsync;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Arrays;
 
 import android.app.Activity;
 import android.content.ContentProviderOperation;
@@ -23,8 +24,24 @@ public class Contacts {
     private HashSet<String> list;
     private Activity main;
     private HashSet<String> contactsOld = null;
-    private HashMap<String,HashMap<String,HashSet<String>>> contacts = new HashMap<>();
+    private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
     private SharedPreferences pref;
+	public String[] types = {
+		StructuredName.CONTENT_ITEM_TYPE,
+		Phone.CONTENT_ITEM_TYPE,
+		Email.CONTENT_ITEM_TYPE,
+		Photo.CONTENT_ITEM_TYPE,
+		Organization.CONTENT_ITEM_TYPE,
+		Im.CONTENT_ITEM_TYPE,
+		Nickname.CONTENT_ITEM_TYPE,
+		Note.CONTENT_ITEM_TYPE,
+		StructuredPostal.CONTENT_ITEM_TYPE,
+		GroupMembership.CONTENT_ITEM_TYPE,
+		Website.CONTENT_ITEM_TYPE,
+		Event.CONTENT_ITEM_TYPE,
+		Relation.CONTENT_ITEM_TYPE,
+		SipAddress.CONTENT_ITEM_TYPE
+	};
 
     Contacts (Activity m, HashSet<String> ids) {
         main = m;
@@ -65,15 +82,16 @@ public class Contacts {
 
         try {
             while (c.moveToNext()) {
-                HashMap<String,HashSet<String>> contact = contacts.get(c.getString(0));
+                HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
                     if(!contact.containsKey(c.getString(2)))
                         contact.put(c.getString(2), new HashSet<>());
-                    HashSet<String> field = contact.get(c.getString(2));
-                    field.add(getGroupName(c.getString(2)) + ":" +
-                        c.getString(3) + ":" +
-                        c.getString(4) + ":" +
-                        c.getString(5));
+                    HashSet<HashMap<String,String>> field = contact.get(c.getString(2));
+                    HashMap<String,String> value = new HashMap();
+					value.put("type", c.getString(3));
+                    value.put("data1", c.getString(4));
+                    value.put("data2", c.getString(5));
+					field.add(value);
                 }
             }
         } finally {
@@ -165,12 +183,20 @@ public class Contacts {
     }
 
     public HashSet<String> mergeContact () {
-        HashMap<String,HashSet<String>> contact = new HashMap<>();
-        for(String key1: contacts.keySet()) {
-                    contact.putAll(contacts.get(key1));
+        HashMap<String,HashSet<HashMap<String,String>>> contact = new HashMap<>();
+        for(String type: types) {
+			HashSet<HashMap<String,String>> values = new HashSet<>();
+			for(String id: contacts.keySet())
+				if(contacts.get(id).get(type) != null 
+					&& contacts.get(id).get(type).size() > 0)
+                	values.addAll(contacts.get(id).get(type));
+					
+			if(values.size() > 0)
+				contact.put(type, values);
         }
-        for(String value: contact.values())
-            Toast.makeText(main, value, Toast.LENGTH_SHORT).show();
+        for(HashSet<HashMap<String,String>> values: contact.values())
+		    for(HashMap<String,String> value:values)
+				Toast.makeText(main, value.toString(), Toast.LENGTH_SHORT).show();
 
         HashSet<String> contactOld = new HashSet<String>();
         for (String i : list) {
