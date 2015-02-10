@@ -69,16 +69,19 @@ public class MergeFragment extends Fragment
 
     public void displayMergedContact () {
         for(String type: Contacts.types) {
-            TextView contactHeading = (TextView)LayoutInflater.from(main)
-                .inflate(R.layout.list_heading, layoutContainer, false);
-            contactHeading.setText(Contacts.getGroupName(type));
-            layout.addView(contactHeading);
-            for(HashMap<String,String> item: contact.get(type)) {
-                TextView contactList = (TextView)LayoutInflater.from(main)
-                    .inflate(R.layout.list_row_1, layoutContainer, false);
-                contactList.setText(item.get("data1"));
-                Toast.makeText(main, item.get("data1"), Toast.LENGTH_SHORT).show();
-                //layout.addView(contactHeading);
+            if(contact.get(type) != null 
+                && contact.get(type).size() > 0) {
+                TextView contactHeading = (TextView)LayoutInflater.from(main)
+                    .inflate(R.layout.list_heading, layoutContainer, false);
+                contactHeading.setText(Contacts.getGroupName(type));
+                layout.addView(contactHeading);
+                for(HashMap<String,String> item: contact.get(type)) {
+                    TextView contactList = (TextView)LayoutInflater.from(main)
+                        .inflate(R.layout.list_row_1, layoutContainer, false);
+                    contactList.setText(item.get("data1"));
+                    Toast.makeText(main, item.get("data1"), Toast.LENGTH_SHORT).show();
+                    //layout.addView(contactHeading);
+                }
             }
         }
         /*ArrayList<String>[] display = new ArrayList[5];
