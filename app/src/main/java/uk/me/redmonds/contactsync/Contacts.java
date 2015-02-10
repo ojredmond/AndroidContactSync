@@ -65,7 +65,7 @@ public class Contacts {
         for (String i : list) {
             contacts.put(i,new HashMap<>());
             ids += i + ",";
-            rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
+            Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
             c = main.getContentResolver().query(rawContactUri,
                     new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
                     null, null, null);
