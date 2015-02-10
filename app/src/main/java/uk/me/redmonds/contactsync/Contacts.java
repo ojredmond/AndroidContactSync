@@ -183,7 +183,29 @@ public class Contacts {
     		    label = StructuredPostal.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Website.CONTENT_ITEM_TYPE:
-    		    //label = Website.getTypeLabel(main.getResources(), type, label);
+                switch (type) {
+                    case CommonDataKinds.Website.TYPE_BLOG:
+                        label = "Blog";
+                        break;
+                    case CommonDataKinds.Website.TYPE_FTP:
+                        label = "Ftp";
+                        break;
+                    case CommonDataKinds.Website.TYPE_HOME:
+                        label = "Home";
+                        break;
+                    case CommonDataKinds.Website.TYPE_HOMEPAGE:
+                        label = "Homepage";
+                        break;
+                    case CommonDataKinds.Website.TYPE_OTHER:
+                        label = "Other";
+                        break;
+                    case CommonDataKinds.Website.TYPE_PROFILE:
+                        label = "Profile";
+                        break;
+                    case CommonDataKinds.Website.TYPE_WORK:
+                        label = "Work";
+                        break;
+                }
     		    break;
     		case Event.CONTENT_ITEM_TYPE:
     		    label = Event.getTypeLabel(main.getResources(), type, label);
