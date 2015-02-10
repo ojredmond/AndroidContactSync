@@ -50,13 +50,13 @@ public class Contacts {
         createContacts();
     }
 
-    Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
+/*    Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
         main = m;
         list = ids;
         contactsOld = c;
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
-    }
+    }*/
     
     private void createContacts () {
         String ids = new String();
@@ -192,8 +192,8 @@ public class Contacts {
     	return (String)label;
     }
 
-    public HashSet<String> getContacts() {
-        return contactsOld;
+    public HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> getContacts() {
+        return contacts;
     }
 
     public Boolean deleteContacts () {
