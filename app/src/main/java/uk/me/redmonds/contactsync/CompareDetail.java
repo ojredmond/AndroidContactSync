@@ -91,13 +91,41 @@ public class CompareDetail extends Fragment {
 
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
-            for (int i = 0; i < ids.length; i++) {
-                // create a new view for the contact
-                View contactView = LayoutInflater.from(main)
-                        .inflate(R.layout.contact, layoutContainer, false);
+            Contacts cObj = new Contacts(ids);
+            HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = cObj.getContacts();
+            for (Integer id: ids) {
+                HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
+                for(String type: Contacts.types) {
+                    if(contact.get(type) != null 
+                        && contact.get(type).size() > 0) {
+                        // create a new view for the contact
+                        View contactView = LayoutInflater.from(main)
+                                .inflate(R.layout.contact, layoutContainer, false);
+        
+                        contactView.setTag(account + ":" + id);
+                        
+                        TextView contactHeading = (TextView)LayoutInflater.from(main)
+                            .inflate(R.layout.list_heading, layoutContainer, false);
+                        contactHeading.setText(Contacts.getGroupName(type));
+                        layout.addView(contactHeading);
+                        for(HashMap<String,String> item: contact.get(type)) {
+                            if(item.get("label") == null) {
+                                TextView contactValue = (TextView)LayoutInflater.from(main)
+                                    .inflate(R.layout.list_row_1, layoutContainer, false);
+                                contactValue.setText(item.get("data1"));
+                                layout.addView(contactValue);
+                            } else {
+                                LinearLayout rowLayout = (LinearLayout)LayoutInflater.from(main)
+                                    .inflate(R.layout.list_row_2, layoutContainer, false);
+                                ((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("data1"));
+                                ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
+                                layout.addView(rowLayout);
+                            }
+                        }
+                    }
+                }
 
-                contactView.setTag(account + ":" + ids[i]);
-                List<Map<String, String>> groupData = new ArrayList<>();
+                /*List<Map<String, String>> groupData = new ArrayList<>();
                 List<List<View>> childData = new ArrayList<>();
                 Map<String, Integer> index = new HashMap<>();
                 item = new HashMap<>();
@@ -235,7 +263,7 @@ public class CompareDetail extends Fragment {
                     for (View childItem: l)
                         contactInfo.addView(childItem);
 
-                layout.addView(contactView);
+                layout.addView(contactView);*/
             }
         }
         return true;
