@@ -65,7 +65,8 @@ public class Contacts {
         for (String i : list) {
             contacts.put(i,new HashMap<>());
             ids += i + ",";
-            Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
+            Toast.makeText(main, i, Toast.LENGTH_SHORT).show();
+            /*Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
             c = main.getContentResolver().query(rawContactUri,
                     new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
                     null, null, null);
@@ -78,7 +79,7 @@ public class Contacts {
                 }
             } finally {
                 c.close();
-            }
+            }*/
         }
         if (ids.length() > 0)
             ids = ids.substring(0, ids.length()-1);
@@ -117,80 +118,80 @@ public class Contacts {
 
     public static String getGroupName (String mime) {
         String group;
-    	switch (mime) {
-    		case StructuredName.CONTENT_ITEM_TYPE:
-    		    group = "Name";
-    		    break;
-    		case Phone.CONTENT_ITEM_TYPE:
-    		    group = "Number";
-    		    break;
-    		case Email.CONTENT_ITEM_TYPE:
-    		    group = "Email";
-    		    break;
-    		case Photo.CONTENT_ITEM_TYPE:
-    		    group = "Photo";
-    		    break;
-    		case Organization.CONTENT_ITEM_TYPE:
-    		    group = "Organization";
-    		    break;
-    		case Im.CONTENT_ITEM_TYPE:
-    		    group = "IM";
-    		    break;
-    		case Nickname.CONTENT_ITEM_TYPE:
-    		    group = "Nickname";
-    		    break;
-    		case Note.CONTENT_ITEM_TYPE:
-    		    group = "Note";
-    		    break;
-    		case StructuredPostal.CONTENT_ITEM_TYPE:
-    		    group = "Address";
-    		    break;
-    		case GroupMembership.CONTENT_ITEM_TYPE:
-    		    group = "Group";
-    		    break;
-    		case Website.CONTENT_ITEM_TYPE:
-    		    group = "Sites";
-    		    break;
-    		case Event.CONTENT_ITEM_TYPE:
-    		    group = "Event";
-    		    break;
-    		case Relation.CONTENT_ITEM_TYPE:
-    		    group = "Relation";
-    		    break;
-    		case SipAddress.CONTENT_ITEM_TYPE:
-    		    group = "SIP";
-    		    break;
-    		default:
-    		    group = "Other";
-    	}
-    	
-    	return group;
+        switch (mime) {
+            case StructuredName.CONTENT_ITEM_TYPE:
+                group = "Name";
+                break;
+            case Phone.CONTENT_ITEM_TYPE:
+                group = "Number";
+                break;
+            case Email.CONTENT_ITEM_TYPE:
+                group = "Email";
+                break;
+            case Photo.CONTENT_ITEM_TYPE:
+                group = "Photo";
+                break;
+            case Organization.CONTENT_ITEM_TYPE:
+                group = "Organization";
+                break;
+            case Im.CONTENT_ITEM_TYPE:
+                group = "IM";
+                break;
+            case Nickname.CONTENT_ITEM_TYPE:
+                group = "Nickname";
+                break;
+            case Note.CONTENT_ITEM_TYPE:
+                group = "Note";
+                break;
+            case StructuredPostal.CONTENT_ITEM_TYPE:
+                group = "Address";
+                break;
+            case GroupMembership.CONTENT_ITEM_TYPE:
+                group = "Group";
+                break;
+            case Website.CONTENT_ITEM_TYPE:
+                group = "Sites";
+                break;
+            case Event.CONTENT_ITEM_TYPE:
+                group = "Event";
+                break;
+            case Relation.CONTENT_ITEM_TYPE:
+                group = "Relation";
+                break;
+            case SipAddress.CONTENT_ITEM_TYPE:
+                group = "SIP";
+                break;
+            default:
+                group = "Other";
+        }
+        
+        return group;
     }
     
     private String getTypeLabel (String mime, Integer type, CharSequence label) {
-    	switch (mime) {
-    		case StructuredName.CONTENT_ITEM_TYPE:
-    		    label = null;
-    		    break;
-    		case Phone.CONTENT_ITEM_TYPE:
-    		    label = Phone.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case Email.CONTENT_ITEM_TYPE:
-    		    label = Email.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case Organization.CONTENT_ITEM_TYPE:
-    		    label = Organization.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case Im.CONTENT_ITEM_TYPE:
-    		    label = Im.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case Nickname.CONTENT_ITEM_TYPE:
-    		    //label = Nickname.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case StructuredPostal.CONTENT_ITEM_TYPE:
-    		    label = StructuredPostal.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case Website.CONTENT_ITEM_TYPE:
+        switch (mime) {
+            case StructuredName.CONTENT_ITEM_TYPE:
+                label = null;
+                break;
+            case Phone.CONTENT_ITEM_TYPE:
+                label = Phone.getTypeLabel(main.getResources(), type, label);
+                break;
+            case Email.CONTENT_ITEM_TYPE:
+                label = Email.getTypeLabel(main.getResources(), type, label);
+                break;
+            case Organization.CONTENT_ITEM_TYPE:
+                label = Organization.getTypeLabel(main.getResources(), type, label);
+                break;
+            case Im.CONTENT_ITEM_TYPE:
+                label = Im.getTypeLabel(main.getResources(), type, label);
+                break;
+            case Nickname.CONTENT_ITEM_TYPE:
+                //label = Nickname.getTypeLabel(main.getResources(), type, label);
+                break;
+            case StructuredPostal.CONTENT_ITEM_TYPE:
+                label = StructuredPostal.getTypeLabel(main.getResources(), type, label);
+                break;
+            case Website.CONTENT_ITEM_TYPE:
                 switch (type) {
                     case CommonDataKinds.Website.TYPE_BLOG:
                         label = "Blog";
@@ -214,19 +215,19 @@ public class Contacts {
                         label = "Work";
                         break;
                 }
-    		    break;
-    		case Event.CONTENT_ITEM_TYPE:
-    		    label = Event.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case Relation.CONTENT_ITEM_TYPE:
-    		    label = Relation.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    		case SipAddress.CONTENT_ITEM_TYPE:
-    		    label = SipAddress.getTypeLabel(main.getResources(), type, label);
-    		    break;
-    	}
-    	
-    	return (String)label;
+                break;
+            case Event.CONTENT_ITEM_TYPE:
+                label = Event.getTypeLabel(main.getResources(), type, label);
+                break;
+            case Relation.CONTENT_ITEM_TYPE:
+                label = Relation.getTypeLabel(main.getResources(), type, label);
+                break;
+            case SipAddress.CONTENT_ITEM_TYPE:
+                label = SipAddress.getTypeLabel(main.getResources(), type, label);
+                break;
+        }
+        
+        return (String)label;
     }
 
     public HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> getContacts() {
@@ -277,10 +278,10 @@ public class Contacts {
     }
 
     public HashSet<Object> getContact (String id, String objectType) {
-		Uri rawContactUri;
+        Uri rawContactUri;
         Uri entityUri;
         HashSet<Object> contact = new HashSet<Object> ();
-		
+        
         contactsOld = new HashSet<String> ();
         rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.valueOf(id));
         entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
