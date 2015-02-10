@@ -107,7 +107,7 @@ public class CompareDetail extends Fragment {
                         TextView contactHeading = (TextView)LayoutInflater.from(main)
                             .inflate(R.layout.list_heading, layoutContainer, false);
                         contactHeading.setText(Contacts.getGroupName(type));
-                        layout.addView(contactHeading);
+                        contactInfo.addView(contactHeading);
                         for(HashMap<String,String> item: contact.get(type)) {
                             if(item.get("label") == null) {
                                 TextView contactValue = (TextView)LayoutInflater.from(main)
