@@ -212,9 +212,9 @@ public class MergeFragment extends Fragment
     }
 
     public void onDestroyView() {
-        /*super.onDestroyView();
+        super.onDestroyView();
 
-        contact = new HashSet<String> ();
+        /*contact = new HashSet<String> ();
         View view;
         for (int i=0; i < layout.getChildCount(); i++) {
             view = layout.getChildAt(i);
