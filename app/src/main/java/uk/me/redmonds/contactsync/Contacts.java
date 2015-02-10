@@ -89,7 +89,7 @@ public class Contacts {
                     HashSet<HashMap<String,String>> field = contact.get(c.getString(2));
                     HashMap<String,String> value = new HashMap();
                     value.put("data1", c.getString(3));
-                    value.put("label", getTypeLabel(c.getString(2), c.getInteger(4), c.getString(5)));
+                    value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
                     value.put("data2", c.getString(3));
                     value.put("data3", c.getString(3));
                     field.add(value);
@@ -170,13 +170,13 @@ public class Contacts {
     		    label = Im.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Nickname.CONTENT_ITEM_TYPE:
-    		    label = Nickname.getTypeLabel(main.getResources(), type, label);
+    		    //label = Nickname.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case StructuredPostal.CONTENT_ITEM_TYPE:
     		    label = StructuredPostal.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Website.CONTENT_ITEM_TYPE:
-    		    label = Website.getTypeLabel(main.getResources(), type, label);
+    		    //label = Website.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Event.CONTENT_ITEM_TYPE:
     		    label = Event.getTypeLabel(main.getResources(), type, label);
