@@ -21,7 +21,7 @@ import android.content.*;
 import android.util.*;
 
 public class Contacts {
-    private String[] list;
+    private HashSet<String> list;
     private Activity main;
     private HashSet<String> contactsOld = null;
     private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
@@ -44,14 +44,14 @@ public class Contacts {
     };
 
     Contacts (Activity m, HashSet<String> ids) {
-    	Contacts (m, ids.toArray(new String[ids.size()]);
-    }
-    
-    Contacts (Activity m, String[] ids) {
         main = m;
         list = ids;
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
+   }
+    
+    Contacts (Activity m, String[] ids) {
+        Contacts(m, new HashSet<String>(Arrays.asList(ids));
     }
 
 /*    Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
