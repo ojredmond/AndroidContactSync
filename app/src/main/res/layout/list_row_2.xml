@@ -1,29 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="wrap_content"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/row"
-    android:columnCount="2"
-    android:rowCount="1">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
         android:id="@+id/type"
-        android:layout_row="0"
-        android:layout_column="0" 
-		android:paddingTop="@dimen/medium_gap"
-		android:paddingBottom="@dimen/medium_gap"
-		android:paddingRight="@dimen/medium_gap"
-		android:paddingLeft="@dimen/large_gap"
+        android:paddingTop="@dimen/medium_gap"
+        android:paddingBottom="@dimen/medium_gap"
+        android:paddingStart="@dimen/large_gap"
 		/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
         android:id="@+id/value"
-        android:layout_row="0"
-        android:layout_column="1" 
-		android:padding="@dimen/medium_gap"
+        android:padding="@dimen/medium_gap"
 		/>
-</GridLayout>
+</LinearLayout>
