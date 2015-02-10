@@ -51,7 +51,7 @@ public class Contacts {
    }
     
     Contacts (Activity m, String[] ids) {
-        Contacts(m, new HashSet<String>(Arrays.asList(ids));
+        Contacts(m, new HashSet<String>(Arrays.asList(ids)));
     }
 
 /*    Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
