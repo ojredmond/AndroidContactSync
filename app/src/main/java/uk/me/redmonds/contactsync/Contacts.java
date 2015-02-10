@@ -58,14 +58,6 @@ public class Contacts {
         createContacts();
     }
 
-/*    Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
-        main = m;
-        list = ids;
-        contactsOld = c;
-        pref = main.getPreferences(Context.MODE_PRIVATE);
-        createContacts();
-    }*/
-    
     private void createContacts () {
         Cursor c
         String ids = new String();
@@ -282,15 +274,6 @@ public class Contacts {
         }
         
         return contact;
-        /*for(HashSet<HashMap<String,String>> values: contact.values())
-		    for(HashMap<String,String> value:values)
-				Toast.makeText(main, value.toString(), Toast.LENGTH_SHORT).show();
-
-        HashSet<String> contactOld = new HashSet<String>();
-        for (String i : list) {
-            contactOld.addAll((HashSet<String>)getContact(i, "String"));
-        }
-        return contactOld;*/
     }
 
     public HashSet<Object> getContact (String id, String objectType) {
@@ -334,29 +317,11 @@ public class Contacts {
         String value;
         String where = null;
         String origValue;
-        HashSet<String> accounts = new HashSet<String>();
 
         if (contactsOld == null) {
             // send error report
             TopExceptionHandler.sendReport (main, TopExceptionHandler.generateReport(new Exception("Contacts Variable not created")));
             return false;
-        }
-
-        for (String i : list) {
-            rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
-            c = main.getContentResolver().query(rawContactUri,
-                    new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
-                    null, null, null);
-
-            try {
-                while (c.moveToNext()) {
-                    if (!c.isNull(0) && !c.isNull(1)) {
-                        accounts.add(c.getString(0));
-                    }
-                }
-            } finally {
-                c.close();
-            }
         }
 
         if (accounts.size() == 0) {
@@ -424,7 +389,7 @@ public class Contacts {
             //remove from list delete other contacts
             if (accounts.size() == 1) {
                 //add name
-                addToUnmatched(id, "", accounts.iterator().next());
+                addToUnmatched(id, "", accounts.get(id));
                 return deleteContacts();
             }
         }
