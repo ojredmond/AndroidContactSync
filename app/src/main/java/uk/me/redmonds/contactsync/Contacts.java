@@ -90,6 +90,8 @@ public class Contacts {
                     HashMap<String,String> value = new HashMap();
                     value.put("data1", c.getString(3));
                     value.put("label", getTypeLabel(c.getString(4), c.getString(5)));
+                    value.put("data2", c.getString(3));
+                    value.put("data3", c.getString(3));
                     field.add(value);
                 }
             }
