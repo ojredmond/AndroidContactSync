@@ -59,7 +59,7 @@ public class Contacts {
     }
 
     private void createContacts () {
-        Cursor c
+        Cursor c;
         String ids = new String();
         
         for (String i : list) {
