@@ -99,7 +99,7 @@ public class Contacts {
         }
     }
 
-    private String getGroupName (String mime) {
+    public static String getGroupName (String mime) {
         String group;
     	switch (mime) {
     		case StructuredName.CONTENT_ITEM_TYPE:
