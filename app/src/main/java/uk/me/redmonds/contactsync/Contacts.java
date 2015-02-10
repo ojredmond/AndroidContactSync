@@ -51,7 +51,10 @@ public class Contacts {
    }
     
     Contacts (Activity m, String[] ids) {
-        Contacts(m, new HashSet<String>(Arrays.asList(ids)));
+        main = m;
+        list = new HashSet<String>(Arrays.asList(ids));
+        pref = main.getPreferences(Context.MODE_PRIVATE);
+        createContacts();
     }
 
 /*    Contacts (Activity m, HashSet<String> ids, HashSet<String> c) {
