@@ -78,20 +78,20 @@ public class CompareDetail extends Fragment {
 
         layout.removeAllViews();
 
-        LinearLayout.LayoutParams params;
-        Uri rawContactUri;
-        Uri entityUri;
+        //LinearLayout.LayoutParams params;
+        //Uri rawContactUri;
+        //Uri entityUri;
         String account = listItem.substring(Match.DUPKEY.length());
-        String contactDetail;
-        Cursor c;
+        //String contactDetail;
+        //Cursor c;
 
-        View child;
-        View groupHeader;
-        Map<String, String> item;
+        //View child;
+        //View groupHeader;
+        //Map<String, String> item;
 
         if (dupList.containsKey(name)) {
             String ids[] = dupList.get(name).split(",");
-            Contacts cObj = new Contacts(main, ids);
+            Contacts cObj = new Contacts(main, Arrays.asList(ids));
             HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = cObj.getContacts();
             for (String id: ids) {
                 HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
