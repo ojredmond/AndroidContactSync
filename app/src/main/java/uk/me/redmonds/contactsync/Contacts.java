@@ -89,7 +89,7 @@ public class Contacts {
                     HashSet<HashMap<String,String>> field = contact.get(c.getString(2));
                     HashMap<String,String> value = new HashMap();
                     value.put("data1", c.getString(3));
-                    value.put("label", getTypeLabel(c.getString(4), c.getString(5)));
+                    value.put("label", getTypeLabel(c.getString(2), c.getString(4), c.getString(5)));
                     value.put("data2", c.getString(3));
                     value.put("data3", c.getString(3));
                     field.add(value);
@@ -152,40 +152,40 @@ public class Contacts {
     	return group;
     }
     
-    private String getTypeLabel (Integer mime, CharSequence label) {
+    private String getTypeLabel (String mime, Integer type, CharSequence label) {
     	switch (mime) {
     		case StructuredName.CONTENT_ITEM_TYPE:
     		    label = null;
     		    break;
     		case Phone.CONTENT_ITEM_TYPE:
-    		    label = Phone.getTypeLabel(main.getResources(), mime, label);
+    		    label = Phone.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Email.CONTENT_ITEM_TYPE:
-    		    label = Email.getTypeLabel(main.getResources(), mime, label);
+    		    label = Email.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Organization.CONTENT_ITEM_TYPE:
-    		    label = Organization.getTypeLabel(main.getResources(), mime, label);
+    		    label = Organization.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Im.CONTENT_ITEM_TYPE:
-    		    label = Im.getTypeLabel(main.getResources(), mime, label);
+    		    label = Im.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Nickname.CONTENT_ITEM_TYPE:
-    		    label = Nickname.getTypeLabel(main.getResources(), mime, label);
+    		    label = Nickname.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case StructuredPostal.CONTENT_ITEM_TYPE:
-    		    label = StructuredPostal.getTypeLabel(main.getResources(), mime, label);
+    		    label = StructuredPostal.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Website.CONTENT_ITEM_TYPE:
-    		    label = Website.getTypeLabel(main.getResources(), mime, label);
+    		    label = Website.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Event.CONTENT_ITEM_TYPE:
-    		    label = Event.getTypeLabel(main.getResources(), mime, label);
+    		    label = Event.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case Relation.CONTENT_ITEM_TYPE:
-    		    label = Relation.getTypeLabel(main.getResources(), mime, label);
+    		    label = Relation.getTypeLabel(main.getResources(), type, label);
     		    break;
     		case SipAddress.CONTENT_ITEM_TYPE:
-    		    label = SipAddress.getTypeLabel(main.getResources(), mime, label);
+    		    label = SipAddress.getTypeLabel(main.getResources(), type, label);
     		    break;
     	}
     	
