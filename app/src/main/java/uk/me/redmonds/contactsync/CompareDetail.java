@@ -1,6 +1,5 @@
 package uk.me.redmonds.contactsync;
 
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -12,11 +11,10 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.*;
-import android.net.Uri;
-import android.database.Cursor;
-import android.provider.ContactsContract.*;
-import java.util.*;
-import java.lang.Long;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class CompareDetail extends Fragment {
     private MainActivity main;
@@ -30,7 +28,7 @@ public class CompareDetail extends Fragment {
     private SharedPreferences pref;
     private ViewGroup layoutContainer;
     private View compareView;
-    private final static String NAME = "Name";
+    //private final static String NAME = "Name";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -69,10 +67,8 @@ public class CompareDetail extends Fragment {
     private Boolean fillLayout () {
         HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(listItem, null);
         dupList = new HashMap<> ();
-        // To get the Iterator use the iterator() operation
-        Iterator dupIt = dupSet.iterator();
-        while(dupIt.hasNext()) {
-            String[] itemArray = ((String)dupIt.next()).split(":");
+        for (String aDupSet : dupSet) {
+            String[] itemArray = aDupSet.split(":");
             dupList.put(itemArray[0], itemArray[1]);
         }
 
@@ -94,8 +90,8 @@ public class CompareDetail extends Fragment {
                 View accountInfo = LayoutInflater.from(main)
                         .inflate(R.layout.list_row_2, layoutContainer, false);
                 ((TextView)accountInfo.findViewById(R.id.type)).setText("Account");
-                ((TextView)accountInfo.findViewById(R.id.value)).setText(account);
-                ((LinearLayout)accountInfo.findViewById(R.id.row)).setBackgroundColor(getResources().getColor(R.color.nav_background));
+                ((TextView)accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
+                accountInfo.findViewById(R.id.row).setBackgroundColor(getResources().getColor(R.color.nav_background));
                 contactInfo.addView(accountInfo);
 
                 HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
@@ -140,7 +136,7 @@ public class CompareDetail extends Fragment {
                 //v.setBackgroundResource(R.drawable.border);
             } else {
                 if (selected == null) {
-                    selected = new HashSet<String>();
+                    selected = new HashSet<>();
                 }
                 selected.add(id);
                 //v.setBackgroundResource(R.drawable.borderhighlight);
@@ -155,8 +151,8 @@ public class CompareDetail extends Fragment {
         public void onClick(View p1)
         {
             Contacts contacts;
-            ArrayList<String> ids = new ArrayList<String>();
-            ArrayList<String> accounts = new ArrayList<String>();
+            ArrayList<String> ids = new ArrayList<>();
+            ArrayList<String> accounts = new ArrayList<>();
             for (int i=0; i < layout.getChildCount(); i++) {
                 String contact[] = ((String)layout.getChildAt(i).getTag()).split(":");
                 ids.add(contact[1]);
@@ -193,7 +189,7 @@ public class CompareDetail extends Fragment {
                 case R.id.unmatched_contact:
                     dupList.remove(name);
                     for (int i=0; i < ids.size(); i++) {
-                        contacts = new Contacts(main, new HashSet<String>(ids));
+                        contacts = new Contacts(main, new HashSet<>(ids));
                         contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
                     }
 

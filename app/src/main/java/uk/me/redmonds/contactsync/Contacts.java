@@ -18,11 +18,10 @@ import android.provider.ContactsContract.RawContacts;
 import android.widget.Toast;
 import android.preference.*;
 import android.content.*;
-import android.util.*;
 
 public class Contacts {
     private HashSet<String> list;
-    private HashMap<String,String> accounts;
+    private HashMap<String,String> accounts = new HashMap<>();
     private Activity main;
     private HashSet<String> contactsOld = null;
     private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
@@ -53,20 +52,21 @@ public class Contacts {
     
     Contacts (Activity m, String[] ids) {
         main = m;
-        list = new HashSet<String>(Arrays.asList(ids));
+        list = new HashSet<>(Arrays.asList(ids));
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
     }
 
     private void createContacts () {
         Cursor c;
-        String ids = new String();
+        String ids = "";
         
         for (String i : list) {
-            contacts.put(i,new HashMap<>());
+            contacts.put(i,new HashMap<String,HashSet<HashMap<String,String>>>());
             ids += i + ",";
-            Toast.makeText(main, i, Toast.LENGTH_SHORT).show();
-            Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.getLong(i));
+            Long id = Long.decode(i);
+            Toast.makeText(main, "ID="+id, Toast.LENGTH_SHORT).show();
+            Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, id);
             c = main.getContentResolver().query(rawContactUri,
                     new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
                     null, null, null);
@@ -101,13 +101,13 @@ public class Contacts {
                 HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
                     if(!contact.containsKey(c.getString(2)))
-                        contact.put(c.getString(2), new HashSet<>());
+                        contact.put(c.getString(2), new HashSet<HashMap<String,String>>());
                     HashSet<HashMap<String,String>> field = contact.get(c.getString(2));
-                    HashMap<String,String> value = new HashMap();
+                    HashMap<String,String> value = new HashMap<>();
                     value.put("data1", c.getString(3));
                     value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
-                    value.put("data2", c.getString(3));
-                    value.put("data3", c.getString(3));
+                    value.put("data2", c.getString(4));
+                    value.put("data3", c.getString(5));
                     field.add(value);
                 }
             }
@@ -234,6 +234,10 @@ public class Contacts {
         return contacts;
     }
 
+    public String getAccountName (String id) {
+        return accounts.get(id);
+    }
+
     public Boolean deleteContacts () {
         String where;
         String[] params;
@@ -243,7 +247,7 @@ public class Contacts {
             where = RawContacts._ID + " = ?";
             params = new String[] {id};
 
-            ops = new ArrayList<ContentProviderOperation>();
+            ops = new ArrayList<>();
             ops.add(ContentProviderOperation.newDelete(RawContacts.CONTENT_URI)
                     .withSelection(where, params)
                     .build());
@@ -277,46 +281,12 @@ public class Contacts {
         return contact;
     }
 
-    public HashSet<Object> getContact (String id, String objectType) {
-        Uri rawContactUri;
-        Uri entityUri;
-        HashSet<Object> contact = new HashSet<Object> ();
-        
-        contactsOld = new HashSet<String> ();
-        rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, Long.valueOf(id));
-        entityUri = Uri.withAppendedPath(rawContactUri, RawContacts.Entity.CONTENT_DIRECTORY);
-        Cursor c = main.getContentResolver().query(entityUri,
-                new String[]{RawContacts.Entity.DATA_ID, RawContacts.Entity.MIMETYPE, RawContacts.Entity.DATA1, RawContacts.Entity.DATA2},
-                null, null, null);
-
-        try {
-            while (c.moveToNext()) {
-                if (!c.isNull(0) && !c.isNull(2)
-                        && !c.getString(2).equals("")) {
-                    contact.add(c.getString(1).split("/",2)[1]
-                            + "/" + c.getString(3)
-                            + ";" + c.getString(2)
-                            + ";" + c.getString(2));
-                    contactsOld.add(id + "/" + c.getString(1).split("/",2)[1]
-                            + "/" + c.getString(3)
-                            + ";" + c.getString(2));
-                }
-            }
-        } finally {
-            c.close();
-        }
-        
-        return contact;
-    }
-
     public Boolean saveMergedContact (ArrayList<String[]> contactItems) {
-        Uri rawContactUri;
-        Cursor c;
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
         String type;
         String value;
-        String where = null;
+        String where;
         String origValue;
 
         if (contactsOld == null) {
@@ -330,7 +300,7 @@ public class Contacts {
         }
 
         for (String id : list) {
-            ops = new ArrayList<ContentProviderOperation> ();
+            ops = new ArrayList<> ();
             for (String[] item : contactItems) {
                 opBuilder = null;
                 where = null;
@@ -348,7 +318,6 @@ public class Contacts {
                             .withValue(Data.RAW_CONTACT_ID, id);
                 } else {
                     contactsOld.remove(id + "/" + type);
-                    opBuilder = null;
                 }
 
                 if (opBuilder != null) {
