@@ -77,7 +77,8 @@ public class MergeFragment extends Fragment
                 TextView contactList = (TextView)LayoutInflater.from(main)
                     .inflate(R.layout.list_row_1, layoutContainer, false);
                 contactList.setText(item.get("data1"));
-                layout.addView(contactHeading);
+                Toast.makeText(main, item.get("data1"), Toast.LENGTH_SHORT).show();
+                //layout.addView(contactHeading);
             }
         }
         /*ArrayList<String>[] display = new ArrayList[5];
