@@ -48,7 +48,7 @@ public class MergeFragment extends Fragment
         //StringList l = new StringList(pref, listItem);
         cObject = new Contacts(main, new HashSet<String>(ids));
 
-        View contactView = inflater.inflate(R.layout.fragment_contact, container, false);
+        View contactView = inflater.inflate(R.layout.fragment_merge, container, false);
         // add listeners to buttons
         Button cancel = (Button)contactView.findViewById(R.id.contact_cancel);
         cancel.setOnClickListener(ButtonClick);
