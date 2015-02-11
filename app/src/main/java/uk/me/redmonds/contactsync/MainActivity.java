@@ -93,6 +93,11 @@ public class MainActivity extends ActionBarActivity
         this.deleteFile("stack.trace");
     }
 
+	@Override
+	public boolean onPrepareOptionsMenu (Menu menu) {
+		return false;
+	}
+
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
