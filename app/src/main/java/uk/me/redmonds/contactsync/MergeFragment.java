@@ -90,9 +90,12 @@ public class MergeFragment extends Fragment
                         ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
                         deleteLayout.addView(rowLayout);
                     }
+                    
+                    // listner to delete button
+                    deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
+                    
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
-                    //params.addRule(RelativeLayout.RIGHT_OF, R.id.delete_button);
                     layout.addView(deleteLayout, params);
                 }
             }
@@ -247,6 +250,7 @@ public class MergeFragment extends Fragment
 
         public void onClick(View p1)
         {
+            Toast.makeText(main, p1.getParent().getId(), Toast.LENGTH_LONG).show();
             switch (p1.getId()) {
                 case R.id.contact_confirm:
                     View view;
