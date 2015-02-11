@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.widget.TextView;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -134,9 +135,9 @@ public class MainActivity extends ActionBarActivity
 		if(!title.equals("")) mTitle = title;
 		
         final int actionBarTitle = getResources().getSystem().getIdentifier("action_bar_title", "id", "android");
-        final TextView title = (TextView)getWindow().findViewById(actionBarTitle);
-        title.setEms(10);
-        title.setText(mTitle);
+        final TextView barTitle = (TextView)getWindow().findViewById(actionBarTitle);
+        barTitle.setEms(10);
+        barTitle.setText(mTitle);
 
 /*        ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(mTitle);*/
