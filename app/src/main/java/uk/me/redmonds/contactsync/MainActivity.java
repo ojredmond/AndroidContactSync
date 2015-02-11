@@ -93,11 +93,6 @@ public class MainActivity extends ActionBarActivity
         this.deleteFile("stack.trace");
     }
 
-	@Override
-	public boolean onPrepareOptionsMenu (Menu menu) {
-		return false;
-	}
-
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
@@ -138,8 +133,13 @@ public class MainActivity extends ActionBarActivity
     public void setHeading(CharSequence title) {
 		if(!title.equals("")) mTitle = title;
 		
-        ActionBar actionBar = getSupportActionBar();
-		actionBar.setTitle(mTitle);
+        final int actionBarTitle = getResources().getSystem().getIdentifier("action_bar_title", "id", "android");
+        final TextView title = (TextView)getWindow().findViewById(actionBarTitle);
+        title.setEms(10);
+        title.setText(mTitle);
+
+/*        ActionBar actionBar = getSupportActionBar();
+		actionBar.setTitle(mTitle);*/
 		
     }
 
