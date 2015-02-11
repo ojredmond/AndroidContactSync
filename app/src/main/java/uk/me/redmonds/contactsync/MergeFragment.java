@@ -250,7 +250,6 @@ public class MergeFragment extends Fragment
 
         public void onClick(View p1)
         {
-            Toast.makeText(main, p1.getParent().getId(), Toast.LENGTH_LONG).show();
             switch (p1.getId()) {
                 case R.id.contact_confirm:
                     View view;
@@ -282,7 +281,8 @@ public class MergeFragment extends Fragment
                     }
                     break;
                 default:
-                    int id = p1.getId();
+                    Toast.makeText(main, ((View)p1.getParent()).getId(), Toast.LENGTH_LONG).show();
+                    /*int id = p1.getId();
                     EditText item = (EditText)layout.findViewById(id-1);
 
                     if (((String)item.getContentDescription()).startsWith("name")) {
@@ -297,7 +297,7 @@ public class MergeFragment extends Fragment
                     }
                     contact.remove(item.getContentDescription() + ";" + item.getText().toString());
                     layout.removeAllViews();
-                    displayMergedContact();
+                    displayMergedContact();*/
             }
         }
     };
