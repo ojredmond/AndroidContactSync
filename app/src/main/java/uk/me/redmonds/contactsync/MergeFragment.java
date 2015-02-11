@@ -310,17 +310,16 @@ public class MergeFragment extends Fragment
 					//remove delete button if only one name
 					if(contact.get(type).size() == 1 &&
 					   type.equals(Contacts.types[0])) {
-					   View prevRow;
-					   View nextRow;
+					   ViewGroup row;
 						if(pos > 0) {
-						    prevRow = layout.getChildAt(pos-1);
-    						if (!prevRow.getTag().equals("Heading"))
-    						    prevRow.removeView(prevRow.findViewById(R.id.delete_button));
+						    row = (ViewGroup)layout.getChildAt(pos-1);
+    						if (!row.getTag().equals("Heading"))
+    						    row.removeView(row.findViewById(R.id.delete_button));
 						}
 						if(pos < layout.getChildCount()) {
-						    nextRow = layout.getChildAt(pos+1);
-						    if (!nextRow.getTag().equals("Heading"))
-						        nextRow.removeView(nextRow.findViewById(R.id.delete_button));
+						    row = (ViewGroup)layout.getChildAt(pos+1);
+						    if (!row.getTag().equals("Heading"))
+						        row.removeView(nextRow.findViewById(R.id.delete_button));
 						}
 					}
 					layout.removeView(row);
