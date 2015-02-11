@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/delete_button"
         android:src="@android:drawable/ic_delete"
+        android:background="@android:color/white"
         android:layout_alignParentRight="true"
     />
 
