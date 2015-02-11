@@ -312,14 +312,15 @@ public class MergeFragment extends Fragment
 					   type.equals(Contacts.types[0])) {
 					   View prevRow;
 					   View nextRow;
-						if(pos > 0)
+						if(pos > 0) {
 						    prevRow = layout.getChildAt(pos-1);
-						if(pos < layout.getChildCount())
+    						if (!prevRow.getTag().equals("Heading"))
+    						    prevRow.removeView(prevRow.findViewById(R.id.delete_button));
+						}
+						if(pos < layout.getChildCount()) {
 						    nextRow = layout.getChildAt(pos+1);
-						if (!prevRow.getTag().equals("Heading")) {
-						    prevRow.removeView(prevRow.findViewById(R.id.delete_button));
-						} elseif (!nextRow.getTag().equals("Heading")) {
-						    nextRow.removeView(nextRow.findViewById(R.id.delete_button));
+						    if (!nextRow.getTag().equals("Heading"))
+						        nextRow.removeView(nextRow.findViewById(R.id.delete_button));
 						}
 					}
 					layout.removeView(row);
