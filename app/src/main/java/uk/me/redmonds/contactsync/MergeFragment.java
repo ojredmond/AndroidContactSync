@@ -96,6 +96,7 @@ public class MergeFragment extends Fragment
                     
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
+                    deleteLayout.setTag(Delete");
                     layout.addView(deleteLayout, params);
                 }
             }
@@ -281,7 +282,7 @@ public class MergeFragment extends Fragment
                     }
                     break;
                 default:
-                    Toast.makeText(main, ((View)p1.getParent()).getId(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(main, ((View)p1.getParent()).getTag(), Toast.LENGTH_LONG).show();
                     /*int id = p1.getId();
                     EditText item = (EditText)layout.findViewById(id-1);
 
