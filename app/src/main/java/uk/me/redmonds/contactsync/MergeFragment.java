@@ -96,7 +96,7 @@ public class MergeFragment extends Fragment
                     
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
-                    deleteLayout.setTag(Delete");
+                    deleteLayout.setTag("Delete");
                     layout.addView(deleteLayout, params);
                 }
             }
