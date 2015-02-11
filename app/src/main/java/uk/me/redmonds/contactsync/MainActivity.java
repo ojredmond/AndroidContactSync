@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
-    private CharSequence mTitle;
+    private CharSequence mTitle = "";
 
     public static final String TYPE = "com.google";
     public static final String ACCOUNT1 = "account1";
@@ -60,12 +60,14 @@ public class MainActivity extends ActionBarActivity
         PACKAGE_NAME = getApplicationContext().getPackageName();
 	
         ActionBar actionBar = getSupportActionBar();
-
+		actionBar.setTitle(R.string.app_name);
+		mTitle = getString(R.string.app_name);
+		
 		Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
 		
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getFragmentManager().findFragmentById(R.id.navigation_drawer);
-        mTitle = getTitle();
+        
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(actionBar,
@@ -128,16 +130,18 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
-    public void onSectionAttached(String title) {
-    	if (title != "") mTitle = title;
+    public void setHeading(CharSequence title) {
+		if(!title.equals("")) mTitle = title;
+		
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setTitle(mTitle);
+		actionBar.setTitle(mTitle);
+		
     }
 
     public void restoreActionBar() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setTitle(mTitle);
+        setHeading(mTitle);
     }
 
     public void syncStatus (String type) {

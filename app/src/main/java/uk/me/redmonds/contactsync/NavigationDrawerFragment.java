@@ -144,7 +144,7 @@ public class NavigationDrawerFragment extends Fragment {
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
         ){
             public void onDrawerClosed(View view) {
-                ((MainActivity)getActivity()).onSectionAttached("");
+                ((MainActivity)getActivity()).setHeading("");
             }
  
             public void onDrawerOpened(View drawerView) {

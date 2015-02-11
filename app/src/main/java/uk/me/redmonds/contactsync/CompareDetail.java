@@ -46,7 +46,7 @@ public class CompareDetail extends Fragment {
         bUn.setOnClickListener(ButtonClick);
 
         main = (MainActivity)this.getActivity();
-        main.onSectionAttached(getString(R.string.title_activity_dup));
+        main.setHeading(getString(R.string.title_activity_dup));
 
         Bundle args = getArguments();
         if (args == null) {

@@ -65,7 +65,7 @@ public class Contacts {
             contacts.put(i,new HashMap<String,HashSet<HashMap<String,String>>>());
             ids += i + ",";
             Long id = Long.decode(i);
-            Toast.makeText(main, "ID="+id, Toast.LENGTH_SHORT).show();
+            
             Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, id);
             c = main.getContentResolver().query(rawContactUri,
                     new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},

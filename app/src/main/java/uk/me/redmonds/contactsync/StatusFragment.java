@@ -34,7 +34,7 @@ public class StatusFragment extends Fragment {
         super.onResume();
         
         //set actionbar title
-        ((MainActivity)getActivity()).onSectionAttached(getString(R.string.title_logs));
+        ((MainActivity)getActivity()).setHeading(getString(R.string.title_logs));
     }
 
     @Override

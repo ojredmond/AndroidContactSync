@@ -242,6 +242,6 @@ public class SyncFragment extends ListFragment {
         super.onResume();
         
         //set actionbar title
-        ((MainActivity)getActivity()).onSectionAttached(getString(R.string.app_name));
+        ((MainActivity)getActivity()).setHeading(getString(R.string.app_name));
     }
 }

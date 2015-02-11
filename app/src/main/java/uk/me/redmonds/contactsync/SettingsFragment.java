@@ -61,7 +61,7 @@ public class SettingsFragment extends PreferenceFragment
         getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
         
         //set actionbar title
-        ((MainActivity)getActivity()).onSectionAttached(getString(R.string.title_settings));
+        ((MainActivity)getActivity()).setHeading(getString(R.string.title_settings));
     }
 
     @Override
