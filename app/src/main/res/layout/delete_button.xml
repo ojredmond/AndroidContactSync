@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/delete_button"
-        android:src="@drawable/button_icon"
+        android:src="@android:drawable/ic_delete"
         android:layout_alignParentRight="true"
     />
 
