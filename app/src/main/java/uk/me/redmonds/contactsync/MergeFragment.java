@@ -76,18 +76,22 @@ public class MergeFragment extends Fragment
                 contactHeading.setText(Contacts.getGroupName(type));
                 layout.addView(contactHeading);
                 for(HashMap<String,String> item: contact.get(type)) {
+                    RelativeLayout deleteLayout = (RelativeLayout)LayoutInflater.from(main)
+                        .inflate(R.layout.delete_button, layoutContainer, false);
                     if(item.get("label") == null) {
                         TextView contactValue = (TextView)LayoutInflater.from(main)
                             .inflate(R.layout.list_row_1, layoutContainer, false);
                         contactValue.setText(item.get("data1"));
-                        layout.addView(contactValue);
+                        deleteLayout.addView(contactValue);
                     } else {
                         LinearLayout rowLayout = (LinearLayout)LayoutInflater.from(main)
                             .inflate(R.layout.list_row_2, layoutContainer, false);
                         ((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("data1"));
                         ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
-                        layout.addView(rowLayout);
+                        deleteLayout.addView(rowLayout);
                     }
+                    params = new RelativeLayout.LayoutParams(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
+                    layout.addView(deleteLayout);
                 }
             }
         }
