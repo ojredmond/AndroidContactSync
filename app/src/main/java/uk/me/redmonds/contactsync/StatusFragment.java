@@ -41,7 +41,7 @@ public class StatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View statusView = inflater.inflate(R.layout.status, container, false);
+        View statusView = inflater.inflate(R.layout.fragment_status, container, false);
 
         /*MainActivity main = (MainActivity)this.getActivity();
         main.showMenuIcon();
