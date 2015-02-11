@@ -132,15 +132,10 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void setHeading(CharSequence title) {
-		if(!title.equals("")) mTitle = title;
+        if(!title.equals("")) mTitle = title;
 		
-        final int actionBarTitle = getResources().getSystem().getIdentifier("action_bar_title", "id", "android");
-        final TextView barTitle = (TextView)getWindow().findViewById(actionBarTitle);
-        barTitle.setEms(10);
-        barTitle.setText(mTitle);
-
-/*        ActionBar actionBar = getSupportActionBar();
-		actionBar.setTitle(mTitle);*/
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setTitle(mTitle);
 		
     }
 
