@@ -10,6 +10,7 @@ import android.widget.*;
 import android.app.ActionBar;
 import android.content.SharedPreferences;
 import android.content.Context;
+import android.util.*;
 
 public class MergeFragment extends Fragment
 {
@@ -82,11 +83,14 @@ public class MergeFragment extends Fragment
                         TextView contactValue = (TextView)LayoutInflater.from(main)
                             .inflate(R.layout.list_row_1, layoutContainer, false);
                         contactValue.setText(item.get("data1"));
+						contactValue.setTag(item);
                         deleteLayout.addView(contactValue);
                     } else {
                         LinearLayout rowLayout = (LinearLayout)LayoutInflater.from(main)
                             .inflate(R.layout.list_row_2, layoutContainer, false);
-                        ((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("data1"));
+						TextView contactValue = (TextView)rowLayout.findViewById(R.id.value);
+						contactValue.setText(item.get("data1"));
+						contactValue.setTag(item);
                         ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
                         deleteLayout.addView(rowLayout);
                     }
@@ -96,7 +100,7 @@ public class MergeFragment extends Fragment
                     
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
                     params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
-                    deleteLayout.setTag("Delete");
+                    deleteLayout.setTag(type);
                     layout.addView(deleteLayout, params);
                 }
             }
@@ -282,7 +286,32 @@ public class MergeFragment extends Fragment
                     }
                     break;
                 default:
-                    Toast.makeText(main, ((View)p1.getParent()).getTag(), Toast.LENGTH_LONG).show();
+					RelativeLayout row = (RelativeLayout)p1.getParent();
+					String type = (String)row.getTag();
+					Integer pos = layout.indexOfChild(row);
+					HashMap<String,String> item = (HashMap<String,String>)row.findViewById(R.id.value).getTag();
+					
+					if(contact.get(type).size() == 1 &&
+						type.equals(Contacts.types[0])) {
+							Toast.makeText(main, "A name is required!", Toast.LENGTH_SHORT).show();
+                            return;
+					}
+					
+					if(!contact.get(type).remove(item)) {
+						Toast.makeText(main, "Failed to remove information from contact!", Toast.LENGTH_SHORT).show();
+						return;
+					}
+					
+					if(contact.get(type).size() == 1 && pos > 0) {
+							layout.removeView(layout.getChildAt(pos-1));
+					}
+					
+					//remove delete button if only one name
+					if(contact.get(type).size() == 1 &&
+					   type.equals(Contacts.types[0])) {
+						//TBD
+					}
+					layout.removeView(row);
                     /*int id = p1.getId();
                     EditText item = (EditText)layout.findViewById(id-1);
 
