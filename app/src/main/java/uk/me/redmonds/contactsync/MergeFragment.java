@@ -37,7 +37,7 @@ public class MergeFragment extends Fragment
         main = (MainActivity)this.getActivity();
         //main.showMenuIcon();
 
-        main.setHeading("Merge Contact");
+        main.setHeading("Merge");
 
         // get stored contact enables rotate top not lose any changes
         //SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
