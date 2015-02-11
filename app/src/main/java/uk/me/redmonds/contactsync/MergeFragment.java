@@ -312,7 +312,7 @@ public class MergeFragment extends Fragment
 					   type.equals(Contacts.types[0])) {
 					   ViewGroup rowOther;
 						if(pos > 0) {
-						    row = (ViewGroup)layout.getChildAt(pos-1);
+						    rowOther = (ViewGroup)layout.getChildAt(pos-1);
     						if (!rowOther.getTag().equals("Heading"))
     						    rowOther.removeView(rowOther.findViewById(R.id.delete_button));
 						}
