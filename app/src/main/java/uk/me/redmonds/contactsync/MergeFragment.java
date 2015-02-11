@@ -90,8 +90,8 @@ public class MergeFragment extends Fragment
                         ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
                         deleteLayout.addView(rowLayout);
                     }
-                    params = new RelativeLayout.LayoutParams(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
-                    layout.addView(deleteLayout);
+                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
+                    layout.addView(deleteLayout, params);
                 }
             }
         }
