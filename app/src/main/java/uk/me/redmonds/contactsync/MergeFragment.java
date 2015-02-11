@@ -75,6 +75,7 @@ public class MergeFragment extends Fragment
                 TextView contactHeading = (TextView)LayoutInflater.from(main)
                     .inflate(R.layout.list_heading, layoutContainer, false);
                 contactHeading.setText(Contacts.getGroupName(type));
+                contactHeading.setTag("Heading");
                 layout.addView(contactHeading);
                 for(HashMap<String,String> item: contact.get(type)) {
                     RelativeLayout deleteLayout = (RelativeLayout)LayoutInflater.from(main)
@@ -309,7 +310,17 @@ public class MergeFragment extends Fragment
 					//remove delete button if only one name
 					if(contact.get(type).size() == 1 &&
 					   type.equals(Contacts.types[0])) {
-						//TBD
+					   View prevRow;
+					   View nextRow;
+						if(pos > 0)
+						    prevRow = layout.getChildAt(pos-1);
+						if(pos < layout.getChildCount())
+						    nextRow = layout.getChildAt(pos+1);
+						if (!prevRow.getTag().equals("Heading")) {
+						    prevRow.removeView(prevRow.findViewById(R.id.delete_button));
+						} elseif (!nextRow.getTag().equals("Heading")) {
+						    nextRow.removeView(nextRow.findViewById(R.id.delete_button));
+						}
 					}
 					layout.removeView(row);
                     /*int id = p1.getId();
