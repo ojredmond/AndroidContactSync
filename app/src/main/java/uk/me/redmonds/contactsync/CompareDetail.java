@@ -22,17 +22,10 @@ public class CompareDetail extends Fragment {
     private String name;
 	private String ids[];
     private LinearLayout layout;
-    private HashMap<String,String> dupList;
-    //private StringList dup;
     private String listItem;
-    //private SparseArray<String> dupList;
     private SharedPreferences pref;
     private ViewGroup layoutContainer;
     private View compareView;
-	private Integer bDelId;
-	private Integer bMergeId;
-	private Integer bUnId;
-    //private final static String NAME = "Name";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,20 +60,21 @@ public class CompareDetail extends Fragment {
 		buttonBar.addView(bMerge,params);
 		buttonBar.addView(bUn,params);
 
+        Bundle args = getArguments();
+        if (args == null) {
+            return compareView;
+        }
+
+        listItem = args.getString("listItem");
+        name = args.getString("name");
+        ids = args.getString("ids").split(",");
+
         main = (MainActivity)this.getActivity();
         if (listItem.startsWith(Match.DUPKEY))
             main.setHeading(getString(R.string.title_activity_dup));
         else if (listItem.startsWith(Match.MATCHEDKEY))
             main.setHeading(getString(R.string.title_activity_match));
 
-        Bundle args = getArguments();
-        if (args == null) {
-            return compareView;
-        }
-        listItem = args.getString("listItem");
-        name = args.getString("name");
-		ids = args.getString("ids").split(",");
-		
         pref = main.getPreferences(Context.MODE_PRIVATE);
         selected = (HashSet<String>)pref.getStringSet("selected-" + listItem, null);
 
@@ -195,7 +189,7 @@ public class CompareDetail extends Fragment {
                     contacts.deleteContacts();
 
                     //remove duplicate
-                    dupList.remove(name);
+                    //dupList.remove(name);
 
                     if ((ids.size() - selected.size()) == 1) {
                         for (int i=0; i < ids.size(); i++) {
@@ -211,7 +205,7 @@ public class CompareDetail extends Fragment {
                     main.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
-                    dupList.remove(name);
+                    //dupList.remove(name);
                     for (int i=0; i < ids.size(); i++) {
                         contacts = new Contacts(main, new HashSet<>(ids));
                         contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
