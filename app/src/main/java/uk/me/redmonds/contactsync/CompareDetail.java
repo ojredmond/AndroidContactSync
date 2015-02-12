@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -33,6 +36,15 @@ public class CompareDetail extends Fragment {
         layoutContainer = container;
 
         compareView = inflater.inflate(R.layout.compare, container, false);
+
+        Bundle args = getArguments();
+        if (args == null) {
+            return compareView;
+        }
+
+        listItem = args.getString("listItem");
+        name = args.getString("name");
+        ids = args.getString("ids").split(",");
 
         // add buttons and listener
 		LinearLayout buttonBar = (LinearLayout)compareView.findViewById(R.id.button_bar);
@@ -57,17 +69,9 @@ public class CompareDetail extends Fragment {
                                                 ViewGroup.LayoutParams.WRAP_CONTENT,
                                                 1);
 		buttonBar.addView(bDel,params);
-		buttonBar.addView(bMerge,params);
+        if (listItem.startsWith(Match.DUPKEY))
+		    buttonBar.addView(bMerge,params);
 		buttonBar.addView(bUn,params);
-
-        Bundle args = getArguments();
-        if (args == null) {
-            return compareView;
-        }
-
-        listItem = args.getString("listItem");
-        name = args.getString("name");
-        ids = args.getString("ids").split(",");
 
         main = (MainActivity)this.getActivity();
         if (listItem.startsWith(Match.DUPKEY))
@@ -114,7 +118,7 @@ public class CompareDetail extends Fragment {
 			contactInfo.addView(accountInfo);
 
 			HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
-			for(String type: Contacts.types) {
+			for(String type: Contacts.TYPES) {
 				if(contact.get(type) != null 
 				   && contact.get(type).size() > 0) {
 					TextView contactHeading = (TextView)LayoutInflater.from(main)
@@ -194,7 +198,7 @@ public class CompareDetail extends Fragment {
                     if ((ids.size() - selected.size()) == 1) {
                         for (int i=0; i < ids.size(); i++) {
                             if (!selected.contains(ids.get(i))) {
-                                contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
+                                //contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
                             }
                         }
                     }
@@ -206,10 +210,10 @@ public class CompareDetail extends Fragment {
                     break;
                 case R.id.unmatched_contact:
                     //dupList.remove(name);
-                    for (int i=0; i < ids.size(); i++) {
+                    //for (int i=0; i < ids.size(); i++) {
                         contacts = new Contacts(main, new HashSet<>(ids));
-                        contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
-                    }
+                        contacts.addToUnmatched();
+                    //}
 
                     break;
                 default:

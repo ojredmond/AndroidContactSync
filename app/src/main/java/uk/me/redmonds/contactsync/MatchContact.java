@@ -1,13 +1,26 @@
 package uk.me.redmonds.contactsync;
 
-import android.content.*;
-import android.os.*;
-import android.support.v4.app.*;
-import android.view.*;
-import android.widget.*;
-import java.util.*;
-
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ExpandableListView;
+import android.widget.SimpleExpandableListAdapter;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 public class MatchContact extends Fragment
         implements ExpandableListView.OnChildClickListener
@@ -42,14 +55,12 @@ public class MatchContact extends Fragment
     private OnClickListener ButtonClick = new OnClickListener() {
         public void onClick(View p1)
         {
-            Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
             if (p1.getId() == R.id.delete_contact) {
-                /*StringList um = new StringList(pref, listItem);
                 HashSet<String> list = new HashSet<String>();
                 list.add(String.valueOf(id));
-                Contacts contacts = new Contacts(main, list, um);
-                contacts.deleteContacts();*/
-                Toast.makeText(main, "Deleted " + p1.toString(), Toast.LENGTH_SHORT).show();
+                Contacts contacts = new Contacts(main, list);
+                if (contacts.deleteContacts())
+                    contacts.removeEntry(listItem,id,name);
             }
     
         }
@@ -63,7 +74,7 @@ public class MatchContact extends Fragment
         Bundle args = getArguments();
         listItem = args.getString("listItem");
         name = args.getString("name");
-        id = args.getString("id");
+        id = args.getString("ids");
         String accountSelected = listItem.split(":")[1];
         String accountOther = listItem.split(":")[2];
 

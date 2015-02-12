@@ -1,8 +1,10 @@
 package uk.me.redmonds.contactsync;
-import android.content.*;
-import android.util.*;
-import java.util.Set;
+
+import android.content.SharedPreferences;
+import android.util.SparseArray;
+
 import java.util.HashSet;
+import java.util.Set;
 
 public class StringList
 {

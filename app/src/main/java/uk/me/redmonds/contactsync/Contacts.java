@@ -1,23 +1,36 @@
 package uk.me.redmonds.contactsync;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Arrays;
-
 import android.app.Activity;
 import android.content.ContentProviderOperation;
 import android.content.ContentUris;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
-import android.provider.ContactsContract.CommonDataKinds.*;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Event;
+import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
+import android.provider.ContactsContract.CommonDataKinds.Im;
+import android.provider.ContactsContract.CommonDataKinds.Nickname;
+import android.provider.ContactsContract.CommonDataKinds.Note;
+import android.provider.ContactsContract.CommonDataKinds.Organization;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.CommonDataKinds.Photo;
+import android.provider.ContactsContract.CommonDataKinds.Relation;
+import android.provider.ContactsContract.CommonDataKinds.SipAddress;
+import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
+import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.widget.Toast;
-import android.preference.*;
-import android.content.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class Contacts {
     private HashSet<String> list;
@@ -25,8 +38,8 @@ public class Contacts {
     private Activity main;
     private HashSet<String> contactsOld = null;
     private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
-    private SharedPreferences pref;
-    public static final String[] types = {
+    private static SharedPreferences pref;
+    public static final String[] TYPES = {
         StructuredName.CONTENT_ITEM_TYPE,
         Phone.CONTENT_ITEM_TYPE,
         Email.CONTENT_ITEM_TYPE,
@@ -249,11 +262,15 @@ public class Contacts {
     }
 
     public Boolean deleteContacts () {
+        return deleteContacts(list);
+    }
+
+    public Boolean deleteContacts (HashSet<String> delList) {
         String where;
         String[] params;
         ArrayList<ContentProviderOperation> ops = null;
 
-        for (String id : list) {
+        for (String id : delList) {
             where = RawContacts._ID + " = ?";
             params = new String[] {id};
 
@@ -277,7 +294,7 @@ public class Contacts {
 
     public HashMap<String,HashSet<HashMap<String,String>>> mergeContact () {
         HashMap<String,HashSet<HashMap<String,String>>> contact = new HashMap<>();
-        for(String type: types) {
+        for(String type: TYPES) {
             HashSet<HashMap<String,String>> values = new HashSet<>();
             for(String id: contacts.keySet())
                 if(contacts.get(id).get(type) != null 
@@ -291,19 +308,13 @@ public class Contacts {
         return contact;
     }
 
-    public Boolean saveMergedContact (ArrayList<String[]> contactItems) {
+    public Boolean saveMergedContact (HashMap<String,HashSet<HashMap<String,String>>> contactItems) {
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
         String type;
         String value;
         String where;
         String origValue;
-
-        if (contactsOld == null) {
-            // send error report
-            TopExceptionHandler.sendReport (main, TopExceptionHandler.generateReport(new Exception("Contacts Variable not created")));
-            return false;
-        }
 
         if (accounts.size() == 0) {
             return false;
@@ -365,32 +376,35 @@ public class Contacts {
                 }
             }
 
-            //add id to fragment_unmatched
+            //add id to unmatched_list
             //remove from list delete other contacts
             if (accounts.size() == 1) {
-                //add name
-                addToUnmatched(id, "", accounts.get(id));
-                return deleteContacts();
+                //add name to unMatched
+                addToUnmatched();
+                HashSet<String> delList = new HashSet<>(list);
+                delList.remove(id);
+                return deleteContacts(delList);
             }
         }
 
-        return true;
+        return addToMatched();
     }
 
-    public void addToUnmatched (String id, String name, String account) {
-        list.remove(id);
+    public void addToUnmatched () {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         String account1Name = settings.getString("account1", null);
         String account2Name = settings.getString("account2", null);
         String uName = null;
 
-        if (account.equals(account1Name)) {
-            uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
-        } else if (account.equals(account2Name)) {
-            uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
-        }
+        for (String id: list) {
+            if (accounts.get(id).equals(account1Name)) {
+                uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+            } else if (accounts.get(id).equals(account2Name)) {
+                uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+            }
 
-        addEntry(uName, id, name);
+            addEntry(uName, id, contacts.get(id).get(TYPES[0]).iterator().next().get("data1"));
+        }
     }
 
 
@@ -442,15 +456,15 @@ public class Contacts {
     }
 
     public Boolean removeEntry (String listName, String id, String name) {
-        HashSet set = (HashSet<String>)pref.getStringSet(listName, null);
+        HashSet<String> set = (HashSet<String>)pref.getStringSet(listName, null);
         set.remove(name + ":" + id);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listName,set);
-        return true;
+        return e.commit();
     }
 
     public Boolean addEntry (String listName, String id, String name) {
-        HashSet set = (HashSet<String>)pref.getStringSet(listName, null);
+        HashSet<String> set = (HashSet<String>)pref.getStringSet(listName, null);
         set.add(name + ":" + id);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listName,set);

@@ -1,15 +1,21 @@
 package uk.me.redmonds.contactsync;
 
-import android.app.*;
-import android.content.*;
-import android.os.*;
-import android.preference.*;
-import android.support.v4.app.*;
-import android.view.*;
-import android.widget.*;
-import java.util.*;
-
+import android.app.ActionBar;
 import android.app.ListFragment;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.view.View;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
 public class SyncFragment extends ListFragment {
     //private ArrayList<String> values = new ArrayList<String>();

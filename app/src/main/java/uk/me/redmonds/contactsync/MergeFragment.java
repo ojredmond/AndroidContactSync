@@ -2,12 +2,21 @@ package uk.me.redmonds.contactsync;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.view.*;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.View.OnClickListener;
-import android.os.*;
-import java.util.*;
-import android.widget.*;
-import android.content.SharedPreferences;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class MergeFragment extends Fragment
 {
@@ -63,7 +72,7 @@ public class MergeFragment extends Fragment
     }
 
     public void displayMergedContact () {
-        for(String type: Contacts.types) {
+        for(String type: Contacts.TYPES) {
             if(contact.get(type) != null 
                 && contact.get(type).size() > 0) {
                 TextView contactHeading = (TextView)LayoutInflater.from(main)
@@ -81,7 +90,7 @@ public class MergeFragment extends Fragment
                         contactValue.setText(item.get("data1"));
 						contactValue.setTag(item);
                         //if only 1 name hide delete button
-                        if(!(type.equals(Contacts.types[0]) && contact.get(type).size() == 1))
+                        if(!(type.equals(Contacts.TYPES[0]) && contact.get(type).size() == 1))
                             deleteLayout.addView(contactValue);
                     } else {
                         LinearLayout rowLayout = (LinearLayout)LayoutInflater.from(main)
@@ -101,7 +110,7 @@ public class MergeFragment extends Fragment
                     deleteLayout.setTag(type);
 
                     //if only 1 name hide delete button
-                    if(type.equals(Contacts.types[0]) && contact.get(type).size() == 1)
+                    if(type.equals(Contacts.TYPES[0]) && contact.get(type).size() == 1)
                         layout.addView(contactValue);
                     else
                         layout.addView(deleteLayout, params);
@@ -147,7 +156,7 @@ public class MergeFragment extends Fragment
                         }
                     }
 
-                    if (cObject.saveMergedContact(contactItems)) {
+                    if (cObject.saveMergedContact(contact)) {
                         /*FragmentManager fragMan = main.getSupportFragmentManager();
                         if (fragMan.getBackStackEntryCount() > 0) {
                             fragMan.popBackStack();
@@ -170,7 +179,7 @@ public class MergeFragment extends Fragment
 					HashMap<String,String> item = (HashMap<String,String>)row.findViewById(R.id.value).getTag();
 
 					if(contact.get(type).size() == 1 &&
-						type.equals(Contacts.types[0])) {
+						type.equals(Contacts.TYPES[0])) {
 							Toast.makeText(main, "A name is required!", Toast.LENGTH_SHORT).show();
                             return;
 					}
@@ -186,7 +195,7 @@ public class MergeFragment extends Fragment
 					
 					//remove delete button if only one name
 					if(contact.get(type).size() == 1 &&
-					   type.equals(Contacts.types[0])) {
+					   type.equals(Contacts.TYPES[0])) {
 					   View rowOther;
 						if(pos > 0) {
 						    rowOther = layout.getChildAt(pos-1);

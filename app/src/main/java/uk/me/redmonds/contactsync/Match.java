@@ -1,18 +1,20 @@
 package uk.me.redmonds.contactsync;
 
 //import android.content.ContentResolver;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract.RawContacts;
 import android.view.View;
 import android.widget.TextView;
-import android.util.SparseIntArray;
-import android.util.SparseArray;
-import android.preference.*;
-import android.content.*;
 
 import java.util.HashMap;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Map;
 
 public class Match
 {
