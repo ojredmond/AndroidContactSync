@@ -20,6 +20,7 @@
     <string name="title_activity_results">Matched Results</string>
     <string name="title_activity_compare">Compare</string>
     <string name="title_activity_dup">Duplicates</string>
+    <string name="title_activity_match">Matches</string>
     <string name="delete_contact">Delete</string>
     <string name="merge_contacts">Merge</string>
     <string name="add_to_unmatched">Split</string>

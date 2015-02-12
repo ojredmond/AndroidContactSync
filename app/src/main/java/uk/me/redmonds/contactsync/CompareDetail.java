@@ -58,13 +58,20 @@ public class CompareDetail extends Fragment {
         bDel.setOnClickListener(ButtonClick);
         bMerge.setOnClickListener(ButtonClick);
         bUn.setOnClickListener(ButtonClick);
-		
-		buttonBar.addView(bDel);
-		buttonBar.addView(bMerge);
-		buttonBar.addView(bUn);
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                                1);
+		buttonBar.addView(bDel,params);
+		buttonBar.addView(bMerge,params);
+		buttonBar.addView(bUn,params);
 
         main = (MainActivity)this.getActivity();
-        main.setHeading(getString(R.string.title_activity_dup));
+        if (listItem.startsWith(Match.DUPKEY))
+            main.setHeading(getString(R.string.title_activity_dup));
+        else if (listItem.startsWith(Match.MATCHEDKEY))
+            main.setHeading(getString(R.string.title_activity_match));
 
         Bundle args = getArguments();
         if (args == null) {
