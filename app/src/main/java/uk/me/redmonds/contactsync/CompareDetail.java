@@ -20,6 +20,7 @@ public class CompareDetail extends Fragment {
     private MainActivity main;
     private HashSet<String> selected;
     private String name;
+	private String ids[];
     private LinearLayout layout;
     private HashMap<String,String> dupList;
     //private StringList dup;
@@ -28,6 +29,9 @@ public class CompareDetail extends Fragment {
     private SharedPreferences pref;
     private ViewGroup layoutContainer;
     private View compareView;
+	private Integer bDelId;
+	private Integer bMergeId;
+	private Integer bUnId;
     //private final static String NAME = "Name";
 
     @Override
@@ -37,13 +41,27 @@ public class CompareDetail extends Fragment {
 
         compareView = inflater.inflate(R.layout.compare, container, false);
 
-        // add listener to buttons
-        Button bDel = (Button)compareView.findViewById(R.id.delete_contact);
-        Button bMerge = (Button)compareView.findViewById(R.id.merge_contact);
-        Button bUn = (Button)compareView.findViewById(R.id.unmatched_contact);
+        // add buttons and listener
+		LinearLayout buttonBar = (LinearLayout)compareView.findViewById(R.id.button_bar);
+        Button bDel = (Button)inflater.inflate(R.layout.button, container, false);
+		bDel.setId(R.id.delete_button);
+		bDel.setText(R.string.delete_contact);
+		
+		Button bMerge = (Button)inflater.inflate(R.layout.button, container, false);
+		bMerge.setId(R.id.merge_contact);
+		bMerge.setText(R.string.merge_contacts);
+		
+		Button bUn = (Button)inflater.inflate(R.layout.button, container, false);
+		bUn.setId(R.id.unmatched_contact);
+		bUn.setText(R.string.add_to_unmatched);
+		
         bDel.setOnClickListener(ButtonClick);
         bMerge.setOnClickListener(ButtonClick);
         bUn.setOnClickListener(ButtonClick);
+		
+		buttonBar.addView(bDel);
+		buttonBar.addView(bMerge);
+		buttonBar.addView(bUn);
 
         main = (MainActivity)this.getActivity();
         main.setHeading(getString(R.string.title_activity_dup));
@@ -54,7 +72,8 @@ public class CompareDetail extends Fragment {
         }
         listItem = args.getString("listItem");
         name = args.getString("name");
-
+		ids = args.getString("ids").split(",");
+		
         pref = main.getPreferences(Context.MODE_PRIVATE);
         selected = (HashSet<String>)pref.getStringSet("selected-" + listItem, null);
 
@@ -65,61 +84,59 @@ public class CompareDetail extends Fragment {
     }
 
     private Boolean fillLayout () {
-        HashSet<String> dupSet = (HashSet<String>)pref.getStringSet(listItem, null);
-        dupList = new HashMap<> ();
-        for (String aDupSet : dupSet) {
-            String[] itemArray = aDupSet.split(":");
-            dupList.put(itemArray[0], itemArray[1]);
-        }
-
         layout.removeAllViews();
+		
+		Contacts cObj = new Contacts(main, ids);
+		HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = cObj.getContacts();
+		for (String id: ids) {
+			String account = cObj.getAccountName(id);
+			// create a new view for the contact
+			View contactView = LayoutInflater.from(main)
+				.inflate(R.layout.contact, layoutContainer, false);
+			contactView.setTag(account + ":" + id);
+			layout.addView(contactView);
+			LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
 
-        String account = listItem.substring(Match.DUPKEY.length());
+			// Display account name
+			View accountInfo = LayoutInflater.from(main)
+				.inflate(R.layout.list_row_2, layoutContainer, false);
+			((TextView)accountInfo.findViewById(R.id.type)).setText("Account");
+			((TextView)accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
+			accountInfo.findViewById(R.id.row).setBackgroundColor(getResources().getColor(R.color.nav_background));
+			contactInfo.addView(accountInfo);
 
-        if (dupList.containsKey(name)) {
-            String ids[] = dupList.get(name).split(",");
-            Contacts cObj = new Contacts(main, ids);
-            HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = cObj.getContacts();
-            for (String id: ids) {
-                // create a new view for the contact
-                View contactView = LayoutInflater.from(main)
-                        .inflate(R.layout.contact, layoutContainer, false);
-                contactView.setTag(account + ":" + id);
-                layout.addView(contactView);
-                LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
-                View accountInfo = LayoutInflater.from(main)
-                        .inflate(R.layout.list_row_2, layoutContainer, false);
-                ((TextView)accountInfo.findViewById(R.id.type)).setText("Account");
-                ((TextView)accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
-                accountInfo.findViewById(R.id.row).setBackgroundColor(getResources().getColor(R.color.nav_background));
-                contactInfo.addView(accountInfo);
+			// Display contact id
+			accountInfo = LayoutInflater.from(main)
+				.inflate(R.layout.list_row_2, layoutContainer, false);
+			((TextView)accountInfo.findViewById(R.id.type)).setText("ID");
+			((TextView)accountInfo.findViewById(R.id.value)).setText(id);
+			contactInfo.addView(accountInfo);
 
-                HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
-                for(String type: Contacts.types) {
-                    if(contact.get(type) != null 
-                        && contact.get(type).size() > 0) {
-                        TextView contactHeading = (TextView)LayoutInflater.from(main)
-                            .inflate(R.layout.list_heading, layoutContainer, false);
-                        contactHeading.setText(Contacts.getGroupName(type));
-                        contactInfo.addView(contactHeading);
-                        for(HashMap<String,String> item: contact.get(type)) {
-                            if(item.get("label") == null) {
-                                TextView contactValue = (TextView)LayoutInflater.from(main)
-                                    .inflate(R.layout.list_row_1, layoutContainer, false);
-                                contactValue.setText(item.get("data1"));
-                                contactInfo.addView(contactValue);
-                            } else {
-                                LinearLayout rowLayout = (LinearLayout)LayoutInflater.from(main)
-                                    .inflate(R.layout.list_row_2, layoutContainer, false);
-                                ((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("data1"));
-                                ((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
-                                contactInfo.addView(rowLayout);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+			HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(id);
+			for(String type: Contacts.types) {
+				if(contact.get(type) != null 
+				   && contact.get(type).size() > 0) {
+					TextView contactHeading = (TextView)LayoutInflater.from(main)
+						.inflate(R.layout.list_heading, layoutContainer, false);
+					contactHeading.setText(Contacts.getGroupName(type));
+					contactInfo.addView(contactHeading);
+					for(HashMap<String,String> item: contact.get(type)) {
+						if(item.get("label") == null) {
+							TextView contactValue = (TextView)LayoutInflater.from(main)
+								.inflate(R.layout.list_row_1, layoutContainer, false);
+							contactValue.setText(item.get("data1"));
+							contactInfo.addView(contactValue);
+						} else {
+							LinearLayout rowLayout = (LinearLayout)LayoutInflater.from(main)
+								.inflate(R.layout.list_row_2, layoutContainer, false);
+							((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("data1"));
+							((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
+							contactInfo.addView(rowLayout);
+						}
+					}
+				}
+			}
+		}
         return true;
     }
 

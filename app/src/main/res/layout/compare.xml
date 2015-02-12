@@ -13,36 +13,6 @@ android:layout_height="match_parent" >
     android:background="@drawable/border_top"
     >
 
-    <Button
-        android:id="@+id/delete_contact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="@dimen/button_min_width"
-        android:layout_weight="1"
-        android:background="@drawable/button"
-        android:textColor="@color/material_orange_500"
-        android:text="@string/delete_contact" />
-      
-    <Button
-        android:id="@+id/merge_contact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="@dimen/button_min_width"
-        android:layout_weight="1"
-        android:background="@drawable/button"
-        android:textColor="@color/material_orange_500"
-        android:text="@string/merge_contacts" />
-      
-    <Button
-        android:id="@+id/unmatched_contact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:minWidth="@dimen/button_min_width"
-		android:layout_weight="1"
-		android:background="@drawable/button"
-		android:textColor="@color/material_orange_500"
-        android:text="@string/add_to_unmatched" />
-
 </LinearLayout>
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

@@ -14,6 +14,8 @@ import android.content.Context;
 import java.util.HashSet;
 import java.util.ArrayList;
 import java.util.Iterator;
+import android.preference.PreferenceManager;
+import java.util.*;
 
 /**
  * Created by oli on 31/01/15.
@@ -23,12 +25,12 @@ public class CompareFragment extends android.app.Fragment {
     // representing an object in the collection.
     TabsAdapter mTabsAdapter;
     ViewPager mViewPager;
-    FragmentActivity main;
+    MainActivity main;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        main = (FragmentActivity)this.getActivity();
+        main = (MainActivity)this.getActivity();
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
         mTabsAdapter =
@@ -68,12 +70,24 @@ public class CompareFragment extends android.app.Fragment {
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<String>();
             contactsids = new ArrayList<String>();
+			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+			HashSet<String> account1Set = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + settings.getString(MainActivity.ACCOUNT1, null), null);
+			HashMap<String,String> account1 = new HashMap<String,String>();
+			for(String entry: account1Set) {
+				String contact[] = entry.split(":");
+				account1.put(contact[0],contact[1]);
+			}
             HashSet set = (HashSet<String>)pref.getStringSet(listItem, null);
             Iterator setIt = set.iterator();
             while(setIt.hasNext()) {
                 String contact[] = ((String)setIt.next()).split(":");
-                contacts.add(contact[0]);
-                contactsids.add(contact[1]);
+				if (listItem.startsWith(Match.MATCHEDKEY)){
+					contacts.add(account1.get(contact[0]));
+					contactsids.add(contact[0] + "," + contact[1]);
+				} else {
+					contacts.add(contact[0]);
+					contactsids.add(contact[1]);
+				}  
             }
         }
 
@@ -83,7 +97,7 @@ public class CompareFragment extends android.app.Fragment {
             Bundle argsDetail = new Bundle();
             argsDetail.putString("listItem", listItem);
             argsDetail.putString("name", contacts.get(i));
-            argsDetail.putString("id", contactsids.get(i));
+            argsDetail.putString("ids", contactsids.get(i));
 
             Fragment fragment;
             if (listItem.startsWith(Match.UNMATCHNAMEKEY))
