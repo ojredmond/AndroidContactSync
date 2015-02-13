@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 public class Contacts {
     private HashSet<String> list;
@@ -39,6 +40,10 @@ public class Contacts {
     private HashSet<String> contactsOld = null;
     private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
     private static SharedPreferences pref;
+    private static String account1Name;
+    private static String account2Name;
+    private static HashSet<String> account1;
+    private static HashSet<String> account2;
     public static final String[] TYPES = {
         StructuredName.CONTENT_ITEM_TYPE,
         Phone.CONTENT_ITEM_TYPE,
@@ -55,6 +60,8 @@ public class Contacts {
         Relation.CONTENT_ITEM_TYPE,
         SipAddress.CONTENT_ITEM_TYPE
     };
+    public static Boolean groupInc;
+    public static Boolean photoInc;
 
     Contacts (Activity m, HashSet<String> ids) {
         main = m;
@@ -73,7 +80,7 @@ public class Contacts {
     private void createContacts () {
         Cursor c;
         String ids = "";
-        
+
         for (String i : list) {
             contacts.put(i,new HashMap<String,HashSet<HashMap<String,String>>>());
             ids += i + ",";
@@ -126,6 +133,22 @@ public class Contacts {
             }
         } finally {
             c.close();
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+        account1Name = settings.getString("account1", null);
+        account2Name = settings.getString("account2", null);
+        groupInc = settings.getBoolean("GroupsOnOff", false);
+        photoInc = settings.getBoolean("PicturesOnOff", false);
+
+        account1 = new HashSet<>();
+        account2 = new HashSet<>();
+
+        for (Map.Entry <String, String> e : accounts.entrySet()) {
+            if (e.getValue().equals(account1Name))
+                account1.add(e.getKey());
+            else
+                account2.add(e.getKey());
         }
     }
 
@@ -278,6 +301,8 @@ public class Contacts {
             ops.add(ContentProviderOperation.newDelete(RawContacts.CONTENT_URI)
                     .withSelection(where, params)
                     .build());
+
+            list.remove(id);
         }
 
         if (ops != null) {
@@ -289,6 +314,7 @@ public class Contacts {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -308,92 +334,112 @@ public class Contacts {
         return contact;
     }
 
-    public Boolean saveMergedContact (HashMap<String,HashSet<HashMap<String,String>>> contactItems) {
+    public Boolean saveMergedContact (HashMap<String,HashSet<HashMap<String,String>>> mergedContact) {
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
-        String type;
         String value;
         String where;
-        String origValue;
+        //String origValue;
+        HashSet<String> accountsUsed = new HashSet<>();
 
         if (accounts.size() == 0) {
             return false;
         }
 
         for (String id : list) {
-            ops = new ArrayList<> ();
-            for (String[] item : contactItems) {
-                opBuilder = null;
-                where = null;
-                type = item[0];
-                origValue = item[1];
-                value = item[2];
+            if(accountsUsed.contains(accounts.get(id))) {
+                HashSet<String> deList = new HashSet<>();
+                deList.add(id);
+                deleteContacts(deList);
+            } else {
+                accountsUsed.add(accounts.get(id));
+                ops = new ArrayList<>();
+                for (String type: TYPES) {
+                    //exclude types based on settings
+                    if((!type.equals(TYPES[10]) || groupInc)
+                       && (!type.equals(TYPES[4]) || photoInc)) {
+                        HashSet<HashMap<String, String>> dels;
+                        HashSet<HashMap<String, String>> adds;
 
-                if (contactsOld.contains(id + "/" + type)
-                        && !origValue.equals(value)) {
-                    contactsOld.remove(id + "/" + type);
-                    opBuilder = ContentProviderOperation.newUpdate(Data.CONTENT_URI);
-                    where = Data.RAW_CONTACT_ID + " = " + id;
-                } else if (!contactsOld.contains(id + "/" + type)) {
-                    opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
-                            .withValue(Data.RAW_CONTACT_ID, id);
-                } else {
-                    contactsOld.remove(id + "/" + type);
-                }
+                        if (mergedContact.get(type) != null)
+                            adds = new HashSet<>(mergedContact.get(type));
+                        else
+                            adds = new HashSet<>();
 
-                if (opBuilder != null) {
-                    type = type.split(";",2)[0];
-                    if (where != null) {
-                        where += " AND Data1 = ?";
-                        opBuilder.withSelection(where, new String[] {origValue});
+                        if (contacts.get(id).get(type) != null) {
+                            adds.removeAll(contacts.get(id).get(type));
+                            dels = new HashSet<>(contacts.get(id).get(type));
+                            if (mergedContact.get(type) != null)
+                                dels.removeAll(mergedContact.get(type));
+                        } else {
+                            dels = new HashSet<>();
+                        }
+                        for (HashMap<String, String> item : dels) {
+                            opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
+                            where = "? = ?";
+                            where += " AND ? = ?";
+                            where += " AND ? = ?";
+                            where += " AND ? = ?";
+                            opBuilder.withSelection(where, new String[]{
+                                    Data.RAW_CONTACT_ID, id,
+                                    Data.MIMETYPE, type,
+                                    Data.DATA1, item.get("data1"),
+                                    Data.DATA2, item.get("data2")
+                            });
+
+                            ops.add(opBuilder.build());
+                        }
+                        for (HashMap<String, String> item : adds) {
+                            //TBD update values would need to store orig value for matching
+                            /*if (origContactItems != null
+                                    && !origValue.equals(value)) {
+                                contactsOld.remove(id + "/" + type);
+                                opBuilder = ContentProviderOperation.newUpdate(Data.CONTENT_URI);
+                                where = Data.RAW_CONTACT_ID + " = " + id;
+                            } else*/
+                            opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+                                    .withValue(Data.RAW_CONTACT_ID, id)
+                                    .withValue(Data.MIMETYPE, type)
+                                    .withValue(Data.DATA1, item.get("data1"))
+                                    .withValue(Data.DATA2, item.get("data2"))
+                                    .withValue(Data.DATA3, item.get("data3"));
+
+                            ops.add(opBuilder.build());
+                        }
                     }
-                    opBuilder = setOpBuilder(opBuilder, value, type);
-
-                    ops.add(opBuilder.build());
                 }
-            }
-            // remove any deleted elements
-            for (String s : contactsOld) {
-                if (s.startsWith(id)) {
-                    value = s.split(";",2)[1];
-                    type = s.split(";",2)[0].split("/",2)[1];
-                    opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
-                    where = RawContacts._ID + " = " + id;
-                    where += " AND Data1 = ?";
-                    opBuilder.withSelection(where, new String[] {value});
 
-                    ops.add(opBuilder.build());
+                if (ops.size() > 0) {
+                    try {
+                        main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+                    } catch (Throwable e) {
+                        // send error report
+                        TopExceptionHandler.sendReport(main, TopExceptionHandler.generateReport(e));
+                        return false;
+                    }
                 }
-            }
 
-            if (ops.size() > 0) {
-                try {
-                    main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                } catch (Throwable e) {
-                    // send error report
-                    TopExceptionHandler.sendReport (main, TopExceptionHandler.generateReport(e));
-                    return false;
+                //add id to unmatched_list
+                //remove from list delete other contacts
+                if (accounts.size() == 1) {
+                    //add name to unMatched
+                    addToUnmatched();
+                    HashSet<String> delList = new HashSet<>(list);
+                    delList.remove(id);
+                    return deleteContacts(delList);
                 }
-            }
-
-            //add id to unmatched_list
-            //remove from list delete other contacts
-            if (accounts.size() == 1) {
-                //add name to unMatched
-                addToUnmatched();
-                HashSet<String> delList = new HashSet<>(list);
-                delList.remove(id);
-                return deleteContacts(delList);
             }
         }
 
-        return addToMatched();
+        if (list.size() == 1)
+            addToUnmatched();
+        else
+            addToMatched();
+
+        return true;
     }
 
     public void addToUnmatched () {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-        String account1Name = settings.getString("account1", null);
-        String account2Name = settings.getString("account2", null);
         String uName = null;
 
         for (String id: list) {
@@ -403,10 +449,22 @@ public class Contacts {
                 uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
             }
 
-            addEntry(uName, id, contacts.get(id).get(TYPES[0]).iterator().next().get("data1"));
+            addEntry(uName, contacts.get(id).get(TYPES[0]).iterator().next().get("data1") + ":" + id);
         }
     }
 
+    public void addToMatched () {
+        String matchedName = null;
+
+        for (String id1: account1) {
+            for (String id2: account2) {
+                matchedName = Match.MATCHEDKEY + account1Name + ":" + account2Name;
+                addEntry(matchedName, id1 + ":" + id2);
+                matchedName = Match.MATCHEDKEY + account1Name + ":" + account2Name;
+                addEntry(matchedName, id2 + ":" + id1);
+            }
+        }
+    }
 
     private ContentProviderOperation.Builder setOpBuilder(ContentProviderOperation.Builder opBuilder, String value, String type) {
         if (type.startsWith("name")) {
@@ -463,9 +521,9 @@ public class Contacts {
         return e.commit();
     }
 
-    public Boolean addEntry (String listName, String id, String name) {
+    public Boolean addEntry (String listName, String entry) {
         HashSet<String> set = (HashSet<String>)pref.getStringSet(listName, null);
-        set.add(name + ":" + id);
+        set.add(entry);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listName,set);
         return e.commit();

@@ -3,6 +3,7 @@ package uk.me.redmonds.contactsync;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,14 +31,14 @@ public class MatchContact extends Fragment
     private MainActivity main;
     private String id;
     private HashMap<String,String> unmatchedList;
-    //private SparseArray<String> matchedList;
+    private HashMap<String,String> matchedList;
     private String listItem;
     private String name;
     private SharedPreferences pref;
 
     public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5)
     {
-        //fragment_unmatched list
+        //unmatched list
         if (p3 == 0) {
             String linkName = (String) ((TextView)p2).getText();
             ArrayList<String> ids = new ArrayList<>();
@@ -46,7 +47,12 @@ public class MatchContact extends Fragment
             main.Merge(name,ids,listItem);
         //matched list
         } else if (p3 == 1) {
-            Toast.makeText(main, "click p3 = 1 " + p4, Toast.LENGTH_SHORT).show();
+            String linkName = (String) ((TextView)p2).getText();
+            ArrayList<String> ids = new ArrayList<>();
+            ids.add(id);
+            for(String i: matchedList.get(linkName).split(":"))
+                ids.add(i);
+            main.Merge(name,ids,listItem);
         }
 
         return false;
@@ -86,7 +92,7 @@ public class MatchContact extends Fragment
 
         List<Map<String, String>> groupData = new ArrayList<>();
         List<List<Map<String, String>>> childData = new ArrayList<>();
-        List<Map<String, String>> children = new ArrayList<>();
+        List<Map<String, String>> children;
         Map<String, String> contactMap;
 
         Map<String, String> curGroupMap1 = new HashMap<>();
@@ -115,16 +121,23 @@ public class MatchContact extends Fragment
         curGroupMap2.put(NAME, "Matched");
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
 
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+        HashSet<String> accountSet = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
+        HashMap<String,String> account = new HashMap<>();
+        for(String entry: accountSet) {
+            String contact[] = entry.split(":");
+            account.put(contact[0],contact[1]);
+        }
+
         HashSet<String> md = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
-        HashMap<String,String> matchedList = new HashMap<String, String> ();
+        matchedList = new HashMap<String, String> ();
         children = new ArrayList<Map<String, String>>();
-        // To get the Iterator use the iterator() operation
-        Iterator mdIt = md.iterator();
-        while(mdIt.hasNext()) {
-            String[] itemArray = ((String)mdIt.next()).split(":");
-            matchedList.put(itemArray[0], itemArray[1]);
-            contactMap = new HashMap<String, String> ();
-            contactMap.put(NAME, itemArray[0]);
+        for (String item : md) {
+            String[] itemArray = (item).split(":");
+            String itemName = account.get(itemArray[0]);
+            matchedList.put(itemName, item);
+            contactMap = new HashMap<String, String>();
+            contactMap.put(NAME, itemName);
             children.add(contactMap);
         }
         childData.add(children);

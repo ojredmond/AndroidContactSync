@@ -144,7 +144,7 @@ public class MergeFragment extends Fragment
         {
             switch (p1.getId()) {
                 case R.id.contact_confirm:
-                    View view;
+                    /*View view;
                     ArrayList<String[]> contactItems = new ArrayList<>();
                     for (int y=0; y < layout.getChildCount(); y++) {
                         view = layout.getChildAt(y);
@@ -154,7 +154,7 @@ public class MergeFragment extends Fragment
                                     ((String)view.getContentDescription()).split(";",2)[1],
                                     ((EditText)view).getText().toString()});
                         }
-                    }
+                    }*/
 
                     if (cObject.saveMergedContact(contact)) {
                         /*FragmentManager fragMan = main.getSupportFragmentManager();

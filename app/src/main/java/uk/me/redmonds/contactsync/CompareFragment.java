@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 /**
+ * Fragment used for comparison adds tabs to views
  * Created by oli on 31/01/15.
  */
 public class CompareFragment extends android.app.Fragment {
@@ -68,11 +69,11 @@ public class CompareFragment extends android.app.Fragment {
             String selected = args.getString("selected");
     
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
-            contacts = new ArrayList<String>();
-            contactsids = new ArrayList<String>();
+            contacts = new ArrayList<>();
+            contactsids = new ArrayList<>();
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
 			HashSet<String> account1Set = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + settings.getString(MainActivity.ACCOUNT1, null), null);
-			HashMap<String,String> account1 = new HashMap<String,String>();
+			HashMap<String,String> account1 = new HashMap<>();
 			for(String entry: account1Set) {
 				String contact[] = entry.split(":");
 				account1.put(contact[0],contact[1]);
