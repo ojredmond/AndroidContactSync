@@ -57,7 +57,7 @@ public class CompareFragment extends android.app.Fragment {
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private ArrayList<String> contacts;
-        private ArrayList<String> contactsids;
+        private HashMap<String,String> contactsName;
         private String listItem;
         
         public TabsAdapter(FragmentManager fm) {
@@ -70,7 +70,7 @@ public class CompareFragment extends android.app.Fragment {
     
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
-            contactsids = new ArrayList<>();
+            contactsName = new HashMap<>();
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
 			HashSet<String> account1Set = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + settings.getString(MainActivity.ACCOUNT1, null), null);
 			HashMap<String,String> account1 = new HashMap<>();
@@ -78,17 +78,18 @@ public class CompareFragment extends android.app.Fragment {
 				String contact[] = entry.split(":");
 				account1.put(contact[0],contact[1]);
 			}
-            HashSet set = (HashSet<String>)pref.getStringSet(listItem, null);
-            Iterator setIt = set.iterator();
-            while(setIt.hasNext()) {
-                String contact[] = ((String)setIt.next()).split(":");
-				if (listItem.startsWith(Match.MATCHEDKEY)){
-					contacts.add(account1.get(contact[0]));
-					contactsids.add(contact[0] + "," + contact[1]);
-				} else {
-					contacts.add(contact[0]);
-					contactsids.add(contact[1]);
-				}  
+            HashSet<String> set = (HashSet<String>)pref.getStringSet(listItem, null);
+            for (String aSet : set) {
+                String contact[] = aSet.split(":");
+                if (listItem.startsWith(Match.MATCHEDKEY)) {
+                    String name = account1.get(contact[0]);
+                    contacts.add(contact[0] + "," + contact[1]);
+                    contactsName.put(contact[0] + "," + contact[1], name);
+                } else {
+                    String name = contact[0];
+                    contacts.add(contact[1]);
+                    contactsName.put(contact[1], name);
+                }
             }
         }
 
@@ -98,7 +99,7 @@ public class CompareFragment extends android.app.Fragment {
             Bundle argsDetail = new Bundle();
             argsDetail.putString("listItem", listItem);
             argsDetail.putString("name", contacts.get(i));
-            argsDetail.putString("ids", contactsids.get(i));
+            argsDetail.putString("ids", contactsName.get(contacts.get(i)));
 
             Fragment fragment;
             if (listItem.startsWith(Match.UNMATCHNAMEKEY))
@@ -117,7 +118,7 @@ public class CompareFragment extends android.app.Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            return contacts.get(position);
+            return contactsName.get(contacts.get(position));
         }
     }
 }
