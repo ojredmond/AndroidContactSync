@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Created by oli on 05/02/15.
  */
-public class ListSort implements Comparator<Map<String,String>>
+public class ListSortMap implements Comparator<Map<String,String>>
 {
     public int compare(Map left, Map right) {
         String leftName = (String) left.values().toArray()[0];

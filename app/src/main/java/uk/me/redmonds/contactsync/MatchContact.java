@@ -113,7 +113,7 @@ public class MatchContact extends Fragment
             contactMap.put(NAME, itemArray[0]);
             children.add(contactMap);
         }
-        Collections.sort(children, new ListSort());
+        Collections.sort(children, new ListSortMap());
         childData.add(children);
 
         Map<String, String> curGroupMap2 = new HashMap<String, String>();
