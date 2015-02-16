@@ -63,6 +63,17 @@ public class MainActivity extends ActionBarActivity
             mCurrentFragment = savedInstanceState.getString(STATE_SELECTED_FRAGMENT);
             Toast.makeText(this, mCurrentFragment, Toast.LENGTH_SHORT).show();
             mFromSavedInstanceState = true;
+        } else {
+            Fragment syncF = new SyncFragment();
+
+            // Pass what list to show
+            Bundle args = new Bundle();
+            args.putString("list_type", SyncFragment.OPTIONS);
+            syncF.setArguments(args);
+            fragmentManager.beginTransaction()
+                .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                .commit();
         }
 
         ActionBar actionBar = getSupportActionBar();
