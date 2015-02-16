@@ -64,6 +64,7 @@ public class MainActivity extends ActionBarActivity
             Toast.makeText(this, mCurrentFragment, Toast.LENGTH_SHORT).show();
             mFromSavedInstanceState = true;
         } else {
+            FragmentManager fragmentManager = getFragmentManager();
             Fragment syncF = new SyncFragment();
 
             // Pass what list to show
@@ -71,7 +72,7 @@ public class MainActivity extends ActionBarActivity
             args.putString("list_type", SyncFragment.OPTIONS);
             syncF.setArguments(args);
             fragmentManager.beginTransaction()
-                .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                .add(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
                 .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
                 .commit();
         }
