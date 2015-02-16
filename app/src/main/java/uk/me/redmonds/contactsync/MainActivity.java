@@ -39,12 +39,14 @@ public class MainActivity extends ActionBarActivity
     public static final String TYPE = "com.google";
     public static final String ACCOUNT1 = "account1";
     public static final String ACCOUNT2 = "account2";
+    public static final String STATE_SELECTED_FRAGMENT = "selected_fragment";
     public static String PACKAGE_NAME;
     
     //private SharedPreferences settings;
     private String account1Name;
     private String account2Name;
     private String syncType = "";
+    private Boolean mFromSavedInstanceState = false;
     public Menu mainMenu;
     private List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
 
@@ -55,6 +57,12 @@ public class MainActivity extends ActionBarActivity
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
 	
+        if (savedInstanceState != null) {
+            String mCurrentFragment = savedInstanceState.getString(STATE_SELECTED_FRAGMENT);
+            Toast.makeText(context, mCurrentFragment, Toast.LENGTH_LONG).show();
+            mFromSavedInstanceState = true;
+        }
+
         ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(R.string.app_name);
 		mTitle = getString(R.string.app_name);
@@ -90,14 +98,22 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(STATE_SELECTED_FRAGMENT, "Test");
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
+        if(mFromSavedInstanceState)
+            return;
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new SettingsFragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
-			.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_settings))
+                        .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_settings))
                         .commit();
                 break;
             case 1:
