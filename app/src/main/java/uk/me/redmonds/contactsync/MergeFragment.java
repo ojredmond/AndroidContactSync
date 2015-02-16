@@ -24,7 +24,6 @@ public class MergeFragment extends Fragment
 	private ArrayList<String> ids;
     private MainActivity main;
     private HashMap<String,HashSet<HashMap<String,String>>> contact;
-    private HashSet<String> contacts;
     private LinearLayout layout;
     private Contacts cObject;
     private String listItem;
@@ -45,13 +44,9 @@ public class MergeFragment extends Fragment
         main.setHeading("Merge");
 
         // get stored contact enables rotate top not lose any changes
-        //SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
-        //contact = (HashSet<String>)pref.getStringSet("contactMerge", null);
-        //contacts = (HashSet<String>)pref.getStringSet("contactsMerge", null);
 		if(savedInstanceState != null)
 			contact = (HashMap<String,HashSet<HashMap<String,String>>>)savedInstanceState.getSerializable(STATE_CONTACT);
         //create contacts object
-        //StringList l = new StringList(pref, listItem);
         cObject = new Contacts(main, new HashSet<>(ids));
 
         View contactView = inflater.inflate(R.layout.fragment_merge, container, false);
@@ -127,48 +122,13 @@ public class MergeFragment extends Fragment
         outState.putSerializable(STATE_CONTACT, contact);
     }
 
-    public void onDestroyView() {
-        super.onDestroyView();
-
-        /*contact = new HashSet<String> ();
-        View view;
-        for (int i=0; i < layout.getChildCount(); i++) {
-            view = layout.getChildAt(i);
-            if(view.getTag() != null && !view.getTag().equals("")) {
-                contact.add(view.getContentDescription()
-                        + ";" + ((EditText)view).getText());
-            }
-        }*/
-
-        //SharedPreferences.Editor pref = main.getPreferences(Context.MODE_PRIVATE).edit();
-        //pref.putStringSet("contactMerge", contact);
-        //pref.putStringSet("contactsMerge", cObject.getContacts());
-        //pref.apply();
-    }
-
     OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1)
         {
             switch (p1.getId()) {
                 case R.id.contact_confirm:
-                    /*View view;
-                    ArrayList<String[]> contactItems = new ArrayList<>();
-                    for (int y=0; y < layout.getChildCount(); y++) {
-                        view = layout.getChildAt(y);
-                        if(view.getTag() != null && !view.getTag().equals("")) {
-                            contactItems.add(new String[] {
-                                    (String)view.getContentDescription(),
-                                    ((String)view.getContentDescription()).split(";",2)[1],
-                                    ((EditText)view).getText().toString()});
-                        }
-                    }*/
-
                     if (cObject.saveMergedContact(contact)) {
-                        /*FragmentManager fragMan = main.getSupportFragmentManager();
-                        if (fragMan.getBackStackEntryCount() > 0) {
-                            fragMan.popBackStack();
-                        }*/
                         main.Compare(listType,listItem,null);
                     } else {
                         Toast.makeText(main, "Save Failed", Toast.LENGTH_LONG).show();
