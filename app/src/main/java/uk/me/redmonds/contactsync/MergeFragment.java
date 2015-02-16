@@ -20,7 +20,8 @@ import java.util.HashSet;
 
 public class MergeFragment extends Fragment
 {
-    private ArrayList<String> ids;
+    private final static String STATE_CONTACT = "merge_contact";
+	private ArrayList<String> ids;
     private MainActivity main;
     private HashMap<String,HashSet<HashMap<String,String>>> contact;
     private HashSet<String> contacts;
@@ -47,7 +48,8 @@ public class MergeFragment extends Fragment
         //SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
         //contact = (HashSet<String>)pref.getStringSet("contactMerge", null);
         //contacts = (HashSet<String>)pref.getStringSet("contactsMerge", null);
-
+		if(savedInstanceState != null)
+			contact = (HashMap<String,HashSet<HashMap<String,String>>>)savedInstanceState.getSerializable(STATE_CONTACT);
         //create contacts object
         //StringList l = new StringList(pref, listItem);
         cObject = new Contacts(main, new HashSet<>(ids));
@@ -117,6 +119,12 @@ public class MergeFragment extends Fragment
                 }
             }
         }
+    }
+
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable(STATE_CONTACT, contact);
     }
 
     public void onDestroyView() {
