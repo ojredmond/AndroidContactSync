@@ -57,20 +57,6 @@ public class MainActivity extends ActionBarActivity
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
 	
-        /*if (savedInstanceState = null) {
-            FragmentManager fragmentManager = getFragmentManager();
-            Fragment syncF = new SyncFragment();
-
-            // Pass what list to show
-            Bundle args = new Bundle();
-            args.putString("list_type", SyncFragment.OPTIONS);
-            syncF.setArguments(args);
-            fragmentManager.beginTransaction()
-                .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
-                .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
-                .commit();
-        }*/
-
         ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(R.string.app_name);
 		mTitle = getString(R.string.app_name);
@@ -104,12 +90,6 @@ public class MainActivity extends ActionBarActivity
 
         this.deleteFile("stack.trace");
     }
-
-    /*@Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(STATE_SELECTED_FRAGMENT, mCurrentFragment);
-    }*/
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -291,10 +271,10 @@ public class MainActivity extends ActionBarActivity
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-merge");
 
         //remove sub fragments
-        for (Fragment f : getActiveFragments()) {
+        /*for (Fragment f : getActiveFragments()) {
             if (f.getTag() == null)
                 transaction.remove(f);
-        }
+        }*/
 
         transaction.addToBackStack(null);
 
@@ -308,7 +288,7 @@ public class MainActivity extends ActionBarActivity
         //fragList.add(new WeakReference(fragment));
     }*/
 
-    public ArrayList<Fragment> getActiveFragments() {
+    /*public ArrayList<Fragment> getActiveFragments() {
         ArrayList<Fragment> ret = new ArrayList<Fragment>();
         for(WeakReference<Fragment> ref : fragList) {
             Fragment f = ref.get();
@@ -317,7 +297,7 @@ public class MainActivity extends ActionBarActivity
             }
         }
         return ret;
-    }
+    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
