@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity
 	
         if (savedInstanceState != null) {
             String mCurrentFragment = savedInstanceState.getString(STATE_SELECTED_FRAGMENT);
-            Toast.makeText(getContext(), mCurrentFragment, Toast.LENGTH_LONG).show();
+            Toast.makeText(this, mCurrentFragment, Toast.LENGTH_SHORT).show();
             mFromSavedInstanceState = true;
         }
 
@@ -298,6 +298,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onAttachFragment (Fragment fragment) {
+        Toast.makeText(this, fragment.toString(), Toast.LENGTH_SHORT).show();
         fragList.add(new WeakReference(fragment));
     }
 
