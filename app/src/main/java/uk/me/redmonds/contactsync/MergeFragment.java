@@ -39,7 +39,6 @@ public class MergeFragment extends Fragment
         listItem = args.getString("listItem");
         ids = args.getStringArrayList("ids");
         main = (MainActivity)this.getActivity();
-        //main.showMenuIcon();
 
         main.setHeading("Merge");
 
