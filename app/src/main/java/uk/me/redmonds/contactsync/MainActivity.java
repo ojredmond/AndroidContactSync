@@ -107,8 +107,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        if(mFromSavedInstanceState)
+        if(mFromSavedInstanceState) {
+            mFromSavedInstanceState = false;
             return;
+        }
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
