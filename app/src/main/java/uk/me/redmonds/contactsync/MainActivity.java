@@ -211,7 +211,8 @@ public class MainActivity extends ActionBarActivity
         transaction.commit();
         
         //update the navigation drawer
-        mNavigationDrawerFragment.changeItem(3);
+		if(mNavigationDrawerFragment != null)
+        	mNavigationDrawerFragment.changeItem(3);
     }
 
     public void Compare (String listType, String listItem, String selected) {

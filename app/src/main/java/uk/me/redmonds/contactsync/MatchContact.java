@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.TwoLineListItem;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,8 +24,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-public class MatchContact extends Fragment
-        implements ExpandableListView.OnChildClickListener
+public class MatchContact extends Fragment implements 
+		ExpandableListView.OnChildClickListener,
+		ExpandableListView.OnGroupClickListener
 {
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
@@ -36,6 +38,13 @@ public class MatchContact extends Fragment
     private String name;
     private SharedPreferences pref;
 
+	public boolean onGroupClick(ExpandableListView p1, View p2, int p3, long p4)
+    {
+		if(((String)((TwoLineListItem)p2).getText1().getText()).endsWith("(0)"))
+			return true;
+		else
+			return false;
+	}
     public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5)
     {
         //unmatched list
@@ -95,11 +104,7 @@ public class MatchContact extends Fragment
         List<Map<String, String>> children;
         Map<String, String> contactMap;
 
-        Map<String, String> curGroupMap1 = new HashMap<>();
-        groupData.add(curGroupMap1);
-        curGroupMap1.put(NAME, "Unmatched");
-        curGroupMap1.put(DESCRIPTION, accountOther);
-
+        
         pref = main.getPreferences(Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>)pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<String, String> ();
@@ -115,13 +120,13 @@ public class MatchContact extends Fragment
         }
         Collections.sort(children, new ListSortMap());
         childData.add(children);
+		
+		Map<String, String> curGroupMap1 = new HashMap<>();
+        groupData.add(curGroupMap1);
+        curGroupMap1.put(NAME, "Unmatched (" + children.size() + ")");
+        curGroupMap1.put(DESCRIPTION, accountOther);
 
-        Map<String, String> curGroupMap2 = new HashMap<String, String>();
-        groupData.add(curGroupMap2);
-        curGroupMap2.put(NAME, "Matched");
-        curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
         HashMap<String,String> account = new HashMap<>();
         for(String entry: accountSet) {
@@ -142,6 +147,11 @@ public class MatchContact extends Fragment
         }
         childData.add(children);
 
+		Map<String, String> curGroupMap2 = new HashMap<String, String>();
+        groupData.add(curGroupMap2);
+        curGroupMap2.put(NAME, "Matched (" + children.size() + ")");
+        curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
+
         // Set up our adapter
         SimpleExpandableListAdapter mAdapter = new SimpleExpandableListAdapter(
                 main,
@@ -157,6 +167,7 @@ public class MatchContact extends Fragment
 
         listView.setAdapter(mAdapter);
         listView.setOnChildClickListener(this);
+		listView.setOnGroupClickListener(this);
 
         return view;
     }
