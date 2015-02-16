@@ -231,8 +231,8 @@ public class MainActivity extends ActionBarActivity
         transaction.commit();
         
         //update the navigation drawer
-		if(mNavigationDrawerFragment != null)
-        	mNavigationDrawerFragment.changeItem(3);
+        if(mNavigationDrawerFragment != null)
+            mNavigationDrawerFragment.changeItem(3);
     }
 
     public void Compare (String listType, String listItem, String selected) {
@@ -301,7 +301,7 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onAttachFragment (Fragment fragment) {
-        //Toast.makeText(this, "AF:" + fragment.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "AF:" + fragment.toString(), Toast.LENGTH_SHORT).show();
         mCurrentFragment = fragment.getClass().getName();
         //fragList.add(new WeakReference(fragment));
     }
