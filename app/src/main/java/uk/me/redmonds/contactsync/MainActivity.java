@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity
 	
         if (savedInstanceState != null) {
             String mCurrentFragment = savedInstanceState.getString(STATE_SELECTED_FRAGMENT);
-            Toast.makeText(context, mCurrentFragment, Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), mCurrentFragment, Toast.LENGTH_LONG).show();
             mFromSavedInstanceState = true;
         }
 
