@@ -1,6 +1,5 @@
 package uk.me.redmonds.contactsync;
 
-import android.app.ActionBar;
 import android.app.ListFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -18,22 +17,25 @@ import java.util.List;
 import java.util.Map;
 
 public class SyncFragment extends ListFragment {
-    //private ArrayList<String> values = new ArrayList<String>();
-    private List<Map<String, String>> values = new ArrayList<Map<String, String>>();
-    private MainActivity main;
-    private SharedPreferences pref;
-    private SharedPreferences settings;
-    private String list_type;
-    private String list_item;
     public static final String MATCH = "Perform Matching";
     public static final String FULL = "Full Sync";
     public static final String SYNC = "Sync";
-    private static final String LAST = "View Last Matched Results";
     public static final String OPTIONS = "options";
     public static final String SUMMARY = "summary";
     public static final String DUP = "Duplicates from Account";
     public static final String UNMATCHED = "Unmatched from Account";
     public static final String MATCHED = "Review matches";
+    private static final String LAST = "View Last Matched Results";
+    private static final String NODUP = "No Duplicates";
+    private final static String NAME = "Name";
+    private final static String DESCRIPTION = "Desc";
+    //private ArrayList<String> values = new ArrayList<String>();
+    private List<Map<String, String>> values = new ArrayList<>();
+    private MainActivity main;
+    private SharedPreferences pref;
+    private SharedPreferences settings;
+    private String list_type;
+    private String list_item;
     private String account1Name;
     private String account2Name;
     private String dup1;
@@ -42,10 +44,6 @@ public class SyncFragment extends ListFragment {
     private String un2;
     private HashSet<String> dup1Name;
     private HashSet<String> dup2Name;
-    private static final String NODUP = "No Duplicates";
-    private final static String NAME = "Name";
-    private final static String DESCRIPTION = "Desc";
-
     private HashMap<String, String> value;
 
     @Override
@@ -58,13 +56,6 @@ public class SyncFragment extends ListFragment {
         list_item = args.getString("list_item", null);
 
         main = (MainActivity)this.getActivity();
-        //main.showMenuIcon();
-        ActionBar actionBar = main.getActionBar();
-        //actionBar.setDisplayHomeAsUpEnabled(true);
-        //actionBar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
-        //actionBar.setDisplayShowTitleEnabled(true);
-        //actionBar.setDisplayShowHomeEnabled(true);
-        //actionBar.show();
 
         pref = main.getPreferences(Context.MODE_PRIVATE);
         settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
@@ -84,7 +75,7 @@ public class SyncFragment extends ListFragment {
         if (list_type.equals(OPTIONS) || !pref.getBoolean(Match.SYNCMATCHED,false)) {
             //actionBar.setTitle(title);
             //actionBar.setDisplayHomeAsUpEnabled(false);
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,MATCH);
             if (account1Name == null || account2Name == null) {
                 value.put(DESCRIPTION, "Accounts need to be set");
@@ -97,16 +88,13 @@ public class SyncFragment extends ListFragment {
             values.add(value);
 
             if (pref.getBoolean(Match.SYNCMATCHED,false)) {
-                value = new HashMap <String, String>();
+                value = new HashMap<>();
                 value.put(NAME,LAST);
                 values.add(value);
             }
         } else if (list_type.equals(SUMMARY)) {
-            //actionBar.setTitle(R.string.title_activity_results);
-            if (list_item != null && list_item.startsWith("dup")) {
-                showDuplicates(list_item);
-            } else if (account1Count == 0 && account2Count == 0) {
-                value = new HashMap <String, String>();
+            if (account1Count == 0 && account2Count == 0) {
+                value = new HashMap<>();
                 value.put(NAME, "ERROR");
                 value.put(DESCRIPTION, "Their are no contacts in either account");
                 values.add(value);
@@ -121,11 +109,11 @@ public class SyncFragment extends ListFragment {
                 && pref.getBoolean(Match.SYNCMATCHED,false)
                 && (dup1Name != null && dup1Name.size() > 0)
                 && (dup2Name != null && dup2Name.size() > 0)) {
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,FULL);
             values.add(value);
             //add logic to detect a full sync has been performed
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,SYNC);
             values.add(value);
         }
@@ -141,7 +129,7 @@ public class SyncFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        if (values.get((int)id).get(NAME) == MATCH) {
+        if (values.get((int) id).get(NAME).equals(MATCH)) {
             settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
             account1Name = settings.getString(MainActivity.ACCOUNT1, null);
             account2Name = settings.getString(MainActivity.ACCOUNT2, null);
@@ -151,8 +139,8 @@ public class SyncFragment extends ListFragment {
                 return;
             }
 
-            main.matchStatus(values.get((int)id).get(NAME));
-        } else if (values.get((int)id).get(NAME) == LAST) {
+            main.matchStatus();
+        } else if (values.get((int) id).get(NAME).equals(LAST)) {
             main.showResults();
         } else if (values.get((int)id).get(NAME).startsWith(DUP)) {
             switch (values.get((int)id).get(NAME).charAt(DUP.length())) {
@@ -198,51 +186,46 @@ public class SyncFragment extends ListFragment {
         HashSet<String> matched1 = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
         if (dup1Name != null && dup1Name.size() > 0) {
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,DUP + "1 (" + dup1Name.size() + ")");
             value.put(DESCRIPTION, account1Name);
             values.add(value);
         } else if (account1Name.equals(account2Name)) {
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,NODUP);
             value.put(DESCRIPTION, account1Name);
             values.add(value);
         }
 
         if (!account1Name.equals(account2Name) && dup2Name != null && dup2Name.size() > 0) {
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,DUP + "2 (" + dup2Name.size() + ")");
             value.put(DESCRIPTION, account2Name);
             values.add(value);
         }
 
         if (unmatched1Name != null && unmatched1Name.size() > 0) {
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,UNMATCHED + "1 (" + unmatched1Name.size() + ")");
             value.put(DESCRIPTION, account1Name);
             values.add(value);
         }
 
         if (unmatched2Name != null && unmatched2Name.size() > 0) {
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,UNMATCHED + "2 (" + unmatched2Name.size() + ")");
             value.put(DESCRIPTION, account2Name);
             values.add(value);
         }
 
         if (!account1Name.equals(account2Name) && matched1 != null && matched1.size() > 0) {
-            value = new HashMap <String, String>();
+            value = new HashMap<>();
             value.put(NAME,MATCHED + " (" + matched1.size() + ")");
             value.put(DESCRIPTION, account1Name + " " + account2Name);
             values.add(value);
         }
     }
 
-    public void showDuplicates(String item) {
-        StringList dup = new StringList(pref, item);
-        //values.addAll(dup.getHashSet());
-    }
-    
     @Override
     public void onResume() {
         super.onResume();
