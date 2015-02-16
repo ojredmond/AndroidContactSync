@@ -48,6 +48,7 @@ public class MainActivity extends ActionBarActivity
     private String account2Name;
     private String syncType = "";
     private Boolean mFromSavedInstanceState = false;
+    private String mCurrentFragment;
     public Menu mainMenu;
     private List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
 
@@ -59,7 +60,7 @@ public class MainActivity extends ActionBarActivity
         PACKAGE_NAME = getApplicationContext().getPackageName();
 	
         if (savedInstanceState != null) {
-            String mCurrentFragment = savedInstanceState.getString(STATE_SELECTED_FRAGMENT);
+            mCurrentFragment = savedInstanceState.getString(STATE_SELECTED_FRAGMENT);
             Toast.makeText(this, mCurrentFragment, Toast.LENGTH_SHORT).show();
             mFromSavedInstanceState = true;
         }
@@ -101,7 +102,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString(STATE_SELECTED_FRAGMENT, "Test");
+        outState.putString(STATE_SELECTED_FRAGMENT, mCurrentFragment);
     }
 
     @Override
@@ -298,7 +299,8 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onAttachFragment (Fragment fragment) {
-        Toast.makeText(this, "AF:" + fragment.toString(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "AF:" + fragment.toString(), Toast.LENGTH_SHORT).show();
+        mCurrentFragment = fragment.toString();
         fragList.add(new WeakReference(fragment));
     }
 
