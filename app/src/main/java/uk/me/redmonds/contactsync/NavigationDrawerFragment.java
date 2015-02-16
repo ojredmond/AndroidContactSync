@@ -72,7 +72,7 @@ public class NavigationDrawerFragment extends Fragment {
             mFromSavedInstanceState = true;
         }
 
-        // Select either the default item (0) or the last selected item.
+        // Select either the default item (1) or the last selected item.
         selectItem(mCurrentSelectedPosition);
     }
 
@@ -182,9 +182,10 @@ public class NavigationDrawerFragment extends Fragment {
         if (mDrawerLayout != null) {
             mDrawerLayout.closeDrawer(mFragmentContainerView);
         }
-        if (mCallbacks != null) {
-            //mCallbacks.onNavigationDrawerItemSelected(position);
+        if (mCallbacks != null && !mFromSavedInstanceState) {
+            mCallbacks.onNavigationDrawerItemSelected(position);
         }
+        mFromSavedInstanceState = false;
     }
 
     @Override
