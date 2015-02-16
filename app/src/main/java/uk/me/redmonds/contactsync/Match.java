@@ -1,7 +1,5 @@
 package uk.me.redmonds.contactsync;
 
-//import android.content.ContentResolver;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
