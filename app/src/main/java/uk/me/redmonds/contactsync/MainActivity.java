@@ -99,18 +99,21 @@ public class MainActivity extends ActionBarActivity
         this.deleteFile("stack.trace");
     }
 
-    @Override
+    /*@Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(STATE_SELECTED_FRAGMENT, mCurrentFragment);
-    }
+    }*/
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         if(mFromSavedInstanceState) {
+            Toast.makeText(this, "Restored", Toast.LENGTH_SHORT).show();
             mFromSavedInstanceState = false;
             return;
         }
+
+        Toast.makeText(this, "New", Toast.LENGTH_SHORT).show();
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
@@ -299,12 +302,12 @@ public class MainActivity extends ActionBarActivity
         transaction.commit();
     }
 
-    @Override
+    /*@Override
     public void onAttachFragment (Fragment fragment) {
         Toast.makeText(this, "AF:" + fragment.toString(), Toast.LENGTH_SHORT).show();
         mCurrentFragment = fragment.getClass().getName();
         //fragList.add(new WeakReference(fragment));
-    }
+    }*/
 
     public ArrayList<Fragment> getActiveFragments() {
         ArrayList<Fragment> ret = new ArrayList<Fragment>();
