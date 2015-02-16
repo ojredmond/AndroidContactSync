@@ -3,7 +3,6 @@ package uk.me.redmonds.contactsync;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +12,11 @@ import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
-import android.widget.TwoLineListItem;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -36,50 +32,44 @@ public class MatchContact extends Fragment implements
     private HashMap<String,String> matchedList;
     private String listItem;
     private String name;
+    private OnClickListener ButtonClick = new OnClickListener() {
+        public void onClick(View p1) {
+            if (p1.getId() == R.id.delete_contact) {
+                HashSet<String> list = new HashSet<>();
+                list.add(String.valueOf(id));
+                Contacts contacts = new Contacts(main, list);
+                if (contacts.deleteContacts())
+                    contacts.removeEntry(listItem, id, name);
+            }
+
+        }
+    };
     private SharedPreferences pref;
 
 	public boolean onGroupClick(ExpandableListView p1, View p2, int p3, long p4)
     {
-		if(((String)((TwoLineListItem)p2).getText1().getText()).endsWith("(0)"))
-			return true;
-		else
-			return false;
-	}
-    public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5)
-    {
+        return ((String) ((TextView) p2.findViewById(android.R.id.text1)).getText()).endsWith("(0)");
+    }
+
+    public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5) {
         //unmatched list
         if (p3 == 0) {
-            String linkName = (String) ((TextView)p2).getText();
+            String linkName = (String) ((TextView) p2).getText();
             ArrayList<String> ids = new ArrayList<>();
             ids.add(id);
             ids.add(unmatchedList.get(linkName));
-            main.Merge(name,ids,listItem);
-        //matched list
+            main.Merge(name, ids, listItem);
+            //matched list
         } else if (p3 == 1) {
-            String linkName = (String) ((TextView)p2).getText();
+            String linkName = (String) ((TextView) p2).getText();
             ArrayList<String> ids = new ArrayList<>();
             ids.add(id);
-            for(String i: matchedList.get(linkName).split(":"))
-                ids.add(i);
-            main.Merge(name,ids,listItem);
+            Collections.addAll(ids, matchedList.get(linkName).split(":"));
+            main.Merge(name, ids, listItem);
         }
 
         return false;
     }
-
-    private OnClickListener ButtonClick = new OnClickListener() {
-        public void onClick(View p1)
-        {
-            if (p1.getId() == R.id.delete_contact) {
-                HashSet<String> list = new HashSet<String>();
-                list.add(String.valueOf(id));
-                Contacts contacts = new Contacts(main, list);
-                if (contacts.deleteContacts())
-                    contacts.removeEntry(listItem,id,name);
-            }
-    
-        }
-    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -107,14 +97,13 @@ public class MatchContact extends Fragment implements
         
         pref = main.getPreferences(Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>)pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
-        unmatchedList = new HashMap<String, String> ();
-        children = new ArrayList<Map<String, String>>();
+        unmatchedList = new HashMap<>();
+        children = new ArrayList<>();
         // To get the Iterator use the iterator() operation
-        Iterator umIt = um.iterator();
-        while(umIt.hasNext()) {
-            String[] itemArray = ((String)umIt.next()).split(":");
+        for (String anUm : um) {
+            String[] itemArray = (anUm).split(":");
             unmatchedList.put(itemArray[0], itemArray[1]);
-            contactMap = new HashMap<String, String> ();
+            contactMap = new HashMap<>();
             contactMap.put(NAME, itemArray[0]);
             children.add(contactMap);
         }
@@ -135,19 +124,19 @@ public class MatchContact extends Fragment implements
         }
 
         HashSet<String> md = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
-        matchedList = new HashMap<String, String> ();
-        children = new ArrayList<Map<String, String>>();
+        matchedList = new HashMap<>();
+        children = new ArrayList<>();
         for (String item : md) {
             String[] itemArray = (item).split(":");
             String itemName = account.get(itemArray[0]);
             matchedList.put(itemName, item);
-            contactMap = new HashMap<String, String>();
+            contactMap = new HashMap<>();
             contactMap.put(NAME, itemName);
             children.add(contactMap);
         }
         childData.add(children);
 
-		Map<String, String> curGroupMap2 = new HashMap<String, String>();
+        Map<String, String> curGroupMap2 = new HashMap<>();
         groupData.add(curGroupMap2);
         curGroupMap2.put(NAME, "Matched (" + children.size() + ")");
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);

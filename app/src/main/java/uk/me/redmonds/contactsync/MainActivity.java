@@ -10,45 +10,31 @@ import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends ActionBarActivity
         implements StatusFragment.OnViewCreatedListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks {
 
+    public static final String TYPE = "com.google";
+    public static final String ACCOUNT1 = "account1";
+    public static final String ACCOUNT2 = "account2";
+    public static String PACKAGE_NAME;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     NavigationDrawerFragment mNavigationDrawerFragment;
-
     /**
-     * Used to store the last screen title. For use in {@link #restoreActionBar()}.
+     * Used to store the last screen title.
      */
     private CharSequence mTitle = "";
-
-    public static final String TYPE = "com.google";
-    public static final String ACCOUNT1 = "account1";
-    public static final String ACCOUNT2 = "account2";
-    public static final String STATE_SELECTED_FRAGMENT = "selected_fragment";
-    public static String PACKAGE_NAME;
-    
-    //private SharedPreferences settings;
-    private String account1Name;
-    private String account2Name;
     private String syncType = "";
-    public Menu mainMenu;
-    private List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,8 +66,6 @@ public class MainActivity extends ActionBarActivity
             while((line = reader.readLine()) != null) {
                 trace += line+"\n";
             }
-        } catch(FileNotFoundException fnfe) {
-            return;
         } catch(IOException ioe) {
             return;
         }
@@ -136,22 +120,7 @@ public class MainActivity extends ActionBarActivity
 		
     }
 
-    public void restoreActionBar() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(true);
-        setHeading(mTitle);
-    }
-
-    public void syncStatus (String type) {
-        syncType = type;
-
-        // rest stored results and sync matched to enable full sync to be run
-        if (syncType == SyncFragment.FULL) {
-
-        }
-    }
-
-    public void matchStatus (String type) {
+    public void matchStatus() {
         // get accounts to matched
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String account1Name = pref.getString(ACCOUNT1, null);
@@ -168,7 +137,7 @@ public class MainActivity extends ActionBarActivity
         results.remove(Match.MATCHEDKEY + account2Name + ":" + account1Name);
         results.remove(Match.ACCOUNTKEY + account1Name + ":" + account2Name);
         results.remove(Match.ACCOUNTKEY + account2Name + ":" + account1Name);
-        results.commit();
+        results.apply();
 
         // Create fragment and give it an argument specifying the article it should show
         StatusFragment newFragment = new StatusFragment();
@@ -263,41 +232,17 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences.Editor pref = getPreferences(Context.MODE_PRIVATE).edit();
         pref.remove("contactMerge");
         pref.remove("contactsMerge");
-        pref.commit();
+        pref.apply();
 
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-merge");
 
-        //remove sub fragments
-        /*for (Fragment f : getActiveFragments()) {
-            if (f.getTag() == null)
-                transaction.remove(f);
-        }*/
-
         transaction.addToBackStack(null);
 
         transaction.commit();
     }
-
-    /*@Override
-    public void onAttachFragment (Fragment fragment) {
-        Toast.makeText(this, "AF:" + fragment.toString(), Toast.LENGTH_SHORT).show();
-        mCurrentFragment = fragment.getClass().getName();
-        //fragList.add(new WeakReference(fragment));
-    }*/
-
-    /*public ArrayList<Fragment> getActiveFragments() {
-        ArrayList<Fragment> ret = new ArrayList<Fragment>();
-        for(WeakReference<Fragment> ref : fragList) {
-            Fragment f = ref.get();
-            if(f != null && f.isVisible()) {
-                ret.add(f);
-            }
-        }
-        return ret;
-    }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -305,9 +250,6 @@ public class MainActivity extends ActionBarActivity
          * The action bar home/up action should open or close the drawer.
          * mDrawerToggle will take care of this.
          */
-        if (mNavigationDrawerFragment.mDrawerToggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
+        return mNavigationDrawerFragment.mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
 }

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -36,17 +35,14 @@ public class NavigationDrawerFragment extends Fragment {
      * expands it. This shared preference tracks this.
      */
     private static final String PREF_USER_LEARNED_DRAWER = "navigation_drawer_learned";
-
-    /**
-     * A pointer to the current callbacks instance (the Activity).
-     */
-    private NavigationDrawerCallbacks mCallbacks;
-
     /**
      * Helper component that ties the action bar to the navigation drawer.
      */
     public ActionBarDrawerToggle mDrawerToggle;
-
+    /**
+     * A pointer to the current callbacks instance (the Activity).
+     */
+    private NavigationDrawerCallbacks mCallbacks;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerListView;
     private View mFragmentContainerView;
@@ -109,9 +105,9 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerListView;
     }
 
-    public boolean isDrawerOpen() {
+    /*public boolean isDrawerOpen() {
         return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
-    }
+    }*/
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
@@ -144,10 +140,11 @@ public class NavigationDrawerFragment extends Fragment {
             }
  
             public void onDrawerOpened(View drawerView) {
-                Toast.makeText(getActivity(), "Open", Toast.LENGTH_LONG).show();
-                if (!isAdded()) {
+                //Toast.makeText(getActivity(), "Open", Toast.LENGTH_LONG).show();
+                /*if (!isAdded()) {
                     return;
-                }
+                }*/
+                mUserLearnedDrawer = true;
                 mActionBar.setTitle(getString(R.string.app_name));
             }
         };
@@ -210,6 +207,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
+        outState.putBoolean(PREF_USER_LEARNED_DRAWER, mUserLearnedDrawer);
     }
 
     @Override
@@ -223,11 +221,11 @@ public class NavigationDrawerFragment extends Fragment {
      * Per the navigation drawer design guidelines, updates the action bar to show the global app
      * 'context', rather than just what's in the current screen.
      */
-    private void showGlobalContextActionBar() {
+    /*private void showGlobalContextActionBar() {
         mActionBar.setDisplayShowTitleEnabled(true);
-        mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+        //mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
         mActionBar.setTitle(R.string.app_name);
-    }
+    }*/
 
     /**
      * Callbacks interface that all activities using this fragment must implement.

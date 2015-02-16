@@ -13,10 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.*;
 
 /**
  * Fragment used for comparison adds tabs to views
@@ -74,8 +73,7 @@ public class CompareFragment extends android.app.Fragment {
             //get data to display
             Bundle args = getArguments();
             listItem = args.getString("listItem");
-            String selected = args.getString("selected");
-    
+
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
             

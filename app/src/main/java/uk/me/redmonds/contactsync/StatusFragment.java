@@ -7,35 +7,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class StatusFragment extends Fragment {
     private OnViewCreatedListener mCallback;
     private TextView log;
 
-    //Container Activity must implement this interface
-    public interface OnViewCreatedListener {
-        public void onViewCreated(View statusView);
-    }
-
     @Override
-    public void onAttach (Activity activity) {
+    public void onAttach(Activity activity) {
         super.onAttach(activity);
-        
+
         // make sure activity has implemented callback interface
         try {
-            mCallback = (OnViewCreatedListener)activity;
+            mCallback = (OnViewCreatedListener) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException (activity.toString() + " must implement OnViewCreatedListener");
+            throw new ClassCastException(activity.toString() + " must implement OnViewCreatedListener");
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        
+
         //set actionbar title
-        ((MainActivity)getActivity()).setHeading(getString(R.string.title_logs));
+        ((MainActivity) getActivity()).setHeading(getString(R.string.title_logs));
     }
 
     @Override
@@ -44,33 +38,20 @@ public class StatusFragment extends Fragment {
 
         View statusView = inflater.inflate(R.layout.fragment_status, container, false);
 
-        /*MainActivity main = (MainActivity)this.getActivity();
-        main.showMenuIcon();
-        ActionBar actionBar = main.getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setNavigationMode(ActionBar.DISPLAY_HOME_AS_UP);
-        actionBar.setDisplayShowTitleEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(true);
-        actionBar.show();
-        actionBar.setTitle(R.string.title_activity_main);*/
-
         mCallback.onViewCreated(statusView);
-        log = (TextView)statusView.findViewById(R.id.statuslog);
+        log = (TextView) statusView.findViewById(R.id.statuslog);
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            log.setText (savedInstanceState.getString("log", ""));
+            log.setText(savedInstanceState.getString("log", ""));
         }
 
         // Inflate the layout for this fragment
         return statusView;
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-
-        //outState.putString("log", ((String)log.getText()));
-        Toast.makeText(getActivity(), "log", Toast.LENGTH_LONG ).show();
+    //Container Activity must implement this interface
+    public interface OnViewCreatedListener {
+        public void onViewCreated(View statusView);
     }
 }
