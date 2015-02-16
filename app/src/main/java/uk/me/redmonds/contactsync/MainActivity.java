@@ -47,8 +47,6 @@ public class MainActivity extends ActionBarActivity
     private String account1Name;
     private String account2Name;
     private String syncType = "";
-    private Boolean mFromSavedInstanceState = false;
-    private String mCurrentFragment;
     public Menu mainMenu;
     private List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
 
@@ -59,11 +57,7 @@ public class MainActivity extends ActionBarActivity
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
 	
-        if (savedInstanceState != null) {
-            mCurrentFragment = savedInstanceState.getString(STATE_SELECTED_FRAGMENT);
-            Toast.makeText(this, mCurrentFragment, Toast.LENGTH_SHORT).show();
-            mFromSavedInstanceState = true;
-        } else {
+        /*if (savedInstanceState = null) {
             FragmentManager fragmentManager = getFragmentManager();
             Fragment syncF = new SyncFragment();
 
@@ -72,10 +66,10 @@ public class MainActivity extends ActionBarActivity
             args.putString("list_type", SyncFragment.OPTIONS);
             syncF.setArguments(args);
             fragmentManager.beginTransaction()
-                .add(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
                 .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
                 .commit();
-        }
+        }*/
 
         ActionBar actionBar = getSupportActionBar();
 		actionBar.setTitle(R.string.app_name);
@@ -119,13 +113,6 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-        if(mFromSavedInstanceState) {
-            Toast.makeText(this, "Restored", Toast.LENGTH_SHORT).show();
-            mFromSavedInstanceState = false;
-            return;
-        }
-
-        Toast.makeText(this, "New", Toast.LENGTH_SHORT).show();
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getFragmentManager();
         switch (position) {
