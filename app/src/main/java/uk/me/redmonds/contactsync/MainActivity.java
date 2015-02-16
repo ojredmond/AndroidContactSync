@@ -300,8 +300,8 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onAttachFragment (Fragment fragment) {
         //Toast.makeText(this, "AF:" + fragment.toString(), Toast.LENGTH_SHORT).show();
-        mCurrentFragment = fragment.toString();
-        fragList.add(new WeakReference(fragment));
+        mCurrentFragment = fragment.getClass();
+        //fragList.add(new WeakReference(fragment));
     }
 
     public ArrayList<Fragment> getActiveFragments() {
