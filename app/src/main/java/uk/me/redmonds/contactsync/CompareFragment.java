@@ -58,12 +58,12 @@ public class CompareFragment extends android.app.Fragment {
         return mViewPager;
     }
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		//outState.putInt("tab", mViewPager.getCurrentItem());
-		super.onSaveInstanceState(outState);
-	}
-
+/*    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putInt("tab", mViewPager.getCurrentItem());
+    }
+*/
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private ArrayList<HashMap<String,String>> contacts;
         private String listItem;
