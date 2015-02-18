@@ -93,10 +93,9 @@ public class Match
             publishProgress(message);
 
             ContentResolver mContentResolver = mainActivity.getContentResolver();
-            Uri rawContactUri = RawContacts.CONTENT_URI;
-            rawContactUri.buildUpon()
+            Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
                     .appendQueryParameter(RawContacts.ACCOUNT_NAME, account1Name)
-                    .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.TYPE)
+                    .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
                     .appendQueryParameter(RawContacts.DELETED, "0")
                     .build();
 
@@ -104,8 +103,6 @@ public class Match
                     rawContactUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
                     null, null, RawContacts.DISPLAY_NAME_PRIMARY);
-
-            //new String[]{RawContacts.SOURCE_ID, Entity.DATA_ID, Entity.MIMETYPE, Entity.DATA1}
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
@@ -172,7 +169,7 @@ public class Match
             cursor = mContentResolver.query(
                     RawContacts.CONTENT_URI,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
-                    RawContacts.ACCOUNT_TYPE + " == '" + MainActivity.TYPE + "'"
+                    RawContacts.ACCOUNT_TYPE + " == '" + MainActivity.ACCOUNT_TYPE + "'"
                             + " AND " + RawContacts.ACCOUNT_NAME + " == '" + account2Name + "' "
                             + " AND " + RawContacts.DELETED + " == 0",
                     null, RawContacts.DISPLAY_NAME_PRIMARY);
