@@ -44,6 +44,7 @@ public class Contacts {
     private static String account2Name;
     private static HashSet<String> account1;
     private static HashSet<String> account2;
+    public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
     public static final String[] TYPES = {
         StructuredName.CONTENT_ITEM_TYPE,
         Phone.CONTENT_ITEM_TYPE,
