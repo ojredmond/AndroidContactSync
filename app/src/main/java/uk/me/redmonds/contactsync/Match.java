@@ -88,7 +88,7 @@ public class Match
             
             Cursor cursor = mContentResolver.query(
                 rawContactUri,
-                new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY,
+                new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
                 null, null, RawContacts.DISPLAY_NAME_PRIMARY);
             
             //new String[]{RawContacts.SOURCE_ID, Entity.DATA_ID, Entity.MIMETYPE, Entity.DATA1}
