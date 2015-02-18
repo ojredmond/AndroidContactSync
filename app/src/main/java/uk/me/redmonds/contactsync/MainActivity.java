@@ -149,7 +149,7 @@ public class MainActivity extends ActionBarActivity
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_logs));
-        transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_logs));
+        //transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_logs));
 
         // Commit the transaction
         transaction.commit();
