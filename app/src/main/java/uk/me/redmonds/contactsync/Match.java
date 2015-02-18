@@ -244,22 +244,29 @@ public class Match
             results.putStringSet(DUPKEY + account1Name, dup1Name);
             results.apply();
 
-            HashSet<String> dup2Name = new HashSet<>();
-            for (Map.Entry<String, String> e : dup2List.entrySet()) {
-                dup2Name.add(e.getKey() + ":" + e.getValue());
+            HashSet<String> account1Set = new HashSet<>();
+            for (Map.Entry<String, Long> e : account1.entrySet()) {
+                account1Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
             }
-            results.putStringSet(DUPKEY + account2Name, dup2Name);
-            results.apply();
-
-            HashSet<String> unmatched1Name = new HashSet<>();
-            for (Map.Entry<String, Long> e : unmatched1.entrySet()) {
-                unmatched1Name.add(e.getKey() + ":" + e.getValue());
-            }
-            results.putStringSet(UNMATCHNAMEKEY + account1Name + ":" + account2Name, unmatched1Name);
-
+            results.putStringSet(ACCOUNTKEY + account1Name, account1Set);
             results.apply();
 
             if (!account2Name.equals(account1Name)) {
+                HashSet<String> dup2Name = new HashSet<>();
+                for (Map.Entry<String, String> e : dup2List.entrySet()) {
+                    dup2Name.add(e.getKey() + ":" + e.getValue());
+                }
+                results.putStringSet(DUPKEY + account2Name, dup2Name);
+                results.apply();
+
+                HashSet<String> unmatched1Name = new HashSet<>();
+                for (Map.Entry<String, Long> e : unmatched1.entrySet()) {
+                    unmatched1Name.add(e.getKey() + ":" + e.getValue());
+                }
+                results.putStringSet(UNMATCHNAMEKEY + account1Name + ":" + account2Name, unmatched1Name);
+
+                results.apply();
+
                 HashSet<String> unmatched2Name = new HashSet<>();
                 for (Map.Entry<String, Long> e : unmatched2.entrySet()) {
                     unmatched2Name.add(e.getKey() + ":" + e.getValue());
@@ -280,13 +287,6 @@ public class Match
                     matched2Name.add(e.getKey() + ":" + e.getValue());
                 }
                 results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name);
-                results.apply();
-
-                HashSet<String> account1Set = new HashSet<>();
-                for (Map.Entry<String, Long> e : account1.entrySet()) {
-                    account1Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
-                }
-                results.putStringSet(ACCOUNTKEY + account1Name, account1Set);
                 results.apply();
 
                 HashSet<String> account2Set = new HashSet<>();
