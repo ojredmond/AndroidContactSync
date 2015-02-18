@@ -79,13 +79,25 @@ public class Match
             publishProgress(new String[] {message});
 
             ContentResolver mContentResolver = mainActivity.getContentResolver();
-            cursor = mContentResolver.query(
+            Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
+                .appendQueryParameter(RawContacts.ACCOUNT_NAME, account1Name)
+                .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.TYPE)
+                .appendQueryParameter(RawContacts.DELETED, 0)
+                .build();
+            
+            Cursor cursor = getContentResolver().query(
+                rawContactUri,
+                new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY,
+                null, null, RawContacts.DISPLAY_NAME_PRIMARY);
+            
+            //new String[]{RawContacts.SOURCE_ID, Entity.DATA_ID, Entity.MIMETYPE, Entity.DATA1}
+            /*cursor = mContentResolver.query(
                     RawContacts.CONTENT_URI,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
                     RawContacts.ACCOUNT_TYPE + " == '" + MainActivity.TYPE + "'"
                             + " AND " + RawContacts.ACCOUNT_NAME + " == '" + account1Name + "' "
                             + " AND " + RawContacts.DELETED + " == 0",
-                    null, RawContacts.DISPLAY_NAME_PRIMARY);
+                    null, RawContacts.DISPLAY_NAME_PRIMARY);*/
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
