@@ -1,8 +1,8 @@
 package uk.me.redmonds.contactsync;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,12 +17,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
-public class MergeFragment extends Fragment
-{
+public class MergeFragment extends Fragment {
     private final static String STATE_CONTACT = "merge_contact";
-	private ArrayList<String> ids;
+    private ArrayList<String> ids;
     private MainActivity main;
-    private HashMap<String,HashSet<HashMap<String,String>>> contact;
+    private HashMap<String, HashSet<HashMap<String, String>>> contact;
     private LinearLayout layout;
     private Contacts cObject;
     private String listItem;
@@ -104,7 +103,7 @@ public class MergeFragment extends Fragment
         if (savedInstanceState != null)
             contact = (HashMap<String, HashSet<HashMap<String, String>>>) savedInstanceState.getSerializable(STATE_CONTACT);
         //create contacts object
-        cObject = new Contacts(main, new HashSet<>(ids));
+        cObject = new Contacts(main, listItem, new HashSet<>(ids));
 
         View contactView = inflater.inflate(R.layout.fragment_merge, container, false);
         // add listeners to buttons

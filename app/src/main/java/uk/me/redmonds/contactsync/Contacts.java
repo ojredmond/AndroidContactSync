@@ -75,20 +75,23 @@ public class Contacts {
     private static String account2Name;
     private static HashSet<String> account1;
     private static HashSet<String> account2;
+    private String listName;
     private HashSet<String> list;
     private HashMap<String, String> accounts = new HashMap<>();
     private MainActivity main;
     private HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = new HashMap<>();
 
-    Contacts (Activity m, HashSet<String> ids) {
+    Contacts(Activity m, String l, HashSet<String> ids) {
         main = (MainActivity)m;
+        listName = l;
         list = ids;
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
    }
-    
-    Contacts (Activity m, String[] ids) {
+
+    Contacts(Activity m, String l, String[] ids) {
         main = (MainActivity)m;
+        listName = l;
         list = new HashSet<>(Arrays.asList(ids));
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
@@ -196,9 +199,6 @@ public class Contacts {
                     value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
                     for (int i = 0; i < CONTACT_FIELDS.length; i++)
                         value.put(CONTACT_FIELDS[i], c.getString(i + 3));
-                    value.put("data1", c.getString(3));
-                    value.put("data2", c.getString(4));
-                    value.put("data3", c.getString(5));
                     field.add(value);
                 }
             }
@@ -321,7 +321,10 @@ public class Contacts {
                     .withSelection(where, params)
                     .build());
 
+            String name = contacts.get(id).get(TYPE_NAME).iterator().next().get("value");
+            contacts.remove(id);
             list.remove(id);
+            removeEntry(listName, id, name);
         }
 
         if (ops != null) {
@@ -438,16 +441,6 @@ public class Contacts {
                         return false;
                     }
                 }
-
-                //add id to unmatched_list
-                //remove from list delete other contacts
-                if (accounts.size() == 1) {
-                    //add name to unMatched
-                    addToUnmatched();
-                    HashSet<String> delList = new HashSet<>(list);
-                    delList.remove(id);
-                    return deleteContacts(delList);
-                }
             }
         }
 
@@ -461,15 +454,23 @@ public class Contacts {
 
     public void addToUnmatched () {
         String uName = null;
+        String accountKey = null;
 
         for (String id: list) {
             if (accounts.get(id).equals(account1Name)) {
                 uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+                accountKey = Match.ACCOUNTKEY + account1Name;
             } else if (accounts.get(id).equals(account2Name)) {
-                uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+                uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
+                accountKey = Match.ACCOUNTKEY + account2Name;
             }
 
-            addEntry(uName, contacts.get(id).get(TYPES[0]).iterator().next().get("data1") + ":" + id);
+            String name = contacts.get(id).get(TYPE_NAME).iterator().next().get("value");
+            addEntry(uName, name + ":" + id);
+            if (listName.startsWith(Match.DUPKEY)) {
+                addEntry(accountKey, name + ":" + id);
+                removeEntry(listName, id, name);
+            }
         }
     }
 
@@ -480,7 +481,7 @@ public class Contacts {
             for (String id2: account2) {
                 matchedName = Match.MATCHEDKEY + account1Name + ":" + account2Name;
                 addEntry(matchedName, id1 + ":" + id2);
-                matchedName = Match.MATCHEDKEY + account1Name + ":" + account2Name;
+                matchedName = Match.MATCHEDKEY + account2Name + ":" + account1Name;
                 addEntry(matchedName, id2 + ":" + id1);
             }
         }
@@ -533,21 +534,21 @@ public class Contacts {
         return opBuilder;
     }*/
 
-    public Boolean removeEntry (String listName, String id, String name) {
-        HashSet<String> set = (HashSet<String>)pref.getStringSet(listName, null);
+    private Boolean removeEntry(String listRef, String id, String name) {
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
         set.remove(name + ":" + id);
         SharedPreferences.Editor e = pref.edit();
-        e.putStringSet(listName,set);
+        e.putStringSet(listRef, set);
         return e.commit();
     }
 
-    public Boolean addEntry (String listName, String entry) {
-        HashSet<String> set = (HashSet<String>)pref.getStringSet(listName, null);
+    public Boolean addEntry(String listRef, String entry) {
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
         if (set == null)
             return true;
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
-        e.putStringSet(listName,set);
+        e.putStringSet(listRef, set);
         return e.commit();
     }
 }

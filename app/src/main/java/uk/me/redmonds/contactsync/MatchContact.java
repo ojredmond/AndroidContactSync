@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import android.widget.*;
 
 public class MatchContact extends Fragment implements 
 		ExpandableListView.OnChildClickListener,
@@ -32,19 +31,18 @@ public class MatchContact extends Fragment implements
     private HashMap<String,String> unmatchedList;
     private HashMap<String,String> matchedList;
     private String listItem;
-    private String name;
     private OnClickListener ButtonClick = new OnClickListener() {
         public void onClick(View p1) {
             if (p1.getId() == R.id.delete_contact) {
                 HashSet<String> list = new HashSet<>();
                 list.add(String.valueOf(id));
-                Contacts contacts = new Contacts(main, list);
-                if (contacts.deleteContacts())
-                    contacts.removeEntry(listItem, id, name);
+                Contacts contacts = new Contacts(main, listItem, list);
+                contacts.deleteContacts();
             }
 
         }
     };
+    private String name;
     private SharedPreferences pref;
 
 	public boolean onGroupClick(ExpandableListView p1, View p2, int p3, long p4)

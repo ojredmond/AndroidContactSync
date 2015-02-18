@@ -54,10 +54,8 @@ public class Match
     private class MatchContacts extends AsyncTask<Void, String, String> {
         private int numContactsAccount1 = -1;
         private int numContactsAccount2 = -1;
-        private String lastContactName = "";
         private String tempContactName = "";
         private Long tempContactId;
-        private Boolean dup = false;
         private Boolean syncStarted = false;
 
         @Override
@@ -79,7 +77,6 @@ public class Match
             int dupCount2 = 0;
             int unmatchedCount1 = 0;
             int unmatchedCount2 = 0;
-            Long contactId;
 
             // get sync status
             SharedPreferences status = mainActivity.getPreferences(Context.MODE_PRIVATE);
@@ -137,12 +134,10 @@ public class Match
                 publishProgress(message);
 
             cursor = mContentResolver.query(
-                    RawContacts.CONTENT_URI,
+                    rawContactUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
-                    RawContacts.ACCOUNT_TYPE + " == '" + MainActivity.ACCOUNT_TYPE + "'"
-                            + " AND " + RawContacts.ACCOUNT_NAME + " == '" + account2Name + "' "
-                            + " AND " + RawContacts.DELETED + " == 0",
-                    null, RawContacts.DISPLAY_NAME_PRIMARY);
+                    RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==?",
+                    new String[]{account2Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
             cursor.moveToFirst();
             numContactsAccount2 = cursor.getCount();
@@ -151,40 +146,25 @@ public class Match
                 tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
-                if (lastContactName.equals(tempContactName)) {
-                    dup = true;
+                if (dup2List.containsKey(tempContactName)) {
+                    dupCount2++;
+                    dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
+                } else if (account2.containsKey(tempContactName)) {
+                    dupCount2++;
+                    dup1List.put(tempContactName, account2.get(tempContactName) + "," + Long.toString(tempContactId));
+                    account2.remove(tempContactName);
+                } else if (account1.containsKey(tempContactName)) {
+                    account2.put(tempContactName, tempContactId);
+                    matches++;
+                    matched1.put(account1.get(tempContactName), tempContactId);
+                    matched2.put(tempContactId, account1.get(tempContactName));
+                } else {
+                    account2.put(tempContactName, tempContactId);
+                    unmatchedCount2++;
+                    unmatched2.put(tempContactName, tempContactId);
                 }
 
                 cursor.moveToNext();
-
-                if (!cursor.isAfterLast()) {
-                    if (tempContactName.equals(cursor.getString(1))) {
-                        dup = true;
-                    }
-                }
-
-                if (dup) {
-                    dupCount2++;
-                    if (dup2List.containsKey(tempContactName))
-                        dup2List.put(tempContactName, dup2List.get(tempContactName) + "," + Long.toString(tempContactId));
-                    else
-                        dup2List.put(tempContactName, Long.toString(tempContactId));
-                } else {
-                    account2.put(tempContactName, tempContactId);
-
-                    //match records between account 1 and 2
-                    if (account1.containsKey(tempContactName)) {
-                        contactId = account1.get(tempContactName);
-                        matches++;
-                        matched1.put(contactId, tempContactId);
-                        matched2.put(tempContactId, contactId);
-                    } else {
-                        unmatchedCount2++;
-                        unmatched2.put(tempContactName, tempContactId);
-                    }
-                }
-                lastContactName = tempContactName;
-                dup = false;
             }
 
             cursor.close();
