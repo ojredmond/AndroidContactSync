@@ -94,15 +94,14 @@ public class Match
 
             ContentResolver mContentResolver = mainActivity.getContentResolver();
             Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
-                    .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
                     .appendQueryParameter(RawContacts.DELETED, "0")
                     .build();
 
             cursor = mContentResolver.query(
                     rawContactUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
-                    RawContacts.ACCOUNT_NAME + "==?",
-                    new String[]{account1Name}, RawContacts.DISPLAY_NAME_PRIMARY);
+                    RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==?",
+                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
