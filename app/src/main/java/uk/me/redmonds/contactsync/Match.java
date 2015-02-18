@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract.RawContacts;
+import android.provider.ContactsContract.RawContacts.Entity;
 import android.view.View;
 import android.widget.TextView;
 import android.net.Uri;
@@ -85,7 +86,7 @@ public class Match
                 .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.TYPE)
                 .appendQueryParameter(RawContacts.DELETED, "0")
                 .build();
-            Uri rawContactUri = Uri.withAppendedPath(rawContactUri, Entity.CONTENT_DIRECTORY);
+            rawContactUri = Uri.withAppendedPath(rawContactUri, Entity.CONTENT_DIRECTORY);
             
             cursor = mContentResolver.query(
                 rawContactUri,
