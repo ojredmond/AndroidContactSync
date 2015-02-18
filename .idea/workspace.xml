@@ -18,6 +18,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="adding functionality">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Contact Sync.iws" />
@@ -41,12 +42,18 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="Contacts.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="Contacts.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="6375" max-vertical-offset="8370">
-              <caret line="425" column="8" selection-start-line="425" selection-start-column="29" selection-end-line="425" selection-end-column="29" />
-              <folding />
+            <state vertical-scroll-proportion="0.19753087" vertical-offset="7899" max-vertical-offset="8385">
+              <caret line="533" column="7" selection-start-line="533" selection-start-column="7" selection-end-line="533" selection-end-column="7" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#11682#11683#0" expanded="true" />
+                <element signature="e#11721#11722#0" expanded="true" />
+                <element signature="e#11761#11762#0" expanded="true" />
+                <element signature="e#11804#11805#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -138,10 +145,10 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Match.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="Match.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.59876543" vertical-offset="3309" max-vertical-offset="4560">
+            <state vertical-scroll-proportion="0.0" vertical-offset="3309" max-vertical-offset="4560">
               <caret line="253" column="59" selection-start-line="253" selection-start-column="59" selection-end-line="253" selection-end-column="59" />
               <folding />
             </state>
@@ -749,7 +756,6 @@
         <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/contact.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/NavigationDrawerFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/twolinelistitem.xml" />
@@ -759,6 +765,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/SyncFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/MainActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java" />
       </list>
     </option>
   </component>
@@ -1443,12 +1450,16 @@
       <created>1424298784950</created>
       <updated>1424298784950</updated>
     </task>
-    <option name="localTasksCounter" value="44" />
+    <task id="LOCAL-00044" summary="adding functionality">
+      <created>1424298795202</created>
+      <updated>1424298795202</updated>
+    </task>
+    <option name="localTasksCounter" value="45" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="65" y="-4" width="1535" height="904" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1461,7 +1472,7 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3298292" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4152431" sideWeight="0.5003349" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.325887" sideWeight="0.4996651" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.325887" sideWeight="0.4996651" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4152431" sideWeight="0.4996651" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1545,7 +1556,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="1140" max-vertical-offset="6975">
           <caret line="76" column="0" selection-start-line="76" selection-start-column="0" selection-end-line="76" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11682#11683#0" expanded="true" />
+            <element signature="e#11721#11722#0" expanded="true" />
+            <element signature="e#11761#11762#0" expanded="true" />
+            <element signature="e#11804#11805#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1561,7 +1578,13 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="3150" max-vertical-offset="4440">
           <caret line="210" column="30" selection-start-line="210" selection-start-column="16" selection-end-line="210" selection-end-column="30" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11682#11683#0" expanded="true" />
+            <element signature="e#11721#11722#0" expanded="true" />
+            <element signature="e#11761#11762#0" expanded="true" />
+            <element signature="e#11804#11805#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1879,14 +1902,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="6375" max-vertical-offset="8370">
-          <caret line="425" column="8" selection-start-line="425" selection-start-column="29" selection-end-line="425" selection-end-column="29" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/NavigationDrawerFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="123" max-vertical-offset="3645">
@@ -1960,9 +1975,23 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.59876543" vertical-offset="3309" max-vertical-offset="4560">
+        <state vertical-scroll-proportion="0.0" vertical-offset="3309" max-vertical-offset="4560">
           <caret line="253" column="59" selection-start-line="253" selection-start-column="59" selection-end-line="253" selection-end-column="59" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19753087" vertical-offset="7899" max-vertical-offset="8385">
+          <caret line="533" column="7" selection-start-line="533" selection-start-column="7" selection-end-line="533" selection-end-column="7" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#11682#11683#0" expanded="true" />
+            <element signature="e#11721#11722#0" expanded="true" />
+            <element signature="e#11761#11762#0" expanded="true" />
+            <element signature="e#11804#11805#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

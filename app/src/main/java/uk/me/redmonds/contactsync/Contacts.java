@@ -32,54 +32,53 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import android.text.*;
 
 public class Contacts {
-    private HashSet<String> list;
-    private HashMap<String,String> accounts = new HashMap<>();
-    private MainActivity main;
-    private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
+    public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
+    public static final String[] TYPES = {
+            StructuredName.CONTENT_ITEM_TYPE,
+            Phone.CONTENT_ITEM_TYPE,
+            Email.CONTENT_ITEM_TYPE,
+            Photo.CONTENT_ITEM_TYPE,
+            Organization.CONTENT_ITEM_TYPE,
+            Im.CONTENT_ITEM_TYPE,
+            Nickname.CONTENT_ITEM_TYPE,
+            Note.CONTENT_ITEM_TYPE,
+            StructuredPostal.CONTENT_ITEM_TYPE,
+            GroupMembership.CONTENT_ITEM_TYPE,
+            Website.CONTENT_ITEM_TYPE,
+            Event.CONTENT_ITEM_TYPE,
+            Relation.CONTENT_ITEM_TYPE,
+            SipAddress.CONTENT_ITEM_TYPE
+    };
+    private static final String[] CONTACT_FIELDS = {
+            Data.DATA1,
+            Data.DATA2,
+            Data.DATA3,
+            Data.DATA4,
+            Data.DATA5,
+            Data.DATA6,
+            Data.DATA7,
+            Data.DATA8,
+            Data.DATA9,
+            Data.DATA10,
+            Data.DATA11,
+            Data.DATA12,
+            Data.DATA13,
+            Data.DATA14,
+            Data.DATA15
+    };
+    public static Boolean groupInc;
+    public static Boolean photoInc;
     private static SharedPreferences pref;
     private static String account1Name;
     private static String account2Name;
     private static HashSet<String> account1;
     private static HashSet<String> account2;
-    public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
-    public static final String[] TYPES = {
-        StructuredName.CONTENT_ITEM_TYPE,
-        Phone.CONTENT_ITEM_TYPE,
-        Email.CONTENT_ITEM_TYPE,
-        Photo.CONTENT_ITEM_TYPE,
-        Organization.CONTENT_ITEM_TYPE,
-        Im.CONTENT_ITEM_TYPE,
-        Nickname.CONTENT_ITEM_TYPE,
-        Note.CONTENT_ITEM_TYPE,
-        StructuredPostal.CONTENT_ITEM_TYPE,
-        GroupMembership.CONTENT_ITEM_TYPE,
-        Website.CONTENT_ITEM_TYPE,
-        Event.CONTENT_ITEM_TYPE,
-        Relation.CONTENT_ITEM_TYPE,
-        SipAddress.CONTENT_ITEM_TYPE
-    };
-	private static final String[] CONTACT_FIELDS = {
-		Data.DATA1,
-		Data.DATA2,
-		Data.DATA3,
-		Data.DATA4,
-		Data.DATA5,
-		Data.DATA6,
-		Data.DATA7,
-		Data.DATA8,
-		Data.DATA9,
-		Data.DATA10,
-		Data.DATA11,
-		Data.DATA12,
-		Data.DATA13,
-		Data.DATA14,
-		Data.DATA15
-	};
-    public static Boolean groupInc;
-    public static Boolean photoInc;
+    private HashSet<String> list;
+    private HashMap<String, String> accounts = new HashMap<>();
+    private MainActivity main;
+    private HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = new HashMap<>();
 
     Contacts (Activity m, HashSet<String> ids) {
         main = (MainActivity)m;
@@ -90,86 +89,9 @@ public class Contacts {
     
     Contacts (Activity m, String[] ids) {
         main = (MainActivity)m;
-        list = new HashSet<String>(Arrays.asList(ids));
+        list = new HashSet<>(Arrays.asList(ids));
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
-    }
-
-    private void createContacts () {
-        Cursor c;
-        String ids = "";
-
-        for (String i : list) {
-            contacts.put(i,new HashMap<String,HashSet<HashMap<String,String>>>());
-            ids += i + ",";
-            Long id = Long.decode(i);
-            
-            Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, id);
-            c = main.getContentResolver().query(rawContactUri,
-                    new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
-                    null, null, null);
-
-            try {
-                while (c.moveToNext()) {
-                    if (!c.isNull(0) && !c.isNull(1)) {
-                        accounts.put(i, c.getString(0));
-                    }
-                }
-            } finally {
-                c.close();
-            }
-        }
-        if (ids.length() > 0)
-            ids = ids.substring(0, ids.length()-1);
-			
-		ArrayList<String> selection = new ArrayList<>();
-		selection.add(Data.RAW_CONTACT_ID);
-		selection.add(Data._ID);
-		selection.add(Data.MIMETYPE);
-		selection.addAll(Arrays.asList(CONTACT_FIELDS));
-
-        c = main.getContentResolver().query(Data.CONTENT_URI,
-			selection.toArray(new String[0]),
-            Data.RAW_CONTACT_ID + " IN (" + ids + ")",
-            null, null);
-
-        try {
-            while (c.moveToNext()) {
-                HashMap<String,HashSet<HashMap<String,String>>> contact = contacts.get(c.getString(0));
-                if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
-                    if(!contact.containsKey(c.getString(2)))
-                        contact.put(c.getString(2), new HashSet<HashMap<String,String>>());
-                    HashSet<HashMap<String,String>> field = contact.get(c.getString(2));
-                    HashMap<String,String> value = new HashMap<>();
-                    value.put("value", c.getString(3));
-                    value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
-					for(int i=0; i<CONTACT_FIELDS.length; i++)
-						value.put(CONTACT_FIELDS[i], c.getString(i+3));
-					value.put("data1", c.getString(3));
-                    value.put("data2", c.getString(4));
-                    value.put("data3", c.getString(5));
-                    field.add(value);
-                }
-            }
-        } finally {
-            c.close();
-        }
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-        account1Name = settings.getString(main.ACCOUNT1, null);
-        account2Name = settings.getString(main.ACCOUNT2, null);
-        groupInc = settings.getBoolean(main.GROUPS, false);
-        photoInc = settings.getBoolean(main.PHOTOS, false);
-
-        account1 = new HashSet<>();
-        account2 = new HashSet<>();
-
-        for (Map.Entry <String, String> e : accounts.entrySet()) {
-            if (e.getValue().equals(account1Name))
-                account1.add(e.getKey());
-            else
-                account2.add(e.getKey());
-        }
     }
 
     public static String getGroupName (String mime) {
@@ -220,8 +142,85 @@ public class Contacts {
             default:
                 group = "Other";
         }
-        
+
         return group;
+    }
+
+    private void createContacts() {
+        Cursor c;
+        String ids = "";
+
+        for (String i : list) {
+            contacts.put(i, new HashMap<String, HashSet<HashMap<String, String>>>());
+            ids += i + ",";
+            Long id = Long.decode(i);
+
+            Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, id);
+            c = main.getContentResolver().query(rawContactUri,
+                    new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
+                    null, null, null);
+
+            try {
+                while (c.moveToNext()) {
+                    if (!c.isNull(0) && !c.isNull(1)) {
+                        accounts.put(i, c.getString(0));
+                    }
+                }
+            } finally {
+                c.close();
+            }
+        }
+        if (ids.length() > 0)
+            ids = ids.substring(0, ids.length() - 1);
+
+        ArrayList<String> selection = new ArrayList<>();
+        selection.add(Data.RAW_CONTACT_ID);
+        selection.add(Data._ID);
+        selection.add(Data.MIMETYPE);
+        selection.addAll(Arrays.asList(CONTACT_FIELDS));
+
+        c = main.getContentResolver().query(Data.CONTENT_URI,
+                selection.toArray(new String[selection.size()]),
+                Data.RAW_CONTACT_ID + " IN (" + ids + ")",
+                null, null);
+
+        try {
+            while (c.moveToNext()) {
+                HashMap<String, HashSet<HashMap<String, String>>> contact = contacts.get(c.getString(0));
+                if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
+                    if (!contact.containsKey(c.getString(2)))
+                        contact.put(c.getString(2), new HashSet<HashMap<String, String>>());
+                    HashSet<HashMap<String, String>> field = contact.get(c.getString(2));
+                    HashMap<String, String> value = new HashMap<>();
+                    value.put("value", c.getString(3));
+                    value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
+                    for (int i = 0; i < CONTACT_FIELDS.length; i++)
+                        value.put(CONTACT_FIELDS[i], c.getString(i + 3));
+                    value.put("data1", c.getString(3));
+                    value.put("data2", c.getString(4));
+                    value.put("data3", c.getString(5));
+                    field.add(value);
+                }
+            }
+        } finally {
+            c.close();
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+        account1Name = settings.getString(MainActivity.ACCOUNT1, null);
+        account2Name = settings.getString(MainActivity.ACCOUNT2, null);
+        groupInc = settings.getBoolean(MainActivity.GROUPS, false);
+        photoInc = settings.getBoolean(MainActivity.PHOTOS, false);
+
+        account1 = new HashSet<>();
+        account2 = new HashSet<>();
+
+        for (Map.Entry<String, String> e : accounts.entrySet()) {
+            if (e.getValue().equals(account1Name))
+                account1.add(e.getKey());
+            else
+                account2.add(e.getKey());
+        }
     }
     
     private String getTypeLabel (String mime, Integer type, CharSequence label) {
@@ -357,7 +356,7 @@ public class Contacts {
     public Boolean saveMergedContact (HashMap<String,HashSet<HashMap<String,String>>> mergedContact) {
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
-        String value;
+        //String value;
         String where;
         //String origValue;
         HashSet<String> accountsUsed = new HashSet<>();
@@ -412,8 +411,8 @@ public class Contacts {
 									selection.add(item.get(field));
 								}
 							}
-                            
-                            opBuilder.withSelection(where, selection.toArray(new String[0]));
+
+                            opBuilder.withSelection(where, selection.toArray(new String[selection.size()]));
                             ops.add(opBuilder.build());
                         }
                         for (HashMap<String, String> item : adds) {
@@ -475,7 +474,7 @@ public class Contacts {
     }
 
     public void addToMatched () {
-        String matchedName = null;
+        String matchedName;
 
         for (String id1: account1) {
             for (String id2: account2) {
@@ -487,7 +486,7 @@ public class Contacts {
         }
     }
 
-    private ContentProviderOperation.Builder setOpBuilder(ContentProviderOperation.Builder opBuilder, String value, String type) {
+    /*private ContentProviderOperation.Builder setOpBuilder(ContentProviderOperation.Builder opBuilder, String value, String type) {
         if (type.startsWith("name")) {
             opBuilder.withValue(Data.MIMETYPE, CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
                     .withValue(CommonDataKinds.StructuredName.DISPLAY_NAME, value);
@@ -532,7 +531,7 @@ public class Contacts {
                     .withValue(CommonDataKinds.Identity.NAMESPACE, type.split("/")[1]);
         }
         return opBuilder;
-    }
+    }*/
 
     public Boolean removeEntry (String listName, String id, String name) {
         HashSet<String> set = (HashSet<String>)pref.getStringSet(listName, null);
@@ -544,6 +543,8 @@ public class Contacts {
 
     public Boolean addEntry (String listName, String entry) {
         HashSet<String> set = (HashSet<String>)pref.getStringSet(listName, null);
+        if (set == null)
+            return true;
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listName,set);
