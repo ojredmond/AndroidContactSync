@@ -129,12 +129,12 @@ public class CompareDetail extends Fragment {
 						if(item.get("label") == null) {
 							TextView contactValue = (TextView)LayoutInflater.from(main)
 								.inflate(R.layout.list_row_1, layoutContainer, false);
-							contactValue.setText(item.get("data1"));
+							contactValue.setText(item.get("value"));
 							contactInfo.addView(contactValue);
 						} else {
 							LinearLayout rowLayout = (LinearLayout)LayoutInflater.from(main)
 								.inflate(R.layout.list_row_2, layoutContainer, false);
-							((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("data1"));
+							((TextView)rowLayout.findViewById(R.id.value)).setText(item.get("value"));
 							((TextView)rowLayout.findViewById(R.id.type)).setText(item.get("label"));
 							contactInfo.addView(rowLayout);
 						}

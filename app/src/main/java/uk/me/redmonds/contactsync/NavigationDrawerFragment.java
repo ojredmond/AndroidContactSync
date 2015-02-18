@@ -1,7 +1,7 @@
 package uk.me.redmonds.contactsync;
 
 import android.app.Activity;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -144,7 +144,11 @@ public class NavigationDrawerFragment extends Fragment {
                 /*if (!isAdded()) {
                     return;
                 }*/
-                mUserLearnedDrawer = true;
+				if(!mUserLearnedDrawer){
+					mUserLearnedDrawer = true;
+					SharedPreferences.Editor sp = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+					sp.putBoolean(PREF_USER_LEARNED_DRAWER, mUserLearnedDrawer);
+				}
                 mActionBar.setTitle(getString(R.string.app_name));
             }
         };
@@ -207,7 +211,6 @@ public class NavigationDrawerFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-        outState.putBoolean(PREF_USER_LEARNED_DRAWER, mUserLearnedDrawer);
     }
 
     @Override

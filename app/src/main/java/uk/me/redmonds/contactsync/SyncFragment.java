@@ -1,6 +1,6 @@
 package uk.me.redmonds.contactsync;
 
-import android.app.ListFragment;
+import android.support.v4.app.ListFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;

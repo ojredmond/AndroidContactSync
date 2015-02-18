@@ -16,12 +16,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import android.widget.*;
 
 /**
  * Fragment used for comparison adds tabs to views
  * Created by oli on 31/01/15.
  */
-public class CompareFragment extends android.app.Fragment {
+public class CompareFragment extends Fragment {
     // When requested, this adapter returns a DemoObjectFragment,
     // representing an object in the collection.
     TabsAdapter mTabsAdapter;
@@ -42,18 +43,19 @@ public class CompareFragment extends android.app.Fragment {
         main = (MainActivity)this.getActivity();
         // ViewPager and its adapters use support library
         // fragments, so use getSupportFragmentManager.
+		
         mTabsAdapter =
                 new TabsAdapter(
-                        main.getSupportFragmentManager());
+                        getChildFragmentManager());
 
         View tabs = inflater.inflate(R.layout.fragment_pager, container, false);
 
         mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
 
-		if (savedInstanceState != null) {
-			mViewPager.setCurrentItem(savedInstanceState.getInt("tab", 0));
-		}
+		//if (savedInstanceState != null) {
+		//	mViewPager.setCurrentItem(savedInstanceState.getInt("tab", 0));
+		//}
         return mViewPager;
     }
 
@@ -129,4 +131,12 @@ public class CompareFragment extends android.app.Fragment {
 			return (CharSequence)contacts.get(position).values().toArray()[0];
         }
     }
+	
+	@Override
+	public void onResume()
+	{
+		// TODO: Implement this method
+		super.onResume();
+		Toast.makeText(getActivity(),"test",Toast.LENGTH_SHORT).show();
+	}
 }

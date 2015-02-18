@@ -3,6 +3,7 @@
     android:layout_width="wrap_content" android:layout_height="match_parent"
     android:id="@+id/heading"
 	android:background="@color/material_orange_500"
+	android:textAppearance="?android:attr/textAppearanceSmall"
 	android:textColor="@android:color/white"
 	android:padding="@dimen/medium_gap"
 	>

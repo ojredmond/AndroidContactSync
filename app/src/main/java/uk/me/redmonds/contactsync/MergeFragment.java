@@ -1,7 +1,7 @@
 package uk.me.redmonds.contactsync;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,7 +40,7 @@ public class MergeFragment extends Fragment
                     }
                     break;
                 case R.id.contact_cancel:
-                    FragmentManager fragMan = main.getFragmentManager();
+                    FragmentManager fragMan = main.getSupportFragmentManager();
                     if (fragMan.getBackStackEntryCount() > 0) {
                         fragMan.popBackStack();
                     }
@@ -141,7 +141,7 @@ public class MergeFragment extends Fragment
                     if (item.get("label") == null) {
                         contactValue = (TextView) LayoutInflater.from(main)
                                 .inflate(R.layout.list_row_1, layoutContainer, false);
-                        contactValue.setText(item.get("data1"));
+                        contactValue.setText(item.get("value"));
                         contactValue.setTag(item);
                         //if only 1 name hide delete button
                         if (!(type.equals(Contacts.TYPES[0]) && contact.get(type).size() == 1))
@@ -150,7 +150,7 @@ public class MergeFragment extends Fragment
                         LinearLayout rowLayout = (LinearLayout) LayoutInflater.from(main)
                                 .inflate(R.layout.list_row_2, layoutContainer, false);
                         contactValue = (TextView) rowLayout.findViewById(R.id.value);
-                        contactValue.setText(item.get("data1"));
+                        contactValue.setText(item.get("value"));
                         contactValue.setTag(item);
                         ((TextView) rowLayout.findViewById(R.id.type)).setText(item.get("label"));
                         deleteLayout.addView(rowLayout);

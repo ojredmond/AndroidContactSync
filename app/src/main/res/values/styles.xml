@@ -6,6 +6,26 @@
         <item name="colorPrimaryDark">@color/material_orange_700</item>
         <item name="colorAccent">@color/material_orange_A200</item>
         <item name="android:activatedBackgroundIndicator">@drawable/activatedbackground</item>
-</style>
+		<item name="android:spinnerItemStyle">@style/SpinnerStyle</item>
+		<item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownStyle</item>
+	</style>
 
+	<style name="SpinnerStyle">
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+		<item name="android:padding">@dimen/medium_gap</item>
+		
+	</style>
+	
+	<style name="SpinnerDropDownStyle" parent="@android:style/Widget.DropDownItem.Spinner">
+		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+		<item name="android:padding">@dimen/medium_gap</item>
+
+	</style>
+	
+	<style name="Divider">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">1dp</item>
+		<item name="android:background">?android:attr/listDivider</item>
+	</style>
+	
 </resources>

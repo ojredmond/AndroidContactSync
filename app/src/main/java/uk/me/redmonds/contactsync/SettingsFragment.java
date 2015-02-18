@@ -3,7 +3,7 @@ package uk.me.redmonds.contactsync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.ListPreference;

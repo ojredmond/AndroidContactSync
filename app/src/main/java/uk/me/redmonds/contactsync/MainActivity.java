@@ -1,8 +1,8 @@
 package uk.me.redmonds.contactsync;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -25,6 +25,8 @@ public class MainActivity extends ActionBarActivity
     public static final String TYPE = "com.google";
     public static final String ACCOUNT1 = "account1";
     public static final String ACCOUNT2 = "account2";
+	public static final String GROUPS = "GroupsOnOff";
+	public static final String PHOTOS = "PicturesOnOff";
     public static String PACKAGE_NAME;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -50,7 +52,7 @@ public class MainActivity extends ActionBarActivity
 		Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
 		
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getFragmentManager().findFragmentById(R.id.navigation_drawer);
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         
 
         // Set up the drawer.
@@ -78,12 +80,12 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getFragmentManager();
+        FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new SettingsFragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
-                        .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_settings))
+                        .replace(R.id.container, new Settings_fragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
+                        //.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_settings))
                         .commit();
                 break;
             case 1:
@@ -95,7 +97,7 @@ public class MainActivity extends ActionBarActivity
                 syncF.setArguments(args);
                 fragmentManager.beginTransaction()
                     .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
-                    .addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
+                    //.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
                     .commit();
                 break;
             case 2:
@@ -142,7 +144,7 @@ public class MainActivity extends ActionBarActivity
         // Create fragment and give it an argument specifying the article it should show
         StatusFragment newFragment = new StatusFragment();
 
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
@@ -163,7 +165,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void showResults (String item) {
-        FragmentManager fragMan = getFragmentManager();
+        FragmentManager fragMan = getSupportFragmentManager();
         FragmentTransaction transaction = fragMan.beginTransaction();
         SyncFragment newFragment = new SyncFragment();
 
@@ -187,7 +189,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void Compare (String listType, String listItem, String selected) {
-        FragmentManager fragMan = getFragmentManager();
+        FragmentManager fragMan = getSupportFragmentManager();
         FragmentTransaction transaction = fragMan.beginTransaction();
         CompareFragment newFragment = new CompareFragment();
 
@@ -213,7 +215,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void Merge (String name, ArrayList<String> ids, String listItem) {
-        FragmentManager fragMan = getFragmentManager();
+        FragmentManager fragMan = getSupportFragmentManager();
         FragmentTransaction transaction = fragMan.beginTransaction();
         MergeFragment newFragment = new MergeFragment();
 

@@ -32,12 +32,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import android.text.*;
 
 public class Contacts {
     private HashSet<String> list;
     private HashMap<String,String> accounts = new HashMap<>();
-    private Activity main;
-    private HashSet<String> contactsOld = null;
+    private MainActivity main;
     private HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> contacts = new HashMap<>();
     private static SharedPreferences pref;
     private static String account1Name;
@@ -60,19 +60,36 @@ public class Contacts {
         Relation.CONTENT_ITEM_TYPE,
         SipAddress.CONTENT_ITEM_TYPE
     };
+	private static final String[] CONTACT_FIELDS = {
+		Data.DATA1,
+		Data.DATA2,
+		Data.DATA3,
+		Data.DATA4,
+		Data.DATA5,
+		Data.DATA6,
+		Data.DATA7,
+		Data.DATA8,
+		Data.DATA9,
+		Data.DATA10,
+		Data.DATA11,
+		Data.DATA12,
+		Data.DATA13,
+		Data.DATA14,
+		Data.DATA15
+	};
     public static Boolean groupInc;
     public static Boolean photoInc;
 
     Contacts (Activity m, HashSet<String> ids) {
-        main = m;
+        main = (MainActivity)m;
         list = ids;
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
    }
     
     Contacts (Activity m, String[] ids) {
-        main = m;
-        list = new HashSet<>(Arrays.asList(ids));
+        main = (MainActivity)m;
+        list = new HashSet<String>(Arrays.asList(ids));
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
     }
@@ -103,16 +120,15 @@ public class Contacts {
         }
         if (ids.length() > 0)
             ids = ids.substring(0, ids.length()-1);
+			
+		ArrayList<String> selection = new ArrayList<>();
+		selection.add(Data.RAW_CONTACT_ID);
+		selection.add(Data._ID);
+		selection.add(Data.MIMETYPE);
+		selection.addAll(Arrays.asList(CONTACT_FIELDS));
 
         c = main.getContentResolver().query(Data.CONTENT_URI,
-            new String[] {
-                Data.RAW_CONTACT_ID,
-                Data._ID,
-                Data.MIMETYPE,
-                Data.DATA1,
-                Data.DATA2,
-                Data.DATA3
-            },
+			selection.toArray(new String[0]),
             Data.RAW_CONTACT_ID + " IN (" + ids + ")",
             null, null);
 
@@ -124,8 +140,11 @@ public class Contacts {
                         contact.put(c.getString(2), new HashSet<HashMap<String,String>>());
                     HashSet<HashMap<String,String>> field = contact.get(c.getString(2));
                     HashMap<String,String> value = new HashMap<>();
-                    value.put("data1", c.getString(3));
+                    value.put("value", c.getString(3));
                     value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
+					for(int i=0; i<CONTACT_FIELDS.length; i++)
+						value.put(CONTACT_FIELDS[i], c.getString(i+3));
+					value.put("data1", c.getString(3));
                     value.put("data2", c.getString(4));
                     value.put("data3", c.getString(5));
                     field.add(value);
@@ -136,10 +155,10 @@ public class Contacts {
         }
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-        account1Name = settings.getString("account1", null);
-        account2Name = settings.getString("account2", null);
-        groupInc = settings.getBoolean("GroupsOnOff", false);
-        photoInc = settings.getBoolean("PicturesOnOff", false);
+        account1Name = settings.getString(main.ACCOUNT1, null);
+        account2Name = settings.getString(main.ACCOUNT2, null);
+        groupInc = settings.getBoolean(main.GROUPS, false);
+        photoInc = settings.getBoolean(main.PHOTOS, false);
 
         account1 = new HashSet<>();
         account2 = new HashSet<>();
@@ -376,33 +395,34 @@ public class Contacts {
                         }
                         for (HashMap<String, String> item : dels) {
                             opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
-                            where = "? = ?";
-                            where += " AND ? = ?";
-                            where += " AND ? = ?";
-                            where += " AND ? = ?";
-                            opBuilder.withSelection(where, new String[]{
-                                    Data.RAW_CONTACT_ID, id,
-                                    Data.MIMETYPE, type,
-                                    Data.DATA1, item.get("data1"),
-                                    Data.DATA2, item.get("data2")
-                            });
-
+							ArrayList<String> selection = new ArrayList<>();
+							where = "? = ?";
+							selection.add(Data.RAW_CONTACT_ID);
+							selection.add(id);
+							
+							where += " AND ? = ?";
+							selection.add(Data.MIMETYPE);
+							selection.add(type);
+                            
+							for(String field: CONTACT_FIELDS) {
+								if(item.get(field) != null) {
+									where += " AND ? = ?";
+									selection.add(field);
+									selection.add(item.get(field));
+								}
+							}
+                            
+                            opBuilder.withSelection(where, selection.toArray(new String[0]));
                             ops.add(opBuilder.build());
                         }
                         for (HashMap<String, String> item : adds) {
-                            //TBD update values would need to store orig value for matching
-                            /*if (origContactItems != null
-                                    && !origValue.equals(value)) {
-                                contactsOld.remove(id + "/" + type);
-                                opBuilder = ContentProviderOperation.newUpdate(Data.CONTENT_URI);
-                                where = Data.RAW_CONTACT_ID + " = " + id;
-                            } else*/
                             opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
                                     .withValue(Data.RAW_CONTACT_ID, id)
-                                    .withValue(Data.MIMETYPE, type)
-                                    .withValue(Data.DATA1, item.get("data1"))
-                                    .withValue(Data.DATA2, item.get("data2"))
-                                    .withValue(Data.DATA3, item.get("data3"));
+                                    .withValue(Data.MIMETYPE, type);
+							for(String field: CONTACT_FIELDS) {
+								if(item.get(field) != null)
+									opBuilder.withValue(field, item.get(field));
+							}
 
                             ops.add(opBuilder.build());
                         }
