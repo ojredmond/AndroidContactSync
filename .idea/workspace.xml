@@ -18,6 +18,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="adding functionality">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Contact Sync.iws" />
@@ -141,8 +142,8 @@
       <file leaf-file-name="Match.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.0925926" vertical-offset="3309" max-vertical-offset="4515">
-              <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.59876543" vertical-offset="3309" max-vertical-offset="4560">
+              <caret line="253" column="59" selection-start-line="253" selection-start-column="59" selection-end-line="253" selection-end-column="59" />
               <folding />
             </state>
           </provider>
@@ -1435,7 +1436,11 @@
       <created>1424298618214</created>
       <updated>1424298618214</updated>
     </task>
-    <option name="localTasksCounter" value="42" />
+    <task id="LOCAL-00042" summary="adding functionality">
+      <created>1424298643466</created>
+      <updated>1424298643466</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1952,8 +1957,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.0925926" vertical-offset="3309" max-vertical-offset="4515">
-          <caret line="269" column="0" selection-start-line="269" selection-start-column="0" selection-end-line="269" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.59876543" vertical-offset="3309" max-vertical-offset="4560">
+          <caret line="253" column="59" selection-start-line="253" selection-start-column="59" selection-end-line="253" selection-end-column="59" />
           <folding />
         </state>
       </provider>

@@ -232,9 +232,8 @@ public class Match
 
             SharedPreferences.Editor results = mainActivity.getPreferences(Context.MODE_PRIVATE).edit();
 
-            //store the number of contacts i each account so that can display results even if no contacts
+            //store the number of contacts for account1 so that can display results even if no contacts
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
-            results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
             results.apply();
 
             HashSet<String> dup1Name = new HashSet<>();
@@ -252,6 +251,10 @@ public class Match
             results.apply();
 
             if (!account2Name.equals(account1Name)) {
+                //store the number of contacts for account2 so that can display results even if no contacts
+                results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
+                results.apply();
+
                 HashSet<String> dup2Name = new HashSet<>();
                 for (Map.Entry<String, String> e : dup2List.entrySet()) {
                     dup2Name.add(e.getKey() + ":" + e.getValue());
