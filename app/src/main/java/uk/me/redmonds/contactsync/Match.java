@@ -86,7 +86,7 @@ public class Match
                 .appendQueryParameter(RawContacts.DELETED, "0")
                 .build();
             
-            Cursor cursor = mContentResolver.query(
+            cursor = mContentResolver.query(
                 rawContactUri,
                 new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
                 null, null, RawContacts.DISPLAY_NAME_PRIMARY);
