@@ -140,10 +140,6 @@ public class NavigationDrawerFragment extends Fragment {
             }
  
             public void onDrawerOpened(View drawerView) {
-                Toast.makeText(getActivity(), "Open", Toast.LENGTH_LONG).show();
-                /*if (!isAdded()) {
-                    return;
-                }*/
 				if(!mUserLearnedDrawer){
 					mUserLearnedDrawer = true;
 					SharedPreferences.Editor sp = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
