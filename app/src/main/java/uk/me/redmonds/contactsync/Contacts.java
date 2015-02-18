@@ -476,11 +476,22 @@ public class Contacts {
 
     public void addToMatched () {
         String matchedName;
+        String uName;
+        String name;
 
         for (String id1: account1) {
             for (String id2: account2) {
+                name = contacts.get(id1).get(TYPE_NAME).iterator().next().get("value");
+                uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+                removeEntry(uName, id1, name);
+
+                name = contacts.get(id2).get(TYPE_NAME).iterator().next().get("value");
+                uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
+                removeEntry(uName, id2, name);
+
                 matchedName = Match.MATCHEDKEY + account1Name + ":" + account2Name;
                 addEntry(matchedName, id1 + ":" + id2);
+
                 matchedName = Match.MATCHEDKEY + account2Name + ":" + account1Name;
                 addEntry(matchedName, id2 + ":" + id1);
             }
