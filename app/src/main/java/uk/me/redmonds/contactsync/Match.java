@@ -259,7 +259,7 @@ public class Match
 
             results.apply();
 
-            if (account2Name.equals(account1Name)) {
+            if (!account2Name.equals(account1Name)) {
                 HashSet<String> unmatched2Name = new HashSet<>();
                 for (Map.Entry<String, Long> e : unmatched2.entrySet()) {
                     unmatched2Name.add(e.getKey() + ":" + e.getValue());
@@ -295,10 +295,11 @@ public class Match
                 }
                 results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
                 results.apply();
-
-                results.putBoolean(SYNCMATCHED, true);
-                results.apply();
             }
+
+            results.putBoolean(SYNCMATCHED, true);
+            results.apply();
+
             syncMatched = true;
 
             mainActivity.showResults();
