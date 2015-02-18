@@ -140,7 +140,7 @@ public class NavigationDrawerFragment extends Fragment {
             }
  
             public void onDrawerOpened(View drawerView) {
-                //Toast.makeText(getActivity(), "Open", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Open", Toast.LENGTH_LONG).show();
                 /*if (!isAdded()) {
                     return;
                 }*/
@@ -148,6 +148,7 @@ public class NavigationDrawerFragment extends Fragment {
 					mUserLearnedDrawer = true;
 					SharedPreferences.Editor sp = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
 					sp.putBoolean(PREF_USER_LEARNED_DRAWER, mUserLearnedDrawer);
+					sp.apply();
 				}
                 mActionBar.setTitle(getString(R.string.app_name));
             }
