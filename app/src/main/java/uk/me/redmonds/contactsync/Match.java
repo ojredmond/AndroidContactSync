@@ -85,51 +85,49 @@ public class Match
                 .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.TYPE)
                 .appendQueryParameter(RawContacts.DELETED, "0")
                 .build();
+            Uri rawContactUri = Uri.withAppendedPath(rawContactUri, Entity.CONTENT_DIRECTORY);
             
             cursor = mContentResolver.query(
                 rawContactUri,
-                new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
+                new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
                 null, null, RawContacts.DISPLAY_NAME_PRIMARY);
             
             //new String[]{RawContacts.SOURCE_ID, Entity.DATA_ID, Entity.MIMETYPE, Entity.DATA1}
-            /*cursor = mContentResolver.query(
-                    RawContacts.CONTENT_URI,
-                    new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
-                    RawContacts.ACCOUNT_TYPE + " == '" + MainActivity.TYPE + "'"
-                            + " AND " + RawContacts.ACCOUNT_NAME + " == '" + account1Name + "' "
-                            + " AND " + RawContacts.DELETED + " == 0",
-                    null, RawContacts.DISPLAY_NAME_PRIMARY);*/
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
-                tempContactName = cursor.getString(1);
-                tempContactId = cursor.getLong(0);
-
-                if (lastContactName.equals(tempContactName)) {
-                    dup = true;
-                }
-
-                cursor.moveToNext();
-
-                if (!cursor.isAfterLast()) {
-                    if (tempContactName.equals(cursor.getString(1))) {
+                if(cursor.getString(2) != null && cursor.getString(2).equals(Contacts.TYPE_NAME)) {
+                    tempContactName = cursor.getString(1);
+                    tempContactId = cursor.getLong(0);
+    
+                    if (lastContactName.equals(tempContactName)) {
                         dup = true;
                     }
+    
+                    cursor.moveToNext();
+    
+                    if (!cursor.isAfterLast()) {
+                        if (tempContactName.equals(cursor.getString(1))) {
+                            dup = true;
+                        }
+                    }
+    
+                    if (dup) {
+                        dupCount1++;
+                        if (dup1List.containsKey(tempContactName))
+                            dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
+                        else
+                            dup1List.put(tempContactName, Long.toString(tempContactId));
+                    } else {
+                        account1.put(tempContactName, tempContactId);
+                    }
+                    lastContactName = tempContactName;
+                    dup = false;
                 }
-
-                if (dup) {
-                    dupCount1++;
-                    if (dup1List.containsKey(tempContactName))
-                        dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
-                    else
-                        dup1List.put(tempContactName, Long.toString(tempContactId));
-                } else {
-                    account1.put(tempContactName, tempContactId);
-                }
-                lastContactName = tempContactName;
-                dup = false;
+                else
+                    cursor.moveToNext();
             }
 
             cursor.close();
