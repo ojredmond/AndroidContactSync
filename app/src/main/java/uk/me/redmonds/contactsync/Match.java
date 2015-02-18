@@ -94,7 +94,6 @@ public class Match
 
             ContentResolver mContentResolver = mainActivity.getContentResolver();
             Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
-                    .appendQueryParameter(RawContacts.ACCOUNT_NAME, account1Name)
                     .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
                     .appendQueryParameter(RawContacts.DELETED, "0")
                     .build();
@@ -102,7 +101,8 @@ public class Match
             cursor = mContentResolver.query(
                     rawContactUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
-                    null, null, RawContacts.DISPLAY_NAME_PRIMARY);
+                    RawContacts.ACCOUNT_NAME + "=?",
+                    new String[]{account1Name}, RawContacts.DISPLAY_NAME_PRIMARY);
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
@@ -111,9 +111,11 @@ public class Match
                 tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
-                if (dup1List.containsKey(tempContactName))
+                if (dup1List.containsKey(tempContactName)) {
+                    dupCount1++;
                     dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
-                else if (account1.containsKey(tempContactName)) {
+                } else if (account1.containsKey(tempContactName)) {
+                    dupCount1++;
                     dup1List.put(tempContactName, account1.get(tempContactName) + "," + Long.toString(tempContactId));
                     account1.remove(tempContactName);
                 } else
@@ -121,37 +123,6 @@ public class Match
 
                 cursor.moveToNext();
             }
-            /*cursor.moveToFirst();
-            numContactsAccount1 = cursor.getCount();
-
-            while (!cursor.isAfterLast()) {
-                tempContactName = cursor.getString(1);
-                tempContactId = cursor.getLong(0);
-
-                if (lastContactName.equals(tempContactName)) {
-                    dup = true;
-                }
-
-                cursor.moveToNext();
-
-                if (!cursor.isAfterLast()) {
-                    if (tempContactName.equals(cursor.getString(1))) {
-                        dup = true;
-                    }
-                }
-
-                if (dup) {
-                    dupCount1++;
-                    if (dup1List.containsKey(tempContactName))
-                        dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
-                    else
-                        dup1List.put(tempContactName, Long.toString(tempContactId));
-                } else {
-                    account1.put(tempContactName, tempContactId);
-                }
-                lastContactName = tempContactName;
-                dup = false;
-            }*/
 
             cursor.close();
 
@@ -289,45 +260,46 @@ public class Match
 
             results.apply();
 
-            HashSet<String> unmatched2Name = new HashSet<>();
-            for (Map.Entry<String, Long> e : unmatched2.entrySet()) {
-                unmatched2Name.add(e.getKey() + ":" + e.getValue());
+            if (account2Name.equals(account1Name)) {
+                HashSet<String> unmatched2Name = new HashSet<>();
+                for (Map.Entry<String, Long> e : unmatched2.entrySet()) {
+                    unmatched2Name.add(e.getKey() + ":" + e.getValue());
+                }
+                results.putStringSet(UNMATCHNAMEKEY + account2Name + ":" + account1Name, unmatched2Name);
+
+                results.apply();
+
+                HashSet<String> matched1Name = new HashSet<>();
+                for (Map.Entry<Long, Long> e : matched1.entrySet()) {
+                    matched1Name.add(e.getKey() + ":" + e.getValue());
+                }
+                results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name);
+                results.apply();
+
+                HashSet<String> matched2Name = new HashSet<>();
+                for (Map.Entry<Long, Long> e : matched2.entrySet()) {
+                    matched2Name.add(e.getKey() + ":" + e.getValue());
+                }
+                results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name);
+                results.apply();
+
+                HashSet<String> account1Set = new HashSet<>();
+                for (Map.Entry<String, Long> e : account1.entrySet()) {
+                    account1Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
+                }
+                results.putStringSet(ACCOUNTKEY + account1Name, account1Set);
+                results.apply();
+
+                HashSet<String> account2Set = new HashSet<>();
+                for (Map.Entry<String, Long> e : account2.entrySet()) {
+                    account2Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
+                }
+                results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
+                results.apply();
+
+                results.putBoolean(SYNCMATCHED, true);
+                results.apply();
             }
-            results.putStringSet(UNMATCHNAMEKEY + account2Name + ":" + account1Name, unmatched2Name);
-
-            results.apply();
-
-            HashSet<String> matched1Name = new HashSet<>();
-            for (Map.Entry<Long, Long> e : matched1.entrySet()) {
-                matched1Name.add(e.getKey() + ":" + e.getValue());
-            }
-            results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name);
-            results.apply();
-
-            HashSet<String> matched2Name = new HashSet<>();
-            for (Map.Entry<Long, Long> e : matched2.entrySet()) {
-                matched2Name.add(e.getKey() + ":" + e.getValue());
-            }
-            results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name);
-            results.apply();
-
-            HashSet<String> account1Set = new HashSet<>();
-            for (Map.Entry<String, Long> e : account1.entrySet()) {
-                account1Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
-            }
-            results.putStringSet(ACCOUNTKEY + account1Name, account1Set);
-            results.apply();
-
-            HashSet<String> account2Set = new HashSet<>();
-            for (Map.Entry<String, Long> e : account2.entrySet()) {
-                account2Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
-            }
-            results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
-            results.apply();
-
-            results.putBoolean(SYNCMATCHED, true);
-            results.apply();
-
             syncMatched = true;
 
             mainActivity.showResults();
