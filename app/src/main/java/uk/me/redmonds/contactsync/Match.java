@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract.RawContacts;
 import android.view.View;
 import android.widget.TextView;
+import android.net.Uri;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -82,10 +83,10 @@ public class Match
             Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
                 .appendQueryParameter(RawContacts.ACCOUNT_NAME, account1Name)
                 .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.TYPE)
-                .appendQueryParameter(RawContacts.DELETED, 0)
+                .appendQueryParameter(RawContacts.DELETED, "0")
                 .build();
             
-            Cursor cursor = getContentResolver().query(
+            Cursor cursor = mContentResolver.query(
                 rawContactUri,
                 new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY,
                 null, null, RawContacts.DISPLAY_NAME_PRIMARY);
