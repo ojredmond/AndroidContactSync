@@ -101,7 +101,7 @@ public class Match
             cursor = mContentResolver.query(
                     rawContactUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
-                    RawContacts.ACCOUNT_NAME + "=?",
+                    RawContacts.ACCOUNT_NAME + "==?",
                     new String[]{account1Name}, RawContacts.DISPLAY_NAME_PRIMARY);
 
             cursor.moveToFirst();
