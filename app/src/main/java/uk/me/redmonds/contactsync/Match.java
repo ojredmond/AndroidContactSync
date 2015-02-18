@@ -81,12 +81,12 @@ public class Match
             publishProgress(new String[] {message});
 
             ContentResolver mContentResolver = mainActivity.getContentResolver();
-            Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
+            Uri rawContactUri = Uri.withAppendedPath(RawContacts.CONTENT_URI, Entity.CONTENT_DIRECTORY);
+            rawContactUri. buildUpon()
                 .appendQueryParameter(RawContacts.ACCOUNT_NAME, account1Name)
                 .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.TYPE)
                 .appendQueryParameter(RawContacts.DELETED, "0")
                 .build();
-            rawContactUri = Uri.withAppendedPath(rawContactUri, Entity.CONTENT_DIRECTORY);
             
             cursor = mContentResolver.query(
                 rawContactUri,
