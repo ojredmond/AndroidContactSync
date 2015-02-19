@@ -4,14 +4,15 @@
     android:id="@+id/contact"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/border"
     card_view:cardElevation="5.0sp">
 
     <LinearLayout
         android:id="@+id/contact_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+		android:background="@drawable/border"
+		>
 
     </LinearLayout>
 

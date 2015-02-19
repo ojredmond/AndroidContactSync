@@ -223,7 +223,7 @@ public class Contacts {
                 account2.add(e.getKey());
         }
         
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
         for(String item: set) {
             listMap.put(item.split(":")[0],item.split(":")[1]);
         }
@@ -335,12 +335,13 @@ public class Contacts {
             contacts.remove(id);
             list.remove(id);
             if (listName.startsWith(Match.MATCHEDKEY)) {
+				String id1,id2;
                 if (accounts.get(id).equals(account1Name)) {
-                    String id1 = id;
-                    String id2 = listMap.get(id);
+                    id1 = id;
+                    id2 = listMap.get(id);
                 } else {
-                    String id1 = listMap.get(id);
-                    String id2 = id;
+                    id1 = listMap.get(id);
+                    id2 = id;
                 }
                 removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id1, id2);
                 removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id2, id1);
@@ -496,12 +497,13 @@ public class Contacts {
                 addEntry(accountKey, name + ":" + id);
                 removeEntry(listName, id, name);
             } else if (listName.startsWith(Match.MATCHEDKEY)) {
+				String id1, id2;
                 if (accounts.get(id).equals(account1Name)) {
-                    String id1 = id;
-                    String id2 = listMap.get(id);
+                    id1 = id;
+                    id2 = listMap.get(id);
                 } else {
-                    String id1 = listMap.get(id);
-                    String id2 = id;
+                    id1 = listMap.get(id);
+                    id2 = id;
                 }
                 removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id1, id2);
                 removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id2, id1);

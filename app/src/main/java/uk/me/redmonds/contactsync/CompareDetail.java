@@ -12,9 +12,11 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,28 +24,6 @@ import java.util.HashSet;
 public class CompareDetail extends Fragment {
     private MainActivity main;
     private HashSet<String> selected;
-    OnTouchListener ContactTouch = new OnTouchListener() {
-
-        public boolean onTouch(View v, MotionEvent event) {
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                return false;
-            }
-
-            String id = String.valueOf(v.getId());
-            if (selected != null && selected.contains(id)) {
-                selected.remove(id);
-                v.setBackgroundResource(R.drawable.border);
-            } else {
-                if (selected == null) {
-                    selected = new HashSet<>();
-                }
-                selected.add(id);
-                v.setBackgroundResource(R.drawable.borderhighlight);
-            }
-
-            return false;
-        }
-    };
     private String name;
     private String ids[];
     private LinearLayout layout;
@@ -52,47 +32,36 @@ public class CompareDetail extends Fragment {
 
         public void onClick(View p1) {
             Contacts contacts;
-            ArrayList<String> ids = new ArrayList<>();
-            ArrayList<String> accounts = new ArrayList<>();
-            for (int i = 0; i < layout.getChildCount(); i++) {
+            //ArrayList<String> ids = new ArrayList<>();
+            //ArrayList<String> accounts = new ArrayList<>();
+            /*for (int i = 0; i < layout.getChildCount(); i++) {
                 String contact[] = ((String) layout.getChildAt(i).getTag()).split(":");
                 ids.add(contact[1]);
                 accounts.add(contact[0]);
-            }
+            }*/
 
             switch (p1.getId()) {
                 case R.id.delete_contact:
-                    if (selected == null) {
-                        //add dialog for none selected to confirm delete
-                        Toast.makeText(main, "No contact selected for " + name, Toast.LENGTH_LONG).show();
-                        return;
-                    }
+                    
 
-                    contacts = new Contacts(main, listItem, selected);
-                    //contacts.deleteContacts();
+                    contacts = new Contacts(main, listItem, ids);
+                    contacts.deleteContacts();
 
-                    if ((ids.size() - selected.size()) == 1) {
-                        for (int i = 0; i < ids.size(); i++) {
-                            if (!selected.contains(ids.get(i))) {
-                                //contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
-                        }
-                    }
-                    }
+                    //add back to results
 
-                    if (contacts.size() > 1)
-                        fillLayout();
+                    
                     break;
                 case R.id.merge_contact:
-                    main.Merge(name, ids, listItem);
+                    main.Merge(name, (ArrayList<String>)Arrays.asList(ids), listItem);
                     break;
                 case R.id.unmatched_contact:
-                    contacts = new Contacts(main, listItem, new HashSet<>(ids));
+                    contacts = new Contacts(main, listItem, ids);
                     contacts.addToUnmatched();
 
                     break;
                 default:
                     Toast.makeText(main, p1.toString(), Toast.LENGTH_LONG).show();
-        }
+        	}
         }
     };
     private SharedPreferences pref;
@@ -168,17 +137,27 @@ public class CompareDetail extends Fragment {
             View contactView = LayoutInflater.from(main)
                     .inflate(R.layout.contact, layoutContainer, false);
             contactView.setTag(account + ":" + id);
-            contactView.setOnTouchListener(ContactTouch);
             layout.addView(contactView);
             LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
-
+			//contactInfo.setOnClickListener(ContactTouch);
+			
             // Display account name
+			RelativeLayout deleteLayout = (RelativeLayout)LayoutInflater.from(main)
+				.inflate(R.layout.delete_button, layoutContainer, false);
             View accountInfo = LayoutInflater.from(main)
                     .inflate(R.layout.list_row_2, layoutContainer, false);
             ((TextView) accountInfo.findViewById(R.id.type)).setText("Account");
             ((TextView) accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
-            accountInfo.findViewById(R.id.row).setBackgroundColor(getResources().getColor(R.color.nav_background));
-            contactInfo.addView(accountInfo);
+            //change row background colour
+			deleteLayout.findViewById(R.id.delete_row).setBackgroundColor(getResources().getColor(R.color.nav_background));
+			
+			// listener to delete button
+			deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
+
+			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+			params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
+			deleteLayout.addView(accountInfo, params);
+            contactInfo.addView(deleteLayout, params);
 
             // Display contact id
             accountInfo = LayoutInflater.from(main)
