@@ -90,7 +90,7 @@ public class MainActivity extends ActionBarActivity
                         .commit();
                 break;
             case 1:
-                Fragment syncF = new SyncFragment();
+                /*Fragment syncF = new SyncFragment();
 
                 // Pass what list to show
                 Bundle args = new Bundle();
@@ -99,7 +99,8 @@ public class MainActivity extends ActionBarActivity
                 fragmentManager.beginTransaction()
                     .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
                     //.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
-                    .commit();
+                    .commit();*/
+                showOptions();
                 break;
             case 2:
             	Fragment statusF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_logs));
@@ -270,6 +271,7 @@ public class MainActivity extends ActionBarActivity
             Toast.makeText(this,currentFragmentClass,Toast.LENGTH_SHORT).show();
             switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
+                    String type = ((SyncFragment)currentFragment).getListType();
                     Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
                     break;
                 case "uk.me.redmonds.contactsync.CompareFragment":
