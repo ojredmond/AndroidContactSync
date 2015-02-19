@@ -262,9 +262,12 @@ public class MainActivity extends ActionBarActivity
                 case "uk.me.redmonds.contactsync.SyncFragment":
                     String type = ((SyncFragment)currentFragment).getListType();
                     if(type.equals(SyncFragment.SUMMARY))
-                        Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
+                        showOptions();
                     else
                         super.onBackPressed();
+                    break;
+                case "uk.me.redmonds.contactsync.Settings_fragment":
+                    Toast.makeText(this,"Settings_fragment",Toast.LENGTH_SHORT).show();
                     break;
                 case "uk.me.redmonds.contactsync.CompareFragment":
                     Toast.makeText(this,"CompareFragment",Toast.LENGTH_SHORT).show();
