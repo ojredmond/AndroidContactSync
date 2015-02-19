@@ -32,13 +32,13 @@ public class CompareDetail extends Fragment {
             String id = String.valueOf(v.getId());
             if (selected != null && selected.contains(id)) {
                 selected.remove(id);
-                //v.setBackgroundResource(R.drawable.border);
+                v.setBackgroundResource(R.drawable.border);
             } else {
                 if (selected == null) {
                     selected = new HashSet<>();
                 }
                 selected.add(id);
-                //v.setBackgroundResource(R.drawable.borderhighlight);
+                v.setBackgroundResource(R.drawable.borderhighlight);
             }
 
             return false;

@@ -18,11 +18,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="adding functionality">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/border.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/borderhighlight.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/contact.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/contact.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Contact Sync.iws" />
@@ -50,7 +46,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="4176" max-vertical-offset="8595">
-              <caret line="305" column="25" selection-start-line="305" selection-start-column="25" selection-end-line="305" selection-end-column="25" />
+              <caret line="305" column="24" selection-start-line="305" selection-start-column="24" selection-end-line="305" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -91,8 +87,8 @@
       <file leaf-file-name="CompareDetail.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.7592592" vertical-offset="45" max-vertical-offset="3000">
-              <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
+            <state vertical-scroll-proportion="0.5555556" vertical-offset="45" max-vertical-offset="3000">
+              <caret line="40" column="16" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
               <folding />
             </state>
           </provider>
@@ -718,9 +714,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Match.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/border.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/drawable/borderhighlight.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/contact.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java" />
       </list>
     </option>
   </component>
@@ -1294,7 +1290,11 @@
       <created>1424302431854</created>
       <updated>1424302431854</updated>
     </task>
-    <option name="localTasksCounter" value="48" />
+    <task id="LOCAL-00048" summary="adding functionality">
+      <created>1424328489576</created>
+      <updated>1424328489576</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1789,7 +1789,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/Contacts.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="4176" max-vertical-offset="8595">
-          <caret line="305" column="25" selection-start-line="305" selection-start-column="25" selection-end-line="305" selection-end-column="25" />
+          <caret line="305" column="24" selection-start-line="305" selection-start-column="24" selection-end-line="305" selection-end-column="24" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
@@ -1809,8 +1809,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/CompareDetail.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.7592592" vertical-offset="45" max-vertical-offset="3000">
-          <caret line="82" column="24" selection-start-line="82" selection-start-column="24" selection-end-line="82" selection-end-column="24" />
+        <state vertical-scroll-proportion="0.5555556" vertical-offset="45" max-vertical-offset="3000">
+          <caret line="40" column="16" selection-start-line="40" selection-start-column="16" selection-end-line="40" selection-end-column="16" />
           <folding />
         </state>
       </provider>
