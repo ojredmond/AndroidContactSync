@@ -78,6 +78,7 @@ public class Contacts {
     private String listName;
     private HashSet<String> list;
     private HashMap<String, String> accounts = new HashMap<>();
+    private HashMap<String, String> listMap = new HashMap<>();
     private MainActivity main;
     private HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = new HashMap<>();
 
@@ -221,6 +222,11 @@ public class Contacts {
             else
                 account2.add(e.getKey());
         }
+        
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
+        for(String item: set) {
+            listMap.put(item.split(":")[0],item.split(":")[1]);
+        }
     }
     
     private String getTypeLabel (String mime, Integer type, CharSequence label) {
@@ -328,7 +334,18 @@ public class Contacts {
             String name = contacts.get(id).get(TYPE_NAME).iterator().next().get("value");
             contacts.remove(id);
             list.remove(id);
-            removeEntry(listName, id, name);
+            if (listName.startsWith(Match.MATCHEDKEY)) {
+                if (accounts.get(id).equals(account1Name)) {
+                    String id1 = id;
+                    String id2 = listMap.get(id);
+                } else {
+                    String id1 = listMap.get(id);
+                    String id2 = id;
+                }
+                removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id1, id2);
+                removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id2, id1);
+            } else
+                removeEntry(listName, id, name);
             if (!listName.startsWith(Match.DUPKEY)) {
                 String accountList = Match.ACCOUNTKEY + getAccountName(id);
                 removeEntry(accountList, id, name);
@@ -478,6 +495,16 @@ public class Contacts {
             if (listName.startsWith(Match.DUPKEY)) {
                 addEntry(accountKey, name + ":" + id);
                 removeEntry(listName, id, name);
+            } else if (listName.startsWith(Match.MATCHEDKEY)) {
+                if (accounts.get(id).equals(account1Name)) {
+                    String id1 = id;
+                    String id2 = listMap.get(id);
+                } else {
+                    String id1 = listMap.get(id);
+                    String id2 = id;
+                }
+                removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id1, id2);
+                removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id2, id1);
             }
         }
     }
