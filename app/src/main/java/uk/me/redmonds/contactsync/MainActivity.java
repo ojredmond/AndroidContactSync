@@ -26,8 +26,8 @@ public class MainActivity extends ActionBarActivity
     public static final String ACCOUNT_TYPE = "com.google";
     public static final String ACCOUNT1 = "account1";
     public static final String ACCOUNT2 = "account2";
-	public static final String GROUPS = "GroupsOnOff";
-	public static final String PHOTOS = "PicturesOnOff";
+    public static final String GROUPS = "GroupsOnOff";
+    public static final String PHOTOS = "PicturesOnOff";
     public static String PACKAGE_NAME;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -47,10 +47,10 @@ public class MainActivity extends ActionBarActivity
         PACKAGE_NAME = getApplicationContext().getPackageName();
 	
         ActionBar actionBar = getSupportActionBar();
-		actionBar.setTitle(R.string.app_name);
-		mTitle = getString(R.string.app_name);
+        actionBar.setTitle(R.string.app_name);
+        mTitle = getString(R.string.app_name);
 		
-		Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
+        Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
 		
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -270,11 +270,15 @@ public class MainActivity extends ActionBarActivity
                     break;
                 case "uk.me.redmonds.contactsync.Settings_fragment":
                     Toast.makeText(this,"Settings_fragment",Toast.LENGTH_SHORT).show();
-					showOptions();
-					break;
+                    showOptions();
+                    break;
                 case "uk.me.redmonds.contactsync.CompareFragment":
                     Toast.makeText(this,"CompareFragment",Toast.LENGTH_SHORT).show();
-					showResults();
+                    showResults();
+                    break;
+                case "uk.me.redmonds.contactsync.MergeFragment":
+                    String item = (String)currentFragment.getArguments().get("list_Item");
+                    Toast.makeText(this,"MergeFragment:"+item,Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     Toast.makeText(this,"Default",Toast.LENGTH_SHORT).show();
