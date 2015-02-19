@@ -176,9 +176,6 @@ public class SyncFragment extends ListFragment {
         }
     }
 
-    private String getListType () {
-        return list_type;
-    }
     private void showSummary () {
         un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
         un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
