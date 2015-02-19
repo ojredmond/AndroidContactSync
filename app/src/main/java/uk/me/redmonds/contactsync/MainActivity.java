@@ -242,7 +242,7 @@ public class MainActivity extends ActionBarActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-merge");
 
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
 
         transaction.commit();
     }
@@ -262,7 +262,8 @@ public class MainActivity extends ActionBarActivity
         if(fragmentManager.findFragmentById(R.id.container)!=null) {
             String currentFragment = fragmentManager.findFragmentById(R.id.container).getClass().getName();
             Toast.makeText(this,currentFragment,Toast.LENGTH_SHORT).show();
-        }
+        } else
+            super.onBackPressed();
     }
 
 }
