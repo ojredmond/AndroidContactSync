@@ -257,11 +257,10 @@ public class MainActivity extends ActionBarActivity
         if(fragmentManager.findFragmentById(R.id.container)!=null) {
             Fragment currentFragment = fragmentManager.findFragmentById(R.id.container);
             String currentFragmentClass = currentFragment.getClass().getName();
-            Toast.makeText(this,currentFragmentClass,Toast.LENGTH_SHORT).show();
+
             switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
                     String type = (String)currentFragment.getArguments().get("list_type");
-                    Toast.makeText(this,"SyncFragment:"+type,Toast.LENGTH_SHORT).show();
 
                     if(type.equals(SyncFragment.SUMMARY))
                         showOptions();
@@ -278,10 +277,11 @@ public class MainActivity extends ActionBarActivity
                     break;
                 case "uk.me.redmonds.contactsync.MergeFragment":
                     String item = (String)currentFragment.getArguments().get("listItem");
-                    Toast.makeText(this,"MergeFragment:"+item,Toast.LENGTH_SHORT).show();
+                    String type = (String)currentFragment.getArguments().get("listItem");
+                    Compare (type, item, null);
                     break;
                 default:
-                    Toast.makeText(this,"Default",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this,currentFragmentClass,Toast.LENGTH_SHORT).show();
                     super.onBackPressed();
             }
         } else
