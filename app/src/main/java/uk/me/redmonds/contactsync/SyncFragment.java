@@ -29,7 +29,6 @@ public class SyncFragment extends ListFragment {
     private static final String NODUP = "No Duplicates";
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
-    //private ArrayList<String> values = new ArrayList<String>();
     private List<Map<String, String>> values = new ArrayList<>();
     private MainActivity main;
     private SharedPreferences pref;
@@ -177,6 +176,9 @@ public class SyncFragment extends ListFragment {
         }
     }
 
+    private String getListType () {
+        return list_type;
+    }
     private void showSummary () {
         un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
         un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
