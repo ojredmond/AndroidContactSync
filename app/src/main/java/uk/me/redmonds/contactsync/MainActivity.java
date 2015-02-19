@@ -81,11 +81,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        if(fragmentManager.findFragmentById(R.id.container)!=null) {
-            String currentFragment = fragmentManager.findFragmentById(R.id.container).getClass().getName();
-            Toast.makeText(this,currentFragment,Toast.LENGTH_SHORT).show();
-        }
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
@@ -259,4 +254,14 @@ public class MainActivity extends ActionBarActivity
          */
         return mNavigationDrawerFragment.mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if(fragmentManager.findFragmentById(R.id.container)!=null) {
+            String currentFragment = fragmentManager.findFragmentById(R.id.container).getClass().getName();
+            Toast.makeText(this,currentFragment,Toast.LENGTH_SHORT).show();
+        }
+    }
+
 }
