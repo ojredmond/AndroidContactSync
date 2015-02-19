@@ -184,7 +184,7 @@ public class MainActivity extends ActionBarActivity
 
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_results));
-        transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_results));
+        //transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_results));
 
         transaction.commit();
         
@@ -214,7 +214,7 @@ public class MainActivity extends ActionBarActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-compare");
 
-        transaction.addToBackStack(PACKAGE_NAME + "-compare");
+        //transaction.addToBackStack(PACKAGE_NAME + "-compare");
 
         transaction.commit();
     }
@@ -246,7 +246,7 @@ public class MainActivity extends ActionBarActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-merge");
 
-        transaction.addToBackStack(null);
+        //transaction.addToBackStack(null);
 
         transaction.commit();
     }
