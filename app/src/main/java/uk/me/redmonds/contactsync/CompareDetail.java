@@ -63,41 +63,36 @@ public class CompareDetail extends Fragment {
             switch (p1.getId()) {
                 case R.id.delete_contact:
                     if (selected == null) {
-                        //add code for none selected
+                        //add dialog for none selected to confirm delete
                         Toast.makeText(main, "No contact selected for " + name, Toast.LENGTH_LONG).show();
                         return;
                     }
 
                     contacts = new Contacts(main, listItem, selected);
-                    contacts.deleteContacts();
-
-                    //remove duplicate
-                    //dupList.remove(name);
+                    //contacts.deleteContacts();
 
                     if ((ids.size() - selected.size()) == 1) {
                         for (int i = 0; i < ids.size(); i++) {
                             if (!selected.contains(ids.get(i))) {
                                 //contacts.addToUnmatched(ids.get(i), name, accounts.get(i));
-                            }
                         }
                     }
+                    }
 
-                    fillLayout();
+                    if (contacts.size() > 1)
+                        fillLayout();
                     break;
                 case R.id.merge_contact:
                     main.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
-                    //dupList.remove(name);
-                    //for (int i=0; i < ids.size(); i++) {
                     contacts = new Contacts(main, listItem, new HashSet<>(ids));
                     contacts.addToUnmatched();
-                    //}
 
                     break;
                 default:
                     Toast.makeText(main, p1.toString(), Toast.LENGTH_LONG).show();
-            }
+        }
         }
     };
     private SharedPreferences pref;
@@ -173,6 +168,7 @@ public class CompareDetail extends Fragment {
             View contactView = LayoutInflater.from(main)
                     .inflate(R.layout.contact, layoutContainer, false);
             contactView.setTag(account + ":" + id);
+            contactView.setOnTouchListener(ContactTouch);
             layout.addView(contactView);
             LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
 

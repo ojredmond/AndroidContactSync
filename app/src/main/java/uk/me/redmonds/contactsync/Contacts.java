@@ -303,6 +303,10 @@ public class Contacts {
         return accounts.get(id);
     }
 
+    public Integer size() {
+        return contacts.size();
+    }
+
     public Boolean deleteContacts () {
         return deleteContacts(list);
     }
@@ -325,6 +329,10 @@ public class Contacts {
             contacts.remove(id);
             list.remove(id);
             removeEntry(listName, id, name);
+            if (!listName.startsWith(Match.DUPKEY)) {
+                String accountList = Match.ACCOUNTKEY + getAccountName(id);
+                removeEntry(accountList, id, name);
+            }
         }
 
         if (ops != null) {
