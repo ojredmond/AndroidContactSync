@@ -92,12 +92,11 @@ public class MainActivity extends ActionBarActivity
                 showOptions();
                 break;
             case 2:
-            	Fragment statusF = fragmentManager.findFragmentByTag(PACKAGE_NAME + "-" + getString(R.string.title_logs));
-            	if (statusF == null) statusF = new StatusFragment();
-
-                fragmentManager.beginTransaction()
-                    .replace(R.id.container, statusF, PACKAGE_NAME + "-" + getString(R.string.title_logs))
-                    .commit();
+            	if (!restoreFragment(PACKAGE_NAME + "-" + getString(R.string.title_logs))) {
+                    fragmentManager.beginTransaction()
+                        .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
+                        .commit();
+            	}
                 break;
             case 3:
                 showResults();
@@ -105,6 +104,16 @@ public class MainActivity extends ActionBarActivity
         }
     }
 
+    private Boolean restoreFragment(String fragTag) {
+        Fragment frag = fragmentManager.findFragmentByTag(fragTag);
+    	if (frag == null) return false;
+
+        fragmentManager.beginTransaction()
+            .replace(R.id.container, frag, fragTag)
+            .commit();
+            
+        return true;
+    }
     public void setHeading(CharSequence title) {
         if(!title.equals("")) mTitle = title;
 		
