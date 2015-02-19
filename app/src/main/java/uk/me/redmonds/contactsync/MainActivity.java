@@ -177,7 +177,7 @@ public class MainActivity extends ActionBarActivity
 
         // Pass what list to show
         Bundle args = new Bundle();
-        if (item != null)
+        if (type != null)
             args.putString("list_type", type);
         else
             args.putString("list_type", SyncFragment.OPTIONS);
