@@ -277,7 +277,7 @@ public class MainActivity extends ActionBarActivity
                     showResults();
                     break;
                 case "uk.me.redmonds.contactsync.MergeFragment":
-                    String item = (String)currentFragment.getArguments().get("list_Item");
+                    String item = (String)currentFragment.getArguments().get("listItem");
                     Toast.makeText(this,"MergeFragment:"+item,Toast.LENGTH_SHORT).show();
                     break;
                 default:
