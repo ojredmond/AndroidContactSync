@@ -161,21 +161,26 @@ public class MainActivity extends ActionBarActivity
         m.startMatch(this, statusView, syncType);
     }
 
+    public void showOptions () {
+        showList(SyncFragment.OPTIONS);
+    }
+    
     public void showResults () {
-        showResults(null);
+        showList(SyncFragment.SUMMARY);
     }
 
-    public void showResults (String item) {
+    public void showList (String type) {
         FragmentManager fragMan = getSupportFragmentManager();
         FragmentTransaction transaction = fragMan.beginTransaction();
         SyncFragment newFragment = new SyncFragment();
 
         // Pass what list to show
         Bundle args = new Bundle();
-        args.putString("list_type", SyncFragment.SUMMARY);
-        if (item != null) {
-            args.putString("list_item", item);
-        }
+        if (item != null)
+            args.putString("list_type", type);
+        else
+            args.putString("list_type", SyncFragment.OPTIONS);
+
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
@@ -260,9 +265,10 @@ public class MainActivity extends ActionBarActivity
     public void onBackPressed() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         if(fragmentManager.findFragmentById(R.id.container)!=null) {
-            String currentFragment = fragmentManager.findFragmentById(R.id.container).getClass().getName();
-            Toast.makeText(this,currentFragment,Toast.LENGTH_SHORT).show();
-            switch (currentFragment) {
+            Fragment currentFragment = fragmentManager.findFragmentById(R.id.container);
+            String currentFragmentClass = currentFragment.getClass().getName();
+            Toast.makeText(this,currentFragmentClass,Toast.LENGTH_SHORT).show();
+            switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
                     Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
                     break;
