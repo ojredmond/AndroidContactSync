@@ -86,20 +86,9 @@ public class MainActivity extends ActionBarActivity
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new Settings_fragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
-                        //.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_settings))
                         .commit();
                 break;
             case 1:
-                /*Fragment syncF = new SyncFragment();
-
-                // Pass what list to show
-                Bundle args = new Bundle();
-                args.putString("list_type", SyncFragment.OPTIONS);
-                syncF.setArguments(args);
-                fragmentManager.beginTransaction()
-                    .replace(R.id.container, syncF, PACKAGE_NAME + "-" + getString(R.string.title_sync))
-                    //.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_sync))
-                    .commit();*/
                 showOptions();
                 break;
             case 2:
@@ -272,7 +261,10 @@ public class MainActivity extends ActionBarActivity
             switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
                     String type = ((SyncFragment)currentFragment).getListType();
-                    Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
+                    if(type.equals(SyncFragment.SUMMARY))
+                        Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
+                    else
+                        super.onBackPressed();
                     break;
                 case "uk.me.redmonds.contactsync.CompareFragment":
                     Toast.makeText(this,"CompareFragment",Toast.LENGTH_SHORT).show();
