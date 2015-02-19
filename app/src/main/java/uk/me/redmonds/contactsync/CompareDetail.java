@@ -28,46 +28,37 @@ public class CompareDetail extends Fragment {
     private String ids[];
     private LinearLayout layout;
     private String listItem;
+	Contacts cObj;
+	private SharedPreferences pref;
+    private ViewGroup layoutContainer;
+    private View compareView;
+	
     private OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1) {
-            Contacts contacts;
-            //ArrayList<String> ids = new ArrayList<>();
-            //ArrayList<String> accounts = new ArrayList<>();
-            /*for (int i = 0; i < layout.getChildCount(); i++) {
-                String contact[] = ((String) layout.getChildAt(i).getTag()).split(":");
-                ids.add(contact[1]);
-                accounts.add(contact[0]);
-            }*/
 
             switch (p1.getId()) {
                 case R.id.delete_contact:
-                    
+                    cObj.deleteContacts();
 
-                    contacts = new Contacts(main, listItem, ids);
-                    contacts.deleteContacts();
-
-                    //add back to results
-
-                    
+                    //reload comparefragement
+					main.Compare(null, listItem, null);
                     break;
                 case R.id.merge_contact:
                     main.Merge(name, (ArrayList<String>)Arrays.asList(ids), listItem);
                     break;
                 case R.id.unmatched_contact:
-                    contacts = new Contacts(main, listItem, ids);
-                    contacts.addToUnmatched();
+                    cObj.addToUnmatched();
 
+					//reload comparefragement
+					main.Compare(null, listItem, null);
                     break;
                 default:
                     Toast.makeText(main, p1.toString(), Toast.LENGTH_LONG).show();
         	}
         }
     };
-    private SharedPreferences pref;
-    private ViewGroup layoutContainer;
-    private View compareView;
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -129,7 +120,7 @@ public class CompareDetail extends Fragment {
     private Boolean fillLayout() {
         layout.removeAllViews();
 
-        Contacts cObj = new Contacts(main, listItem, ids);
+        cObj = new Contacts(main, listItem, ids);
         HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = cObj.getContacts();
         for (String id : ids) {
             String account = cObj.getAccountName(id);

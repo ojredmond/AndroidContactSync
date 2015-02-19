@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import android.widget.*;
 
 public class Contacts {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -493,10 +494,13 @@ public class Contacts {
 
             String name = contacts.get(id).get(TYPE_NAME).iterator().next().get("value");
             addEntry(uName, name + ":" + id);
+			
             if (listName.startsWith(Match.DUPKEY)) {
                 addEntry(accountKey, name + ":" + id);
                 removeEntry(listName, id, name);
-            } else if (listName.startsWith(Match.MATCHEDKEY)) {
+            }
+			
+			if (listName.startsWith(Match.MATCHEDKEY + accounts.get(id))) {
 				String id1, id2;
                 if (accounts.get(id).equals(account1Name)) {
                     id1 = id;
@@ -505,8 +509,8 @@ public class Contacts {
                     id1 = listMap.get(id);
                     id2 = id;
                 }
-                removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id1, id2);
-                removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id2, id1);
+                removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id2, id1);
+                removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id1, id2);
             }
         }
     }
@@ -584,6 +588,7 @@ public class Contacts {
 
     private Boolean removeEntry(String listRef, String id, String name) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
+		//Toast.makeText(main,listName,Toast.LENGTH_SHORT).show();
         set.remove(name + ":" + id);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
