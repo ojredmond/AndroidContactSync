@@ -271,8 +271,8 @@ public class MainActivity extends ActionBarActivity
             Toast.makeText(this,currentFragmentClass,Toast.LENGTH_SHORT).show();
             switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
-                    String type = ((SyncFragment)currentFragment).getListType();
-                    Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
+                    String type = (String)currentFragment.getArguments().get("list_type");// getListType();
+                    Toast.makeText(this,"SyncFragment:"+type,Toast.LENGTH_SHORT).show();
                     break;
                 case "uk.me.redmonds.contactsync.CompareFragment":
                     Toast.makeText(this,"CompareFragment",Toast.LENGTH_SHORT).show();
