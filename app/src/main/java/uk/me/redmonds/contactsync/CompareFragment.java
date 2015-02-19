@@ -41,8 +41,6 @@ public class CompareFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         main = (MainActivity)this.getActivity();
-        // ViewPager and its adapters use support library
-        // fragments, so use getSupportFragmentManager.
 		
         mTabsAdapter =
                 new TabsAdapter(

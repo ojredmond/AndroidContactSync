@@ -29,6 +29,8 @@ public class MainActivity extends ActionBarActivity
     public static final String GROUPS = "GroupsOnOff";
     public static final String PHOTOS = "PicturesOnOff";
     public static String PACKAGE_NAME;
+	
+	private FragmentManager fragmentManager;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -52,8 +54,11 @@ public class MainActivity extends ActionBarActivity
 		
         Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
 		
+		//get the fragment manager
+		fragmentManager = getSupportFragmentManager();
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
+			fragmentManager.findFragmentById(R.id.navigation_drawer);
         
 
         // Set up the drawer.
@@ -80,8 +85,9 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
+		if(fragmentManager == null) fragmentManager = getSupportFragmentManager();
+		
         // update the main content by replacing fragments
-        FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
@@ -144,7 +150,7 @@ public class MainActivity extends ActionBarActivity
         // Create fragment and give it an argument specifying the article it should show
         StatusFragment newFragment = new StatusFragment();
 
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
 
         // Replace whatever is in the fragment_container view with this fragment,
         // and add the transaction to the back stack so the user can navigate back
@@ -169,8 +175,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void showList (String type) {
-        FragmentManager fragMan = getSupportFragmentManager();
-        FragmentTransaction transaction = fragMan.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         SyncFragment newFragment = new SyncFragment();
 
         // Pass what list to show
@@ -194,8 +199,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void Compare (String listType, String listItem, String selected) {
-        FragmentManager fragMan = getSupportFragmentManager();
-        FragmentTransaction transaction = fragMan.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         CompareFragment newFragment = new CompareFragment();
 
         // Pass what list to show
@@ -220,8 +224,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void Merge (String name, ArrayList<String> ids, String listItem) {
-        FragmentManager fragMan = getSupportFragmentManager();
-        FragmentTransaction transaction = fragMan.beginTransaction();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
         MergeFragment newFragment = new MergeFragment();
 
         // Pass what list to show
@@ -262,11 +265,11 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onBackPressed() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        
         if(fragmentManager.findFragmentById(R.id.container)!=null) {
             Fragment currentFragment = fragmentManager.findFragmentById(R.id.container);
             String currentFragmentClass = currentFragment.getClass().getName();
-            String type, item;
+            String type, item, name;
 
             switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
@@ -278,16 +281,15 @@ public class MainActivity extends ActionBarActivity
                         super.onBackPressed();
                     break;
                 case "uk.me.redmonds.contactsync.Settings_fragment":
-                    Toast.makeText(this,"Settings_fragment",Toast.LENGTH_SHORT).show();
                     showOptions();
                     break;
                 case "uk.me.redmonds.contactsync.CompareFragment":
-                    Toast.makeText(this,"CompareFragment",Toast.LENGTH_SHORT).show();
                     showResults();
                     break;
                 case "uk.me.redmonds.contactsync.MergeFragment":
                     item = (String)currentFragment.getArguments().get("listItem");
                     type = (String)currentFragment.getArguments().get("listItem");
+					name = (String)currentFragment.getArguments().get("listItem");
                     Compare (type, item, null);
                     break;
                 default:
