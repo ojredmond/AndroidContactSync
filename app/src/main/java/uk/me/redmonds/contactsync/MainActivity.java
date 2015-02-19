@@ -266,11 +266,12 @@ public class MainActivity extends ActionBarActivity
                 case "uk.me.redmonds.contactsync.SyncFragment":
                     Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
                     break;
-                case "uk.me.redmonds.contactsync.SyncFragment":
-                    Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
+                case "uk.me.redmonds.contactsync.CompareFragment":
+                    Toast.makeText(this,"CompareFragment",Toast.LENGTH_SHORT).show();
                     break;
                 default:
                     Toast.makeText(this,"Default",Toast.LENGTH_SHORT).show();
+                    super.onBackPressed();
             }
         } else
             super.onBackPressed();
