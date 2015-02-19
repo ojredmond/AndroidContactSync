@@ -257,10 +257,11 @@ public class MainActivity extends ActionBarActivity
         if(fragmentManager.findFragmentById(R.id.container)!=null) {
             Fragment currentFragment = fragmentManager.findFragmentById(R.id.container);
             String currentFragmentClass = currentFragment.getClass().getName();
+            String type, item;
 
             switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
-                    String type = (String)currentFragment.getArguments().get("list_type");
+                    type = (String)currentFragment.getArguments().get("list_type");
 
                     if(type.equals(SyncFragment.SUMMARY))
                         showOptions();
@@ -276,8 +277,8 @@ public class MainActivity extends ActionBarActivity
                     showResults();
                     break;
                 case "uk.me.redmonds.contactsync.MergeFragment":
-                    String item = (String)currentFragment.getArguments().get("listItem");
-                    String type = (String)currentFragment.getArguments().get("listItem");
+                    item = (String)currentFragment.getArguments().get("listItem");
+                    type = (String)currentFragment.getArguments().get("listItem");
                     Compare (type, item, null);
                     break;
                 default:
