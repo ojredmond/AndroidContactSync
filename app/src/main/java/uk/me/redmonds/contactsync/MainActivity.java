@@ -262,6 +262,16 @@ public class MainActivity extends ActionBarActivity
         if(fragmentManager.findFragmentById(R.id.container)!=null) {
             String currentFragment = fragmentManager.findFragmentById(R.id.container).getClass().getName();
             Toast.makeText(this,currentFragment,Toast.LENGTH_SHORT).show();
+            switch (currentFragment) {
+                case "uk.me.redmonds.contactsync.SyncFragment":
+                    Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
+                    break;
+                case "uk.me.redmonds.contactsync.SyncFragment":
+                    Toast.makeText(this,"SyncFragment",Toast.LENGTH_SHORT).show();
+                    break;
+                default:
+                    Toast.makeText(this,"Default",Toast.LENGTH_SHORT).show();
+            }
         } else
             super.onBackPressed();
     }
