@@ -62,9 +62,9 @@ public class CompareFragment extends Fragment {
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
             
-			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-			HashSet<String> account1Set = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + settings.getString(MainActivity.ACCOUNT1, null), null);
-			HashMap<String,String> account1 = new HashMap<>();
+            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+            HashSet<String> account1Set = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + settings.getString(MainActivity.ACCOUNT1, null), null);
+            HashMap<String,String> account1 = new HashMap<>();
 			for(String entry: account1Set) {
 				String contact[] = entry.split(":");
 				account1.put(contact[0],contact[1]);
@@ -89,7 +89,8 @@ public class CompareFragment extends Fragment {
 			Collections.sort(contacts, new ListSortMap());
             if (selectedMap != null) {
                 int index = contacts.indexOf(selectedMap);
-                mViewPager.setPrimaryItem(index);
+                Object f = instantiateItem (mViewPager, index);
+                setPrimaryItem(mViewPager, index, f);
             }
         }
 
