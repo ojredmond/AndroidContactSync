@@ -137,40 +137,30 @@ public class Match
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==?",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
-            Uri tmpUri = RawContacts.CONTENT_URI.buildUpon()
-                    .appendQueryParameter(RawContacts.ACCOUNT_NAME, account1Name)
-                    .appendQueryParameter(RawContacts.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
-                    .build();
-            Uri entityUri = Uri.withAppendedPath(tmpUri, Entity.CONTENT_DIRECTORY);
-            Cursor c = mContentResolver.query(entityUri,
-                      new String[]{RawContacts.SOURCE_ID, Entity.DATA_ID, Entity.MIMETYPE, Entity.DATA1},
-                      null, null, null);
+            String ids = "";
             try {
-                while (c.moveToNext()) {
-                    String sourceId = c.getString(0);
-                    if (!c.isNull(1)) {
-                        String mimeType = c.getString(2);
-                        String data = c.getString(3);
+                while (cursor.moveToNext()) {
+                    if (!cursor.isNull(0)) {
+                        ids += cursor.getString(0) + ",";
                     }
                 }
             } finally {
                 c.close();
             }
-            /*cursor = mContentResolver.query(entityUri,
-                    new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
-                    RawContacts.ACCOUNT_NAME + "==? AND " 
-                        + RawContacts.ACCOUNT_TYPE + "==? AND ",
-                        + "==? AND " + Entity.MIMETYPE + " IN (" + types + ") AND " 
-                        + RawContacts.DELETED + "==0",
-                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, null);*/
+            ids = ids.substring(0, ids.length() - 1);
+            
+            cursor = mContentResolver.query(Data.CONTENT_URI,
+                    new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+                    Data.RAW_CONTACT_ID + "IN (" + ids + ") AND " 
+                        + Data.MIMETYPE + " IN (" + types + ")",
+                    null, null);
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
-                //if(cursor.getString(4) != null && cursor.getString(4).equals(StructuredName.CONTENT_ITEM_TYPE)
-                //    && cursor.getString(4).equals(account1Name) && cursor.getString(5).equals(MainActivity.ACCOUNT_TYPE)) {
-                tempContactName = cursor.getString(1);
+                if(!cursor.isNull(1) && cursor.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
+                tempContactName = cursor.getString(2);
                 tempContactId = cursor.getLong(0);
 
                 /*cItems = mContentResolver.query(Data.CONTENT_URI,
