@@ -1,5 +1,6 @@
 package uk.me.redmonds.contactsync;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,13 +12,11 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.Activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import android.widget.*;
 
 /**
  * Fragment used for comparison adds tabs to views
@@ -26,55 +25,40 @@ import android.widget.*;
 public class CompareFragment extends Fragment {
     // When requested, this adapter returns a DemoObjectFragment,
     // representing an object in the collection.
-    TabsAdapter mTabsAdapter;
-    ViewPager mViewPager;
-
-    // this method is only called once for this fragment
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // retain this fragment
-        setRetainInstance(true);
-    }
+    private TabsAdapter mTabsAdapter;
+    private ViewPager mViewPager;
+    private Activity main;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-		
+        main = getActivity();
+
         mTabsAdapter =
                 new TabsAdapter(
-                        getChildFragmentManager());
+                        getFragmentManager());
 
         View tabs = inflater.inflate(R.layout.fragment_pager, container, false);
 
         mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
 
-		//if (savedInstanceState != null) {
-		//	mViewPager.setCurrentItem(savedInstanceState.getInt("tab", 0));
-		//}
         return mViewPager;
     }
 
-/*    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        //outState.putInt("tab", mViewPager.getCurrentItem());
-    }
-*/
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private ArrayList<HashMap<String,String>> contacts;
         private String listItem;
-		Activity main;
-        
+
         public TabsAdapter(FragmentManager fm) {
             super(fm);
 
             //get data to display
             Bundle args = getArguments();
             listItem = args.getString("listItem");
-			
-			main = getActivity();
+            String seleted = args.getString("selected");
+            HashMap selectedMap = null;
+
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
             
@@ -89,17 +73,24 @@ public class CompareFragment extends Fragment {
             for (String aSet : set) {
 				HashMap<String,String> contactsName = new HashMap<>();
                 String contact[] = aSet.split(":");
+                String name;
                 if (listItem.startsWith(Match.MATCHEDKEY)) {
-                    String name = account1.get(contact[0]);
+                    name = account1.get(contact[0]);
                     contactsName.put(contact[0] + "," + contact[1], name);
 					contacts.add(contactsName);
                 } else {
-                    String name = contact[0];
+                    name = contact[0];
                     contactsName.put(contact[1], name);
 					contacts.add(contactsName);
                 }
+                if (name.equals(seleted))
+                    selectedMap = contactsName;
             }
 			Collections.sort(contacts, new ListSortMap());
+            if (selectedMap != null) {
+                int index = contacts.indexOf(selectedMap);
+                mViewPager.setCurrentItem(index);
+            }
         }
 
         @Override
@@ -130,12 +121,4 @@ public class CompareFragment extends Fragment {
 			return (CharSequence)contacts.get(position).values().toArray()[0];
         }
     }
-	
-	/*@Override
-	public void onResume()
-	{
-		// TODO: Implement this method
-		super.onResume();
-		Toast.makeText(getActivity(),"test",Toast.LENGTH_SHORT).show();
-	}*/
 }

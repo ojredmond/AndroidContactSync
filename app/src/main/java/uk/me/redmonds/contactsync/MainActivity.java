@@ -22,19 +22,17 @@ import java.util.ArrayList;
 public class MainActivity extends ActionBarActivity
         implements StatusFragment.OnViewCreatedListener,
         NavigationDrawerFragment.NavigationDrawerCallbacks {
-
     public static final String ACCOUNT_TYPE = "com.google";
     public static final String ACCOUNT1 = "account1";
     public static final String ACCOUNT2 = "account2";
     public static final String GROUPS = "GroupsOnOff";
     public static final String PHOTOS = "PicturesOnOff";
     public static String PACKAGE_NAME;
-	
-	private FragmentManager fragmentManager;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     NavigationDrawerFragment mNavigationDrawerFragment;
+    private FragmentManager fragmentManager;
     /**
      * Used to store the last screen title.
      */
@@ -288,9 +286,9 @@ public class MainActivity extends ActionBarActivity
                     break;
                 case "uk.me.redmonds.contactsync.MergeFragment":
                     item = (String)currentFragment.getArguments().get("listItem");
-                    type = (String)currentFragment.getArguments().get("listItem");
-					name = (String)currentFragment.getArguments().get("listItem");
-                    Compare (type, item, null);
+                    type = (String) currentFragment.getArguments().get("listType");
+                    name = (String) currentFragment.getArguments().get("name");
+                    Compare(type, item, name);
                     break;
                 default:
                     Toast.makeText(this,currentFragmentClass,Toast.LENGTH_SHORT).show();
