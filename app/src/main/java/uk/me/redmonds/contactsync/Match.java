@@ -175,7 +175,7 @@ public class Match
                                 account1.put(tempContactName, tempContactId);
                         }
                     } finally {
-                        cursor.close();
+                        cItems.close();
                     }
                 }
             } finally {
