@@ -131,16 +131,27 @@ public class Match
                     .appendQueryParameter(RawContacts.DELETED, "0")
                     .build();
 
-            /*cursor = mContentResolver.query(
+            cursor = mContentResolver.query(
                     rawContactUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==?",
-                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);*/
+                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
             Uri entityUri = Uri.withAppendedPath(RawContacts.CONTENT_URI, Entity.CONTENT_DIRECTORY);
-            cursor = mContentResolver.query(entityUri,
-                    new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE, Entity.MIMETYPE, Entity.DATA1},
-                    null, null, null);
+            Cursor c = getContentResolver().query(entityUri,
+                      new String[]{RawContacts.SOURCE_ID, Entity.DATA_ID, Entity.MIMETYPE, Entity.DATA1},
+                      null, null, null);
+            try {
+                while (c.moveToNext()) {
+                    String sourceId = c.getString(0);
+                    if (!c.isNull(1)) {
+                        String mimeType = c.getString(2);
+                        String data = c.getString(3);
+                    }
+                }
+            } finally {
+                c.close();
+            }
             /*cursor = mContentResolver.query(entityUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
                     RawContacts.ACCOUNT_NAME + "==? AND " 
@@ -153,8 +164,8 @@ public class Match
             numContactsAccount1 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
-                if(cursor.getString(4) != null && cursor.getString(4).equals(StructuredName.CONTENT_ITEM_TYPE)
-                    && cursor.getString(4).equals(account1Name) && cursor.getString(5).equals(MainActivity.ACCOUNT_TYPE)) {
+                //if(cursor.getString(4) != null && cursor.getString(4).equals(StructuredName.CONTENT_ITEM_TYPE)
+                //    && cursor.getString(4).equals(account1Name) && cursor.getString(5).equals(MainActivity.ACCOUNT_TYPE)) {
                 tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
@@ -180,7 +191,7 @@ public class Match
                     account1.put(tempContactName, tempContactId);
 
                 cursor.moveToNext();
-            }
+            //}
             }
 
             cursor.close();
