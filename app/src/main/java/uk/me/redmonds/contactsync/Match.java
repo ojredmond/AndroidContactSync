@@ -136,8 +136,9 @@ public class Match
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==?",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);*/
 
-            cursor = mContentResolver.query(Data.CONTENT_URI,
-                    new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+             Uri entityUri = Uri.withAppendedPath(rawContactUri, Entity.CONTENT_DIRECTORY);
+             Cursor c = getContentResolver().query(entityUri,
+                      new String[]{RawContacts._ID, Entity.MIMETYPE, Entity.DATA1},
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
