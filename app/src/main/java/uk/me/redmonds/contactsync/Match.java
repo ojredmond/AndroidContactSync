@@ -132,15 +132,15 @@ public class Match
                 tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
-                cItem = mContentResolver.query(Data.CONTENT_URI,
+                cItems = mContentResolver.query(Data.CONTENT_URI,
                     new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
                     Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
                     new String[]{String.valueOf(tempContactId)}, null);
     
-                cItem.moveToFirst();
-                while (!cItem.isAfterLast()) {
+                cItems.moveToFirst();
+                while (!cItems.isAfterLast()) {
                     dupCount1++;
-                    cItem.moveToNext();
+                    cItems.moveToNext();
                 }
 
                 if (dup1List.containsKey(tempContactName)) {
