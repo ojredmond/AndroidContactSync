@@ -148,7 +148,7 @@ public class Match
                     cItems = mContentResolver.query(Data.CONTENT_URI,
                         new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
                         Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
-                        new String[]{String.valueOf(tempContactId)}, null);
+                        new String[]{Long.toString(tempContactId)}, null);
     
                     try {
                         while (cItems.moveToNext()) {
