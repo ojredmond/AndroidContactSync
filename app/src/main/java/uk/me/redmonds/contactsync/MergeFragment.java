@@ -27,6 +27,7 @@ public class MergeFragment extends Fragment {
     private String listItem;
     private ViewGroup layoutContainer;
     private String listType;
+	private String selectedName;
     OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1) {
@@ -39,10 +40,7 @@ public class MergeFragment extends Fragment {
                     }
                     break;
                 case R.id.contact_cancel:
-                    FragmentManager fragMan = main.getSupportFragmentManager();
-                    if (fragMan.getBackStackEntryCount() > 0) {
-                        fragMan.popBackStack();
-                    }
+                    main.Compare(listType, listItem, selectedName);
                     break;
                 default:
                     RelativeLayout row = (RelativeLayout) p1.getParent();
@@ -94,6 +92,7 @@ public class MergeFragment extends Fragment {
         Bundle args = getArguments();
         listType = args.getString("listType");
         listItem = args.getString("listItem");
+		selectedName = args.getString("selected");
         ids = args.getStringArrayList("ids");
         main = (MainActivity) this.getActivity();
 

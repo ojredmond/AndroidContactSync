@@ -42,6 +42,7 @@ public class CompareFragment extends Fragment {
 
         mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
+		mViewPager.setCurrentItem(mTabsAdapter.selectedIndex);
 
         return mViewPager;
     }
@@ -49,6 +50,7 @@ public class CompareFragment extends Fragment {
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private ArrayList<HashMap<String,String>> contacts;
         private String listItem;
+		public int selectedIndex = 0;
 
         public TabsAdapter(FragmentManager fm) {
             super(fm);
@@ -88,9 +90,7 @@ public class CompareFragment extends Fragment {
             }
 			Collections.sort(contacts, new ListSortMap());
             if (selectedMap != null) {
-                int index = contacts.indexOf(selectedMap);
-                Object f = instantiateItem (mViewPager, index);
-                setPrimaryItem(mViewPager, index, f);
+                selectedIndex = contacts.indexOf(selectedMap);
             }
         }
 
