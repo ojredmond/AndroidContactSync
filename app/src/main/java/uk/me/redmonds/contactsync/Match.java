@@ -141,9 +141,9 @@ public class Match
             cursor = mContentResolver.query(entityUri,
                       new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE 
-                    + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
+                    + "==? AND " + Entity.MIMETYPE + " IN (" + types + ")",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
-                    //+ "==? AND " + Data.MIMETYPE + " IN (" + types + ") AND " + RawContacts.DELETED + "==0",
+                    //+ "==? AND " + Entity.MIMETYPE + " IN (" + types + ") AND " + RawContacts.DELETED + "==0",
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
