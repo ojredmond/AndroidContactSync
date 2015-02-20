@@ -139,17 +139,22 @@ public class Match
 
             Uri entityUri = Uri.withAppendedPath(RawContacts.CONTENT_URI, Entity.CONTENT_DIRECTORY);
             cursor = mContentResolver.query(entityUri,
+                    new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE, Entity.MIMETYPE, Entity.DATA1},
+                    null, null, null);
+            /*cursor = mContentResolver.query(entityUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
                     RawContacts.ACCOUNT_NAME + "==? AND " 
-                        + RawContacts.ACCOUNT_TYPE + "==?",
-                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, null);
-                    //+ "==? AND " + Entity.MIMETYPE + " IN (" + types + ") AND " + RawContacts.DELETED + "==0",
+                        + RawContacts.ACCOUNT_TYPE + "==? AND ",
+                        + "==? AND " + Entity.MIMETYPE + " IN (" + types + ") AND " 
+                        + RawContacts.DELETED + "==0",
+                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, null);*/
 
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
-                if(cursor.getString(2) != null && cursor.getString(2).equals(StructuredName.CONTENT_ITEM_TYPE)) {
+                if(cursor.getString(4) != null && cursor.getString(4).equals(StructuredName.CONTENT_ITEM_TYPE)
+                    && cursor.getString(4).equals(account1Name) && cursor.getString(5).equals(MainActivity.ACCOUNT_TYPE)) {
                 tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
