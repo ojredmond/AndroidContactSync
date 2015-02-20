@@ -137,58 +137,51 @@ public class Match
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==?",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
-            String ids = "";
+            numContactsAccount1 = cursor.getCount();
+
             try {
                 while (cursor.moveToNext()) {
-                    if (!cursor.isNull(0)) {
-                        ids += cursor.getString(0) + ",";
+                    tempContactName = cursor.getString(2);
+                    tempContactId = cursor.getLong(0);
+    
+                    cItems = mContentResolver.query(Data.CONTENT_URI,
+                        new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+                        Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
+                        new String[]{String.valueOf(tempContactId)}, null);
+    
+                    try {
+                        while (cItems.moveToNext()) {
+                            account1Other.get(cItems.getString(1)).put(cItems.getString(2),cursor.getLong(0));
+                            //if(!cItems.isNull(1) && cItems.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
+            
+                            /*cItems = mContentResolver.query(Data.CONTENT_URI,
+                                new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+                                Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
+                                new String[]{String.valueOf(tempContactId)}, null);
+                
+                            cItems.moveToFirst();
+                            while (!cItems.isAfterLast()) {
+                                cItems.moveToNext();
+                            }*/
+            
+                            if (dup1List.containsKey(tempContactName)) {
+                                dupCount1++;
+                                dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
+                            } else if (account1.containsKey(tempContactName)) {
+                                dupCount1++;
+                                dup1List.put(tempContactName, account1.get(tempContactName) + "," + Long.toString(tempContactId));
+                                account1.remove(tempContactName);
+                            } else
+                                account1.put(tempContactName, tempContactId);
+                        }
+                    } finally {
+                        cursor.close();
                     }
                 }
             } finally {
                 cursor.close();
             }
-            ids = ids.substring(0, ids.length() - 1);
-            
-            cursor = mContentResolver.query(Data.CONTENT_URI,
-                    new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
-                    Data.RAW_CONTACT_ID + "IN (" + ids + ") AND " 
-                        + Data.MIMETYPE + " IN (" + types + ")",
-                    null, null);
 
-            cursor.moveToFirst();
-            numContactsAccount1 = cursor.getCount();
-
-            while (!cursor.isAfterLast()) {
-                if(!cursor.isNull(1) && cursor.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
-                tempContactName = cursor.getString(2);
-                tempContactId = cursor.getLong(0);
-
-                /*cItems = mContentResolver.query(Data.CONTENT_URI,
-                    new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
-                    Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
-                    new String[]{String.valueOf(tempContactId)}, null);
-    
-                cItems.moveToFirst();
-                while (!cItems.isAfterLast()) {
-                    account1Other.get(cItems.getString(1)).put(cItems.getString(2),cursor.getLong(0));
-                    cItems.moveToNext();
-                }*/
-
-                if (dup1List.containsKey(tempContactName)) {
-                    dupCount1++;
-                    dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
-                } else if (account1.containsKey(tempContactName)) {
-                    dupCount1++;
-                    dup1List.put(tempContactName, account1.get(tempContactName) + "," + Long.toString(tempContactId));
-                    account1.remove(tempContactName);
-                } else
-                    account1.put(tempContactName, tempContactId);
-
-                cursor.moveToNext();
-            }
-            }
-
-            cursor.close();
 
             message = "Loaded Account 1: "
                     + String.valueOf(numContactsAccount1)
