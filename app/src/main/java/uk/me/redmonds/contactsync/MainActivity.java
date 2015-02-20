@@ -27,6 +27,7 @@ public class MainActivity extends ActionBarActivity
     public static final String ACCOUNT2 = "account2";
     public static final String GROUPS = "GroupsOnOff";
     public static final String PHOTOS = "PicturesOnOff";
+	public static final String DEEP = "DeepOnOff";
     public static String PACKAGE_NAME;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.

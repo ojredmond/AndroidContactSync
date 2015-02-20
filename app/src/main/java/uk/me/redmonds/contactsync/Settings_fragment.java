@@ -37,6 +37,10 @@ public class Settings_fragment extends Fragment
 			prefEdit.putBoolean(main.PHOTOS, p1.isChecked());
 		}
 		
+		if(p1.getId() == R.id.deep) {
+			prefEdit.putBoolean(main.DEEP, p1.isChecked());
+		}
+		
 		if(prefEdit != null) prefEdit.apply();
 	}
 	
@@ -119,17 +123,21 @@ public class Settings_fragment extends Fragment
 		//set switches with saved state
 		Boolean groupInc = pref.getBoolean(main.GROUPS, false);
 		Boolean photoInc = pref.getBoolean(main.PHOTOS, false);
+		Boolean deepInc = pref.getBoolean(main.DEEP, false);
 		
 		SwitchCompat groupSw = (SwitchCompat)preferenceView.findViewById(R.id.groups);
 		groupSw.setChecked(groupInc);
 		SwitchCompat photoSw = (SwitchCompat)preferenceView.findViewById(R.id.pictures);
 		photoSw.setChecked(photoInc);
+		SwitchCompat deepSw = (SwitchCompat)preferenceView.findViewById(R.id.deep);
+		deepSw.setChecked(deepInc);
 		
 		// Add listeners
 		account1.setOnItemSelectedListener(this);
 		account2.setOnItemSelectedListener(this);
 		groupSw.setOnCheckedChangeListener(this);
 		photoSw.setOnCheckedChangeListener(this);
+		deepSw.setOnCheckedChangeListener(this);
 		
 		//set actionbar title
         ((MainActivity)getActivity()).setHeading(getString(R.string.title_settings));

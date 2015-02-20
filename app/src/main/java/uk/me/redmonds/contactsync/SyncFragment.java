@@ -29,7 +29,7 @@ public class SyncFragment extends ListFragment {
     private static final String NODUP = "No Duplicates";
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
-    private List<Map<String, String>> values = new ArrayList<>();
+    private ArrayList<HashMap<String, String>> values = new ArrayList<>();
     private MainActivity main;
     private SharedPreferences pref;
     private SharedPreferences settings;
