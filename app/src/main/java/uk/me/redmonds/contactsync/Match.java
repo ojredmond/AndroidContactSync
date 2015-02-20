@@ -114,6 +114,13 @@ public class Match
             if (syncMatched) {
                 return null;
             }
+
+            //creates mime types list for query
+            String types = "";
+            for(int i=0; i<MIME_TYPE_LIST.length;i++)
+                types += "'" + MIME_TYPE_LIST[i] + "',";
+            types = types.substring(0, types.length() - 1);
+            
             message = "Starting " + syncType + "...\n";
             message += "Loading Account 1\n";
             publishProgress(message);
@@ -137,15 +144,9 @@ public class Match
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
 
-            //creates mime types list for query
-            String types = "";
-            for(int i=0; i<MIME_TYPE_LIST.length;i++)
-                types += "'" + MIME_TYPE_LIST[i] + "',";
-            types = types.substring(0, types.length() - 1);
-            
             while (!cursor.isAfterLast()) {
                 if(cItems.getString(1) != null && cItems.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
-                tempContactName = cursor.getString(1);
+                tempContactName = cursor.getString(2);//cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
                 /*cItems = mContentResolver.query(Data.CONTENT_URI,
