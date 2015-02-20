@@ -141,7 +141,7 @@ public class Match
 
             try {
                 while (cursor.moveToNext()) {
-                    tempContactName = cursor.getString(2);
+                    tempContactName = cursor.getString(1);
                     tempContactId = cursor.getLong(0);
     
                     cItems = mContentResolver.query(Data.CONTENT_URI,
