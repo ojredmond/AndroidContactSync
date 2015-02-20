@@ -102,7 +102,7 @@ public class Match
             
             Cursor cursor;
             Cursor cItems;
-            String type;
+            String type, data;
             int matches = 0;
             int dupCount1 = 0;
             int dupCount2 = 0;
