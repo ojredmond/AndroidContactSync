@@ -89,7 +89,7 @@ public class CompareFragment extends Fragment {
 			Collections.sort(contacts, new ListSortMap());
             if (selectedMap != null) {
                 int index = contacts.indexOf(selectedMap);
-                mViewPager.setCurrentItem(index);
+                mViewPager.setPrimaryItem(index);
             }
         }
 
