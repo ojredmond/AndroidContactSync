@@ -145,7 +145,7 @@ public class Match
                     }
                 }
             } finally {
-                c.close();
+                cursor.close();
             }
             ids = ids.substring(0, ids.length() - 1);
             
