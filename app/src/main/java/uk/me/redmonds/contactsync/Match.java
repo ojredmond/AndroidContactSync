@@ -139,7 +139,7 @@ public class Match
 
             Uri entityUri = Uri.withAppendedPath(RawContacts.CONTENT_URI, Entity.CONTENT_DIRECTORY);
             cursor = mContentResolver.query(entityUri,
-                      new String[]{RawContacts._ID, Entity.MIMETYPE, Entity.DATA1},
+                      new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE 
                     + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
@@ -149,8 +149,8 @@ public class Match
             numContactsAccount1 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
-                if(cursor.getString(1) != null && cursor.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
-                tempContactName = cursor.getString(2);//cursor.getString(1);
+                if(cursor.getString(2) != null && cursor.getString(2).equals(StructuredName.CONTENT_ITEM_TYPE)) {
+                tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
                 /*cItems = mContentResolver.query(Data.CONTENT_URI,
