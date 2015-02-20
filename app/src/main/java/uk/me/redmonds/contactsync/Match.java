@@ -13,6 +13,7 @@ import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,27 +69,36 @@ public class Match
     private class MatchContacts extends AsyncTask<Void, String, String> {
         private int numContactsAccount1 = -1;
         private int numContactsAccount2 = -1;
-        private String tempContactName = "";
-        private Long tempContactId;
         private Boolean syncStarted = false;
 
         @Override
         protected String doInBackground(Void... params) {
             String message;
+            String tempContactName;
+            Long tempContactId;
+            String tempData;
 
             account1 = new HashMap<>();
-            account1Other = new HashMap<>();
             account2 = new HashMap<>();
-            account2Other = new HashMap<>();
             dup1List = new HashMap<>();
-            dup1ListOther = new HashMap<>();
             dup2List = new HashMap<>();
-            dup2ListOther = new HashMap<>();
             unmatched1 = new HashMap<>();
             unmatched2 = new HashMap<>();
             matched1 = new HashMap<>();
             matched2 = new HashMap<>();
+            account1Other = new HashMap<>();
+            account2Other = new HashMap<>();
+            dup1ListOther = new HashMap<>();
+            dup2ListOther = new HashMap<>();
 
+            //create empty Hashmaps for Other variables
+            for(String type: MIME_TYPE_LIST) {
+                account1Other.put(type,new HashMap<>());
+                account2Other.put(type,new HashMap<>());
+                dup1ListOther.put(type,new HashMap<>());
+                dup2ListOther.put(type,new HashMap<>());
+            }
+            
             Cursor cursor;
             Cursor cItems;
             int matches = 0;
@@ -139,7 +149,7 @@ public class Match
     
                 cItems.moveToFirst();
                 while (!cItems.isAfterLast()) {
-                    dupCount1++;
+                    account1Other.get(cItems.getString(1)).put(cItems.getString(2),cursor.getLong(0));
                     cItems.moveToNext();
                 }
 
@@ -320,6 +330,9 @@ public class Match
             results.apply();
 
             syncMatched = true;
+            for(String type: MIME_TYPE_LIST) {
+                Toast.makeText(mainActivity, type + account1Other.get(type).size(),Toast.DURATION_SHORT).show();
+            }
 
             mainActivity.showResults();
         }
