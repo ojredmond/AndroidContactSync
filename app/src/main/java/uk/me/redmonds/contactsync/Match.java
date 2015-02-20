@@ -331,7 +331,7 @@ public class Match
 
             syncMatched = true;
             for(String type: MIME_TYPE_LIST) {
-                Toast.makeText(mainActivity, type + account1Other.get(type).size(),Toast.DURATION_SHORT).show();
+                Toast.makeText(mainActivity, type + account1Other.get(type).size(),Toast.LENGTH_SHORT).show();
             }
 
             mainActivity.showResults();
