@@ -138,7 +138,7 @@ public class Match
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
             Uri entityUri = Uri.withAppendedPath(RawContacts.CONTENT_URI, Entity.CONTENT_DIRECTORY);
-            Cursor c = getContentResolver().query(entityUri,
+            Cursor c = mContentResolver.query(entityUri,
                       new String[]{RawContacts.SOURCE_ID, Entity.DATA_ID, Entity.MIMETYPE, Entity.DATA1},
                       null, null, null);
             try {
