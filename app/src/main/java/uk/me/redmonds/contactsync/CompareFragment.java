@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.app.Activity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,7 +28,6 @@ public class CompareFragment extends Fragment {
     // representing an object in the collection.
     TabsAdapter mTabsAdapter;
     ViewPager mViewPager;
-    MainActivity main;
 
     // this method is only called once for this fragment
     @Override
@@ -40,7 +40,6 @@ public class CompareFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        main = (MainActivity)this.getActivity();
 		
         mTabsAdapter =
                 new TabsAdapter(
@@ -66,6 +65,7 @@ public class CompareFragment extends Fragment {
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private ArrayList<HashMap<String,String>> contacts;
         private String listItem;
+		Activity main;
         
         public TabsAdapter(FragmentManager fm) {
             super(fm);
@@ -73,7 +73,8 @@ public class CompareFragment extends Fragment {
             //get data to display
             Bundle args = getArguments();
             listItem = args.getString("listItem");
-
+			
+			main = getActivity();
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
             
@@ -130,11 +131,11 @@ public class CompareFragment extends Fragment {
         }
     }
 	
-	@Override
+	/*@Override
 	public void onResume()
 	{
 		// TODO: Implement this method
 		super.onResume();
 		Toast.makeText(getActivity(),"test",Toast.LENGTH_SHORT).show();
-	}
+	}*/
 }
