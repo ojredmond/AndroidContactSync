@@ -139,10 +139,10 @@ public class Match
 
             Uri entityUri = Uri.withAppendedPath(RawContacts.CONTENT_URI, Entity.CONTENT_DIRECTORY);
             cursor = mContentResolver.query(entityUri,
-                      new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
-                    RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE 
-                    + "==? AND " + Entity.MIMETYPE + " IN (" + types + ")",
-                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
+                    new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY, Entity.MIMETYPE, Entity.DATA1},
+                    RawContacts.ACCOUNT_NAME + "==? AND " 
+                        + RawContacts.ACCOUNT_TYPE + "==? AND ",
+                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, null);
                     //+ "==? AND " + Entity.MIMETYPE + " IN (" + types + ") AND " + RawContacts.DELETED + "==0",
 
             cursor.moveToFirst();
