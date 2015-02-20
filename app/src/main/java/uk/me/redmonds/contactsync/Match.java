@@ -123,10 +123,15 @@ public class Match
                     .appendQueryParameter(RawContacts.DELETED, "0")
                     .build();
 
-            cursor = mContentResolver.query(
+            /*cursor = mContentResolver.query(
                     rawContactUri,
                     new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==?",
+                    new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);*/
+
+            cursor = mContentResolver.query(Data.CONTENT_URI,
+                    new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+                    RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
 
             cursor.moveToFirst();
@@ -139,10 +144,11 @@ public class Match
             types = types.substring(0, types.length() - 1);
             
             while (!cursor.isAfterLast()) {
+                if(cItems.getString(1) != null && cItems.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
                 tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
-                cItems = mContentResolver.query(Data.CONTENT_URI,
+                /*cItems = mContentResolver.query(Data.CONTENT_URI,
                     new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
                     Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
                     new String[]{String.valueOf(tempContactId)}, null);
@@ -151,7 +157,7 @@ public class Match
                 while (!cItems.isAfterLast()) {
                     account1Other.get(cItems.getString(1)).put(cItems.getString(2),cursor.getLong(0));
                     cItems.moveToNext();
-                }
+                }*/
 
                 if (dup1List.containsKey(tempContactName)) {
                     dupCount1++;
@@ -164,6 +170,7 @@ public class Match
                     account1.put(tempContactName, tempContactId);
 
                 cursor.moveToNext();
+            }
             }
 
             cursor.close();
