@@ -29,7 +29,7 @@ public class Match
             Email.CONTENT_ITEM_TYPE,
             Nickname.CONTENT_ITEM_TYPE,
             SipAddress.CONTENT_ITEM_TYPE
-    }
+    };
     private MainActivity mainActivity = null;
     private TextView status = null;
     private String syncType = "";
