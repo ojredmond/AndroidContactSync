@@ -125,7 +125,7 @@ public class Match
             //creates mime types list for query
             String types = "";
             for(int i=0; i<MIME_TYPE_LIST.length;i++)
-                types += MIME_TYPE_LIST[i] + ",";
+                types += "'" + MIME_TYPE_LIST[i] + "',";
             types = types.substring(0, types.length() - 1);
             
             while (!cursor.isAfterLast()) {
