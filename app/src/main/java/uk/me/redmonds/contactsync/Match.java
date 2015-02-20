@@ -102,6 +102,7 @@ public class Match
             
             Cursor cursor;
             Cursor cItems;
+            String type;
             int matches = 0;
             int dupCount1 = 0;
             int dupCount2 = 0;
@@ -151,20 +152,31 @@ public class Match
     
                     try {
                         while (cItems.moveToNext()) {
-                            account1Other.get(cItems.getString(1)).put(cItems.getString(2),cursor.getLong(0));
-                            //if(!cItems.isNull(1) && cItems.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
-            
-                            /*cItems = mContentResolver.query(Data.CONTENT_URI,
-                                new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
-                                Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
-                                new String[]{String.valueOf(tempContactId)}, null);
-                
-                            cItems.moveToFirst();
-                            while (!cItems.isAfterLast()) {
-                                cItems.moveToNext();
-                            }*/
-            
-                            if (dup1List.containsKey(tempContactName)) {
+                            type = cItems.getString(1);
+                            data = cItems.getString(2);
+
+                            if (dup1ListOther.get(type).containsKey(data)) {
+                                dup1ListOther.get(type).put(data,
+                                    dup1ListOther.get(type).get(data) + "," + cursor.getString(0));
+                                if(type.equals(StructuredName.CONTENT_ITEM_TYPE)) {
+                                    dupCount1++;
+                                    dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
+                                }
+                            } else if (account1Other.get(type).containsKey(data)) {
+                                dup1ListOther.get(type).put(data,
+                                    account1Other.get(type).get(data) + "," + cursor.getString(0));
+                                account1Other.get(type).remove(data);
+                                if(type.equals(StructuredName.CONTENT_ITEM_TYPE)) {
+                                    dupCount1++;
+                                    dup1List.put(tempContactName, account1.get(tempContactName) + "," + Long.toString(tempContactId));
+                                    account1.remove(tempContactName);
+                                }
+                            } else {
+                                account1Other.get(type).put(cItems.getString(2),cursor.getLong(0));
+                                if(type.equals(StructuredName.CONTENT_ITEM_TYPE))
+                                    account1.put(tempContactName, tempContactId);
+                            }
+                            /*if (dup1List.containsKey(tempContactName)) {
                                 dupCount1++;
                                 dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
                             } else if (account1.containsKey(tempContactName)) {
@@ -172,7 +184,7 @@ public class Match
                                 dup1List.put(tempContactName, account1.get(tempContactName) + "," + Long.toString(tempContactId));
                                 account1.remove(tempContactName);
                             } else
-                                account1.put(tempContactName, tempContactId);
+                                account1.put(tempContactName, tempContactId);*/
                         }
                     } finally {
                         cItems.close();
