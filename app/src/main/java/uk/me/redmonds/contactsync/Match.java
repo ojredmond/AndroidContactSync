@@ -11,6 +11,7 @@ import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.CommonDataKinds.*;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
+import android.provider.ContactsContract.RawContacts.Entity;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -137,7 +138,7 @@ public class Match
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);*/
 
              Uri entityUri = Uri.withAppendedPath(rawContactUri, Entity.CONTENT_DIRECTORY);
-             Cursor c = getContentResolver().query(entityUri,
+             cursor = mContentResolver.query(entityUri,
                       new String[]{RawContacts._ID, Entity.MIMETYPE, Entity.DATA1},
                     RawContacts.ACCOUNT_NAME + "==? AND " + RawContacts.ACCOUNT_TYPE + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
                     new String[]{account1Name, MainActivity.ACCOUNT_TYPE}, RawContacts.DISPLAY_NAME_PRIMARY);
