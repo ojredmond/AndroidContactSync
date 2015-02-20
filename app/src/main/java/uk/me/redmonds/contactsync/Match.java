@@ -23,13 +23,24 @@ public class Match
     public static final String MATCHEDKEY = "matched:";
     public static final String ACCOUNTKEY = "account:";
     public static final String NUMCONTACTS = "count:";
+    public static final String MIME_TYPE_LIST[] = {
+            StructuredName.CONTENT_ITEM_TYPE,
+            Phone.CONTENT_ITEM_TYPE,
+            Email.CONTENT_ITEM_TYPE,
+            Nickname.CONTENT_ITEM_TYPE,
+            SipAddress.CONTENT_ITEM_TYPE
+    }
     private MainActivity mainActivity = null;
     private TextView status = null;
     private String syncType = "";
     private HashMap<String, Long> account1;
+    private HashMap<String, HashMap<String, Long>> account1Other;
     private HashMap<String, Long> account2;
+    private HashMap<String, HashMap<String, Long>> account2Other;
     private HashMap<String, String> dup1List;
+    private HashMap<String, HashMap<String, String>> dup1ListOther;
     private HashMap<String, String> dup2List;
+    private HashMap<String, HashMap<String, String>> dup2ListOther;
     private HashMap<String, Long> unmatched1;
     private HashMap<String, Long> unmatched2;
     private HashMap<Long, Long>  matched1;
@@ -63,15 +74,20 @@ public class Match
             String message;
 
             account1 = new HashMap<>();
+            account1Other = new HashMap<>();
             account2 = new HashMap<>();
+            account2Other = new HashMap<>();
             dup1List = new HashMap<>();
+            dup1ListOther = new HashMap<>();
             dup2List = new HashMap<>();
+            dup2ListOther = new HashMap<>();
             unmatched1 = new HashMap<>();
             unmatched2 = new HashMap<>();
             matched1 = new HashMap<>();
             matched2 = new HashMap<>();
 
             Cursor cursor;
+            Cursor cItems;
             int matches = 0;
             int dupCount1 = 0;
             int dupCount2 = 0;
@@ -103,9 +119,26 @@ public class Match
             cursor.moveToFirst();
             numContactsAccount1 = cursor.getCount();
 
+            //creates mime types list for query
+            String types = "";
+            for(int i=0; i<MIME_TYPE_LIST.length;i++)
+                types += MIME_TYPE_LIST[i] + ",";
+            types = types.substring(0, types.length() - 1);
+            
             while (!cursor.isAfterLast()) {
                 tempContactName = cursor.getString(1);
                 tempContactId = cursor.getLong(0);
+
+                cItem = mContentResolver.query(Data.CONTENT_URI,
+                    new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+                    Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
+                    new String[]{String.valueOf(tempContactId)}, null);
+    
+                cItem.moveToFirst();
+                while (!cItem.isAfterLast()) {
+                    dupCount1++;
+                    cItem.moveToNext();
+                }
 
                 if (dup1List.containsKey(tempContactName)) {
                     dupCount1++;
