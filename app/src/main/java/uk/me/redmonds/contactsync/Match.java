@@ -145,7 +145,7 @@ public class Match
             numContactsAccount1 = cursor.getCount();
 
             while (!cursor.isAfterLast()) {
-                if(cItems.getString(1) != null && cItems.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
+                if(cursor.getString(1) != null && cursor.getString(1).equals(StructuredName.CONTENT_ITEM_TYPE)) {
                 tempContactName = cursor.getString(2);//cursor.getString(1);
                 tempContactId = cursor.getLong(0);
 
