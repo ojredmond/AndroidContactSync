@@ -182,21 +182,26 @@ public class SyncFragment extends ListFragment {
         HashSet<String> unmatched2Name = (HashSet<String>)pref.getStringSet(un2, null);
         HashSet<String> matched1 = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
+        Boolean dup = false;
+        HashSet<HashMap<String, String>> dupValues = new HashSet<>();
         for (String type : Match.MIME_TYPE_LIST) {
             String dupLabel = Match.DUPKEY + type + account1Name;
             HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
             if (dupSet != null && dupSet.size() > 0) {
+                dup = true;
                 value = new HashMap<>();
-                value.put(NAME, DUP + "1 " + Contacts.getGroupName(type) + "(" + dupSet.size() + ")");
+                value.put(NAME, Contacts.getGroupName(type) + "(" + dupSet.size() + ")");
                 value.put(DESCRIPTION, account1Name);
-                values.add(value);
+                dupValues.add(value);
             }
         }
-        if (dup1Name != null && dup1Name.size() > 0) {
+
+        if (dup) {
             value = new HashMap<>();
-            value.put(NAME,DUP + "1 (" + dup1Name.size() + ")");
+            value.put(NAME, DUP + "1");
             value.put(DESCRIPTION, account1Name);
             values.add(value);
+            values.addAll(dupValues);
         } else if (account1Name.equals(account2Name)) {
             value = new HashMap<>();
             value.put(NAME,NODUP);
