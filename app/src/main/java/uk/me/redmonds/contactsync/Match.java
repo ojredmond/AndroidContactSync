@@ -95,13 +95,8 @@ public class Match
             dup1ListOther = new HashMap<>();
             dup2ListOther = new HashMap<>();
 
-            //create empty Hashmaps for Other variables
-            /*for(String type: MIME_TYPE_LIST) {
-                account1Other.put(type,new HashMap<>());
-                account2Other.put(type,new HashMap<>());
-                dup1ListOther.put(type,new HashMap<>());
-                dup2ListOther.put(type,new HashMap<>());
-            }*/
+            
+            
             
             Cursor cursor;
             Cursor cItems;

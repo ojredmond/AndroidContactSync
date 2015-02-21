@@ -24,12 +24,12 @@ public class SyncFragment extends ListFragment {
     public static final String MATCHED = "Review matches";
     private static final String LAST = "View Last Matched Results";
     private static final String NODUP = "No Duplicates";
-    private ArrayList<HashMap<String, String>> values = new ArrayList<>();
+    private ArrayList<HashMap<String, Object>> values = new ArrayList<>();
     private MainActivity main;
     private SharedPreferences pref;
     private SharedPreferences settings;
     private String list_type;
-    private String list_item;
+    //private String list_item;
     private String account1Name;
     private String account2Name;
     private String dup1;
@@ -38,7 +38,7 @@ public class SyncFragment extends ListFragment {
     private String un2;
     private HashSet<String> dup1Name;
     private HashSet<String> dup2Name;
-    private HashMap<String, String> value;
+    private HashMap<String, Object> value;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -47,7 +47,7 @@ public class SyncFragment extends ListFragment {
         values.clear();
         Bundle args = getArguments();
         list_type = args.getString("list_type", null);
-        list_item = args.getString("list_item", null);
+        //list_item = args.getString("list_item", null);
 
         main = (MainActivity)this.getActivity();
 
@@ -112,19 +112,19 @@ public class SyncFragment extends ListFragment {
             values.add(value);
         }
 
-        //ArrayAdapter<String> adapter = new ArrayAdapter<String>(main, android.R.layout.simple_list_item_1, values);
+        
         FlexibleListAdapter adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main, android.R.layout.simple_list_item_2);
-        /*SimpleAdapter adapter = new SimpleAdapter(main,
-                values,
-                android.R.layout.simple_list_item_2,
-                new String[] { FlexibleListAdapter.TITLE, FlexibleListAdapter.DESCRIPTION },
-                new int[] { android.R.id.text1, android.R.id.text2 });*/
+        
         setListAdapter(adapter);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        if (values.get((int) id).get(FlexibleListAdapter.TITLE).equals(MATCH)) {
+		Toast.makeText(v.getContext(),""+l.getAdapter().getItem(position).toString(),Toast.LENGTH_LONG).show();
+		
+		HashMap<String,Object> clickedItem = (HashMap<String,Object>)l.getAdapter().getItem(position);
+		
+        if (clickedItem.get(FlexibleListAdapter.TITLE).equals(MATCH)) {
             settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
             account1Name = settings.getString(MainActivity.ACCOUNT1, null);
             account2Name = settings.getString(MainActivity.ACCOUNT2, null);
@@ -135,10 +135,16 @@ public class SyncFragment extends ListFragment {
             }
 
             main.matchStatus();
-        } else if (values.get((int) id).get(FlexibleListAdapter.TITLE).equals(LAST)) {
+        } else if (clickedItem.get(FlexibleListAdapter.TITLE).equals(LAST)) {
             main.showResults();
-        } else if (values.get((int) id).get(FlexibleListAdapter.TITLE).startsWith(DUP)) {
-            switch (values.get((int) id).get(FlexibleListAdapter.TITLE).charAt(DUP.length())) {
+		} else if (clickedItem.containsKey(FlexibleListAdapter.LISTITEM)) {
+			main.Compare(list_type, (String)clickedItem.get(FlexibleListAdapter.LISTITEM), null);
+		
+		/*} else if (v.getTag() != null && v.getTag() instanceof String) {
+			Toast.makeText(v.getContext(),v.getTag(),Toast.LENGTH_LONG).show();
+			//main.Compare(list_type, (String)v.getTag(), null);
+        } else if (((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).startsWith(DUP)) {
+            switch (((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).charAt(DUP.length())) {
                 case '1':
                     //main.showResults(dup1);
                     main.Compare(list_type, dup1, null);
@@ -148,10 +154,10 @@ public class SyncFragment extends ListFragment {
                     main.Compare(list_type, dup2, null);
                     break;
                 default:
-                    Toast.makeText(v.getContext(), id + ":" + values.get((int) id) + ":" + values.get((int) id).get(FlexibleListAdapter.TITLE).charAt(DUP.length()) + ":", Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(), id + ":" + values.get((int) id) + ":" + ((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).charAt(DUP.length()) + ":", Toast.LENGTH_LONG).show();
             }
-        } else if (values.get((int) id).get(FlexibleListAdapter.TITLE).startsWith(UNMATCHED)) {
-            switch (values.get((int) id).get(FlexibleListAdapter.TITLE).charAt(UNMATCHED.length())) {
+        } else if (((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).startsWith(UNMATCHED)) {
+            switch (((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).charAt(UNMATCHED.length())) {
                 case '1':
                     main.Compare(list_type, un1, null);
                     break;
@@ -159,14 +165,14 @@ public class SyncFragment extends ListFragment {
                     main.Compare(list_type, un2, null);
                     break;
                 default:
-                    Toast.makeText(v.getContext(), id + ":" + values.get((int) id) + ":" + values.get((int) id).get(FlexibleListAdapter.TITLE).charAt(DUP.length()) + ":", Toast.LENGTH_LONG).show();
+                    Toast.makeText(v.getContext(), id + ":" + values.get((int) id) + ":" + ((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).charAt(DUP.length()) + ":", Toast.LENGTH_LONG).show();
             }
-        } else if (values.get((int) id).get(FlexibleListAdapter.TITLE).startsWith(MATCHED)) {
+        } else if (((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).startsWith(MATCHED)) {
             main.Compare(list_type, Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
-        } else if (list_item != null && list_item.startsWith("dup")) {
-            main.Compare(list_type, list_item, values.get((int) id).get(FlexibleListAdapter.TITLE));
-        } else if (values.get((int) id).get(FlexibleListAdapter.TITLE).startsWith(NODUP)) {
-            //do nothing
+        //} else if (list_item != null && list_item.startsWith("dup")) {
+        //    main.Compare(list_type, list_item, ((String)values.get((int) id).get(FlexibleListAdapter.TITLE)));
+        } else if (((String)values.get((int) id).get(FlexibleListAdapter.TITLE)).startsWith(NODUP)) {
+            //do nothing*/
         } else {
             Toast.makeText(v.getContext(), values.get((int) id).get(FlexibleListAdapter.TITLE), Toast.LENGTH_LONG).show();
         }
@@ -181,7 +187,7 @@ public class SyncFragment extends ListFragment {
         HashSet<String> matched1 = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
         Boolean dup = false;
-        HashSet<HashMap<String, String>> dupValues = new HashSet<>();
+        HashSet<HashMap<String, Object>> dupValues = new HashSet<>();
         for (String type : Match.MIME_TYPE_LIST) {
             String dupLabel = Match.DUPKEY + type + account1Name;
             HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
@@ -189,8 +195,8 @@ public class SyncFragment extends ListFragment {
                 dup = true;
                 value = new HashMap<>();
                 value.put(FlexibleListAdapter.TITLE, Contacts.getGroupName(type) + " (" + dupSet.size() + ")");
-                value.put(FlexibleListAdapter.LAYOUT, String.valueOf(android.R.layout.simple_list_item_1));
-                value.put(FlexibleListAdapter.TAG, dupLabel);
+                value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
+                value.put(FlexibleListAdapter.LISTITEM, dupLabel);
                 dupValues.add(value);
             }
         }
@@ -212,6 +218,7 @@ public class SyncFragment extends ListFragment {
             value = new HashMap<>();
             value.put(FlexibleListAdapter.TITLE, DUP + "2 (" + dup2Name.size() + ")");
             value.put(FlexibleListAdapter.DESCRIPTION, account2Name);
+			value.put(FlexibleListAdapter.LISTITEM, dup2Name);
             values.add(value);
         }
 
@@ -219,6 +226,7 @@ public class SyncFragment extends ListFragment {
             value = new HashMap<>();
             value.put(FlexibleListAdapter.TITLE, UNMATCHED + "1 (" + unmatched1Name.size() + ")");
             value.put(FlexibleListAdapter.DESCRIPTION, account1Name);
+			value.put(FlexibleListAdapter.LISTITEM, unmatched1Name);
             values.add(value);
         }
 
@@ -226,6 +234,7 @@ public class SyncFragment extends ListFragment {
             value = new HashMap<>();
             value.put(FlexibleListAdapter.TITLE, UNMATCHED + "2 (" + unmatched2Name.size() + ")");
             value.put(FlexibleListAdapter.DESCRIPTION, account2Name);
+			value.put(FlexibleListAdapter.LISTITEM, unmatched2Name);
             values.add(value);
         }
 
@@ -233,6 +242,7 @@ public class SyncFragment extends ListFragment {
             value = new HashMap<>();
             value.put(FlexibleListAdapter.TITLE, MATCHED + " (" + matched1.size() + ")");
             value.put(FlexibleListAdapter.DESCRIPTION, account1Name + " " + account2Name);
+			value.put(FlexibleListAdapter.LISTITEM, matched1);
             values.add(value);
         }
     }

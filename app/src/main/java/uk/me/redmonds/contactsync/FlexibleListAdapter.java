@@ -17,7 +17,7 @@ public class FlexibleListAdapter extends BaseAdapter {
     public final static String TITLE = "Title";
     public final static String DESCRIPTION = "Desc";
     public final static String LAYOUT = "Layout";
-    public final static String TAG = "Tag";
+    public final static String LISTITEM = "List Item";
     private HashMap[] items;
     private Activity context;
     private int defaultLayout;
@@ -48,12 +48,10 @@ public class FlexibleListAdapter extends BaseAdapter {
         if (view == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             if (items[i].containsKey(LAYOUT))
-                view = mInflater.inflate(Integer.getInteger((String) items[i].get(LAYOUT)), null);
+                view = mInflater.inflate(items[i].get(LAYOUT), null);
             else
                 view = mInflater.inflate(defaultLayout, null);
 
-            if (items[i].containsKey(TAG))
-                view.setTag(items[i].get(TAG));
             if (items[i].containsKey(TITLE))
                 ((TextView) view.findViewById(android.R.id.text1)).setText((String) items[i].get(TITLE));
             if (items[i].containsKey(DESCRIPTION))
