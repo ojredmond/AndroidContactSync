@@ -10,7 +10,20 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.provider.ContactsContract.CommonDataKinds;
-import android.provider.ContactsContract.CommonDataKinds.*;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Event;
+import android.provider.ContactsContract.CommonDataKinds.GroupMembership;
+import android.provider.ContactsContract.CommonDataKinds.Im;
+import android.provider.ContactsContract.CommonDataKinds.Nickname;
+import android.provider.ContactsContract.CommonDataKinds.Note;
+import android.provider.ContactsContract.CommonDataKinds.Organization;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.CommonDataKinds.Photo;
+import android.provider.ContactsContract.CommonDataKinds.Relation;
+import android.provider.ContactsContract.CommonDataKinds.SipAddress;
+import android.provider.ContactsContract.CommonDataKinds.StructuredName;
+import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
+import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
 
@@ -19,7 +32,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import android.widget.*;
 
 public class Contacts {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -297,7 +309,7 @@ public class Contacts {
         return accounts.get(id);
     }
 
-    public Integer size() {
+    public int size() {
         return contacts.size();
     }
 
@@ -544,7 +556,7 @@ public class Contacts {
                     .withValue(CommonDataKinds.Organization.TYPE, type.split("/")[1]);
         } else if (type.startsWith("relation")) {
             opBuilder.withValue(Data.MIMETYPE, CommonDataKinds.Relation.CONTENT_ITEM_TYPE)
-                    .withValue(CommonDataKinds.Relation.NAME, value)
+                    .withValue(CommonDataKinds.Relation.TITLE, value)
                     .withValue(CommonDataKinds.Relation.TYPE, type.split("/")[1]);
         } else if (type.startsWith("sipaddress")) {
             opBuilder.withValue(Data.MIMETYPE, CommonDataKinds.SipAddress.CONTENT_ITEM_TYPE)
