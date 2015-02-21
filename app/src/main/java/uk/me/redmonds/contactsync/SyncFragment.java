@@ -187,7 +187,7 @@ public class SyncFragment extends ListFragment {
             HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
             if (dupSet != null && dupSet.size() > 0) {
                 value = new HashMap<>();
-                value.put(NAME, DUP + "1 " + type + "(" + dupSet.size() + ")");
+                value.put(NAME, DUP + "1 " + Contacts.getGroupName(type) + "(" + dupSet.size() + ")");
                 value.put(DESCRIPTION, account1Name);
                 values.add(value);
             }
