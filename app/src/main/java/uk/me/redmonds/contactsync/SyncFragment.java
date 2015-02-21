@@ -27,6 +27,7 @@ public class SyncFragment extends ListFragment {
     private static final String NODUP = "No Duplicates";
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
+    private final static String TAG = "Tag";
     private ArrayList<HashMap<String, String>> values = new ArrayList<>();
     private MainActivity main;
     private SharedPreferences pref;
@@ -190,8 +191,8 @@ public class SyncFragment extends ListFragment {
             if (dupSet != null && dupSet.size() > 0) {
                 dup = true;
                 value = new HashMap<>();
-                value.put(NAME, Contacts.getGroupName(type) + "(" + dupSet.size() + ")");
-                value.put(DESCRIPTION, account1Name);
+                value.put(DESCRIPTION, Contacts.getGroupName(type) + "(" + dupSet.size() + ")");
+                value.put(TAG, dupLabel);
                 dupValues.add(value);
             }
         }
