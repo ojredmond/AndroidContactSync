@@ -7,14 +7,15 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.provider.ContactsContract.CommonDataKinds;
-import android.provider.ContactsContract.CommonDataKinds.*;
+import android.provider.ContactsContract.CommonDataKinds.Email;
+import android.provider.ContactsContract.CommonDataKinds.Nickname;
+import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.provider.ContactsContract.CommonDataKinds.SipAddress;
+import android.provider.ContactsContract.CommonDataKinds.StructuredName;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.provider.ContactsContract.RawContacts.Entity;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -313,12 +314,16 @@ public class Match
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
             results.apply();
 
-            HashSet<String> dup1Name = new HashSet<>();
-            for (Map.Entry<String, String> e : dup1List.entrySet()) {
-                dup1Name.add(e.getKey() + ":" + e.getValue());
-				Toast.makeText(mainActivity, e.getKey() + e.getValue(),Toast.LENGTH_LONG).show();
+            HashMap<String, HashSet<String>> dup1Name = new HashMap<>();
+            for (String type : MIME_TYPE_LIST)
+                dup1Name.put(type, new HashSet<String>());
+            for (Map.Entry<String, HashMap<String, String>> e : dup1ListOther.entrySet()) {
+                for (Map.Entry<String, String> v : e.getValue().entrySet()) {
+                    dup1Name.get(v.getKey()).add(e.getKey() + ":" + v.getValue());
+                }
             }
-            results.putStringSet(DUPKEY + account1Name, dup1Name);
+            for (String type : MIME_TYPE_LIST)
+                results.putStringSet(DUPKEY + type + account1Name, dup1Name.get(type));
             results.apply();
 
             HashSet<String> account1Set = new HashSet<>();

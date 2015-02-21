@@ -1,10 +1,10 @@
 package uk.me.redmonds.contactsync;
 
-import android.support.v4.app.ListFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -13,8 +13,6 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
 
 public class SyncFragment extends ListFragment {
     public static final String MATCH = "Perform Matching";
@@ -184,6 +182,16 @@ public class SyncFragment extends ListFragment {
         HashSet<String> unmatched2Name = (HashSet<String>)pref.getStringSet(un2, null);
         HashSet<String> matched1 = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
+        for (String type : Match.MIME_TYPE_LIST) {
+            String dupLabel = Match.DUPKEY + type + account1Name;
+            HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
+            if (dupSet != null && dupSet.size() > 0) {
+                value = new HashMap<>();
+                value.put(NAME, DUP + "1 " + type + "(" + dupSet.size() + ")");
+                value.put(DESCRIPTION, account1Name);
+                values.add(value);
+            }
+        }
         if (dup1Name != null && dup1Name.size() > 0) {
             value = new HashMap<>();
             value.put(NAME,DUP + "1 (" + dup1Name.size() + ")");
