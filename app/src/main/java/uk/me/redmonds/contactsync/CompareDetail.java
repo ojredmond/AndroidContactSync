@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -125,12 +126,14 @@ public class CompareDetail extends Fragment {
 			RelativeLayout deleteLayout = (RelativeLayout)LayoutInflater.from(main)
 				.inflate(R.layout.delete_button, layoutContainer, false);
             View accountInfo = LayoutInflater.from(main)
-                    .inflate(R.layout.list_account, layoutContainer, false);
+                    .inflate(R.layout.list_row_2, layoutContainer, false);
             ((TextView) accountInfo.findViewById(R.id.type)).setText("Account");
             ((TextView) accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
-
+			deleteLayout.setBackgroundColor(R.color.nav_background);
+			
             // listener to delete button
             deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
+			
 
 			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
