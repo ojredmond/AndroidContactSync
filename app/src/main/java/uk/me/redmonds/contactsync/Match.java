@@ -64,7 +64,7 @@ public class Match
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
-		deep = settings.getBoolean(main.DEEP, false);
+        deep = settings.getBoolean(MainActivity.DEEP, false);
 
         MatchContacts task = new MatchContacts();
         task.execute();
@@ -120,9 +120,8 @@ public class Match
             //creates mime types list for query
             String types = "";
 			if(deep) {
-            	for(int i=0; i<MIME_TYPE_LIST.length;i++)
-                	types += "'" + MIME_TYPE_LIST[i] + "',";
-            	types = types.substring(0, types.length() - 1);
+                for (String aMIME_TYPE_LIST : MIME_TYPE_LIST) types += "'" + aMIME_TYPE_LIST + "',";
+                types = types.substring(0, types.length() - 1);
 			} else
 				types = "'" + Contacts.TYPE_NAME + "'";
             
@@ -176,10 +175,11 @@ public class Match
 										if(type.equals(StructuredName.CONTENT_ITEM_TYPE)) {
 											dup1List.put(tempContactName, dup1List.get(tempContactName) + "," + Long.toString(tempContactId));
 										}
-									} else if (account1Other.containsKey(data)) {
-										dupCount1++;
-										tempData.put(type,account1Other.get(data).get(type) 
-													 + "," + cItems.getString(0));
+                                    } else if (account1Other.containsKey(data) &&
+                                            account1Other.get(data).get(type) != null) {
+                                        dupCount1++;
+                                        tempData.put(type, account1Other.get(data).get(type)
+                                                + "," + cItems.getString(0));
 										dup1ListOther.put(data,tempData);
 										unmatched1.remove(tempContactName);
 
