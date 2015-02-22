@@ -1,14 +1,10 @@
 package uk.me.redmonds.contactsync;
 
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -16,23 +12,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class CompareDetail extends Fragment {
+    Contacts cObj;
     private MainActivity main;
-    private HashSet<String> selected;
     private String name;
     private String ids[];
     private LinearLayout layout;
     private String listItem;
-	Contacts cObj;
-	private SharedPreferences pref;
-    private ViewGroup layoutContainer;
-    private View compareView;
-	
     private OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1) {
@@ -42,22 +33,24 @@ public class CompareDetail extends Fragment {
                     cObj.deleteContacts();
 
                     //reload comparefragement
-					main.Compare(null, listItem, null);
+                    main.Compare(null, listItem, null);
                     break;
                 case R.id.merge_contact:
-                    main.Merge(name, (ArrayList<String>)Arrays.asList(ids), listItem);
+                    main.Merge(name, (ArrayList<String>) Arrays.asList(ids), listItem);
                     break;
                 case R.id.unmatched_contact:
                     cObj.addToUnmatched();
 
-					//reload comparefragement
-					main.Compare(null, listItem, null);
+                    //reload comparefragement
+                    main.Compare(null, listItem, null);
                     break;
                 default:
                     Toast.makeText(main, p1.toString(), Toast.LENGTH_LONG).show();
-        	}
+            }
         }
     };
+    private ViewGroup layoutContainer;
+    private View compareView;
     
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,9 +101,6 @@ public class CompareDetail extends Fragment {
         else if (listItem.startsWith(Match.MATCHEDKEY))
             main.setHeading(getString(R.string.title_activity_match));
 
-        pref = main.getPreferences(Context.MODE_PRIVATE);
-        selected = (HashSet<String>) pref.getStringSet("selected-" + listItem, null);
-
         layout = (LinearLayout) compareView.findViewById(R.id.compare);
         fillLayout();
 
@@ -130,20 +120,17 @@ public class CompareDetail extends Fragment {
             contactView.setTag(account + ":" + id);
             layout.addView(contactView);
             LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
-			//contactInfo.setOnClickListener(ContactTouch);
-			
+
             // Display account name
 			RelativeLayout deleteLayout = (RelativeLayout)LayoutInflater.from(main)
 				.inflate(R.layout.delete_button, layoutContainer, false);
             View accountInfo = LayoutInflater.from(main)
-                    .inflate(R.layout.list_row_2, layoutContainer, false);
+                    .inflate(R.layout.list_account, layoutContainer, false);
             ((TextView) accountInfo.findViewById(R.id.type)).setText("Account");
             ((TextView) accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
-            //change row background colour
-			deleteLayout.findViewById(R.id.delete_row).setBackgroundColor(getResources().getColor(R.color.nav_background));
-			
-			// listener to delete button
-			deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
+
+            // listener to delete button
+            deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
 
 			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);

@@ -1,36 +1,120 @@
-<?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-        xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:paddingTop="@dimen/medium_gap">
 
-    <PreferenceCategory
-        android:title="@string/accounts">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/material_orange_500"
+        android:padding="@dimen/medium_gap"
+        android:text="@string/accounts"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white" />
 
-        <ListPreference
-            android:key="account1"
-            android:title="@string/account1" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_gap"
+        android:text="@string/account1"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
 
-        <ListPreference
-            android:key="account2"
-            android:title="@string/account2" />
+    <Spinner
+        android:id="@+id/account1selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_gap"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    </PreferenceCategory>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_gap"
+        android:text="@string/account2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textStyle="bold" />
 
-    <PreferenceCategory
-        android:title="@string/options">
+    <Spinner
+        android:id="@+id/account2selector"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/medium_gap"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <SwitchPreference
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/large_gap"
+        android:background="@color/material_orange_500"
+        android:padding="@dimen/medium_gap"
+        android:text="@string/options"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@android:color/white"
+
+        />
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:columnCount="2"
+        android:rowCount="3">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="0"
+            android:padding="@dimen/medium_gap"
+            android:text="@string/groups"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/groups"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="0"
             android:defaultValue="false"
-            android:key="GroupsOnOff"
-            android:title="@string/groups" />
+            android:padding="@dimen/medium_gap" />
 
-        <SwitchPreference
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="1"
+            android:padding="@dimen/medium_gap"
+            android:text="@string/photos"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/pictures"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="1"
             android:defaultValue="false"
-            android:key="PicturesOnOff"
-            android:title="@string/photos" />
+            android:padding="@dimen/medium_gap" />
 
-    </PreferenceCategory>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="0"
+            android:layout_row="2"
+            android:padding="@dimen/medium_gap"
+            android:text="@string/deep"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
+        <android.support.v7.widget.SwitchCompat
+            android:id="@+id/deep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_column="1"
+            android:layout_row="2"
+            android:defaultValue="false"
+            android:padding="@dimen/medium_gap" />
+    </GridLayout>
 
-</PreferenceScreen>
+</LinearLayout>
