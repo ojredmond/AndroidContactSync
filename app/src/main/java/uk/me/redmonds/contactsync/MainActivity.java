@@ -90,7 +90,7 @@ public class MainActivity extends ActionBarActivity
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
-                        .replace(R.id.container, new Settings_fragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
+                        .replace(R.id.container, new SettingsFragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
                         .commit();
                 break;
             case 1:
