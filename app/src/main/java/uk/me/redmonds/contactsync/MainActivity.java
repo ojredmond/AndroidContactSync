@@ -222,7 +222,7 @@ public class MainActivity extends ActionBarActivity
         transaction.commit();
     }
 
-    public void Merge (String name, ArrayList<String> ids, String listItem) {
+    public void Merge (String name, String[] ids, String listItem) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         MergeFragment newFragment = new MergeFragment();
 
@@ -232,7 +232,8 @@ public class MainActivity extends ActionBarActivity
             args.putString("name", name);
         }
         if (ids != null) {
-            args.putStringArrayList("ids", ids);
+			args.putStringArray("ids",ids);
+            //args.putStringArrayList("ids", ids);
         }
         if (listItem != null) {
             args.putString("listItem", listItem);

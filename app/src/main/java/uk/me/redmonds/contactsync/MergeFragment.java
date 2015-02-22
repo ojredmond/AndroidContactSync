@@ -19,7 +19,7 @@ import java.util.HashSet;
 
 public class MergeFragment extends Fragment {
     private final static String STATE_CONTACT = "merge_contact";
-    private ArrayList<String> ids;
+    private String[] ids;
     private MainActivity main;
     private HashMap<String, HashSet<HashMap<String, String>>> contact;
     private LinearLayout layout;
@@ -93,7 +93,7 @@ public class MergeFragment extends Fragment {
         listType = args.getString("listType");
         listItem = args.getString("listItem");
 		selectedName = args.getString("selected");
-        ids = args.getStringArrayList("ids");
+        ids = args.getStringArray("ids");
         main = (MainActivity) this.getActivity();
 
         main.setHeading("Merge");
@@ -102,7 +102,7 @@ public class MergeFragment extends Fragment {
         if (savedInstanceState != null)
             contact = (HashMap<String, HashSet<HashMap<String, String>>>) savedInstanceState.getSerializable(STATE_CONTACT);
         //create contacts object
-        cObject = new Contacts(main, listItem, new HashSet<>(ids));
+        cObject = new Contacts(main, listItem, ids);
 
         View contactView = inflater.inflate(R.layout.fragment_merge, container, false);
         // add listeners to buttons

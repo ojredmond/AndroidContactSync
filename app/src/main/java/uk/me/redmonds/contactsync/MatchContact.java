@@ -57,14 +57,14 @@ public class MatchContact extends Fragment implements
             ArrayList<String> ids = new ArrayList<>();
             ids.add(id);
             ids.add(unmatchedList.get(linkName));
-            main.Merge(name, ids, listItem);
+            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
             //matched list
         } else if (p3 == 1) {
             String linkName = (String) ((TextView) p2).getText();
             ArrayList<String> ids = new ArrayList<>();
             ids.add(id);
             Collections.addAll(ids, matchedList.get(linkName).split(":"));
-            main.Merge(name, ids, listItem);
+            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
         }
 
         return false;

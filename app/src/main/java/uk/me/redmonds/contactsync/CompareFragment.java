@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -101,7 +102,8 @@ public class CompareFragment extends Fragment {
             argsDetail.putString("listItem", listItem);
             argsDetail.putString("name", (String)contacts.get(i).values().toArray()[0]);
             argsDetail.putString("ids", (String)contacts.get(i).keySet().toArray()[0]);
-
+			
+			
             Fragment fragment;
             if (listItem.startsWith(Match.UNMATCHNAMEKEY))
                 fragment = new MatchContact();

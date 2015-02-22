@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import javax.xml.datatype.*;
 
 public class CompareDetail extends Fragment {
     Contacts cObj;
@@ -37,7 +38,8 @@ public class CompareDetail extends Fragment {
                     main.Compare(null, listItem, null);
                     break;
                 case R.id.merge_contact:
-                    main.Merge(name, (ArrayList<String>) Arrays.asList(ids), listItem);
+					Toast.makeText(main,"test "+ids.length,Toast.LENGTH_LONG).show();
+                    main.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
                     cObj.addToUnmatched();
@@ -68,7 +70,7 @@ public class CompareDetail extends Fragment {
         listItem = args.getString("listItem");
         name = args.getString("name");
         ids = args.getString("ids").split(",");
-
+		
         // add buttons and listener
         LinearLayout buttonBar = (LinearLayout) compareView.findViewById(R.id.button_bar);
         Button bDel = (Button) inflater.inflate(R.layout.button, container, false);
@@ -97,6 +99,7 @@ public class CompareDetail extends Fragment {
         buttonBar.addView(bUn, params);
 
         main = (MainActivity) this.getActivity();
+		Toast.makeText(main,"size " + ids.length,Toast.LENGTH_LONG).show();
         if (listItem.startsWith(Match.DUPKEY))
             main.setHeading(getString(R.string.title_activity_dup));
         else if (listItem.startsWith(Match.MATCHEDKEY))
