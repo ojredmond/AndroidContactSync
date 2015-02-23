@@ -151,6 +151,7 @@ public class SyncFragment extends ListFragment {
         HashSet<String> matched1 = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
         Boolean dup = false;
+		Boolean first = true;
         
         for (String type : Match.MIME_TYPE_LIST) {
             String dupLabel = Match.DUPKEY + type + account1Name;
@@ -171,9 +172,13 @@ public class SyncFragment extends ListFragment {
 				}
                 
                 value = new HashMap<>();
-                value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type) + " (" + dupSet.size() + ")"});
-                value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
-                value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+                value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type), "(" + dupSet.size() + ")"});
+                if(first)
+                    value.put(FlexibleListAdapter.LAYOUT, list_row_border_top_2);
+                else
+                    value.put(FlexibleListAdapter.LAYOUT, list_row_2);
+                    
+                value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type,R.id.value});
                 value.put(FlexibleListAdapter.LISTITEM, dupLabel);
                 values.add(value);
             }
@@ -186,7 +191,7 @@ public class SyncFragment extends ListFragment {
             values.add(value);
         }
 		
-		Boolean first = true;
+		first = true;
         if (!account1Name.equals(account2Name)) {
 			for (String type : Match.MIME_TYPE_LIST) {
 				String dupLabel = Match.DUPKEY + type + account2Name;
