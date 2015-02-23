@@ -12,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/type"
-        android:paddingTop="@dimen/medium_gap"
-        android:paddingBottom="@dimen/medium_gap"
+        android:paddingTop="@dimen/large_gap"
+        android:paddingBottom="@dimen/large_gap"
         android:paddingStart="@dimen/large_gap"
 		/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/value"
-        android:padding="@dimen/medium_gap"
+        android:padding="@dimen/large_gap"
 		/>
 </LinearLayout>
