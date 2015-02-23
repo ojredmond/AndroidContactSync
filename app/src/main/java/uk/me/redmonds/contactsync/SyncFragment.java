@@ -21,6 +21,7 @@ public class SyncFragment extends ListFragment {
     public static final String SUMMARY = "summary";
     public static final String DUP = "Duplicates";
     public static final String UNMATCHED = "Unmatched from Account";
+	public static final String PMATCHED = "Potential Matches";
     public static final String MATCHED = "Review matches";
     private static final String LAST = "View Last Matched Results";
     private static final String NODUP = "No Duplicates";
@@ -114,12 +115,11 @@ public class SyncFragment extends ListFragment {
         FlexibleListAdapter adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main, android.R.layout.simple_list_item_2);
         
         setListAdapter(adapter);
+		getListView().setDivider(null);
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-		Toast.makeText(v.getContext(),""+l.getAdapter().getItem(position).toString(),Toast.LENGTH_LONG).show();
-		
 		HashMap<String,Object> clickedItem = (HashMap<String,Object>)l.getAdapter().getItem(position);
 
         if (clickedItem.containsKey(FlexibleListAdapter.TITLE) && clickedItem.get(FlexibleListAdapter.TITLE).equals(MATCH)) {
@@ -151,75 +151,141 @@ public class SyncFragment extends ListFragment {
         HashSet<String> matched1 = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
         Boolean dup = false;
-        HashSet<HashMap<String, Object>> dupValues = new HashSet<>();
+        
         for (String type : Match.MIME_TYPE_LIST) {
             String dupLabel = Match.DUPKEY + type + account1Name;
             HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
             if (dupSet != null && dupSet.size() > 0) {
-                dup = true;
+				if (!dup) {
+					dup = true;
+					value = new HashMap<>();
+					value.put(FlexibleListAdapter.TEXT, new String[]{DUP});
+					value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
+					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
+					values.add(value);
+					value = new HashMap<>();
+					value.put(FlexibleListAdapter.TEXT, new String[]{"Account", account1Name});
+					value.put(FlexibleListAdapter.LAYOUT, R.layout.list_account);
+					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
+					values.add(value);
+				}
+                
                 value = new HashMap<>();
                 value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type) + " (" + dupSet.size() + ")"});
                 value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
                 value.put(FlexibleListAdapter.LISTITEM, dupLabel);
-                dupValues.add(value);
+                values.add(value);
             }
         }
 
-        if (dup) {
-            value = new HashMap<>();
-            value.put(FlexibleListAdapter.TEXT, new String[]{DUP});
-            value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
-            value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
-            values.add(value);
-            value = new HashMap<>();
-            value.put(FlexibleListAdapter.TEXT, new String[]{"Account", account1Name});
-            value.put(FlexibleListAdapter.LAYOUT, R.layout.list_account);
-            value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
-            values.add(value);
-            values.addAll(dupValues);
-        } else if (account1Name.equals(account2Name)) {
+        if (!dup && account1Name.equals(account2Name)) {
             value = new HashMap<>();
             value.put(FlexibleListAdapter.TITLE, NODUP);
             value.put(FlexibleListAdapter.DESCRIPTION, account1Name);
             values.add(value);
         }
+		
+		Boolean first = true;
+        if (!account1Name.equals(account2Name)) {
+			for (String type : Match.MIME_TYPE_LIST) {
+				String dupLabel = Match.DUPKEY + type + account2Name;
+				HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
+				if (dupSet != null && dupSet.size() > 0) {
+					if (!dup) {
+						dup = true;
+						value = new HashMap<>();
+						value.put(FlexibleListAdapter.TEXT, new String[]{DUP});
+						value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
+						value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
+						values.add(value);
+					} else if(first) {
+						first = false;
+						value = new HashMap<>();
+						value.put(FlexibleListAdapter.TEXT, new String[]{"Account", account2Name});
+						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_account);
+						value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
+						values.add(value);
+					}
 
-        if (!account1Name.equals(account2Name) && dup2Name != null && dup2Name.size() > 0) {
-            value = new HashMap<>();
-            value.put(FlexibleListAdapter.TITLE, DUP + "2 (" + dup2Name.size() + ")");
-            value.put(FlexibleListAdapter.DESCRIPTION, account2Name);
-            value.put(FlexibleListAdapter.LISTITEM, dup2);
-            values.add(value);
-        }
+					value = new HashMap<>();
+					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type) + " (" + dupSet.size() + ")"});
+					value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
+					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+					value.put(FlexibleListAdapter.LISTITEM, dupLabel);
+					values.add(value);
+				}
+			}
+			
+			if((unmatched1Name != null && unmatched1Name.size() > 0)
+			   || (unmatched2Name != null && unmatched2Name.size() > 0)){
+				value = new HashMap<>();
+				value.put(FlexibleListAdapter.TEXT, new String[]{UNMATCHED});
+				value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
+				values.add(value);
+			}
 
-        if (unmatched1Name != null && unmatched1Name.size() > 0) {
-            value = new HashMap<>();
-            value.put(FlexibleListAdapter.TITLE, UNMATCHED + "1 (" + unmatched1Name.size() + ")");
-            value.put(FlexibleListAdapter.DESCRIPTION, account1Name);
-            value.put(FlexibleListAdapter.LISTITEM, un1);
-            values.add(value);
-        }
+			if (unmatched1Name != null && unmatched1Name.size() > 0) {
+				value = new HashMap<>();
+				value.put(FlexibleListAdapter.TEXT, new String[]{account1Name + " (" + unmatched1Name.size() + ")"});
+				value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+				value.put(FlexibleListAdapter.LISTITEM, un1);
+				values.add(value);
+			}
 
-        if (unmatched2Name != null && unmatched2Name.size() > 0) {
-            value = new HashMap<>();
-            value.put(FlexibleListAdapter.TITLE, UNMATCHED + "2 (" + unmatched2Name.size() + ")");
-            value.put(FlexibleListAdapter.DESCRIPTION, account2Name);
-            value.put(FlexibleListAdapter.LISTITEM, un2);
-            values.add(value);
-        }
+			if (unmatched2Name != null && unmatched2Name.size() > 0) {
+				value = new HashMap<>();
+				value.put(FlexibleListAdapter.TEXT, new String[]{account2Name + " (" + unmatched2Name.size() + ")"});
+				value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+				value.put(FlexibleListAdapter.LISTITEM, un2);
+				values.add(value);
+			}
+			
+			first = true;
+			for (String type : Match.MIME_TYPE_LIST) {
+				String matchLabel = Match.MATCHEDKEY + type + account1Name + ":" + account2Name;
+				HashSet<String> matchSet = (HashSet<String>) pref.getStringSet(matchLabel, null);
+				if (matchSet != null && matchSet.size() > 0) {
+					if (first) {
+						first = false;
+						value = new HashMap<>();
+						value.put(FlexibleListAdapter.TEXT, new String[]{PMATCHED});
+						value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
+						value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
+						values.add(value);
+					}
 
-        if (!account1Name.equals(account2Name) && matched1 != null && matched1.size() > 0) {
-            value = new HashMap<>();
-            value.put(FlexibleListAdapter.TITLE, MATCHED + " (" + matched1.size() + ")");
-            value.put(FlexibleListAdapter.DESCRIPTION, account1Name + " " + account2Name);
-            value.put(FlexibleListAdapter.LISTITEM, Match.MATCHEDKEY + account1Name + ":" + account2Name);
-            values.add(value);
-        }
+					value = new HashMap<>();
+					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type) + " (" + matchSet.size() + ")"});
+					value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
+					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+					value.put(FlexibleListAdapter.LISTITEM, matchLabel);
+					values.add(value);
+				}
+			}
+
+			if (matched1 != null && matched1.size() > 0) {
+				value = new HashMap<>();
+				value.put(FlexibleListAdapter.TEXT, new String[]{MATCHED});
+				value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
+				values.add(value);
+
+				value = new HashMap<>();
+				value.put(FlexibleListAdapter.TEXT, new String[]{matched1.size() + " matches"});
+				value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+				value.put(FlexibleListAdapter.LISTITEM, Match.MATCHEDKEY + account1Name + ":" + account2Name);
+				values.add(value);
+			}
+		}
     }
 
     @Override
-    public void onResume() {
+    public void onResume() {;
         super.onResume();
         
         //set actionbar title

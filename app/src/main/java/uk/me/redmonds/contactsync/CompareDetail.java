@@ -11,7 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,7 +39,6 @@ public class CompareDetail extends Fragment {
                     main.Compare(null, listItem, null);
                     break;
                 case R.id.merge_contact:
-					Toast.makeText(main,"test "+ids.length,Toast.LENGTH_LONG).show();
                     main.Merge(name, ids, listItem);
                     break;
                 case R.id.unmatched_contact:
@@ -70,6 +70,10 @@ public class CompareDetail extends Fragment {
         listItem = args.getString("listItem");
         name = args.getString("name");
         ids = args.getString("ids").split(",");
+		main = (MainActivity) this.getActivity();
+		
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+        String account1Name = settings.getString(MainActivity.ACCOUNT1, null);
 		
         // add buttons and listener
         LinearLayout buttonBar = (LinearLayout) compareView.findViewById(R.id.button_bar);
@@ -79,7 +83,11 @@ public class CompareDetail extends Fragment {
 
         Button bMerge = (Button) inflater.inflate(R.layout.button, container, false);
         bMerge.setId(R.id.merge_contact);
-        bMerge.setText(R.string.merge_contacts);
+		if(listItem.startsWith(Match.MATCHEDKEY)
+			&& !listItem.startsWith(Match.MATCHEDKEY + account1Name))
+			bMerge.setText(R.string.confirm);
+		else
+        	bMerge.setText(R.string.merge_contacts);
 
         Button bUn = (Button) inflater.inflate(R.layout.button, container, false);
         bUn.setId(R.id.unmatched_contact);
@@ -94,12 +102,10 @@ public class CompareDetail extends Fragment {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 1);
         buttonBar.addView(bDel, params);
-        if (listItem.startsWith(Match.DUPKEY))
+        if (!listItem.startsWith(Match.MATCHEDKEY + account1Name))
             buttonBar.addView(bMerge, params);
         buttonBar.addView(bUn, params);
 
-        main = (MainActivity) this.getActivity();
-		Toast.makeText(main,"size " + ids.length,Toast.LENGTH_LONG).show();
         if (listItem.startsWith(Match.DUPKEY))
             main.setHeading(getString(R.string.title_activity_dup));
         else if (listItem.startsWith(Match.MATCHEDKEY))
