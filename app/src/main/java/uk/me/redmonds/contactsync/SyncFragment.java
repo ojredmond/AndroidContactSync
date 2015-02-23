@@ -115,7 +115,10 @@ public class SyncFragment extends ListFragment {
         FlexibleListAdapter adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main, android.R.layout.simple_list_item_2);
         
         setListAdapter(adapter);
-		getListView().setDivider(null);
+		ListView lv = getListView();
+		lv.setDivider(null);
+		lv.setBackgroundColor(android.R.color.white);
+		//lv.setPadding(0,R.dimen.large_gap,0,0);
     }
 
     @Override
@@ -174,13 +177,14 @@ public class SyncFragment extends ListFragment {
                 value = new HashMap<>();
                 value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type), "(" + dupSet.size() + ")"});
                 if(first)
-                    value.put(FlexibleListAdapter.LAYOUT, list_row_border_top_2);
+                    value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
                 else
-                    value.put(FlexibleListAdapter.LAYOUT, list_row_2);
+                    value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_2);
                     
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type,R.id.value});
                 value.put(FlexibleListAdapter.LISTITEM, dupLabel);
                 values.add(value);
+				first = false;
             }
         }
 
@@ -205,7 +209,6 @@ public class SyncFragment extends ListFragment {
 						value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
 						values.add(value);
 					} else if(first) {
-						first = false;
 						value = new HashMap<>();
 						value.put(FlexibleListAdapter.TEXT, new String[]{"Account", account2Name});
 						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_account);
@@ -214,11 +217,15 @@ public class SyncFragment extends ListFragment {
 					}
 
 					value = new HashMap<>();
-					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type) + " (" + dupSet.size() + ")"});
-					value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
-					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type), "(" + dupSet.size() + ")"});
+					if(first)
+						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
+					else
+						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_2);
+					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
 					value.put(FlexibleListAdapter.LISTITEM, dupLabel);
 					values.add(value);
+					first = false;
 				}
 			}
 			
@@ -233,18 +240,18 @@ public class SyncFragment extends ListFragment {
 
 			if (unmatched1Name != null && unmatched1Name.size() > 0) {
 				value = new HashMap<>();
-				value.put(FlexibleListAdapter.TEXT, new String[]{account1Name + " (" + unmatched1Name.size() + ")"});
-				value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
-				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+				value.put(FlexibleListAdapter.TEXT, new String[]{account1Name, "(" + unmatched1Name.size() + ")"});
+				value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type,R.id.value});
 				value.put(FlexibleListAdapter.LISTITEM, un1);
 				values.add(value);
 			}
 
 			if (unmatched2Name != null && unmatched2Name.size() > 0) {
 				value = new HashMap<>();
-				value.put(FlexibleListAdapter.TEXT, new String[]{account2Name + " (" + unmatched2Name.size() + ")"});
-				value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
-				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+				value.put(FlexibleListAdapter.TEXT, new String[]{account2Name, "(" + unmatched2Name.size() + ")"});
+				value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type,R.id.value});
 				value.put(FlexibleListAdapter.LISTITEM, un2);
 				values.add(value);
 			}
@@ -255,7 +262,6 @@ public class SyncFragment extends ListFragment {
 				HashSet<String> matchSet = (HashSet<String>) pref.getStringSet(matchLabel, null);
 				if (matchSet != null && matchSet.size() > 0) {
 					if (first) {
-						first = false;
 						value = new HashMap<>();
 						value.put(FlexibleListAdapter.TEXT, new String[]{PMATCHED});
 						value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
@@ -264,11 +270,15 @@ public class SyncFragment extends ListFragment {
 					}
 
 					value = new HashMap<>();
-					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type) + " (" + matchSet.size() + ")"});
-					value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
-					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type), "(" + matchSet.size() + ")"});
+					if(first)
+						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
+					else
+						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_2);
+					value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
 					value.put(FlexibleListAdapter.LISTITEM, matchLabel);
 					values.add(value);
+					first = false;
 				}
 			}
 
@@ -281,8 +291,8 @@ public class SyncFragment extends ListFragment {
 
 				value = new HashMap<>();
 				value.put(FlexibleListAdapter.TEXT, new String[]{matched1.size() + " matches"});
-				value.put(FlexibleListAdapter.LAYOUT, android.R.layout.simple_list_item_1);
-				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{android.R.id.text1});
+				value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_1);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
 				value.put(FlexibleListAdapter.LISTITEM, Match.MATCHEDKEY + account1Name + ":" + account2Name);
 				values.add(value);
 			}

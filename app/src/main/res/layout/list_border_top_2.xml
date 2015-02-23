@@ -12,14 +12,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/type"
-        android:textAppearance="android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:padding="@dimen/large_gap"
 	/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/value"
-        android:textAppearance="android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:padding="@dimen/large_gap"
 	/>
 </LinearLayout>

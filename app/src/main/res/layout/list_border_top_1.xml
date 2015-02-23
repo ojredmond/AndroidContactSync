@@ -3,6 +3,6 @@
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:background="@drawable/separator"
     android:id="@+id/value"
-    android:textAppearance="android:attr/textAppearanceMedium"
+    android:textAppearance="?android:attr/textAppearanceMedium"
     android:padding="@dimen/large_gap"
     />
