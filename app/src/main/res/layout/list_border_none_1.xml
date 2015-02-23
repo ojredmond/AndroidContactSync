@@ -2,6 +2,7 @@
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:id="@+id/value"
+	android:textAppearance="?android:attr/textAppearanceMedium"
     android:paddingTop="@dimen/large_gap"
     android:paddingBottom="@dimen/large_gap"
     android:paddingRight="@dimen/large_gap"
