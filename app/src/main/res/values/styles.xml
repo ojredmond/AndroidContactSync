@@ -8,31 +8,22 @@
         <item name="android:activatedBackgroundIndicator">@drawable/activatedbackground</item>
         <item name="android:spinnerItemStyle">@style/SpinnerStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownStyle</item>
-        <item name="android:listViewStyle">@style/ListViews</item>
-	</style>
+    </style>
 
-	<style name="SpinnerStyle">
-		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-		<item name="android:padding">@dimen/medium_gap</item>
-		
-	</style>
+    <style name="SpinnerStyle">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:padding">@dimen/medium_gap</item>
+    </style>
 	
-	<style name="SpinnerDropDownStyle" parent="@android:style/Widget.DropDownItem.Spinner">
-		<item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-		<item name="android:padding">@dimen/medium_gap</item>
-
-	</style>
+    <style name="SpinnerDropDownStyle" parent="@android:style/Widget.DropDownItem.Spinner">
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+        <item name="android:padding">@dimen/medium_gap</item>
+    </style>
 	
-	<style name="Divider">
-		<item name="android:layout_width">match_parent</item>
-		<item name="android:layout_height">1dp</item>
-		<item name="android:background">?android:attr/listDivider</item>
-	</style>
-
-	<!-- ListViews -->
-	<style name="ListViews" parent="@android:style/Widget.ListView">
-	    <item name="android:background">@android:color/white</item>
-	    <item name="android:divider">@android:color/transparent</item>
-	</style>
+    <style name="Divider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">?android:attr/listDivider</item>
+    </style>
 
 </resources>
