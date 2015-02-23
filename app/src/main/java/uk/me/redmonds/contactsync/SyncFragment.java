@@ -117,8 +117,8 @@ public class SyncFragment extends ListFragment {
         setListAdapter(adapter);
 		ListView lv = getListView();
 		lv.setDivider(null);
-		lv.setBackgroundColor(android.R.color.white);
-		//lv.setPadding(0,R.dimen.large_gap,0,0);
+		float gap = getResources().getDimension(R.dimen.large_gap);
+		lv.setPadding(0,20,0,0);
     }
 
     @Override
