@@ -10,7 +10,7 @@
         android:layout_height="@dimen/button__bar_height"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="@drawable/border_top"
+        android:background="@drawable/button_border_top"
         >
 
         <Button
