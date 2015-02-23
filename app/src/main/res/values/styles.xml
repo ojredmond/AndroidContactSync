@@ -6,8 +6,9 @@
         <item name="colorPrimaryDark">@color/material_orange_700</item>
         <item name="colorAccent">@color/material_orange_A200</item>
         <item name="android:activatedBackgroundIndicator">@drawable/activatedbackground</item>
-		<item name="android:spinnerItemStyle">@style/SpinnerStyle</item>
-		<item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownStyle</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerStyle</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownStyle</item>
+        <item name="android:listViewStyle">@style/ListViews</item>
 	</style>
 
 	<style name="SpinnerStyle">
