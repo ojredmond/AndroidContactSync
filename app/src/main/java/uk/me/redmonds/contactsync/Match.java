@@ -49,14 +49,14 @@ public class Match
     private HashMap<String, HashMap<String, String>> dup2ListOther;
     private HashMap<String, Long> unmatched1;
     private HashMap<String, Long> unmatched2;
-	private HashMap<Long, Long>  matched1;
+    private HashMap<Long, Long>  matched1;
     private HashMap<String,HashMap<Long, Long>>  matched1Other;
     private HashMap<Long, Long>  matched2;
-	private HashMap<String,HashMap<Long, Long>>  matched2Other;
+    private HashMap<String,HashMap<Long, Long>>  matched2Other;
     private String account1Name;
     private String account2Name;
     private Boolean syncMatched;
-	private Boolean deep;
+    private Boolean deep;
 
     public void startMatch(MainActivity main, View statusView, String type) {
         mainActivity = main;
@@ -77,54 +77,57 @@ public class Match
         private int numContactsAccount2 = -1;
         private Boolean syncStarted = false;
 
-        private void performMatching(HashMap<String,String> tempData, String data) {
+        private Boolean[] performMatching(HashMap<String,String> tempData, String, type, String data) {
+            Boolean duplicate = false;
+            Boolean matched = false;
             if (dup2ListOther.containsKey(data) 
-				&& dup2ListOther.get(data).get(type) != null) {
-				dupCount2++;
-				tempData.put(type,dup2ListOther.get(data).get(type) 
-							 + "," + cItems.getString(0));
-				dup2ListOther.put(data,tempData);
-				duplicate = true;
+                && dup2ListOther.get(data).get(type) != null) {
+                dupCount2++;
+                tempData.put(type,dup2ListOther.get(data).get(type) 
+                             + "," + cItems.getString(0));
+                dup2ListOther.put(data,tempData);
+                duplicate = true;
             } else if (account2Other.containsKey(data) &&
-					   account2Other.get(data).get(type) != null) {
+                       account2Other.get(data).get(type) != null) {
                 dupCount2++;
                 tempData.put(type, account2Other.get(data).get(type)
-							 + "," + cItems.getString(0));
-				dup2ListOther.put(data,tempData);
-				//remove from unmatched
-				unmatched2.remove(tempContactName);
-				//remove from matched
-				if(matched2Other.get(type).containsKey(tempContactId)) {
-					  Long OtherId = matched2Other.get(type).get(tempContactId);
-					  matched2Other.get(type).remove(tempContactId);
-					  matched1Other.get(type).remove(OtherId);
-				}
-				duplicate = true;
-				unmatchedCount2--;
-			} else if(account1Other.containsKey(data)
-				&& account1Other.get(data).get(type) != null
-					&& !account1Other.get(data).get(type).contains(",")) {
-				Long account1id = Long.decode(account1Other.get(data).get(type));
-				if(	unmatched1Id.containsKey(account1id)) {
-					HashMap<Long,Long> idsMap;
-					if(matched1Other.containsKey(type))
-						idsMap = matched1Other.get(type);
-					else
-						idsMap = new HashMap<>();
-						
-					idsMap.put(account1id,tempContactId);
-					matched1Other.put(type,idsMap);
-					idsMap = new HashMap<>();
-					idsMap.put(tempContactId,account1id);
-					matched2Other.put(type,idsMap);
-			
-					matches++;
-					matched = true;
-				}
-			}
+                             + "," + cItems.getString(0));
+                dup2ListOther.put(data,tempData);
+                //remove from unmatched
+                unmatched2.remove(tempContactName);
+                //remove from matched
+                if(matched2Other.get(type).containsKey(tempContactId)) {
+                      Long OtherId = matched2Other.get(type).get(tempContactId);
+                      matched2Other.get(type).remove(tempContactId);
+                      matched1Other.get(type).remove(OtherId);
+                }
+                duplicate = true;
+                unmatchedCount2--;
+            } else if(account1Other.containsKey(data)
+                && account1Other.get(data).get(type) != null
+                    && !account1Other.get(data).get(type).contains(",")) {
+                Long account1id = Long.decode(account1Other.get(data).get(type));
+                if(    unmatched1Id.containsKey(account1id)) {
+                    HashMap<Long,Long> idsMap;
+                    if(matched1Other.containsKey(type))
+                        idsMap = matched1Other.get(type);
+                    else
+                        idsMap = new HashMap<>();
+                        
+                    idsMap.put(account1id,tempContactId);
+                    matched1Other.put(type,idsMap);
+                    idsMap = new HashMap<>();
+                    idsMap.put(tempContactId,account1id);
+                    matched2Other.put(type,idsMap);
+            
+                    matches++;
+                    matched = true;
+                }
+            }
 
-			//add all data to account info
-			account2Other.put(data, tempData);
+            //add all data to account info
+            account2Other.put(data, tempData);
+            return new Boolean[]{duplicate,matched}
         }
         @Override
         protected String doInBackground(Void... params) {
@@ -138,7 +141,7 @@ public class Match
             dup1List = new HashMap<>();
             dup2List = new HashMap<>();
             unmatched1 = new HashMap<>();
-			HashMap<Long,String> unmatched1Id = new HashMap<>();
+            HashMap<Long,String> unmatched1Id = new HashMap<>();
             unmatched2 = new HashMap<>();
             matched1 = new HashMap<>();
             matched2 = new HashMap<>();
@@ -146,7 +149,7 @@ public class Match
             account2Other = new HashMap<>();
             dup1ListOther = new HashMap<>();
             dup2ListOther = new HashMap<>();
-			matched1Other = new HashMap<>();
+            matched1Other = new HashMap<>();
             matched2Other = new HashMap<>();
             
             
@@ -154,8 +157,8 @@ public class Match
             Cursor cursor;
             Cursor cItems;
             String type, data;
-			Boolean duplicate, matched;
-			
+            Boolean duplicate, matched;
+            
             int matches = 0;
             int dupCount1 = 0;
             int dupCount2 = 0;
@@ -169,15 +172,15 @@ public class Match
             if (syncMatched) {
                 return null;
             }
-			
-			
+            
+            
             //creates mime types list for query
             String types = "";
-			if(deep) {
+            if(deep) {
                 for (String aMIME_TYPE_LIST : MIME_TYPE_LIST) types += "'" + aMIME_TYPE_LIST + "',";
                 types = types.substring(0, types.length() - 1);
-			} else
-				types = "'" + Contacts.TYPE_NAME + "'";
+            } else
+                types = "'" + Contacts.TYPE_NAME + "'";
             
             message = "Starting " + syncType + "...\n";
             message += "Loading Account 1\n";
@@ -198,61 +201,61 @@ public class Match
 
             try {
                 while (cursor.moveToNext()) {
-					if(!cursor.isNull(0) && !cursor.isNull(1)) {
-						tempContactName = cursor.getString(1);
-						tempContactId = cursor.getLong(0);
-						duplicate = false;
-						cItems = mContentResolver.query(Data.CONTENT_URI,
-														new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
-														Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
-														new String[]{Long.toString(tempContactId)}, null);
+                    if(!cursor.isNull(0) && !cursor.isNull(1)) {
+                        tempContactName = cursor.getString(1);
+                        tempContactId = cursor.getLong(0);
+                        duplicate = false;
+                        cItems = mContentResolver.query(Data.CONTENT_URI,
+                                                        new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+                                                        Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
+                                                        new String[]{Long.toString(tempContactId)}, null);
 
-						try {
-							while (cItems.moveToNext()) {
-								if(!cItems.isNull(0) && !cItems.isNull(1) && !cItems.isNull(2)){
-									type = cItems.getString(1);
-									if(type.equals(StructuredName.CONTENT_ITEM_TYPE))
-										data = tempContactName;
-									else
-										data = cItems.getString(2);
-									tempData = new HashMap<>();
-									tempData.put(type,cItems.getString(0));
-									
-									if (dup1ListOther.containsKey(data) 
-										&& dup1ListOther.get(data).get(type) != null) {
-										dupCount1++;
-										tempData.put(type,dup1ListOther.get(data).get(type) 
-													 + "," + cItems.getString(0));
-										dup1ListOther.put(data,tempData);
-										duplicate = true;
+                        try {
+                            while (cItems.moveToNext()) {
+                                if(!cItems.isNull(0) && !cItems.isNull(1) && !cItems.isNull(2)){
+                                    type = cItems.getString(1);
+                                    if(type.equals(StructuredName.CONTENT_ITEM_TYPE))
+                                        data = tempContactName;
+                                    else
+                                        data = cItems.getString(2);
+                                    tempData = new HashMap<>();
+                                    tempData.put(type,cItems.getString(0));
+                                    
+                                    if (dup1ListOther.containsKey(data) 
+                                        && dup1ListOther.get(data).get(type) != null) {
+                                        dupCount1++;
+                                        tempData.put(type,dup1ListOther.get(data).get(type) 
+                                                     + "," + cItems.getString(0));
+                                        dup1ListOther.put(data,tempData);
+                                        duplicate = true;
                                     } else if (account1Other.containsKey(data) &&
                                             account1Other.get(data).get(type) != null) {
                                         dupCount1++;
                                         tempData.put(type, account1Other.get(data).get(type)
                                                 + "," + cItems.getString(0));
-										dup1ListOther.put(data,tempData);
-										Long removeId = unmatched1.remove(tempContactName);
-										unmatched1Id.remove(removeId);
-										duplicate = true;
-										unmatchedCount1--;
-									}
-									
-									//add all non-duplicate data to account variable
-									account1Other.put(data, tempData);
-								}
-							}
-						} finally {
-							cItems.close();
-						}
-						//store all contacts
-						account1.put(tempContactName, tempContactId);
-						//store all non-duplicates as unmatched
-						if(!duplicate) {
-							unmatched1.put(tempContactName, tempContactId);
-							unmatched1Id.put(tempContactId,tempContactName);
-							unmatchedCount1++;
-						}
-					}
+                                        dup1ListOther.put(data,tempData);
+                                        Long removeId = unmatched1.remove(tempContactName);
+                                        unmatched1Id.remove(removeId);
+                                        duplicate = true;
+                                        unmatchedCount1--;
+                                    }
+                                    
+                                    //add all non-duplicate data to account variable
+                                    account1Other.put(data, tempData);
+                                }
+                            }
+                        } finally {
+                            cItems.close();
+                        }
+                        //store all contacts
+                        account1.put(tempContactName, tempContactId);
+                        //store all non-duplicates as unmatched
+                        if(!duplicate) {
+                            unmatched1.put(tempContactName, tempContactId);
+                            unmatched1Id.put(tempContactId,tempContactName);
+                            unmatchedCount1++;
+                        }
+                    }
                     
                 }
             } finally {
@@ -279,117 +282,121 @@ public class Match
 
             numContactsAccount2 = cursor.getCount();
 
-			try {
+            try {
                 while (cursor.moveToNext()) {
-					if(!cursor.isNull(0) && !cursor.isNull(1)) {
-						tempContactName = cursor.getString(1);
-						tempContactId = cursor.getLong(0);
-						duplicate = false;
-						matched = false;
-						cItems = mContentResolver.query(Data.CONTENT_URI,
-														new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
-														Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
-														new String[]{Long.toString(tempContactId)}, null);
+                    if(!cursor.isNull(0) && !cursor.isNull(1)) {
+                        tempContactName = cursor.getString(1);
+                        tempContactId = cursor.getLong(0);
+                        duplicate = false;
+                        matched = false;
+                        cItems = mContentResolver.query(Data.CONTENT_URI,
+                                                        new String[]{Data.RAW_CONTACT_ID, Data.MIMETYPE, Data.DATA1},
+                                                        Data.RAW_CONTACT_ID + "==? AND " + Data.MIMETYPE + " IN (" + types + ")",
+                                                        new String[]{Long.toString(tempContactId)}, null);
 
-						try {
-							while (cItems.moveToNext()) {
-								if(!cItems.isNull(0) && !cItems.isNull(1) && !cItems.isNull(2)){
-									type = cItems.getString(1);
-									if(type.equals(StructuredName.CONTENT_ITEM_TYPE))
-										data = tempContactName;
-									else
-										data = cItems.getString(2);
-									tempData = new HashMap<>();
-									tempData.put(type,cItems.getString(0));
+                        try {
+                            while (cItems.moveToNext()) {
+                                if(!cItems.isNull(0) && !cItems.isNull(1) && !cItems.isNull(2)){
+                                    type = cItems.getString(1);
+                                    if(type.equals(StructuredName.CONTENT_ITEM_TYPE))
+                                        data = tempContactName;
+                                    else
+                                        data = cItems.getString(2);
+                                    tempData = new HashMap<>();
+                                    tempData.put(type,cItems.getString(0));
 
-                                    performMatching(tempData,data);
-									/*if (dup2ListOther.containsKey(data) 
-										&& dup2ListOther.get(data).get(type) != null) {
-										dupCount2++;
-										tempData.put(type,dup2ListOther.get(data).get(type) 
-													 + "," + cItems.getString(0));
-										dup2ListOther.put(data,tempData);
-										duplicate = true;
+                                    Boolean returnValues[] = performMatching(tempData,type,data);
+                                    if(returnValues[0])
+                                        duplicate = true;
+                                    if(returnValues[1])
+                                        matched = true;
+                                    /*if (dup2ListOther.containsKey(data) 
+                                        && dup2ListOther.get(data).get(type) != null) {
+                                        dupCount2++;
+                                        tempData.put(type,dup2ListOther.get(data).get(type) 
+                                                     + "," + cItems.getString(0));
+                                        dup2ListOther.put(data,tempData);
+                                        duplicate = true;
                                     } else if (account2Other.containsKey(data) &&
-											   account2Other.get(data).get(type) != null) {
+                                               account2Other.get(data).get(type) != null) {
                                         dupCount2++;
                                         tempData.put(type, account2Other.get(data).get(type)
-													 + "," + cItems.getString(0));
-										dup2ListOther.put(data,tempData);
-										//remove from unmatched
-										unmatched2.remove(tempContactName);
-										//remove from matched
-										if(matched2Other.get(type).containsKey(tempContactId)) {
-											  Long OtherId = matched2Other.get(type).get(tempContactId);
-											  matched2Other.get(type).remove(tempContactId);
-											  matched1Other.get(type).remove(OtherId);
-										}
-										duplicate = true;
-										unmatchedCount2--;
-									} else if(account1Other.containsKey(data)
-										&& account1Other.get(data).get(type) != null
-											&& !account1Other.get(data).get(type).contains(",")) {
-										Long account1id = Long.decode(account1Other.get(data).get(type));
-										if(	unmatched1Id.containsKey(account1id)) {
-											HashMap<Long,Long> idsMap;
-											if(matched1Other.containsKey(type))
-												idsMap = matched1Other.get(type);
-											else
-												idsMap = new HashMap<>();
-												
-											idsMap.put(account1id,tempContactId);
-											matched1Other.put(type,idsMap);
-											idsMap = new HashMap<>();
-											idsMap.put(tempContactId,account1id);
-											matched2Other.put(type,idsMap);
-									
-											matches++;
-											matched = true;
-										}
-									}
+                                                     + "," + cItems.getString(0));
+                                        dup2ListOther.put(data,tempData);
+                                        //remove from unmatched
+                                        unmatched2.remove(tempContactName);
+                                        //remove from matched
+                                        if(matched2Other.get(type).containsKey(tempContactId)) {
+                                              Long OtherId = matched2Other.get(type).get(tempContactId);
+                                              matched2Other.get(type).remove(tempContactId);
+                                              matched1Other.get(type).remove(OtherId);
+                                        }
+                                        duplicate = true;
+                                        unmatchedCount2--;
+                                    } else if(account1Other.containsKey(data)
+                                        && account1Other.get(data).get(type) != null
+                                            && !account1Other.get(data).get(type).contains(",")) {
+                                        Long account1id = Long.decode(account1Other.get(data).get(type));
+                                        if(    unmatched1Id.containsKey(account1id)) {
+                                            HashMap<Long,Long> idsMap;
+                                            if(matched1Other.containsKey(type))
+                                                idsMap = matched1Other.get(type);
+                                            else
+                                                idsMap = new HashMap<>();
+                                                
+                                            idsMap.put(account1id,tempContactId);
+                                            matched1Other.put(type,idsMap);
+                                            idsMap = new HashMap<>();
+                                            idsMap.put(tempContactId,account1id);
+                                            matched2Other.put(type,idsMap);
+                                    
+                                            matches++;
+                                            matched = true;
+                                        }
+                                    }
 
-									//add all data to account info
-									account2Other.put(data, tempData);*/
-								}
-							}
-						} finally {
-							cItems.close();
-						}
-						//store all contacts
-						account2.put(tempContactName, tempContactId);
-						//store all non-duplicates as unmatched
-						if(!duplicate && !matched) {
-							unmatched2.put(tempContactName, tempContactId);
-							unmatchedCount2++;
-						}
-						
-						//remove from unmatched1
-						if(matched) {
-							Long account1id = new Long(-1);
-							Boolean nameMatch = false;
-							if(matched2Other.containsKey(Contacts.TYPE_NAME)
-								&& matched2Other.get(Contacts.TYPE_NAME).containsKey(tempContactId)){
-								 account1id = matched2Other.get(Contacts.TYPE_NAME).get(tempContactId);
-								 nameMatch = true;
-								}
-							
-							for(String t:matched2Other.keySet()) {
-								if(!t.equals(Contacts.TYPE_NAME) && matched2Other.get(t).containsKey(tempContactId)) {
-									if(nameMatch) {
-										matched2Other.get(t).remove(tempContactId);
-										matched1Other.get(t).remove(account1id);
-									} else
-										account1id = matched2Other.get(t).get(tempContactId);
-								}
-							}
-							
-							if(!account1id.equals(new Long(-1))) {
-								String a1ContactName = unmatched1Id.remove(account1id);
-								unmatched1.remove(a1ContactName);
-								unmatchedCount1--;
-							}
-						}
-					}
+                                    //add all data to account info
+                                    account2Other.put(data, tempData);*/
+                                }
+                            }
+                        } finally {
+                            cItems.close();
+                        }
+                        //store all contacts
+                        account2.put(tempContactName, tempContactId);
+                        //store all non-duplicates as unmatched
+                        if(!duplicate && !matched) {
+                            unmatched2.put(tempContactName, tempContactId);
+                            unmatchedCount2++;
+                        }
+                        
+                        //remove from unmatched1
+                        if(matched) {
+                            Long account1id = new Long(-1);
+                            Boolean nameMatch = false;
+                            if(matched2Other.containsKey(Contacts.TYPE_NAME)
+                                && matched2Other.get(Contacts.TYPE_NAME).containsKey(tempContactId)){
+                                 account1id = matched2Other.get(Contacts.TYPE_NAME).get(tempContactId);
+                                 nameMatch = true;
+                                }
+                            
+                            for(String t:matched2Other.keySet()) {
+                                if(!t.equals(Contacts.TYPE_NAME) && matched2Other.get(t).containsKey(tempContactId)) {
+                                    if(nameMatch) {
+                                        matched2Other.get(t).remove(tempContactId);
+                                        matched1Other.get(t).remove(account1id);
+                                    } else
+                                        account1id = matched2Other.get(t).get(tempContactId);
+                                }
+                            }
+                            
+                            if(!account1id.equals(new Long(-1))) {
+                                String a1ContactName = unmatched1Id.remove(account1id);
+                                unmatched1.remove(a1ContactName);
+                                unmatchedCount1--;
+                            }
+                        }
+                    }
 
                 }
             } finally {
@@ -459,19 +466,19 @@ public class Match
                 //store the number of contacts for account2 so that can display results even if no contacts
                 results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
                 results.apply();
-				
-				HashMap<String, HashSet<String>> dup2Name = new HashMap<>();
-				for (String type : MIME_TYPE_LIST)
-					dup2Name.put(type, new HashSet<String>());
+                
+                HashMap<String, HashSet<String>> dup2Name = new HashMap<>();
+                for (String type : MIME_TYPE_LIST)
+                    dup2Name.put(type, new HashSet<String>());
                 for (Map.Entry<String, HashMap<String, String>> e : dup2ListOther.entrySet()) {
-					for (Map.Entry<String, String> v : e.getValue().entrySet()) {
-						dup2Name.get(v.getKey()).add(e.getKey() + ":" + v.getValue());
-					}
-				}
-				for (String type : MIME_TYPE_LIST)
-					results.putStringSet(DUPKEY + type + account2Name, dup2Name.get(type));
-				results.apply();
-				
+                    for (Map.Entry<String, String> v : e.getValue().entrySet()) {
+                        dup2Name.get(v.getKey()).add(e.getKey() + ":" + v.getValue());
+                    }
+                }
+                for (String type : MIME_TYPE_LIST)
+                    results.putStringSet(DUPKEY + type + account2Name, dup2Name.get(type));
+                results.apply();
+                
 
                 HashSet<String> unmatched1Name = new HashSet<>();
                 for (Map.Entry<String, Long> e : unmatched1.entrySet()) {
@@ -489,21 +496,21 @@ public class Match
 
                 results.apply();
 
-				HashMap<String, HashSet<String>> matched1Name = new HashMap<>();
-				for (String type : MIME_TYPE_LIST)
-					matched1Name.put(type, new HashSet<String>());
+                HashMap<String, HashSet<String>> matched1Name = new HashMap<>();
+                for (String type : MIME_TYPE_LIST)
+                    matched1Name.put(type, new HashSet<String>());
                 for (Map.Entry<String, HashMap<Long, Long>> e : matched1Other.entrySet()) {
-					for (Map.Entry<Long, Long> v : e.getValue().entrySet()) {
-						matched1Name.get(e.getKey()).add(v.getKey() + ":" + v.getValue());
-					}
-				}
-				for (String type : MIME_TYPE_LIST)
-					if(type.equals(Contacts.TYPE_NAME))
-						results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name.get(type));
-					else
-						results.putStringSet(MATCHEDKEY + type + account1Name + ":" + account2Name, matched1Name.get(type));
-				results.apply();
-				
+                    for (Map.Entry<Long, Long> v : e.getValue().entrySet()) {
+                        matched1Name.get(e.getKey()).add(v.getKey() + ":" + v.getValue());
+                    }
+                }
+                for (String type : MIME_TYPE_LIST)
+                    if(type.equals(Contacts.TYPE_NAME))
+                        results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name.get(type));
+                    else
+                        results.putStringSet(MATCHEDKEY + type + account1Name + ":" + account2Name, matched1Name.get(type));
+                results.apply();
+                
                 /*HashSet<String> matched1Name = new HashSet<>();
                 for (Map.Entry<Long, Long> e : matched1.entrySet()) {
                     matched1Name.add(e.getKey() + ":" + e.getValue());
