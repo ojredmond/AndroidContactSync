@@ -26,6 +26,7 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -493,6 +494,7 @@ public class Contacts {
     public void addToUnmatched () {
         String uName = null;
 
+		removeEntries();
 		Boolean first = true;
         for (String id: list) {
             if (accounts.get(id).equals(account1Name)) {
@@ -502,14 +504,16 @@ public class Contacts {
             }
 
             String name = contacts.get(id).get(TYPE_NAME).iterator().next().get("value");
-            addEntry(uName, name + ":" + id);
+            
 			
             if (listName.startsWith(Match.DUPKEY)) {
+				
 				for(String type: Match.MIME_TYPE_LIST) {
-					removeEntry(Match.DUPKEY + type + accounts.get(id), id);
+					if(findEntry(Match.DUPKEY + type + accounts.get(id), id))
+						return;
 				}
             }
-			
+			addEntry(uName, name + ":" + id);
 			if (first && listName.startsWith(Match.MATCHEDKEY)) {
 				String id1, id2;
                 if (accounts.get(id).equals(account1Name)) {
@@ -614,12 +618,27 @@ public class Contacts {
 
 	private Boolean removeEntry(String listRef, String id) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
-		//Toast.makeText(main,listName,Toast.LENGTH_SHORT).show();
-		if (set == null)
+		
+		if (set == null || set.size() == 0)
             return true;
-		for (String item: set)
-			if(item.endsWith(":" + id))
+		
+		for (String item: set) {
+			//Toast.makeText(main,item,Toast.LENGTH_SHORT).show();
+			String itemArray[] = item.split(":");
+			ArrayList<String> idList = (ArrayList)Arrays.asList(itemArray[1].split(","));
+			if(idList.contains(id)) {
+				idList.remove(id);
         		set.remove(item);
+				if(idList.size() > 0) {
+					item = itemArray[0];
+					for(String itemId: idList)
+						item += itemId + ",";
+					item = item.substring(0,item.length()-1);
+					set.add(item);
+				}
+				break;
+			}
+		}
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
         return e.commit();
