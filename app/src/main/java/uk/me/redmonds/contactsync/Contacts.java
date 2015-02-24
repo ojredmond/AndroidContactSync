@@ -26,7 +26,6 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,23 +76,26 @@ public class Contacts {
     private static HashSet<String> account1;
     private static HashSet<String> account2;
     private String listName;
+    private String listKey;
     private HashSet<String> list;
     private HashMap<String, String> accounts = new HashMap<>();
     private HashMap<String, String> listMap = new HashMap<>();
     private MainActivity main;
     private HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = new HashMap<>();
 
-    Contacts(Activity m, String l, HashSet<String> ids) {
+    Contacts(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
         listName = l;
+        listKey = key;
         list = ids;
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
    }
 
-    Contacts(Activity m, String l, String[] ids) {
+    Contacts(Activity m, String l, String key, String[] ids) {
         main = (MainActivity)m;
         listName = l;
+        listKey = key;
         list = new HashSet<String>(Arrays.asList(ids));
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
@@ -509,9 +511,9 @@ public class Contacts {
             if (listName.startsWith(Match.DUPKEY)) {
 				
 				for(String type: Match.MIME_TYPE_LIST) {
-					if(findEntry(Match.DUPKEY + type + accounts.get(id), id))
-						return;
-				}
+                    if (findEntries(Match.DUPKEY + type + accounts.get(id), id))
+                        return;
+                }
             }
 			addEntry(uName, name + ":" + id);
 			if (first && listName.startsWith(Match.MATCHEDKEY)) {
@@ -616,10 +618,43 @@ public class Contacts {
         return opBuilder;
     }*/
 
-	private Boolean removeEntry(String listRef, String id) {
+    private Boolean findEntries(String listRef, String id) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
-		
-		if (set == null || set.size() == 0)
+
+        if (set == null || set.size() == 0)
+            return false;
+
+        for (String item : set) {
+            if (item.contains(":" + id + ",")
+                    || item.contains("," + id + ",")
+                    || item.endsWith("," + id))
+                return true;
+        }
+        return false;
+    }
+
+    private Boolean removeEntries() {
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
+
+        if (set == null || set.size() == 0)
+            return true;
+
+        for (String item : set) {
+            if (item.startsWith(listKey)) {
+                set.remove(item);
+                break;
+            }
+        }
+
+        SharedPreferences.Editor e = pref.edit();
+        e.putStringSet(listName, set);
+        return e.commit();
+    }
+
+    private Boolean removeEntry(String listRef, String id) {
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
+
+        if (set == null || set.size() == 0)
             return true;
 		
 		for (String item: set) {
@@ -644,12 +679,12 @@ public class Contacts {
         return e.commit();
     }
 
-    private Boolean removeEntry(String listRef, String id, String name) {
+    private Boolean removeEntry(String listRef, String ref1, String ref2) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
 		//Toast.makeText(main,listName,Toast.LENGTH_SHORT).show();
 		if (set == null)
             return true;
-        set.remove(name + ":" + id);
+        set.remove(ref2 + ":" + ref1);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
         return e.commit();

@@ -1,6 +1,8 @@
 package uk.me.redmonds.contactsync;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,14 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import javax.xml.datatype.*;
 
 public class CompareDetail extends Fragment {
     Contacts cObj;
@@ -74,8 +71,8 @@ public class CompareDetail extends Fragment {
         name = args.getString("name");
         ids = args.getString("ids").split(",");
 		main = (MainActivity) this.getActivity();
-		
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         String account1Name = settings.getString(MainActivity.ACCOUNT1, null);
 		
         // add buttons and listener
@@ -123,7 +120,11 @@ public class CompareDetail extends Fragment {
     private Boolean fillLayout() {
         layout.removeAllViews();
 
-        cObj = new Contacts(main, listItem, ids);
+        if (listItem.startsWith(Match.MATCHEDKEY))
+            cObj = new Contacts(main, listItem, ids[0], ids);
+        else
+            cObj = new Contacts(main, listItem, name, ids);
+
         HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = cObj.getContacts();
         for (String id : ids) {
             String account = cObj.getAccountName(id);

@@ -32,12 +32,6 @@ public class SyncFragment extends ListFragment {
     private String list_type;
     private String account1Name;
     private String account2Name;
-    private String dup1;
-    private String dup2;
-    private String un1;
-    private String un2;
-    private HashSet<String> dup1Name;
-    private HashSet<String> dup2Name;
     private HashMap<String, Object> value;
 	private Boolean dup = false;
 
@@ -59,12 +53,6 @@ public class SyncFragment extends ListFragment {
         // get he number of contacts in each account to chek they are not both empty
         int account1Count = pref.getInt(Match.NUMCONTACTS + account1Name, -1);
         int account2Count = pref.getInt(Match.NUMCONTACTS + account2Name, -1);
-
-        //get duplicate lists for display desicisions
-        dup1 = Match.DUPKEY + account1Name;
-        dup2 = Match.DUPKEY + account2Name;
-        dup1Name = (HashSet<String>)pref.getStringSet(dup1, null);
-        dup2Name = (HashSet<String>)pref.getStringSet(dup2, null);
 
         if (list_type.equals(OPTIONS) || !pref.getBoolean(Match.SYNCMATCHED,false)) {
 			value = new HashMap<>();
@@ -138,9 +126,10 @@ public class SyncFragment extends ListFragment {
         setListAdapter(adapter);
 		ListView lv = getListView();
 		lv.setDivider(null);
-		int gap = getResources().getDimensionPixelOffset(R.dimen.large_gap);
-		lv.setPadding(0,gap,0,0);
-		lv.setBackgroundColor(getResources().getColor(android.R.color.white));
+        int gap = getResources().getDimensionPixelOffset(R.dimen.small_gap);
+        lv.setPadding(0, gap, 0, 0);
+        View top = main.getLayoutInflater().inflate(R.layout.spacer, lv, false);
+        lv.addHeaderView(top);
     }
 
     @Override
@@ -168,8 +157,8 @@ public class SyncFragment extends ListFragment {
     }
 
     private void showSummary () {
-        un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
-        un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
+        String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+        String un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
 
         HashSet<String> unmatched1Name = (HashSet<String>)pref.getStringSet(un1, null);
         HashSet<String> unmatched2Name = (HashSet<String>)pref.getStringSet(un2, null);
