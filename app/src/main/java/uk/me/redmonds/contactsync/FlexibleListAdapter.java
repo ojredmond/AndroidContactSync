@@ -23,11 +23,23 @@ public class FlexibleListAdapter extends BaseAdapter {
     private HashMap[] items;
     private Activity context;
     private int defaultLayout;
+    private int defaultTitleId;
+    private int defaultDescriptionId;
 
-    public FlexibleListAdapter(HashMap[] i, Activity a, int layout) {
+    public FlexibleListAdapter(HashMap[] i, Activity a, int layout, int id1, int id2) {
         items = i;
         context = a;
         defaultLayout = layout;
+        defaultTitleId = id1;
+        defaultDescriptionId = id2;
+    }
+
+    public FlexibleListAdapter(HashMap[] i, Activity a) {
+        items = i;
+        context = a;
+        defaultLayout = android.R.layout.simple_list_item_2;
+        defaultTitleId = android.R.id.text1;
+        defaultDescriptionId = android.R.id.text2;
     }
 
     @Override
@@ -62,9 +74,9 @@ public class FlexibleListAdapter extends BaseAdapter {
                         ((TextView) view.findViewById(ids[y])).setText(text[y]);
             }
             if (items[i].containsKey(TITLE))
-                ((TextView) view.findViewById(android.R.id.text1)).setText((String) items[i].get(TITLE));
+                ((TextView) view.findViewById(defaultTitleId)).setText((String) items[i].get(TITLE));
             if (items[i].containsKey(DESCRIPTION))
-                ((TextView) view.findViewById(android.R.id.text2)).setText((String) items[i].get(DESCRIPTION));
+                ((TextView) view.findViewById(defaultDescriptionId)).setText((String) items[i].get(DESCRIPTION));
         }
         return view;
     }
