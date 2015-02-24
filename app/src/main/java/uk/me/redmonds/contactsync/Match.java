@@ -77,6 +77,55 @@ public class Match
         private int numContactsAccount2 = -1;
         private Boolean syncStarted = false;
 
+        private void performMatching(HashMap<String,String> tempData, String data) {
+            if (dup2ListOther.containsKey(data) 
+				&& dup2ListOther.get(data).get(type) != null) {
+				dupCount2++;
+				tempData.put(type,dup2ListOther.get(data).get(type) 
+							 + "," + cItems.getString(0));
+				dup2ListOther.put(data,tempData);
+				duplicate = true;
+            } else if (account2Other.containsKey(data) &&
+					   account2Other.get(data).get(type) != null) {
+                dupCount2++;
+                tempData.put(type, account2Other.get(data).get(type)
+							 + "," + cItems.getString(0));
+				dup2ListOther.put(data,tempData);
+				//remove from unmatched
+				unmatched2.remove(tempContactName);
+				//remove from matched
+				if(matched2Other.get(type).containsKey(tempContactId)) {
+					  Long OtherId = matched2Other.get(type).get(tempContactId);
+					  matched2Other.get(type).remove(tempContactId);
+					  matched1Other.get(type).remove(OtherId);
+				}
+				duplicate = true;
+				unmatchedCount2--;
+			} else if(account1Other.containsKey(data)
+				&& account1Other.get(data).get(type) != null
+					&& !account1Other.get(data).get(type).contains(",")) {
+				Long account1id = Long.decode(account1Other.get(data).get(type));
+				if(	unmatched1Id.containsKey(account1id)) {
+					HashMap<Long,Long> idsMap;
+					if(matched1Other.containsKey(type))
+						idsMap = matched1Other.get(type);
+					else
+						idsMap = new HashMap<>();
+						
+					idsMap.put(account1id,tempContactId);
+					matched1Other.put(type,idsMap);
+					idsMap = new HashMap<>();
+					idsMap.put(tempContactId,account1id);
+					matched2Other.put(type,idsMap);
+			
+					matches++;
+					matched = true;
+				}
+			}
+
+			//add all data to account info
+			account2Other.put(data, tempData);
+        }
         @Override
         protected String doInBackground(Void... params) {
             String message;
@@ -253,7 +302,8 @@ public class Match
 									tempData = new HashMap<>();
 									tempData.put(type,cItems.getString(0));
 
-									if (dup2ListOther.containsKey(data) 
+                                    performMatching(tempData,data);
+									/*if (dup2ListOther.containsKey(data) 
 										&& dup2ListOther.get(data).get(type) != null) {
 										dupCount2++;
 										tempData.put(type,dup2ListOther.get(data).get(type) 
@@ -293,17 +343,13 @@ public class Match
 											idsMap.put(tempContactId,account1id);
 											matched2Other.put(type,idsMap);
 									
-											//remove from unmatched1
-											//String a1ContactName = unmatched1Id.remove(account1id);
-											//unmatched1.remove(a1ContactName);
-											//unmatchedCount1--;
 											matches++;
 											matched = true;
 										}
 									}
 
 									//add all data to account info
-									account2Other.put(data, tempData);
+									account2Other.put(data, tempData);*/
 								}
 							}
 						} finally {
