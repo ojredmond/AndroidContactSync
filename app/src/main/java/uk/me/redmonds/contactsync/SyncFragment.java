@@ -30,7 +30,6 @@ public class SyncFragment extends ListFragment {
     private SharedPreferences pref;
     private SharedPreferences settings;
     private String list_type;
-    //private String list_item;
     private String account1Name;
     private String account2Name;
     private String dup1;
@@ -48,7 +47,6 @@ public class SyncFragment extends ListFragment {
         values.clear();
         Bundle args = getArguments();
         list_type = args.getString("list_type", null);
-        //list_item = args.getString("list_item", null);
 
         main = (MainActivity)this.getActivity();
 
@@ -117,8 +115,8 @@ public class SyncFragment extends ListFragment {
         setListAdapter(adapter);
 		ListView lv = getListView();
 		lv.setDivider(null);
-		float gap = getResources().getDimension(R.dimen.large_gap);
-		lv.setPadding(0,20,0,0);
+		int gap = getResources().getDimensionPixelOffset(R.dimen.large_gap);
+		lv.setPadding(0,gap,0,0);
     }
 
     @Override

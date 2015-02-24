@@ -47,6 +47,9 @@ public class CompareDetail extends Fragment {
                     //reload comparefragement
                     main.Compare(null, listItem, null);
                     break;
+				case R.id.delete_button:
+					Toast.makeText(main, ""+p1.getTag(), Toast.LENGTH_LONG).show();
+					break;
                 default:
                     Toast.makeText(main, p1.toString(), Toast.LENGTH_LONG).show();
             }
@@ -142,7 +145,8 @@ public class CompareDetail extends Fragment {
 			
             // listener to delete button
             deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
-			
+			//store Id in tag
+			deleteLayout.findViewById(R.id.delete_button).setTag(id);
 
 			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 			params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);

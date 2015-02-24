@@ -266,7 +266,14 @@ public class Match
                                         tempData.put(type, account2Other.get(data).get(type)
 													 + "," + cItems.getString(0));
 										dup2ListOther.put(data,tempData);
+										//remove from unmatched
 										unmatched2.remove(tempContactName);
+										//remove from matched
+										if(matched2Other.get(type).containsKey(tempContactId)) {
+											  Long OtherId = matched2Other.get(type).get(tempContactId);
+											  matched2Other.get(type).remove(tempContactId);
+											  matched1Other.get(type).remove(OtherId);
+										}
 										duplicate = true;
 										unmatchedCount2--;
 									} else if(account1Other.containsKey(data)
@@ -287,9 +294,9 @@ public class Match
 											matched2Other.put(type,idsMap);
 									
 											//remove from unmatched1
-											String a1ContactName = unmatched1Id.remove(account1id);
-											unmatched1.remove(a1ContactName);
-											unmatchedCount1--;
+											//String a1ContactName = unmatched1Id.remove(account1id);
+											//unmatched1.remove(a1ContactName);
+											//unmatchedCount1--;
 											matches++;
 											matched = true;
 										}
@@ -308,6 +315,33 @@ public class Match
 						if(!duplicate && !matched) {
 							unmatched2.put(tempContactName, tempContactId);
 							unmatchedCount2++;
+						}
+						
+						//remove from unmatched1
+						if(matched) {
+							Long account1id = new Long(-1);
+							Boolean nameMatch = false;
+							if(matched2Other.containsKey(Contacts.TYPE_NAME)
+								&& matched2Other.get(Contacts.TYPE_NAME).containsKey(tempContactId)){
+								 account1id = matched2Other.get(Contacts.TYPE_NAME).get(tempContactId);
+								 nameMatch = true;
+								}
+							
+							for(String t:matched2Other.keySet()) {
+								if(!t.equals(Contacts.TYPE_NAME) && matched2Other.get(t).containsKey(tempContactId)) {
+									if(nameMatch) {
+										matched2Other.get(t).remove(tempContactId);
+										matched1Other.get(t).remove(account1id);
+									} else
+										account1id = matched2Other.get(t).get(tempContactId);
+								}
+							}
+							
+							if(!account1id.equals(new Long(-1))) {
+								String a1ContactName = unmatched1Id.remove(account1id);
+								unmatched1.remove(a1ContactName);
+								unmatchedCount1--;
+							}
 						}
 					}
 
