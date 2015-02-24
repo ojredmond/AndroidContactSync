@@ -110,7 +110,7 @@ public class SyncFragment extends ListFragment {
         }
 
         
-        FlexibleListAdapter adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main, android.R.layout.simple_list_item_2);
+        FlexibleListAdapter adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main);
         
         setListAdapter(adapter);
 		ListView lv = getListView();
