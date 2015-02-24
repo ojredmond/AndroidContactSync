@@ -16,14 +16,14 @@ import java.util.HashSet;
 public class SyncFragment extends ListFragment {
     public static final String MATCH = "Perform Matching";
     public static final String FULL = "Full Sync";
-    public static final String SYNC = "Sync";
+    public static final String SYNC = "Sync Changes";
     public static final String OPTIONS = "options";
     public static final String SUMMARY = "summary";
     public static final String DUP = "Duplicates";
     public static final String UNMATCHED = "Unmatched from Account";
 	public static final String PMATCHED = "Potential Matches";
     public static final String MATCHED = "Review matches";
-    private static final String LAST = "View Last Matched Results";
+    private static final String LAST = "View Last Results";
     private static final String NODUP = "No Duplicates";
     private ArrayList<HashMap<String, Object>> values = new ArrayList<>();
     private MainActivity main;
@@ -39,6 +39,7 @@ public class SyncFragment extends ListFragment {
     private HashSet<String> dup1Name;
     private HashSet<String> dup2Name;
     private HashMap<String, Object> value;
+	private Boolean dup = false;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -66,21 +67,29 @@ public class SyncFragment extends ListFragment {
         dup2Name = (HashSet<String>)pref.getStringSet(dup2, null);
 
         if (list_type.equals(OPTIONS) || !pref.getBoolean(Match.SYNCMATCHED,false)) {
+			value = new HashMap<>();
+			value.put(FlexibleListAdapter.TEXT, new String[]{"Match"});
+			value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
+			value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
+			values.add(value);
             value = new HashMap<>();
-            value.put(FlexibleListAdapter.TITLE, MATCH);
+            
             if (account1Name == null || account2Name == null) {
-                value.put(FlexibleListAdapter.DESCRIPTION, "Accounts need to be set");
+                value.put(FlexibleListAdapter.TEXT, new String[]{MATCH,"Accounts need to be set"});
             } else if (account1Name.equals(account2Name)) {
-                value.put(FlexibleListAdapter.DESCRIPTION, "for " + account1Name);
+                value.put(FlexibleListAdapter.TEXT, new String[]{MATCH,"for " + account1Name});
             } else {
-                value.put(FlexibleListAdapter.DESCRIPTION, "for " + account1Name + " & " + account2Name);
+                value.put(FlexibleListAdapter.TEXT, new String[]{MATCH,"for " + account1Name + " & " + account2Name});
             }
-
+			value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_r2);
+			value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.title, R.id.value});
             values.add(value);
 
             if (pref.getBoolean(Match.SYNCMATCHED,false)) {
                 value = new HashMap<>();
-                value.put(FlexibleListAdapter.TITLE, LAST);
+                value.put(FlexibleListAdapter.TEXT, new String[]{LAST});
+				value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_1);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
                 values.add(value);
             }
         } else if (list_type.equals(SUMMARY)) {
@@ -94,18 +103,32 @@ public class SyncFragment extends ListFragment {
             }
         }
 
-
+		for (String type : Match.MIME_TYPE_LIST) {
+            String dupLabel = Match.DUPKEY + type + account1Name;
+            HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
+            if (dupSet != null && dupSet.size() > 0) {
+				dup = true;
+            }
+        }
         if (account1Name != null && account2Name != null
                 && !account1Name.equals(account2Name)
                 && pref.getBoolean(Match.SYNCMATCHED,false)
-                && (dup1Name != null && dup1Name.size() > 0)
-                && (dup2Name != null && dup2Name.size() > 0)) {
-            value = new HashMap<>();
-            value.put(FlexibleListAdapter.TITLE, FULL);
+                && !dup) {
+			value = new HashMap<>();
+			value.put(FlexibleListAdapter.TEXT, new String[]{"Sync"});
+			value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
+			value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
+			values.add(value);
+			value = new HashMap<>();
+            value.put(FlexibleListAdapter.TEXT, new String[]{FULL});
+			value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_1);
+			value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
             values.add(value);
             //add logic to detect a full sync has been performed
             value = new HashMap<>();
-            value.put(FlexibleListAdapter.TITLE, SYNC);
+            value.put(FlexibleListAdapter.TEXT, new String[]{SYNC});
+			value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_1);
+			value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
             values.add(value);
         }
 
@@ -117,13 +140,14 @@ public class SyncFragment extends ListFragment {
 		lv.setDivider(null);
 		int gap = getResources().getDimensionPixelOffset(R.dimen.large_gap);
 		lv.setPadding(0,gap,0,0);
+		lv.setBackgroundColor(getResources().getColor(android.R.color.white));
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
 		HashMap<String,Object> clickedItem = (HashMap<String,Object>)l.getAdapter().getItem(position);
 
-        if (clickedItem.containsKey(FlexibleListAdapter.TITLE) && clickedItem.get(FlexibleListAdapter.TITLE).equals(MATCH)) {
+        if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[])clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(MATCH)) {
             settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
             account1Name = settings.getString(MainActivity.ACCOUNT1, null);
             account2Name = settings.getString(MainActivity.ACCOUNT2, null);
@@ -134,7 +158,7 @@ public class SyncFragment extends ListFragment {
             }
 
             main.matchStatus();
-        } else if (clickedItem.containsKey(FlexibleListAdapter.TITLE) && clickedItem.get(FlexibleListAdapter.TITLE).equals(LAST)) {
+        } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[])clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)) {
             main.showResults();
 		} else if (clickedItem.containsKey(FlexibleListAdapter.LISTITEM)) {
 			main.Compare(list_type, (String)clickedItem.get(FlexibleListAdapter.LISTITEM), null);
@@ -151,9 +175,8 @@ public class SyncFragment extends ListFragment {
         HashSet<String> unmatched2Name = (HashSet<String>)pref.getStringSet(un2, null);
         HashSet<String> matched1 = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
-        Boolean dup = false;
 		Boolean first = true;
-        
+        dup = false;
         for (String type : Match.MIME_TYPE_LIST) {
             String dupLabel = Match.DUPKEY + type + account1Name;
             HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
