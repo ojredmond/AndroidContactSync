@@ -39,6 +39,8 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle = "";
     private String syncType = "";
+	private StatusFragment log;
+	private String logText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,14 @@ public class MainActivity extends ActionBarActivity
 		//get the fragment manager
 		fragmentManager = getSupportFragmentManager();
 
+		if (savedInstanceState != null) {
+            // Restore last state for checked position.
+			if(savedInstanceState.containsKey("log")) {
+				logText = savedInstanceState.getString("log");
+			}
+            
+        }
+		
         mNavigationDrawerFragment = (NavigationDrawerFragment)
 			fragmentManager.findFragmentById(R.id.navigation_drawer);
         
@@ -91,34 +101,27 @@ public class MainActivity extends ActionBarActivity
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new SettingsFragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
+						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;
             case 1:
                 showOptions();
                 break;
             case 2:
-            	if (!restoreFragment(PACKAGE_NAME + "-" + getString(R.string.title_logs))) {
+				String tag = PACKAGE_NAME + "-" + getString(R.string.title_logs);
+				if (log == null)
+					log = new StatusFragment(logText);
+					
                     fragmentManager.beginTransaction()
-                        .replace(R.id.container, new StatusFragment(), PACKAGE_NAME + "-" + getString(R.string.title_logs))
+                        .replace(R.id.container, log, tag)
                         .commit();
-            	}
                 break;
             case 3:
                 showResults();
                 break;
         }
     }
-
-    private Boolean restoreFragment(String fragTag) {
-        Fragment frag = fragmentManager.findFragmentByTag(fragTag);
-    	if (frag == null) return false;
-
-        fragmentManager.beginTransaction()
-            .replace(R.id.container, frag, fragTag)
-            .commit();
-            
-        return true;
-    }
+	
     public void setHeading(CharSequence title) {
         if(!title.equals("")) mTitle = title;
 		
@@ -136,8 +139,12 @@ public class MainActivity extends ActionBarActivity
         results.putBoolean(Match.SYNCMATCHED, false);
         results.remove(Match.NUMCONTACTS + account1Name);
         results.remove(Match.NUMCONTACTS + account2Name);
-        results.remove(Match.DUPKEY + account1Name);
-        results.remove(Match.DUPKEY + account2Name);
+		for(String type: Match.MIME_TYPE_LIST) {
+			results.remove(Match.DUPKEY + type + account1Name);
+			results.remove(Match.DUPKEY + type + account2Name);
+			results.remove(Match.MATCHEDKEY + type + account1Name + ":" + account2Name);
+			results.remove(Match.MATCHEDKEY + type + account2Name + ":" + account1Name);
+		}
         results.remove(Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name);
         results.remove(Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name);
         results.remove(Match.MATCHEDKEY + account1Name + ":" + account2Name);
@@ -146,18 +153,7 @@ public class MainActivity extends ActionBarActivity
         results.remove(Match.ACCOUNTKEY + account2Name + ":" + account1Name);
         results.apply();
 
-        // Create fragment and give it an argument specifying the article it should show
-        StatusFragment newFragment = new StatusFragment();
-
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-
-        // Replace whatever is in the fragment_container view with this fragment,
-        // and add the transaction to the back stack so the user can navigate back
-        transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_logs));
-        //transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_logs));
-
-        // Commit the transaction
-        transaction.commit();
+		onNavigationDrawerItemSelected(2);
     }
 
     public void onViewCreated(View statusView) {
@@ -166,14 +162,20 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void showOptions () {
-        showList(SyncFragment.OPTIONS);
+		showList(SyncFragment.OPTIONS,PACKAGE_NAME + "-" + getString(R.string.title_sync));
+		//update the navigation drawer
+        if(mNavigationDrawerFragment != null)
+            mNavigationDrawerFragment.changeItem(1);
     }
     
     public void showResults () {
-        showList(SyncFragment.SUMMARY);
+        showList(SyncFragment.SUMMARY, PACKAGE_NAME + "-" + getString(R.string.title_results));
+		//update the navigation drawer
+        if(mNavigationDrawerFragment != null)
+            mNavigationDrawerFragment.changeItem(3);
     }
 
-    public void showList (String type) {
+    public void showList (String type, String fragTag) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         SyncFragment newFragment = new SyncFragment();
 
@@ -187,14 +189,9 @@ public class MainActivity extends ActionBarActivity
         newFragment.setArguments(args);
 
         // Add the fragment to the 'fragment_container' FrameLayout
-        transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-" + getString(R.string.title_results));
-        //transaction.addToBackStack(PACKAGE_NAME + "-" + getString(R.string.title_results));
+        transaction.replace(R.id.container, newFragment, fragTag);
 
         transaction.commit();
-        
-        //update the navigation drawer
-        if(mNavigationDrawerFragment != null)
-            mNavigationDrawerFragment.changeItem(3);
     }
 
     public void Compare (String listType, String listItem, String selected) {
@@ -217,8 +214,6 @@ public class MainActivity extends ActionBarActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-compare");
 
-        //transaction.addToBackStack(PACKAGE_NAME + "-compare");
-
         transaction.commit();
     }
 
@@ -233,7 +228,6 @@ public class MainActivity extends ActionBarActivity
         }
         if (ids != null) {
 			args.putStringArray("ids",ids);
-            //args.putStringArrayList("ids", ids);
         }
         if (listItem != null) {
             args.putString("listItem", listItem);
@@ -249,8 +243,6 @@ public class MainActivity extends ActionBarActivity
         // Add the fragment to the 'fragment_container' FrameLayout
         transaction.replace(R.id.container, newFragment, PACKAGE_NAME + "-merge");
 
-        //transaction.addToBackStack(null);
-
         transaction.commit();
     }
 
@@ -265,8 +257,10 @@ public class MainActivity extends ActionBarActivity
 
     @Override
     public void onBackPressed() {
-        
-        if(fragmentManager.findFragmentById(R.id.container)!=null) {
+        //check to see if drawer id open
+		if(mNavigationDrawerFragment.isVisible())
+			mNavigationDrawerFragment.closeDrawer();
+        else if(fragmentManager.findFragmentById(R.id.container)!=null) {
             Fragment currentFragment = fragmentManager.findFragmentById(R.id.container);
             String currentFragmentClass = currentFragment.getClass().getName();
             String type, item, name;
@@ -299,5 +293,11 @@ public class MainActivity extends ActionBarActivity
         } else
             super.onBackPressed();
     }
-
+	
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+		if (log != null && !log.getLog().equals(""))
+			outState.putString("log",log.getLog());
+		super.onSaveInstanceState(outState);
+    }
 }

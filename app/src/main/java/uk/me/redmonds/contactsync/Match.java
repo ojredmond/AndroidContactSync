@@ -89,7 +89,8 @@ public class Match {
                 dup1ListOther.put(data, tempData);
                 duplicate = true;
             } else if (account1Other.containsKey(data) &&
-                    account1Other.get(data).get(type) != null) {
+                    account1Other.get(data).get(type) != null
+					&& !account1Other.get(data).get(type).equals(tempContactId.toString())) {
                 //dupCount1++;
                 tempData.put(type, account1Other.get(data).get(type)
                         + "," + tempContactId.toString());
@@ -124,7 +125,8 @@ public class Match {
                 dup2ListOther.put(data, tempData);
                 duplicate = true;
             } else if (account2Other.containsKey(data) &&
-                    account2Other.get(data).get(type) != null) {
+                    account2Other.get(data).get(type) != null
+					 && !account2Other.get(data).get(type).equals(tempContactId.toString())) {
                 //dupCount2++;
                 tempData.put(type, account2Other.get(data).get(type)
                         + "," + tempContactId.toString());
@@ -215,7 +217,7 @@ public class Match {
                 for (String aMIME_TYPE_LIST : MIME_TYPE_LIST) types += "'" + aMIME_TYPE_LIST + "',";
                 types = types.substring(0, types.length() - 1);
             } else
-                types = "'" + Contacts.TYPE_NAME + "'";
+                types = "'" + ContactsHelper.TYPE_NAME + "'";
 
             message = "Starting " + syncType + "...\n";
             message += "Loading Account 1\n";
@@ -270,12 +272,12 @@ public class Match {
                             }
                         } else {
                             tempData = new HashMap<>();
-                            tempData.put(Contacts.TYPE_NAME, tempContactId.toString());
+                            tempData.put(ContactsHelper.TYPE_NAME, tempContactId.toString());
 
                             duplicate = performMatchingP1(
                                     unmatched1Id, tempData,
                                     tempContactName, tempContactId,
-                                    Contacts.TYPE_NAME, tempContactName,
+                                    ContactsHelper.TYPE_NAME, tempContactName,
                                     duplicate
                             );
                         }
@@ -354,12 +356,12 @@ public class Match {
                             }
                         } else {
                             tempData = new HashMap<>();
-                            tempData.put(Contacts.TYPE_NAME, tempContactId.toString());
+                            tempData.put(ContactsHelper.TYPE_NAME, tempContactId.toString());
 
                             Boolean returnValues[] = performMatchingP2(
                                     unmatched1Id, tempData,
                                     tempContactName, tempContactId,
-                                    Contacts.TYPE_NAME, tempContactName,
+                                    ContactsHelper.TYPE_NAME, tempContactName,
                                     duplicate, matched
                             );
 
@@ -378,14 +380,14 @@ public class Match {
                         if (matched) {
                             Long account1id = new Long(-1);
                             Boolean nameMatch = false;
-                            if (matched2Other.containsKey(Contacts.TYPE_NAME)
-                                    && matched2Other.get(Contacts.TYPE_NAME).containsKey(tempContactId)) {
-                                account1id = matched2Other.get(Contacts.TYPE_NAME).get(tempContactId);
+                            if (matched2Other.containsKey(ContactsHelper.TYPE_NAME)
+                                    && matched2Other.get(ContactsHelper.TYPE_NAME).containsKey(tempContactId)) {
+                                account1id = matched2Other.get(ContactsHelper.TYPE_NAME).get(tempContactId);
                                 nameMatch = true;
                             }
 
                             for (String t : matched2Other.keySet()) {
-                                if (!t.equals(Contacts.TYPE_NAME) && matched2Other.get(t).containsKey(tempContactId)) {
+                                if (!t.equals(ContactsHelper.TYPE_NAME) && matched2Other.get(t).containsKey(tempContactId)) {
                                     if (nameMatch) {
                                         matched2Other.get(t).remove(tempContactId);
                                         matched1Other.get(t).remove(account1id);
@@ -509,7 +511,7 @@ public class Match {
                     }
                 }
                 for (String type : MIME_TYPE_LIST)
-                    if (type.equals(Contacts.TYPE_NAME))
+                    if (type.equals(ContactsHelper.TYPE_NAME))
                         results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name.get(type));
                     else
                         results.putStringSet(MATCHEDKEY + type + account1Name + ":" + account2Name, matched1Name.get(type));
@@ -524,7 +526,7 @@ public class Match {
                     }
                 }
                 for (String type : MIME_TYPE_LIST)
-                    if (type.equals(Contacts.TYPE_NAME))
+                    if (type.equals(ContactsHelper.TYPE_NAME))
                         results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name.get(type));
                     else
                         results.putStringSet(MATCHEDKEY + type + account2Name + ":" + account1Name, matched2Name.get(type));

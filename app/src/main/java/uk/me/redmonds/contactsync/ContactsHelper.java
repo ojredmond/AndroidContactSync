@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Event;
@@ -26,14 +27,18 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
+import android.content.res.AssetFileDescriptor;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.io.*;
 
-public class Contacts {
+public class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
     public static final String[] TYPES = {
             StructuredName.CONTENT_ITEM_TYPE,
@@ -83,7 +88,7 @@ public class Contacts {
     private MainActivity main;
     private HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = new HashMap<>();
 
-    Contacts(Activity m, String l, String key, HashSet<String> ids) {
+    ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
         listName = l;
         listKey = key;
@@ -92,7 +97,7 @@ public class Contacts {
         createContacts();
    }
 
-    Contacts(Activity m, String l, String key, String[] ids) {
+    ContactsHelper(Activity m, String l, String key, String[] ids) {
         main = (MainActivity)m;
         listName = l;
         listKey = key;
@@ -312,6 +317,41 @@ public class Contacts {
         return accounts.get(id);
     }
 
+	public InputStream openPhoto(long contactId) {
+		Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
+		Uri photoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.CONTENT_DIRECTORY);
+		Cursor cursor = main.getContentResolver().query(photoUri,
+												   new String[] {Contacts.Photo.PHOTO}, null, null, null);
+		if (cursor == null) {
+			return null;
+		}
+		try {
+			if (cursor.moveToFirst()) {
+				byte[] data = cursor.getBlob(0);
+				if (data != null) {
+					return new ByteArrayInputStream(data);
+				}
+			}
+		} finally {
+			cursor.close();
+		}
+		return null;
+	}
+	
+	public InputStream openDisplayPhoto(long contactId) {
+		Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
+		Uri displayPhotoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.DISPLAY_PHOTO);
+		try {
+			AssetFileDescriptor fd =
+				main.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
+			return fd.createInputStream();
+		} catch (FileNotFoundException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
+	}
+	
     public int size() {
         return contacts.size();
     }

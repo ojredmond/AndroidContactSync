@@ -7,11 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.*;
 
 public class StatusFragment extends Fragment {
+	private final static String LOG = "log";
     private OnViewCreatedListener mCallback;
     private TextView log;
+	private String logText;
 
+	public StatusFragment() {
+		logText = "";
+	}
+	
+	public StatusFragment(String text) {
+		logText = text;
+	}
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -40,18 +50,32 @@ public class StatusFragment extends Fragment {
 
         mCallback.onViewCreated(statusView);
         log = (TextView) statusView.findViewById(R.id.statuslog);
+		log.setText(logText);
 
         if (savedInstanceState != null) {
             // Restore last state for checked position.
-            log.setText(savedInstanceState.getString("log", ""));
+            log.setText(savedInstanceState.getString(LOG, ""));
         }
 
         // Inflate the layout for this fragment
         return statusView;
     }
 
+	public String getLog() {
+		return log.getText().toString();
+	}
+	public void setLog(String text) {
+		log.setText(text);
+	}
+	
     //Container Activity must implement this interface
     public interface OnViewCreatedListener {
         public void onViewCreated(View statusView);
+    }
+	
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(LOG, log.getText().toString());
+		super.onSaveInstanceState(outState);
     }
 }

@@ -37,7 +37,7 @@ public class MatchContact extends Fragment implements
             if (p1.getId() == R.id.delete_contact) {
                 HashSet<String> list = new HashSet<>();
                 list.add(String.valueOf(id));
-                Contacts contacts = new Contacts(main, listItem, name, list);
+                ContactsHelper contacts = new ContactsHelper(main, listItem, name, list);
                 contacts.deleteContacts();
             }
 

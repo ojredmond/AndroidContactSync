@@ -73,6 +73,8 @@ public class CompareFragment extends Fragment {
 				account1.put(contact[0],contact[1]);
 			}
             HashSet<String> set = (HashSet<String>)pref.getStringSet(listItem, null);
+			if(set == null || set.size() == 0)
+				main.onBackPressed();
             for (String aSet : set) {
 				HashMap<String,String> contactsName = new HashMap<>();
                 String contact[] = aSet.split(":");

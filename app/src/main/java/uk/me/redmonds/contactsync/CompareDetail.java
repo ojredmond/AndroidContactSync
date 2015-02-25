@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 public class CompareDetail extends Fragment {
-    Contacts cObj;
+    ContactsHelper cObj;
     private MainActivity main;
     private String name;
     private String ids[];
@@ -121,9 +121,9 @@ public class CompareDetail extends Fragment {
         layout.removeAllViews();
 
         if (listItem.startsWith(Match.MATCHEDKEY))
-            cObj = new Contacts(main, listItem, ids[0], ids);
+            cObj = new ContactsHelper(main, listItem, ids[0], ids);
         else
-            cObj = new Contacts(main, listItem, name, ids);
+            cObj = new ContactsHelper(main, listItem, name, ids);
 
         HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = cObj.getContacts();
         for (String id : ids) {
@@ -162,12 +162,12 @@ public class CompareDetail extends Fragment {
             contactInfo.addView(accountInfo);
 
             HashMap<String, HashSet<HashMap<String, String>>> contact = contacts.get(id);
-            for (String type : Contacts.TYPES) {
+            for (String type : ContactsHelper.TYPES) {
                 if (contact.get(type) != null
                         && contact.get(type).size() > 0) {
                     TextView contactHeading = (TextView) LayoutInflater.from(main)
                             .inflate(R.layout.list_heading, layoutContainer, false);
-                    contactHeading.setText(Contacts.getGroupName(type));
+                    contactHeading.setText(ContactsHelper.getGroupName(type));
                     contactInfo.addView(contactHeading);
                     for (HashMap<String, String> item : contact.get(type)) {
                         if (item.get("label") == null) {

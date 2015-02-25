@@ -76,8 +76,8 @@ public class SyncFragment extends ListFragment {
             if (pref.getBoolean(Match.SYNCMATCHED,false)) {
                 value = new HashMap<>();
                 value.put(FlexibleListAdapter.TEXT, new String[]{LAST});
-				value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_1);
-				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
+				value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_r2);
+				value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.title});
                 values.add(value);
             }
         } else if (list_type.equals(SUMMARY)) {
@@ -91,17 +91,33 @@ public class SyncFragment extends ListFragment {
             }
         }
 
+		Boolean hideSync = false;
 		for (String type : Match.MIME_TYPE_LIST) {
-            String dupLabel = Match.DUPKEY + type + account1Name;
-            HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
-            if (dupSet != null && dupSet.size() > 0) {
-				dup = true;
+            String label = Match.DUPKEY + type + account1Name;
+            HashSet<String> set = (HashSet<String>) pref.getStringSet(label, null);
+            if (set != null && set.size() > 0) {
+				hideSync = true;
+            }
+			label = Match.DUPKEY + type + account2Name;
+            set = (HashSet<String>) pref.getStringSet(label, null);
+            if (set != null && set.size() > 0) {
+				hideSync = true;
+            }
+			label = Match.MATCHEDKEY + type + account1Name + ":" + account2Name;
+            set = (HashSet<String>) pref.getStringSet(label, null);
+            if (set != null && set.size() > 0) {
+				hideSync = true;
+            }
+			label = Match.MATCHEDKEY + type + account2Name + ":" + account1Name;
+            set = (HashSet<String>) pref.getStringSet(label, null);
+            if (set != null && set.size() > 0) {
+				hideSync = true;
             }
         }
         if (account1Name != null && account2Name != null
                 && !account1Name.equals(account2Name)
                 && pref.getBoolean(Match.SYNCMATCHED,false)
-                && !dup) {
+                && !hideSync) {
 			value = new HashMap<>();
 			value.put(FlexibleListAdapter.TEXT, new String[]{"Sync"});
 			value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
@@ -109,13 +125,13 @@ public class SyncFragment extends ListFragment {
 			values.add(value);
 			value = new HashMap<>();
             value.put(FlexibleListAdapter.TEXT, new String[]{FULL});
-			value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_1);
+			value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
 			value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
             values.add(value);
             //add logic to detect a full sync has been performed
             value = new HashMap<>();
             value.put(FlexibleListAdapter.TEXT, new String[]{SYNC});
-			value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_1);
+			value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_2);
 			value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
             values.add(value);
         }
@@ -185,7 +201,7 @@ public class SyncFragment extends ListFragment {
 				}
                 
                 value = new HashMap<>();
-                value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type), "(" + dupSet.size() + ")"});
+                value.put(FlexibleListAdapter.TEXT, new String[]{ContactsHelper.getGroupName(type), "(" + dupSet.size() + ")"});
                 if(first)
                     value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
                 else
@@ -218,7 +234,8 @@ public class SyncFragment extends ListFragment {
 						value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
 						value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
 						values.add(value);
-					} else if(first) {
+					} 
+					if(first) {
 						value = new HashMap<>();
 						value.put(FlexibleListAdapter.TEXT, new String[]{"Account", account2Name});
 						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_account);
@@ -227,7 +244,7 @@ public class SyncFragment extends ListFragment {
 					}
 
 					value = new HashMap<>();
-					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type), "(" + dupSet.size() + ")"});
+					value.put(FlexibleListAdapter.TEXT, new String[]{ContactsHelper.getGroupName(type), "(" + dupSet.size() + ")"});
 					if(first)
 						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
 					else
@@ -280,7 +297,7 @@ public class SyncFragment extends ListFragment {
 					}
 
 					value = new HashMap<>();
-					value.put(FlexibleListAdapter.TEXT, new String[]{Contacts.getGroupName(type), "(" + matchSet.size() + ")"});
+					value.put(FlexibleListAdapter.TEXT, new String[]{ContactsHelper.getGroupName(type), "(" + matchSet.size() + ")"});
 					if(first)
 						value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
 					else

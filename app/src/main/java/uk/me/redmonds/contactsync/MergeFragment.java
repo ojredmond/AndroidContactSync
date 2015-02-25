@@ -21,7 +21,7 @@ public class MergeFragment extends Fragment {
     private MainActivity main;
     private HashMap<String, HashSet<HashMap<String, String>>> contact;
     private LinearLayout layout;
-    private Contacts cObject;
+    private ContactsHelper cObject;
     private String listItem;
     private ViewGroup layoutContainer;
     private String listType;
@@ -31,7 +31,9 @@ public class MergeFragment extends Fragment {
         public void onClick(View p1) {
             switch (p1.getId()) {
                 case R.id.contact_confirm:
-                    if (cObject.saveMergedContact(contact)) {
+					if(contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
+						Toast.makeText(main, "Needs to be only 1 name", Toast.LENGTH_LONG).show();
+					} else if (cObject.saveMergedContact(contact)) {
                         main.Compare(listType, listItem, null);
                     } else {
                         Toast.makeText(main, "Save Failed", Toast.LENGTH_LONG).show();
@@ -47,7 +49,7 @@ public class MergeFragment extends Fragment {
                     HashMap<String, String> item = (HashMap<String, String>) row.findViewById(R.id.value).getTag();
 
                     if (contact.get(type).size() == 1 &&
-                            type.equals(Contacts.TYPES[0])) {
+						type.equals(ContactsHelper.TYPE_NAME)) {
                         Toast.makeText(main, "A name is required!", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -63,7 +65,7 @@ public class MergeFragment extends Fragment {
 
                     //remove delete button if only one name
                     if (contact.get(type).size() == 1 &&
-                            type.equals(Contacts.TYPES[0])) {
+                            type.equals(ContactsHelper.TYPES[0])) {
                         View rowOther;
                         if (pos > 0) {
                             rowOther = layout.getChildAt(pos - 1);
@@ -100,7 +102,7 @@ public class MergeFragment extends Fragment {
         if (savedInstanceState != null)
             contact = (HashMap<String, HashSet<HashMap<String, String>>>) savedInstanceState.getSerializable(STATE_CONTACT);
         //create contacts object
-        cObject = new Contacts(main, listItem, selectedName, ids);
+        cObject = new ContactsHelper(main, listItem, selectedName, ids);
 
         View contactView = inflater.inflate(R.layout.fragment_merge, container, false);
         // add listeners to buttons
@@ -122,12 +124,12 @@ public class MergeFragment extends Fragment {
     }
 
     public void displayMergedContact() {
-        for (String type : Contacts.TYPES) {
+        for (String type : ContactsHelper.TYPES) {
             if (contact.get(type) != null
                     && contact.get(type).size() > 0) {
                 TextView contactHeading = (TextView) LayoutInflater.from(main)
                         .inflate(R.layout.list_heading, layoutContainer, false);
-                contactHeading.setText(Contacts.getGroupName(type));
+                contactHeading.setText(ContactsHelper.getGroupName(type));
                 contactHeading.setTag("Heading");
                 layout.addView(contactHeading);
                 for (HashMap<String, String> item : contact.get(type)) {
@@ -140,7 +142,7 @@ public class MergeFragment extends Fragment {
                         contactValue.setText(item.get("value"));
                         contactValue.setTag(item);
                         //if only 1 name hide delete button
-                        if (!(type.equals(Contacts.TYPES[0]) && contact.get(type).size() == 1))
+                        if (!(type.equals(ContactsHelper.TYPES[0]) && contact.get(type).size() == 1))
                             deleteLayout.addView(contactValue);
                     } else {
                         LinearLayout rowLayout = (LinearLayout) LayoutInflater.from(main)
@@ -160,7 +162,7 @@ public class MergeFragment extends Fragment {
                     deleteLayout.setTag(type);
 
                     //if only 1 name hide delete button
-                    if (type.equals(Contacts.TYPES[0]) && contact.get(type).size() == 1)
+                    if (type.equals(ContactsHelper.TYPES[0]) && contact.get(type).size() == 1)
                         layout.addView(contactValue);
                     else
                         layout.addView(deleteLayout, params);
