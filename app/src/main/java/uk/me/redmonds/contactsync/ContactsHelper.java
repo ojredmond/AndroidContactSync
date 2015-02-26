@@ -27,6 +27,7 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
+import android.provider.ContactsContract.DisplayPhoto;
 import android.content.res.AssetFileDescriptor;
 
 import java.io.ByteArrayInputStream;
@@ -37,14 +38,18 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.io.*;
+import java.util.*;
+import android.widget.*;
 
 public class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
+	public static final String TYPE_PHOTO = Photo.CONTENT_ITEM_TYPE;
+	public static final String TYPE_GROUP = GroupMembership.CONTENT_ITEM_TYPE;
     public static final String[] TYPES = {
+			Photo.CONTENT_ITEM_TYPE,
             StructuredName.CONTENT_ITEM_TYPE,
             Phone.CONTENT_ITEM_TYPE,
             Email.CONTENT_ITEM_TYPE,
-            Photo.CONTENT_ITEM_TYPE,
             Organization.CONTENT_ITEM_TYPE,
             Im.CONTENT_ITEM_TYPE,
             Nickname.CONTENT_ITEM_TYPE,
@@ -87,6 +92,7 @@ public class ContactsHelper {
     private HashMap<String, String> listMap = new HashMap<>();
     private MainActivity main;
     private HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = new HashMap<>();
+	private HashMap<String, byte[]> contactPhotos = new HashMap<>();
 
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
@@ -185,6 +191,13 @@ public class ContactsHelper {
         if (ids.length() > 0)
             ids = ids.substring(0, ids.length() - 1);
 
+		//get settings
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+        account1Name = settings.getString(MainActivity.ACCOUNT1, null);
+        account2Name = settings.getString(MainActivity.ACCOUNT2, null);
+        groupInc = settings.getBoolean(MainActivity.GROUPS, false);
+        photoInc = settings.getBoolean(MainActivity.PHOTOS, false);
+
         ArrayList<String> selection = new ArrayList<>();
         selection.add(Data.RAW_CONTACT_ID);
         selection.add(Data._ID);
@@ -199,27 +212,34 @@ public class ContactsHelper {
         try {
             while (c.moveToNext()) {
                 HashMap<String, HashSet<HashMap<String, String>>> contact = contacts.get(c.getString(0));
-                if (!c.isNull(1) && !c.isNull(3) && !c.getString(3).equals("")) {
-                    if (!contact.containsKey(c.getString(2)))
+                if (!c.isNull(1) && !c.isNull(2) 
+					&& (!c.getString(2).equals(TYPE_GROUP) || groupInc)
+					&& (!c.getString(2).equals(TYPE_PHOTO) || photoInc)) {
+					
+                    if(c.getString(2).equals(TYPE_PHOTO)) {
+						if(c.getType(CONTACT_FIELDS.length + 2) == Cursor.FIELD_TYPE_BLOB
+						   && !c.isNull(CONTACT_FIELDS.length + 2))
+							contactPhotos.put(c.getString(0), c.getBlob(CONTACT_FIELDS.length + 2));
+					}
+					if (!contact.containsKey(c.getString(2)))
                         contact.put(c.getString(2), new HashSet<HashMap<String, String>>());
                     HashSet<HashMap<String, String>> field = contact.get(c.getString(2));
                     HashMap<String, String> value = new HashMap<>();
-                    value.put("value", c.getString(3));
+					if(!c.isNull(3) && !c.getString(3).equals(""))
+                    	value.put("value", c.getString(3));
                     value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
+					
                     for (int i = 0; i < CONTACT_FIELDS.length; i++)
-                        value.put(CONTACT_FIELDS[i], c.getString(i + 3));
+						if(c.getType(i + 3) == Cursor.FIELD_TYPE_BLOB)
+							value.put(CONTACT_FIELDS[i], null);
+						else
+                        	value.put(CONTACT_FIELDS[i], c.getString(i + 3));
                     field.add(value);
                 }
             }
         } finally {
             c.close();
         }
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-        account1Name = settings.getString(MainActivity.ACCOUNT1, null);
-        account2Name = settings.getString(MainActivity.ACCOUNT2, null);
-        groupInc = settings.getBoolean(MainActivity.GROUPS, false);
-        photoInc = settings.getBoolean(MainActivity.PHOTOS, false);
 
         account1 = new HashSet<>();
         account2 = new HashSet<>();
@@ -316,32 +336,26 @@ public class ContactsHelper {
     public String getAccountName (String id) {
         return accounts.get(id);
     }
-
-	public InputStream openPhoto(long contactId) {
-		Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
-		Uri photoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.CONTENT_DIRECTORY);
-		Cursor cursor = main.getContentResolver().query(photoUri,
-												   new String[] {Contacts.Photo.PHOTO}, null, null, null);
-		if (cursor == null) {
-			return null;
-		}
-		try {
-			if (cursor.moveToFirst()) {
-				byte[] data = cursor.getBlob(0);
-				if (data != null) {
-					return new ByteArrayInputStream(data);
-				}
-			}
-		} finally {
-			cursor.close();
-		}
-		return null;
-	}
 	
-	public InputStream openDisplayPhoto(long contactId) {
-		Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
-		Uri displayPhotoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.DISPLAY_PHOTO);
-		try {
+	public byte[] openPhoto(String contactId) {
+		HashSet<HashMap<String,String>> photoSet = contacts.get(contactId).get(TYPE_PHOTO);
+		if(photoSet == null)
+			return null;
+		Toast.makeText(main,"Size "+photoSet.size(),Toast.LENGTH_LONG).show();
+		Iterator it = photoSet.iterator();
+		if(!it.hasNext())
+			return null;
+		HashMap<String,String> photo = (HashMap<String,String>)it.next();
+		
+		//Long photoId = Long.decode(photo.get(Data.DATA14));
+		Toast.makeText(main,photo.get(Data.DATA14),Toast.LENGTH_LONG).show();
+		//Uri displayPhotoUri = ContentUris.withAppendedId(DisplayPhoto.CONTENT_URI, photoId);
+		if(contactPhotos.containsKey(contactId))
+			return contactPhotos.get(contactId);
+		else
+			return null;
+		//return Contacts.openContactPhotoInputStream(main.getContentResolver(),displayPhotoUri,true);
+		/*try {
 			AssetFileDescriptor fd =
 				main.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
 			return fd.createInputStream();
@@ -349,7 +363,7 @@ public class ContactsHelper {
 			return null;
 		} catch (IOException e) {
 			return null;
-		}
+		}*/
 	}
 	
     public int size() {
@@ -459,8 +473,8 @@ public class ContactsHelper {
                 ops = new ArrayList<>();
                 for (String type: TYPES) {
                     //exclude types based on settings
-                    if((!type.equals(TYPES[10]) || groupInc)
-                       && (!type.equals(TYPES[4]) || photoInc)) {
+                    if((!type.equals(TYPE_GROUP) || groupInc)
+                       && (!type.equals(TYPE_PHOTO) || photoInc)) {
                         HashSet<HashMap<String, String>> dels;
                         HashSet<HashMap<String, String>> adds;
 

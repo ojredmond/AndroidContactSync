@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.io.InputStream;
+import android.widget.*;
+import android.graphics.*;
 
 public class CompareDetail extends Fragment {
     ContactsHelper cObj;
@@ -135,6 +138,18 @@ public class CompareDetail extends Fragment {
             layout.addView(contactView);
             LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
 
+			// Display photo if it exists
+			if(cObj.photoInc) {
+				byte[] photoData = cObj.openPhoto(id);
+				if(photoData != null) {
+					View photoView = LayoutInflater.from(main)
+						.inflate(R.layout.image, layoutContainer, false);
+					ImageView photo = (ImageView)photoView.findViewById(R.id.photo);
+					photo.setImageBitmap(BitmapFactory.decodeByteArray(photoData,0,photoData.length));
+					contactInfo.addView(photoView);
+				}
+			}
+			
             // Display account name
 			RelativeLayout deleteLayout = (RelativeLayout)LayoutInflater.from(main)
 				.inflate(R.layout.delete_button, layoutContainer, false);
@@ -165,11 +180,18 @@ public class CompareDetail extends Fragment {
             for (String type : ContactsHelper.TYPES) {
                 if (contact.get(type) != null
                         && contact.get(type).size() > 0) {
-                    TextView contactHeading = (TextView) LayoutInflater.from(main)
-                            .inflate(R.layout.list_heading, layoutContainer, false);
-                    contactHeading.setText(ContactsHelper.getGroupName(type));
-                    contactInfo.addView(contactHeading);
+                    
+					Boolean first = true;
                     for (HashMap<String, String> item : contact.get(type)) {
+						if (item.get("value") == null)
+							break;
+						if(first) {
+							TextView contactHeading = (TextView) LayoutInflater.from(main)
+								.inflate(R.layout.list_heading, layoutContainer, false);
+							contactHeading.setText(ContactsHelper.getGroupName(type));
+							contactInfo.addView(contactHeading);
+							first = false;
+						}
                         if (item.get("label") == null) {
                             TextView contactValue = (TextView) LayoutInflater.from(main)
                                     .inflate(R.layout.list_row_1, layoutContainer, false);
