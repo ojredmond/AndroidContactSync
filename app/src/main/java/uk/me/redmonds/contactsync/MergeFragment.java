@@ -181,7 +181,8 @@ public class MergeFragment extends Fragment {
 							deleteLayout.setLayoutParams(itemParams);
 							
 							if((photoLayout.getChildCount()&1)==0) {
-							    photoLayout.addView(photoRow);
+							    if(photoRow != null)
+							        photoLayout.addView(photoRow);
 							    photoRow = new TableRow(main);
                                 photoRow.setLayoutParams(rowParams);
 							}
