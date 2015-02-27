@@ -126,11 +126,19 @@ public class MergeFragment extends Fragment {
     }
 
     public void displayMergedContact() {
-		TableRow.LayoutParams photoParams = null;
-		TableLayout photoLayout = new TableLayout(main);
-		photoLayout.set
-		
-		
+        TableLayout.LayoutParams tableParams = 
+            new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 
+                                   TableLayout.LayoutParams.MATCH_PARENT);
+        TableRow.LayoutParams rowParams = 
+            new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1f);
+        TableRow.LayoutParams itemParams = 
+            new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 
+                                TableRow.LayoutParams.MATCH_PARENT, 1f);
+        
+        TableLayout photoLayout = new TableLayout(main);
+        tableLayout.setLayoutParams(tableParams);
+        TableRow photoRow = null;
+
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 		params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
 		
@@ -142,6 +150,7 @@ public class MergeFragment extends Fragment {
                 for (StringMap item : contact.get(type)) {
 					if (photoLayout != null &&
 						!type.equals(ContactsHelper.TYPE_PHOTO) && photoLayout.getChildCount() > 0) {
+						    photoLayout.addView(photoRow);
 							layout.addView(photoLayout);
 							photoLayout = null;
 					}
@@ -169,11 +178,18 @@ public class MergeFragment extends Fragment {
 							Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData,0,photoData.length);
 							photo.setImageBitmap(photoBitmap);
 							deleteLayout.addView(photoView);
-							GridLayout.Spec rowSpec = GridLayout.spec(0);
+							
+							if((photoLayout.getChildCount()&1)==0) {
+							    photoLayout.addView(photoRow);
+							    photoRow = new TableRow(main);
+                                photoRow.setLayoutParams(rowParams);
+							}
+							
+							/*GridLayout.Spec rowSpec = GridLayout.spec(0);
 							GridLayout.Spec colSpec = GridLayout.spec(photoLayout.getChildCount());
 							photoParams = new GridLayout.LayoutParams(rowSpec,colSpec);
 							
-							deleteLayout.setLayoutParams(photoParams);
+							deleteLayout.setLayoutParams(photoParams);*/
 						}
 					} else if (item.get("label") == null) {
                         contactValue = (TextView) LayoutInflater.from(main)
@@ -202,7 +218,7 @@ public class MergeFragment extends Fragment {
                     if (type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1)
                         layout.addView(contactValue);
                     else if (type.equals(ContactsHelper.TYPE_PHOTO))
-						photoLayout.addView(deleteLayout);
+						photoRow.addView(deleteLayout);
 					else
 						layout.addView(deleteLayout);
                 }
