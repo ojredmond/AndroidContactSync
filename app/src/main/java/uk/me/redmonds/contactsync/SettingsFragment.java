@@ -25,7 +25,6 @@ public class SettingsFragment extends Fragment
         OnCheckedChangeListener {
     private SharedPreferences pref;
     private SharedPreferences.Editor prefEdit;
-    private MainActivity main;
 
     @Override
     public void onCheckedChanged(CompoundButton p1, boolean isChecked) {
@@ -68,7 +67,7 @@ public class SettingsFragment extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View preferenceView = inflater.inflate(R.layout.fragment_settings, container, false);
-        main = (MainActivity) getActivity();
+        MainActivity main = (MainActivity) getActivity();
 
         // Create an ArrayAdapter using the string array and a default spinner layout
         AccountManager accounts = AccountManager.get(this.getActivity());

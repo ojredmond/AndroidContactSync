@@ -20,19 +20,18 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
-public class MatchContact extends Fragment implements 
-		ExpandableListView.OnChildClickListener,
-		ExpandableListView.OnGroupClickListener
-{
+public class MatchContact extends Fragment implements
+        ExpandableListView.OnChildClickListener,
+        ExpandableListView.OnGroupClickListener {
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
     private MainActivity main;
     private String id;
-    private HashMap<String,String> unmatchedList;
-    private HashMap<String,String> matchedList;
+    private HashMap<String, String> unmatchedList;
+    private HashMap<String, String> matchedList;
     private String listItem;
     private String name;
-    private OnClickListener ButtonClick = new OnClickListener() {
+    private final OnClickListener ButtonClick = new OnClickListener() {
         public void onClick(View p1) {
             if (p1.getId() == R.id.delete_contact) {
                 HashSet<String> list = new HashSet<>();
@@ -43,10 +42,8 @@ public class MatchContact extends Fragment implements
 
         }
     };
-    private SharedPreferences pref;
 
-	public boolean onGroupClick(ExpandableListView p1, View p2, int p3, long p4)
-    {
+    public boolean onGroupClick(ExpandableListView p1, View p2, int p3, long p4) {
         return ((String) ((TextView) p2.findViewById(android.R.id.text1)).getText()).endsWith("(0)");
     }
 
@@ -93,9 +90,9 @@ public class MatchContact extends Fragment implements
         List<Map<String, String>> children;
         Map<String, String> contactMap;
 
-        
-        pref = main.getPreferences(Context.MODE_PRIVATE);
-        HashSet<String> um = (HashSet<String>)pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
+
+        SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
+        HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
         children = new ArrayList<>();
         // To get the Iterator use the iterator() operation
@@ -108,21 +105,21 @@ public class MatchContact extends Fragment implements
         }
         Collections.sort(children, new ListSortMap());
         childData.add(children);
-		
-		Map<String, String> curGroupMap1 = new HashMap<>();
+
+        Map<String, String> curGroupMap1 = new HashMap<>();
         groupData.add(curGroupMap1);
         curGroupMap1.put(NAME, "Unmatched (" + children.size() + ")");
         curGroupMap1.put(DESCRIPTION, accountOther);
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-        HashSet<String> accountSet = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
-        HashMap<String,String> account = new HashMap<>();
-        for(String entry: accountSet) {
+        HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
+        HashMap<String, String> account = new HashMap<>();
+        for (String entry : accountSet) {
             String contact[] = entry.split(":");
-            account.put(contact[0],contact[1]);
+            account.put(contact[0], contact[1]);
         }
 
-        HashSet<String> md = (HashSet<String>)pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
+        HashSet<String> md = (HashSet<String>) pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
         matchedList = new HashMap<>();
         children = new ArrayList<>();
         for (String item : md) {
@@ -145,17 +142,17 @@ public class MatchContact extends Fragment implements
                 main,
                 groupData,
                 R.layout.list_heading_2,
-                new String[] { NAME, DESCRIPTION },
-                new int[] { android.R.id.text1, android.R.id.text2 },
+                new String[]{NAME, DESCRIPTION},
+                new int[]{android.R.id.text1, android.R.id.text2},
                 childData,
                 R.layout.list_detail,
-                new String[] { NAME },
-                new int[] { R.id.value }
+                new String[]{NAME},
+                new int[]{R.id.value}
         );
 
         listView.setAdapter(mAdapter);
         listView.setOnChildClickListener(this);
-		listView.setOnGroupClickListener(this);
+        listView.setOnGroupClickListener(this);
 
         return view;
     }

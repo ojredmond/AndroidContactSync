@@ -9,7 +9,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
-import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.provider.ContactsContract.CommonDataKinds.Event;
@@ -27,21 +26,15 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.provider.ContactsContract.DisplayPhoto;
-import android.content.res.AssetFileDescriptor;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
-import java.io.*;
-import java.util.*;
-import android.widget.*;
 
-public class ContactsHelper {
+class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
 	public static final String TYPE_PHOTO = Photo.CONTENT_ITEM_TYPE;
 	public static final String TYPE_GROUP = GroupMembership.CONTENT_ITEM_TYPE;
@@ -61,6 +54,7 @@ public class ContactsHelper {
             Relation.CONTENT_ITEM_TYPE,
             SipAddress.CONTENT_ITEM_TYPE
     };
+    public final static String PHOTO = Data.DATA15;
     private static final String[] CONTACT_FIELDS = {
             Data.DATA1,
             Data.DATA2,
@@ -78,7 +72,6 @@ public class ContactsHelper {
             Data.DATA14,
             Data.DATA15
     };
-	public final static String PHOTO = Data.DATA15;
     public static Boolean groupInc;
     public static Boolean photoInc;
     private static SharedPreferences pref;
@@ -86,13 +79,13 @@ public class ContactsHelper {
     private static String account2Name;
     private static HashSet<String> account1;
     private static HashSet<String> account2;
-    private String listName;
-    private String listKey;
-    private HashSet<String> list;
-    private HashMap<String, String> accounts = new HashMap<>();
-    private HashMap<String, String> listMap = new HashMap<>();
-    private MainActivity main;
-    private HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = new HashMap<>();
+    private final String listName;
+    private final String listKey;
+    private final HashSet<String> list;
+    private final HashMap<String, String> accounts = new HashMap<>();
+    private final HashMap<String, String> listMap = new HashMap<>();
+    private final MainActivity main;
+    private final HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = new HashMap<>();
 
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
@@ -107,7 +100,7 @@ public class ContactsHelper {
         main = (MainActivity)m;
         listName = l;
         listKey = key;
-        list = new HashSet<String>(Arrays.asList(ids));
+        list = new HashSet<>(Arrays.asList(ids));
         pref = main.getPreferences(Context.MODE_PRIVATE);
         createContacts();
     }
@@ -219,9 +212,9 @@ public class ContactsHelper {
 					if (!contact.containsKey(c.getString(2)))
                         contact.put(c.getString(2), new HashSet<StringMap>());
                     HashSet<StringMap> field = contact.get(c.getString(2));
-                    StringMap value = new StringMap<>();
-					if(!c.isNull(3) && !c.getString(3).equals(""))
-                    	value.put("value", c.getString(3));
+                    StringMap value = new StringMap();
+                    if (!c.isNull(3) && !c.getString(3).equals(""))
+                        value.put("value", c.getString(3));
                     value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
 					
                     for (int i = 0; i < CONTACT_FIELDS.length; i++)
@@ -356,8 +349,8 @@ public class ContactsHelper {
         return contacts.size();
     }
 
-    public Boolean deleteContacts () {
-        return deleteContacts(list);
+    public void deleteContacts() {
+        deleteContacts(list);
     }
 
     public Boolean deleteContacts (HashSet<String> delList) {
@@ -461,8 +454,8 @@ public class ContactsHelper {
                     //exclude types based on settings
                     if((!type.equals(TYPE_GROUP) || groupInc)
                        && (!type.equals(TYPE_PHOTO) || photoInc)) {
-                        HashSet<HashMap<String, String>> dels;
-                        HashSet<HashMap<String, String>> adds;
+                        HashSet<StringMap> dels;
+                        HashSet<StringMap> adds;
 
                         if (mergedContact.get(type) != null)
                             adds = new HashSet<>(mergedContact.get(type));
@@ -477,7 +470,7 @@ public class ContactsHelper {
                         } else {
                             dels = new HashSet<>();
                         }
-                        for (HashMap<String, String> item : dels) {
+                        for (StringMap item : dels) {
                             opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
 							ArrayList<String> selection = new ArrayList<>();
 							where = "? = ?";
@@ -499,7 +492,7 @@ public class ContactsHelper {
                             opBuilder.withSelection(where, selection.toArray(new String[selection.size()]));
                             ops.add(opBuilder.build());
                         }
-                        for (HashMap<String, String> item : adds) {
+                        for (StringMap item : adds) {
                             opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
                                     .withValue(Data.RAW_CONTACT_ID, id)
                                     .withValue(Data.MIMETYPE, type);
@@ -557,7 +550,8 @@ public class ContactsHelper {
             }
 			addEntry(uName, name + ":" + id);
 			if (first && listName.startsWith(Match.MATCHEDKEY)) {
-				String id1, id2;
+                first = false;
+                String id1, id2;
                 if (accounts.get(id).equals(account1Name)) {
                     id1 = id;
                     id2 = listMap.get(id);
@@ -673,11 +667,11 @@ public class ContactsHelper {
         return false;
     }
 
-    private Boolean removeEntries() {
+    private void removeEntries() {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
 
         if (set == null || set.size() == 0)
-            return true;
+            return;
 
         for (String item : set) {
             if (item.startsWith(listKey)) {
@@ -688,7 +682,7 @@ public class ContactsHelper {
 
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listName, set);
-        return e.commit();
+        e.commit();
     }
 
     private Boolean removeEntry(String listRef, String id) {
@@ -719,18 +713,18 @@ public class ContactsHelper {
         return e.commit();
     }
 
-    private Boolean removeEntry(String listRef, String ref1, String ref2) {
+    private void removeEntry(String listRef, String ref1, String ref2) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
 		//Toast.makeText(main,listName,Toast.LENGTH_SHORT).show();
 		if (set == null)
-            return true;
+            return;
         set.remove(ref2 + ":" + ref1);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
-        return e.commit();
+        e.commit();
     }
 
-    public Boolean addEntry(String listRef, String entry) {
+    private Boolean addEntry(String listRef, String entry) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
         if (set == null)
             return true;

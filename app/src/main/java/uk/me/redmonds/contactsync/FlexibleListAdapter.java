@@ -13,15 +13,15 @@ import java.util.HashMap;
  * A Flexibale list adapter that allows each row to specify layout
  * Created by oli on 21/02/15.
  */
-public class FlexibleListAdapter extends BaseAdapter {
+class FlexibleListAdapter extends BaseAdapter {
     public final static String TEXT = "text";
     public final static String TITLE = "Title";
     public final static String DESCRIPTION = "Desc";
     public final static String LAYOUT = "Layout";
     public final static String LAYOUTIDS = "Layout IDs";
     public final static String LISTITEM = "List Item";
-    private HashMap[] items;
-    private Activity context;
+    private final HashMap[] items;
+    private final Activity context;
     private int defaultLayout = android.R.layout.simple_list_item_2;
     private int defaultTitleId = android.R.id.text1;
     private int defaultDescriptionId = android.R.id.text2;

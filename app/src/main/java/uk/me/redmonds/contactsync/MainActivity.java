@@ -17,7 +17,6 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity
         implements StatusFragment.OnViewCreatedListener,
@@ -27,20 +26,19 @@ public class MainActivity extends ActionBarActivity
     public static final String ACCOUNT2 = "account2";
     public static final String GROUPS = "GroupsOnOff";
     public static final String PHOTOS = "PicturesOnOff";
-	public static final String DEEP = "DeepOnOff";
-    public static String PACKAGE_NAME;
+    public static final String DEEP = "DeepOnOff";
+    private static String PACKAGE_NAME;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
-    NavigationDrawerFragment mNavigationDrawerFragment;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
     private FragmentManager fragmentManager;
     /**
      * Used to store the last screen title.
      */
     private CharSequence mTitle = "";
-    private String syncType = "";
-	private StatusFragment log;
-	private String logText = "";
+    private StatusFragment log;
+    private String logText = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,27 +46,27 @@ public class MainActivity extends ActionBarActivity
         setContentView(R.layout.activity_main);
 
         PACKAGE_NAME = getApplicationContext().getPackageName();
-	
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.app_name);
         mTitle = getString(R.string.app_name);
-		
-        Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
-		
-		//get the fragment manager
-		fragmentManager = getSupportFragmentManager();
 
-		if (savedInstanceState != null) {
+        Thread.setDefaultUncaughtExceptionHandler(new TopExceptionHandler(this));
+
+        //get the fragment manager
+        fragmentManager = getSupportFragmentManager();
+
+        if (savedInstanceState != null) {
             // Restore last state for checked position.
-			if(savedInstanceState.containsKey("log")) {
-				logText = savedInstanceState.getString("log");
-			}
-            
+            if (savedInstanceState.containsKey("log")) {
+                logText = savedInstanceState.getString("log");
+            }
+
         }
-		
+
         mNavigationDrawerFragment = (NavigationDrawerFragment)
-			fragmentManager.findFragmentById(R.id.navigation_drawer);
-        
+                fragmentManager.findFragmentById(R.id.navigation_drawer);
+
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(actionBar,
@@ -80,39 +78,39 @@ public class MainActivity extends ActionBarActivity
         try {
             BufferedReader reader = new BufferedReader(
                     new InputStreamReader(this.openFileInput("stack.trace")));
-            while((line = reader.readLine()) != null) {
-                trace += line+"\n";
+            while ((line = reader.readLine()) != null) {
+                trace += line + "\n";
             }
-        } catch(IOException ioe) {
+        } catch (IOException ioe) {
             return;
         }
 
-        TopExceptionHandler.sendReport (this, trace);
+        TopExceptionHandler.sendReport(this, trace);
 
         this.deleteFile("stack.trace");
     }
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
-		if(fragmentManager == null) fragmentManager = getSupportFragmentManager();
-		
+        if (fragmentManager == null) fragmentManager = getSupportFragmentManager();
+
         // update the main content by replacing fragments
         switch (position) {
             case 0:
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, new SettingsFragment(), PACKAGE_NAME + "-" + getString(R.string.title_settings))
-						.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                        .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
                         .commit();
                 break;
             case 1:
                 showOptions();
                 break;
             case 2:
-				String tag = PACKAGE_NAME + "-" + getString(R.string.title_logs);
-				if (log == null)
-					log = new StatusFragment(logText);
-					
-                    fragmentManager.beginTransaction()
+                String tag = PACKAGE_NAME + "-" + getString(R.string.title_logs);
+                if (log == null)
+                    log = new StatusFragment(logText);
+
+                fragmentManager.beginTransaction()
                         .replace(R.id.container, log, tag)
                         .commit();
                 break;
@@ -121,13 +119,13 @@ public class MainActivity extends ActionBarActivity
                 break;
         }
     }
-	
+
     public void setHeading(CharSequence title) {
-        if(!title.equals("")) mTitle = title;
-		
+        if (!title.equals("")) mTitle = title;
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);
-		
+
     }
 
     public void matchStatus() {
@@ -139,12 +137,12 @@ public class MainActivity extends ActionBarActivity
         results.putBoolean(Match.SYNCMATCHED, false);
         results.remove(Match.NUMCONTACTS + account1Name);
         results.remove(Match.NUMCONTACTS + account2Name);
-		for(String type: Match.MIME_TYPE_LIST) {
-			results.remove(Match.DUPKEY + type + account1Name);
-			results.remove(Match.DUPKEY + type + account2Name);
-			results.remove(Match.MATCHEDKEY + type + account1Name + ":" + account2Name);
-			results.remove(Match.MATCHEDKEY + type + account2Name + ":" + account1Name);
-		}
+        for (String type : Match.MIME_TYPE_LIST) {
+            results.remove(Match.DUPKEY + type + account1Name);
+            results.remove(Match.DUPKEY + type + account2Name);
+            results.remove(Match.MATCHEDKEY + type + account1Name + ":" + account2Name);
+            results.remove(Match.MATCHEDKEY + type + account2Name + ":" + account1Name);
+        }
         results.remove(Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name);
         results.remove(Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name);
         results.remove(Match.MATCHEDKEY + account1Name + ":" + account2Name);
@@ -153,29 +151,30 @@ public class MainActivity extends ActionBarActivity
         results.remove(Match.ACCOUNTKEY + account2Name + ":" + account1Name);
         results.apply();
 
-		onNavigationDrawerItemSelected(2);
+        onNavigationDrawerItemSelected(2);
     }
 
     public void onViewCreated(View statusView) {
         Match m = new Match();
+        String syncType = "";
         m.startMatch(this, statusView, syncType);
     }
 
-    public void showOptions () {
-		showList(SyncFragment.OPTIONS,PACKAGE_NAME + "-" + getString(R.string.title_sync));
-		//update the navigation drawer
-        if(mNavigationDrawerFragment != null)
+    void showOptions() {
+        showList(SyncFragment.OPTIONS, PACKAGE_NAME + "-" + getString(R.string.title_sync));
+        //update the navigation drawer
+        if (mNavigationDrawerFragment != null)
             mNavigationDrawerFragment.changeItem(1);
     }
-    
-    public void showResults () {
+
+    public void showResults() {
         showList(SyncFragment.SUMMARY, PACKAGE_NAME + "-" + getString(R.string.title_results));
-		//update the navigation drawer
-        if(mNavigationDrawerFragment != null)
+        //update the navigation drawer
+        if (mNavigationDrawerFragment != null)
             mNavigationDrawerFragment.changeItem(3);
     }
 
-    public void showList (String type, String fragTag) {
+    void showList(String type, String fragTag) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         SyncFragment newFragment = new SyncFragment();
 
@@ -194,7 +193,7 @@ public class MainActivity extends ActionBarActivity
         transaction.commit();
     }
 
-    public void Compare (String listType, String listItem, String selected) {
+    public void Compare(String listType, String listItem, String selected) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         CompareFragment newFragment = new CompareFragment();
 
@@ -217,7 +216,7 @@ public class MainActivity extends ActionBarActivity
         transaction.commit();
     }
 
-    public void Merge (String name, String[] ids, String listItem) {
+    public void Merge(String name, String[] ids, String listItem) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         MergeFragment newFragment = new MergeFragment();
 
@@ -227,7 +226,7 @@ public class MainActivity extends ActionBarActivity
             args.putString("name", name);
         }
         if (ids != null) {
-			args.putStringArray("ids",ids);
+            args.putStringArray("ids", ids);
         }
         if (listItem != null) {
             args.putString("listItem", listItem);
@@ -258,18 +257,18 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void onBackPressed() {
         //check to see if drawer id open
-		if(mNavigationDrawerFragment.isVisible())
-			mNavigationDrawerFragment.closeDrawer();
-        else if(fragmentManager.findFragmentById(R.id.container)!=null) {
+        if (mNavigationDrawerFragment.isVisible())
+            mNavigationDrawerFragment.closeDrawer();
+        else if (fragmentManager.findFragmentById(R.id.container) != null) {
             Fragment currentFragment = fragmentManager.findFragmentById(R.id.container);
             String currentFragmentClass = currentFragment.getClass().getName();
             String type, item, name;
 
             switch (currentFragmentClass) {
                 case "uk.me.redmonds.contactsync.SyncFragment":
-                    type = (String)currentFragment.getArguments().get("list_type");
+                    type = (String) currentFragment.getArguments().get("list_type");
 
-                    if(type.equals(SyncFragment.SUMMARY))
+                    if (type.equals(SyncFragment.SUMMARY))
                         showOptions();
                     else
                         super.onBackPressed();
@@ -281,23 +280,23 @@ public class MainActivity extends ActionBarActivity
                     showResults();
                     break;
                 case "uk.me.redmonds.contactsync.MergeFragment":
-                    item = (String)currentFragment.getArguments().get("listItem");
+                    item = (String) currentFragment.getArguments().get("listItem");
                     type = (String) currentFragment.getArguments().get("listType");
                     name = (String) currentFragment.getArguments().get("name");
                     Compare(type, item, name);
                     break;
                 default:
-                    Toast.makeText(this,currentFragmentClass,Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, currentFragmentClass, Toast.LENGTH_SHORT).show();
                     super.onBackPressed();
             }
         } else
             super.onBackPressed();
     }
-	
-	@Override
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
-		if (log != null && !log.getLog().equals(""))
-			outState.putString("log",log.getLog());
-		super.onSaveInstanceState(outState);
+        if (log != null && !log.getLog().equals(""))
+            outState.putString("log", log.getLog());
+        super.onSaveInstanceState(outState);
     }
 }

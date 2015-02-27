@@ -1,34 +1,35 @@
 package uk.me.redmonds.contactsync;
 
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import java.io.InputStream;
-import android.widget.*;
-import android.graphics.*;
-import android.view.Gravity;
 
 public class CompareDetail extends Fragment {
-    ContactsHelper cObj;
+    private ContactsHelper cObj;
     private MainActivity main;
     private String name;
     private String ids[];
     private LinearLayout layout;
     private String listItem;
-    private OnClickListener ButtonClick = new OnClickListener() {
+    private final OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1) {
 
@@ -48,33 +49,32 @@ public class CompareDetail extends Fragment {
                     //reload comparefragement
                     main.Compare(null, listItem, null);
                     break;
-				case R.id.delete_button:
-					HashSet<String> idSet = new HashSet<>();
-					idSet.add((String)p1.getTag());
-					cObj.deleteContacts(idSet);
-					
-					if(cObj.size()>1)
-						fillLayout();
-					else if (cObj.size()>0)
-						cObj.addToUnmatched();
-					else
-						//reload comparefragement
-						main.Compare(null, listItem, null);
-					break;
+                case R.id.delete_button:
+                    HashSet<String> idSet = new HashSet<>();
+                    idSet.add((String) p1.getTag());
+                    cObj.deleteContacts(idSet);
+
+                    if (cObj.size() > 1)
+                        fillLayout();
+                    else if (cObj.size() > 0)
+                        cObj.addToUnmatched();
+                    else
+                        //reload comparefragement
+                        main.Compare(null, listItem, null);
+                    break;
                 default:
                     Toast.makeText(main, p1.toString(), Toast.LENGTH_LONG).show();
             }
         }
     };
     private ViewGroup layoutContainer;
-    private View compareView;
-    
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         layoutContainer = container;
 
-        compareView = inflater.inflate(R.layout.compare, container, false);
+        View compareView = inflater.inflate(R.layout.compare, container, false);
 
         Bundle args = getArguments();
         if (args == null) {
@@ -84,11 +84,11 @@ public class CompareDetail extends Fragment {
         listItem = args.getString("listItem");
         name = args.getString("name");
         ids = args.getString("ids").split(",");
-		main = (MainActivity) this.getActivity();
+        main = (MainActivity) this.getActivity();
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         String account1Name = settings.getString(MainActivity.ACCOUNT1, null);
-		
+
         // add buttons and listener
         LinearLayout buttonBar = (LinearLayout) compareView.findViewById(R.id.button_bar);
         Button bDel = (Button) inflater.inflate(R.layout.button, container, false);
@@ -97,11 +97,11 @@ public class CompareDetail extends Fragment {
 
         Button bMerge = (Button) inflater.inflate(R.layout.button, container, false);
         bMerge.setId(R.id.merge_contact);
-		if(listItem.startsWith(Match.MATCHEDKEY)
-			&& !listItem.startsWith(Match.MATCHEDKEY + account1Name))
-			bMerge.setText(R.string.confirm);
-		else
-        	bMerge.setText(R.string.merge_contacts);
+        if (listItem.startsWith(Match.MATCHEDKEY)
+                && !listItem.startsWith(Match.MATCHEDKEY + account1Name))
+            bMerge.setText(R.string.confirm);
+        else
+            bMerge.setText(R.string.merge_contacts);
 
         Button bUn = (Button) inflater.inflate(R.layout.button, container, false);
         bUn.setId(R.id.unmatched_contact);
@@ -131,7 +131,7 @@ public class CompareDetail extends Fragment {
         return compareView;
     }
 
-    private Boolean fillLayout() {
+    private void fillLayout() {
         layout.removeAllViews();
 
         if (listItem.startsWith(Match.MATCHEDKEY))
@@ -149,40 +149,40 @@ public class CompareDetail extends Fragment {
             layout.addView(contactView);
             LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
 
-			// Display photo if it exists
-			if(cObj.photoInc) {
-				byte[] photoData = cObj.getPhoto(id);
-				if(photoData != null) {
-					View photoView = LayoutInflater.from(main)
-						.inflate(R.layout.image, layoutContainer, false);
-					ImageView photo = (ImageView)photoView.findViewById(R.id.photo);
-					Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData,0,photoData.length);
-					photoBitmap = Bitmap.createBitmap(photoBitmap,0,0,photoBitmap.getWidth(),photoBitmap.getHeight()/2);
-					photo.setImageBitmap(photoBitmap);
-					contactInfo.addView(photoView);
-				}
-			}
-			
+            // Display photo if it exists
+            if (ContactsHelper.photoInc) {
+                byte[] photoData = cObj.getPhoto(id);
+                if (photoData != null) {
+                    View photoView = LayoutInflater.from(main)
+                            .inflate(R.layout.image, layoutContainer, false);
+                    ImageView photo = (ImageView) photoView.findViewById(R.id.photo);
+                    Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
+                    photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight() / 2);
+                    photo.setImageBitmap(photoBitmap);
+                    contactInfo.addView(photoView);
+                }
+            }
+
             // Display account name
-			FrameLayout deleteLayout = new FrameLayout(main);
-			deleteLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT));
+            FrameLayout deleteLayout = new FrameLayout(main);
+            deleteLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
             View accountInfo = LayoutInflater.from(main)
                     .inflate(R.layout.list_account, layoutContainer, false);
             ((TextView) accountInfo.findViewById(R.id.type)).setText("Account");
             ((TextView) accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
-			//deleteLayout.setBackgroundColor(R.color.nav_background);
-			
+            //deleteLayout.setBackgroundColor(R.color.nav_background);
+
             // listener to delete button
-			ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
-				.inflate(R.layout.delete_button, layoutContainer, false);
+            ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
+                    .inflate(R.layout.delete_button, layoutContainer, false);
             deleteButton.setOnClickListener(ButtonClick);
-			//store Id in tag
-			deleteButton.setTag(id);
-			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
-			params.gravity = Gravity.END;
-			
-			deleteLayout.addView(accountInfo);
-			deleteLayout.addView(deleteButton,params);
+            //store Id in tag
+            deleteButton.setTag(id);
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+            params.gravity = Gravity.END;
+
+            deleteLayout.addView(accountInfo);
+            deleteLayout.addView(deleteButton, params);
             contactInfo.addView(deleteLayout);
 
             // Display contact id
@@ -196,18 +196,18 @@ public class CompareDetail extends Fragment {
             for (String type : ContactsHelper.TYPES) {
                 if (contact.get(type) != null
                         && contact.get(type).size() > 0) {
-                    
-					Boolean first = true;
+
+                    Boolean first = true;
                     for (StringMap item : contact.get(type)) {
-						if (item.get("value") == null)
-							break;
-						if(first) {
-							TextView contactHeading = (TextView) LayoutInflater.from(main)
-								.inflate(R.layout.list_heading, layoutContainer, false);
-							contactHeading.setText(ContactsHelper.getGroupName(type));
-							contactInfo.addView(contactHeading);
-							first = false;
-						}
+                        if (item.get("value") == null)
+                            break;
+                        if (first) {
+                            TextView contactHeading = (TextView) LayoutInflater.from(main)
+                                    .inflate(R.layout.list_heading, layoutContainer, false);
+                            contactHeading.setText(ContactsHelper.getGroupName(type));
+                            contactInfo.addView(contactHeading);
+                            first = false;
+                        }
                         if (item.get("label") == null) {
                             TextView contactValue = (TextView) LayoutInflater.from(main)
                                     .inflate(R.layout.list_row_1, layoutContainer, false);
@@ -224,6 +224,5 @@ public class CompareDetail extends Fragment {
                 }
             }
         }
-        return true;
     }
 }

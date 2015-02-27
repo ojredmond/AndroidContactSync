@@ -1,11 +1,11 @@
 package uk.me.redmonds.contactsync;
 
 import android.app.Activity;
-import android.support.v4.app.Fragment;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.*;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -31,7 +30,7 @@ public class NavigationDrawerFragment extends Fragment {
      */
     private static final String STATE_SELECTED_POSITION = "selected_navigation_drawer_position";
 
-	private static final String STATE_DRAWER_OPEN = "selected_navigation_drawer_open";
+    private static final String STATE_DRAWER_OPEN = "selected_navigation_drawer_open";
     /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
      * expands it. This shared preference tracks this.
@@ -53,7 +52,7 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 1;
     private boolean mDrawerOpen;
     private boolean mUserLearnedDrawer;
-	private boolean mFromSavedInstanceState;
+    private boolean mFromSavedInstanceState;
 
     public NavigationDrawerFragment() {
     }
@@ -61,8 +60,8 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-		
-		mDrawerOpen = false;
+
+        mDrawerOpen = false;
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -72,7 +71,7 @@ public class NavigationDrawerFragment extends Fragment {
         if (savedInstanceState != null) {
             mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
             mDrawerOpen = savedInstanceState.getBoolean(STATE_DRAWER_OPEN);
-			mFromSavedInstanceState = true;
+            mFromSavedInstanceState = true;
         }
 
         // Select either the default item (1) or the last selected item.
@@ -111,9 +110,9 @@ public class NavigationDrawerFragment extends Fragment {
         return mDrawerListView;
     }
 
-    public void closeDrawer () {
-		mDrawerLayout.closeDrawer(mFragmentContainerView);
-	}
+    public void closeDrawer() {
+        mDrawerLayout.closeDrawer(mFragmentContainerView);
+    }
 
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
@@ -136,32 +135,32 @@ public class NavigationDrawerFragment extends Fragment {
         // ActionBarDrawerToggle ties together the the proper interactions
         // between the navigation drawer and the action bar app icon.
         mDrawerToggle = new ActionBarDrawerToggle(
-                (ActionBarActivity)getActivity(), /* host Activity */
+                (ActionBarActivity) getActivity(), /* host Activity */
                 mDrawerLayout,                    /* DrawerLayout object */
                 R.string.navigation_drawer_open,  /* "open drawer" description for accessibility */
                 R.string.navigation_drawer_close  /* "close drawer" description for accessibility */
-        ){
+        ) {
             public void onDrawerClosed(View view) {
-                ((MainActivity)getActivity()).setHeading("");
+                ((MainActivity) getActivity()).setHeading("");
             }
- 
+
             public void onDrawerOpened(View drawerView) {
-				if(!mUserLearnedDrawer){
-					mUserLearnedDrawer = true;
-					SharedPreferences.Editor sp = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
-					sp.putBoolean(PREF_USER_LEARNED_DRAWER, mUserLearnedDrawer);
-					sp.apply();
-				}
+                if (!mUserLearnedDrawer) {
+                    mUserLearnedDrawer = true;
+                    SharedPreferences.Editor sp = PreferenceManager.getDefaultSharedPreferences(getActivity()).edit();
+                    sp.putBoolean(PREF_USER_LEARNED_DRAWER, mUserLearnedDrawer);
+                    sp.apply();
+                }
                 mActionBar.setTitle(getString(R.string.app_name));
             }
         };
 
         // If the user hasn't 'learned' about the drawer, open it to introduce them to the drawer,
         // per the navigation drawer design guidelines.
-        if ((!mUserLearnedDrawer && !mFromSavedInstanceState)|| mDrawerOpen) {
+        if ((!mUserLearnedDrawer && !mFromSavedInstanceState) || mDrawerOpen) {
             mDrawerLayout.openDrawer(mFragmentContainerView);
         }
-		mFromSavedInstanceState = false;
+        mFromSavedInstanceState = false;
         // Defer code dependent on restoration of previous instance state.
         mDrawerLayout.post(new Runnable() {
             @Override
@@ -213,7 +212,7 @@ public class NavigationDrawerFragment extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
-		outState.putBoolean(STATE_DRAWER_OPEN, this.isVisible());
+        outState.putBoolean(STATE_DRAWER_OPEN, this.isVisible());
     }
 
     @Override

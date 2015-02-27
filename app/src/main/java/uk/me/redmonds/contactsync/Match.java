@@ -21,7 +21,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-public class Match {
+class Match {
     public static final String SYNCMATCHED = "syncMatched";
     public static final String DUPKEY = "dup:";
     public static final String UNMATCHNAMEKEY = "unmatchedName:";
@@ -378,7 +378,7 @@ public class Match {
 
                         //remove from unmatched1
                         if (matched) {
-                            Long account1id = new Long(-1);
+                            Long account1id = (long) -1;
                             Boolean nameMatch = false;
                             if (matched2Other.containsKey(ContactsHelper.TYPE_NAME)
                                     && matched2Other.get(ContactsHelper.TYPE_NAME).containsKey(tempContactId)) {
@@ -396,7 +396,7 @@ public class Match {
                                 }
                             }
 
-                            if (!account1id.equals(new Long(-1))) {
+                            if (!account1id.equals(Long.valueOf(-1))) {
                                 String a1ContactName = unmatched1Id.remove(account1id);
                                 unmatched1.remove(a1ContactName);
                                 unmatchedCount1--;

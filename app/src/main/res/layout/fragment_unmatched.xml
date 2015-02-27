@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/button_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button__bar_height"
         android:layout_alignParentBottom="true"
-        android:orientation="horizontal"
         android:background="@drawable/button_border_top"
-        >
-    
+        android:orientation="horizontal">
+
         <Button
             android:id="@+id/delete_contact"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:minWidth="@dimen/button_min_width"
-            android:background="@drawable/button"
             android:layout_weight="1"
-            android:textColor="@color/material_orange_500"
-            android:text="@string/delete_contact" />
-          
+            android:background="@drawable/button"
+            android:minWidth="@dimen/button_min_width"
+            android:text="@string/delete_contact"
+            android:textColor="@color/material_orange_500" />
+
     </LinearLayout>
 
-    <ExpandableListView android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ExpandableListView
         android:id="@+id/list"
-        android:layout_alignParentTop="true"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_above="@id/button_bar"
-        />
+        android:layout_alignParentTop="true" />
 
 </RelativeLayout>

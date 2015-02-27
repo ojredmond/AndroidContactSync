@@ -1,5 +1,7 @@
 package uk.me.redmonds.contactsync;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -7,19 +9,20 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
+import android.widget.TableLayout;
+import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.HashSet;
-import android.widget.*;
-import android.graphics.*;
 
 public class MergeFragment extends Fragment {
     private final static String STATE_CONTACT = "merge_contact";
-    private String[] ids;
     private MainActivity main;
     private HashMap<String, HashSet<StringMap>> contact;
     private LinearLayout layout;
@@ -28,7 +31,7 @@ public class MergeFragment extends Fragment {
     private ViewGroup layoutContainer;
     private String listType;
 	private String selectedName;
-    OnClickListener ButtonClick = new OnClickListener() {
+    private final OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1) {
             switch (p1.getId()) {
@@ -95,7 +98,7 @@ public class MergeFragment extends Fragment {
         listType = args.getString("listType");
         listItem = args.getString("listItem");
 		selectedName = args.getString("selected");
-        ids = args.getStringArray("ids");
+        String[] ids = args.getStringArray("ids");
         main = (MainActivity) this.getActivity();
 
         main.setHeading("Merge");
@@ -125,7 +128,7 @@ public class MergeFragment extends Fragment {
         return contactView;
     }
 
-    public void displayMergedContact() {
+    void displayMergedContact() {
         TableLayout.LayoutParams tableParams = 
             new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 
                                    TableLayout.LayoutParams.WRAP_CONTENT);
@@ -228,12 +231,14 @@ public class MergeFragment extends Fragment {
 					deleteLayout.setTag(type);
 						
                     //if only 1 name hide delete button
-                    if (type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1)
-							layout.addView(contactValue,linearParams);
-                    else if (type.equals(ContactsHelper.TYPE_PHOTO))
-						photoRow.addView(deleteLayout);
-					else
-						layout.addView(deleteLayout,linearParams);
+                    if (type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1) {
+                        assert contactValue != null;
+                        layout.addView(contactValue, linearParams);
+                    } else if (type.equals(ContactsHelper.TYPE_PHOTO)) {
+                        assert photoRow != null;
+                        photoRow.addView(deleteLayout);
+                    } else
+                        layout.addView(deleteLayout,linearParams);
                 }
             }
         }

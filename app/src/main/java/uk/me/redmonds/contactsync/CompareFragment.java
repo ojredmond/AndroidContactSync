@@ -12,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,10 +23,6 @@ import java.util.HashSet;
  * Created by oli on 31/01/15.
  */
 public class CompareFragment extends Fragment {
-    // When requested, this adapter returns a DemoObjectFragment,
-    // representing an object in the collection.
-    private TabsAdapter mTabsAdapter;
-    private ViewPager mViewPager;
     private Activity main;
 
     @Override
@@ -35,23 +30,22 @@ public class CompareFragment extends Fragment {
                              Bundle savedInstanceState) {
         main = getActivity();
 
-        mTabsAdapter =
-                new TabsAdapter(
-                        getFragmentManager());
+        TabsAdapter mTabsAdapter = new TabsAdapter(
+                getFragmentManager());
 
         View tabs = inflater.inflate(R.layout.fragment_pager, container, false);
 
-        mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
+        ViewPager mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
-		mViewPager.setCurrentItem(mTabsAdapter.selectedIndex);
+        mViewPager.setCurrentItem(mTabsAdapter.selectedIndex);
 
         return mViewPager;
     }
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
-        private ArrayList<HashMap<String,String>> contacts;
-        private String listItem;
-		public int selectedIndex = 0;
+        private final ArrayList<HashMap<String, String>> contacts;
+        private final String listItem;
+        public int selectedIndex = 0;
 
         public TabsAdapter(FragmentManager fm) {
             super(fm);
@@ -64,34 +58,34 @@ public class CompareFragment extends Fragment {
 
             SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
-            
+
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-            HashSet<String> account1Set = (HashSet<String>)pref.getStringSet(Match.ACCOUNTKEY + settings.getString(MainActivity.ACCOUNT1, null), null);
-            HashMap<String,String> account1 = new HashMap<>();
-			for(String entry: account1Set) {
-				String contact[] = entry.split(":");
-				account1.put(contact[0],contact[1]);
-			}
-            HashSet<String> set = (HashSet<String>)pref.getStringSet(listItem, null);
-			if(set == null || set.size() == 0)
-				main.onBackPressed();
+            HashSet<String> account1Set = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + settings.getString(MainActivity.ACCOUNT1, null), null);
+            HashMap<String, String> account1 = new HashMap<>();
+            for (String entry : account1Set) {
+                String contact[] = entry.split(":");
+                account1.put(contact[0], contact[1]);
+            }
+            HashSet<String> set = (HashSet<String>) pref.getStringSet(listItem, null);
+            if (set == null || set.size() == 0)
+                main.onBackPressed();
             for (String aSet : set) {
-				HashMap<String,String> contactsName = new HashMap<>();
+                HashMap<String, String> contactsName = new HashMap<>();
                 String contact[] = aSet.split(":");
                 String name;
                 if (listItem.startsWith(Match.MATCHEDKEY)) {
                     name = account1.get(contact[0]);
                     contactsName.put(contact[0] + "," + contact[1], name);
-					contacts.add(contactsName);
+                    contacts.add(contactsName);
                 } else {
                     name = contact[0];
                     contactsName.put(contact[1], name);
-					contacts.add(contactsName);
+                    contacts.add(contactsName);
                 }
                 if (name.equals(seleted))
                     selectedMap = contactsName;
             }
-			Collections.sort(contacts, new ListSortMap());
+            Collections.sort(contacts, new ListSortMap());
             if (selectedMap != null) {
                 selectedIndex = contacts.indexOf(selectedMap);
             }
@@ -102,10 +96,10 @@ public class CompareFragment extends Fragment {
             //pass contact information to Fragment
             Bundle argsDetail = new Bundle();
             argsDetail.putString("listItem", listItem);
-            argsDetail.putString("name", (String)contacts.get(i).values().toArray()[0]);
-            argsDetail.putString("ids", (String)contacts.get(i).keySet().toArray()[0]);
-			
-			
+            argsDetail.putString("name", (String) contacts.get(i).values().toArray()[0]);
+            argsDetail.putString("ids", (String) contacts.get(i).keySet().toArray()[0]);
+
+
             Fragment fragment;
             if (listItem.startsWith(Match.UNMATCHNAMEKEY))
                 fragment = new MatchContact();
@@ -123,7 +117,7 @@ public class CompareFragment extends Fragment {
 
         @Override
         public CharSequence getPageTitle(int position) {
-			return (CharSequence)contacts.get(position).values().toArray()[0];
+            return (CharSequence) contacts.get(position).values().toArray()[0];
         }
     }
 }
