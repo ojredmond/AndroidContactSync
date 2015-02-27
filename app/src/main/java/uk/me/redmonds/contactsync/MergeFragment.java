@@ -136,7 +136,7 @@ public class MergeFragment extends Fragment {
                                 TableRow.LayoutParams.MATCH_PARENT, 1f);
         
         TableLayout photoLayout = new TableLayout(main);
-        tableLayout.setLayoutParams(tableParams);
+        photoLayout.setLayoutParams(tableParams);
         TableRow photoRow = null;
 
 		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
