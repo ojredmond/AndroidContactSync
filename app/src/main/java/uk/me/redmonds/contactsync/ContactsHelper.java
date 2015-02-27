@@ -78,6 +78,7 @@ public class ContactsHelper {
             Data.DATA14,
             Data.DATA15
     };
+	public final static String PHOTO = Data.DATA15;
     public static Boolean groupInc;
     public static Boolean photoInc;
     private static SharedPreferences pref;
@@ -91,8 +92,7 @@ public class ContactsHelper {
     private HashMap<String, String> accounts = new HashMap<>();
     private HashMap<String, String> listMap = new HashMap<>();
     private MainActivity main;
-    private HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = new HashMap<>();
-	private HashMap<String, byte[]> contactPhotos = new HashMap<>();
+    private HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = new HashMap<>();
 
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
@@ -169,7 +169,7 @@ public class ContactsHelper {
         String ids = "";
 
         for (String i : list) {
-            contacts.put(i, new HashMap<String, HashSet<HashMap<String, String>>>());
+            contacts.put(i, new HashMap<String, HashSet<StringMap>>());
             ids += i + ",";
             Long id = Long.decode(i);
 
@@ -211,27 +211,22 @@ public class ContactsHelper {
 
         try {
             while (c.moveToNext()) {
-                HashMap<String, HashSet<HashMap<String, String>>> contact = contacts.get(c.getString(0));
+                HashMap<String, HashSet<StringMap>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(2) 
 					&& (!c.getString(2).equals(TYPE_GROUP) || groupInc)
 					&& (!c.getString(2).equals(TYPE_PHOTO) || photoInc)) {
 					
-                    if(c.getString(2).equals(TYPE_PHOTO)) {
-						if(c.getType(CONTACT_FIELDS.length + 2) == Cursor.FIELD_TYPE_BLOB
-						   && !c.isNull(CONTACT_FIELDS.length + 2))
-							contactPhotos.put(c.getString(0), c.getBlob(CONTACT_FIELDS.length + 2));
-					}
 					if (!contact.containsKey(c.getString(2)))
-                        contact.put(c.getString(2), new HashSet<HashMap<String, String>>());
-                    HashSet<HashMap<String, String>> field = contact.get(c.getString(2));
-                    HashMap<String, String> value = new HashMap<>();
+                        contact.put(c.getString(2), new HashSet<StringMap>());
+                    HashSet<StringMap> field = contact.get(c.getString(2));
+                    StringMap value = new StringMap<>();
 					if(!c.isNull(3) && !c.getString(3).equals(""))
                     	value.put("value", c.getString(3));
                     value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
 					
                     for (int i = 0; i < CONTACT_FIELDS.length; i++)
 						if(c.getType(i + 3) == Cursor.FIELD_TYPE_BLOB)
-							value.put(CONTACT_FIELDS[i], null);
+							value.put(CONTACT_FIELDS[i], c.getBlob(i + 3));
 						else
                         	value.put(CONTACT_FIELDS[i], c.getString(i + 3));
                     field.add(value);
@@ -329,7 +324,7 @@ public class ContactsHelper {
         return (String)label;
     }
 
-    public HashMap<String,HashMap<String,HashSet<HashMap<String,String>>>> getContacts() {
+    public HashMap<String,HashMap<String,HashSet<StringMap>>> getContacts() {
         return contacts;
     }
 
@@ -337,33 +332,22 @@ public class ContactsHelper {
         return accounts.get(id);
     }
 	
-	public byte[] openPhoto(String contactId) {
-		HashSet<HashMap<String,String>> photoSet = contacts.get(contactId).get(TYPE_PHOTO);
-		if(photoSet == null)
-			return null;
-		Toast.makeText(main,"Size "+photoSet.size(),Toast.LENGTH_LONG).show();
-		Iterator it = photoSet.iterator();
-		if(!it.hasNext())
-			return null;
-		HashMap<String,String> photo = (HashMap<String,String>)it.next();
-		
-		//Long photoId = Long.decode(photo.get(Data.DATA14));
-		Toast.makeText(main,photo.get(Data.DATA14),Toast.LENGTH_LONG).show();
-		//Uri displayPhotoUri = ContentUris.withAppendedId(DisplayPhoto.CONTENT_URI, photoId);
-		if(contactPhotos.containsKey(contactId))
-			return contactPhotos.get(contactId);
+	public HashSet<byte[]> getPhotos() {
+		HashSet<byte[]> photos = new HashSet<>();
+		for(HashMap<String,HashSet<StringMap>> contact:contacts.values()) {
+			for(StringMap photo:contact.get(TYPE_PHOTO)) {
+				photos.add(photo.getByteArray(Data.DATA15));
+			}
+		}
+		return photos;
+	}
+	
+	public byte[] getPhoto(String contactId) {
+		Iterator it = contacts.get(contactId).get(TYPE_PHOTO).iterator();
+		if(it.hasNext())
+			return ((StringMap)it.next()).getByteArray(Data.DATA15);
 		else
 			return null;
-		//return Contacts.openContactPhotoInputStream(main.getContentResolver(),displayPhotoUri,true);
-		/*try {
-			AssetFileDescriptor fd =
-				main.getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
-			return fd.createInputStream();
-		} catch (FileNotFoundException e) {
-			return null;
-		} catch (IOException e) {
-			return null;
-		}*/
 	}
 	
     public int size() {
@@ -435,10 +419,10 @@ public class ContactsHelper {
         return true;
     }
 
-    public HashMap<String,HashSet<HashMap<String,String>>> mergeContact () {
-        HashMap<String,HashSet<HashMap<String,String>>> contact = new HashMap<>();
+    public HashMap<String,HashSet<StringMap>> mergeContact () {
+        HashMap<String,HashSet<StringMap>> contact = new HashMap<>();
         for(String type: TYPES) {
-            HashSet<HashMap<String,String>> values = new HashSet<>();
+            HashSet<StringMap> values = new HashSet<>();
             for(String id: contacts.keySet())
                 if(contacts.get(id).get(type) != null 
                     && contacts.get(id).get(type).size() > 0)
@@ -451,7 +435,7 @@ public class ContactsHelper {
         return contact;
     }
 
-    public Boolean saveMergedContact (HashMap<String,HashSet<HashMap<String,String>>> mergedContact) {
+    public Boolean saveMergedContact (HashMap<String,HashSet<StringMap>> mergedContact) {
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
         //String value;

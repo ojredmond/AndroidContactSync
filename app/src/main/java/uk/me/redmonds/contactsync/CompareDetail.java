@@ -128,7 +128,7 @@ public class CompareDetail extends Fragment {
         else
             cObj = new ContactsHelper(main, listItem, name, ids);
 
-        HashMap<String, HashMap<String, HashSet<HashMap<String, String>>>> contacts = cObj.getContacts();
+        HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = cObj.getContacts();
         for (String id : ids) {
             String account = cObj.getAccountName(id);
             // create a new view for the contact
@@ -140,12 +140,14 @@ public class CompareDetail extends Fragment {
 
 			// Display photo if it exists
 			if(cObj.photoInc) {
-				byte[] photoData = cObj.openPhoto(id);
+				byte[] photoData = cObj.getPhoto(id);
 				if(photoData != null) {
 					View photoView = LayoutInflater.from(main)
 						.inflate(R.layout.image, layoutContainer, false);
 					ImageView photo = (ImageView)photoView.findViewById(R.id.photo);
-					photo.setImageBitmap(BitmapFactory.decodeByteArray(photoData,0,photoData.length));
+					Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData,0,photoData.length);
+					photoBitmap = Bitmap.createBitmap(photoBitmap,0,0,photoBitmap.getWidth(),photoBitmap.getHeight()/2);
+					photo.setImageBitmap(photoBitmap);
 					contactInfo.addView(photoView);
 				}
 			}
@@ -176,13 +178,13 @@ public class CompareDetail extends Fragment {
             ((TextView) accountInfo.findViewById(R.id.value)).setText(id);
             contactInfo.addView(accountInfo);
 
-            HashMap<String, HashSet<HashMap<String, String>>> contact = contacts.get(id);
+            HashMap<String, HashSet<StringMap>> contact = contacts.get(id);
             for (String type : ContactsHelper.TYPES) {
                 if (contact.get(type) != null
                         && contact.get(type).size() > 0) {
                     
 					Boolean first = true;
-                    for (HashMap<String, String> item : contact.get(type)) {
+                    for (StringMap item : contact.get(type)) {
 						if (item.get("value") == null)
 							break;
 						if(first) {
