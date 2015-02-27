@@ -178,6 +178,7 @@ public class MergeFragment extends Fragment {
 							Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData,0,photoData.length);
 							photo.setImageBitmap(photoBitmap);
 							deleteLayout.addView(photoView);
+							deleteLayout.setLayoutParams(itemParams);
 							
 							if((photoLayout.getChildCount()&1)==0) {
 							    photoLayout.addView(photoRow);
