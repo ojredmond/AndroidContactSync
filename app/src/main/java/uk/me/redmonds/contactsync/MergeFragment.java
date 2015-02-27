@@ -128,31 +128,35 @@ public class MergeFragment extends Fragment {
     public void displayMergedContact() {
         TableLayout.LayoutParams tableParams = 
             new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, 
-                                   TableLayout.LayoutParams.MATCH_PARENT);
+                                   TableLayout.LayoutParams.WRAP_CONTENT);
         TableRow.LayoutParams rowParams = 
-            new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 0, 1f);
+            new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 
+									  TableRow.LayoutParams.WRAP_CONTENT);
         TableRow.LayoutParams itemParams = 
             new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, 
-                                TableRow.LayoutParams.MATCH_PARENT, 1f);
+                                300,1f);
         
         TableLayout photoLayout = new TableLayout(main);
         photoLayout.setLayoutParams(tableParams);
         TableRow photoRow = null;
 
-		RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-		params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
+		//RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+		//params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
 		
+		LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 
+																			   LinearLayout.LayoutParams.WRAP_CONTENT,1f);
         for (String type : ContactsHelper.TYPES) {
             if (contact.get(type) != null
                     && contact.get(type).size() > 0) {
                 Boolean first = true;
 				
                 for (StringMap item : contact.get(type)) {
-					if (photoLayout != null &&
-						!type.equals(ContactsHelper.TYPE_PHOTO) && photoLayout.getChildCount() > 0) {
-						    photoLayout.addView(photoRow);
-							layout.addView(photoLayout);
-							photoLayout = null;
+					if (photoRow != null &&
+							!type.equals(ContactsHelper.TYPE_PHOTO) 
+							&& photoRow.getChildCount() > 0) {
+						photoLayout.addView(photoRow);
+						layout.addView(photoLayout,linearParams);
+						photoRow = null;
 					}
 					if (item.get("value") == null && !type.equals(ContactsHelper.TYPE_PHOTO))
 						break;
@@ -164,7 +168,7 @@ public class MergeFragment extends Fragment {
 						first = false;
 					}
                     TextView contactValue;
-                    RelativeLayout deleteLayout = (RelativeLayout) LayoutInflater.from(main)
+                    FrameLayout deleteLayout = (FrameLayout) LayoutInflater.from(main)
                             .inflate(R.layout.delete_button, layoutContainer, false);
 					contactValue = null;
 					
@@ -180,11 +184,14 @@ public class MergeFragment extends Fragment {
 							deleteLayout.addView(photoView);
 							deleteLayout.setLayoutParams(itemParams);
 							
-							if((photoLayout.getChildCount()&1)==0) {
-							    if(photoRow != null)
-							        photoLayout.addView(photoRow);
-							    photoRow = new TableRow(main);
-                                photoRow.setLayoutParams(rowParams);
+							if(photoRow != null && 
+									(photoRow.getChildCount()&1)==0) {
+							    photoLayout.addView(photoRow);
+							    photoRow = null;
+							}
+							if(photoRow == null) {
+									photoRow = new TableRow(main);
+									photoRow.setLayoutParams(rowParams);
 							}
 							
 							/*GridLayout.Spec rowSpec = GridLayout.spec(0);
@@ -200,7 +207,7 @@ public class MergeFragment extends Fragment {
                         contactValue.setTag(item);
                         //if only 1 name hide delete button
                         if (!(type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1))
-                            deleteLayout.addView(contactValue,params);
+                            deleteLayout.addView(contactValue);
                     } else {
                         LinearLayout rowLayout = (LinearLayout) LayoutInflater.from(main)
                                 .inflate(R.layout.list_row_2, layoutContainer, false);
@@ -208,7 +215,7 @@ public class MergeFragment extends Fragment {
                         contactValue.setText(item.get("value"));
                         contactValue.setTag(item);
                         ((TextView) rowLayout.findViewById(R.id.type)).setText(item.get("label"));
-                        deleteLayout.addView(rowLayout,params);
+                        deleteLayout.addView(rowLayout);
                     }
 
                     // listener to delete button
@@ -218,11 +225,11 @@ public class MergeFragment extends Fragment {
 						
                     //if only 1 name hide delete button
                     if (type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1)
-                        layout.addView(contactValue);
+							layout.addView(contactValue,linearParams);
                     else if (type.equals(ContactsHelper.TYPE_PHOTO))
 						photoRow.addView(deleteLayout);
 					else
-						layout.addView(deleteLayout);
+						layout.addView(deleteLayout,linearParams);
                 }
             }
         }
