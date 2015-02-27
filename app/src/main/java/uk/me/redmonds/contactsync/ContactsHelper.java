@@ -343,6 +343,8 @@ public class ContactsHelper {
 	}
 	
 	public byte[] getPhoto(String contactId) {
+		if(contacts.get(contactId).get(TYPE_PHOTO) == null)
+			return null;
 		Iterator it = contacts.get(contactId).get(TYPE_PHOTO).iterator();
 		if(it.hasNext())
 			return ((StringMap)it.next()).getByteArray(Data.DATA15);

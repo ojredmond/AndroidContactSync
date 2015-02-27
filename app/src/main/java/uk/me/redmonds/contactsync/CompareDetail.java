@@ -19,6 +19,7 @@ import java.util.HashSet;
 import java.io.InputStream;
 import android.widget.*;
 import android.graphics.*;
+import android.view.Gravity;
 
 public class CompareDetail extends Fragment {
     ContactsHelper cObj;
@@ -48,7 +49,17 @@ public class CompareDetail extends Fragment {
                     main.Compare(null, listItem, null);
                     break;
 				case R.id.delete_button:
-					Toast.makeText(main, ""+p1.getTag(), Toast.LENGTH_LONG).show();
+					HashSet<String> idSet = new HashSet<>();
+					idSet.add((String)p1.getTag());
+					cObj.deleteContacts(idSet);
+					
+					if(cObj.size()>1)
+						fillLayout();
+					else if (cObj.size()>0)
+						cObj.addToUnmatched();
+					else
+						//reload comparefragement
+						main.Compare(null, listItem, null);
 					break;
                 default:
                     Toast.makeText(main, p1.toString(), Toast.LENGTH_LONG).show();
@@ -153,23 +164,26 @@ public class CompareDetail extends Fragment {
 			}
 			
             // Display account name
-			RelativeLayout deleteLayout = (RelativeLayout)LayoutInflater.from(main)
-				.inflate(R.layout.delete_button, layoutContainer, false);
+			FrameLayout deleteLayout = new FrameLayout(main);
+			deleteLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT,FrameLayout.LayoutParams.WRAP_CONTENT));
             View accountInfo = LayoutInflater.from(main)
-                    .inflate(R.layout.list_row_2, layoutContainer, false);
+                    .inflate(R.layout.list_account, layoutContainer, false);
             ((TextView) accountInfo.findViewById(R.id.type)).setText("Account");
             ((TextView) accountInfo.findViewById(R.id.value)).setText(cObj.getAccountName(id));
-			deleteLayout.setBackgroundColor(R.color.nav_background);
+			//deleteLayout.setBackgroundColor(R.color.nav_background);
 			
             // listener to delete button
-            deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
+			ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
+				.inflate(R.layout.delete_button, layoutContainer, false);
+            deleteButton.setOnClickListener(ButtonClick);
 			//store Id in tag
-			deleteLayout.findViewById(R.id.delete_button).setTag(id);
-
-			RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-			params.addRule(RelativeLayout.ALIGN_PARENT_START, RelativeLayout.TRUE);
-			deleteLayout.addView(accountInfo, params);
-            contactInfo.addView(deleteLayout, params);
+			deleteButton.setTag(id);
+			FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT,FrameLayout.LayoutParams.WRAP_CONTENT);
+			params.gravity = Gravity.END;
+			
+			deleteLayout.addView(accountInfo);
+			deleteLayout.addView(deleteButton,params);
+            contactInfo.addView(deleteLayout);
 
             // Display contact id
             accountInfo = LayoutInflater.from(main)

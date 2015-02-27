@@ -45,10 +45,10 @@ public class MergeFragment extends Fragment {
                     main.Compare(listType, listItem, selectedName);
                     break;
                 default:
-                    RelativeLayout row = (RelativeLayout) p1.getParent();
+                    ViewGroup row = (ViewGroup) p1.getParent();
                     String type = (String) row.getTag();
                     Integer pos = layout.indexOfChild(row);
-                    StringMap item = (StringMap) row.findViewById(R.id.value).getTag();
+                    StringMap item = (StringMap) p1.getTag();
 
                     if (contact.get(type).size() == 1 &&
 						type.equals(ContactsHelper.TYPE_NAME)) {
@@ -164,12 +164,12 @@ public class MergeFragment extends Fragment {
 						TextView contactHeading = (TextView) LayoutInflater.from(main)
 							.inflate(R.layout.list_heading, layoutContainer, false);
 						contactHeading.setText(ContactsHelper.getGroupName(type));
+						contactHeading.setTag("Heading");
 						layout.addView(contactHeading);
 						first = false;
 					}
                     TextView contactValue;
-                    FrameLayout deleteLayout = (FrameLayout) LayoutInflater.from(main)
-                            .inflate(R.layout.delete_button, layoutContainer, false);
+                    FrameLayout deleteLayout = new FrameLayout(main);
 					contactValue = null;
 					
 					if (type.equals(ContactsHelper.TYPE_PHOTO)) {
@@ -219,7 +219,11 @@ public class MergeFragment extends Fragment {
                     }
 
                     // listener to delete button
-                    deleteLayout.findViewById(R.id.delete_button).setOnClickListener(ButtonClick);
+					ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
+                            .inflate(R.layout.delete_button, layoutContainer, false);
+                    deleteButton.setOnClickListener(ButtonClick);
+					deleteButton.setTag(item);
+					deleteLayout.addView(deleteButton);
 
 					deleteLayout.setTag(type);
 						
