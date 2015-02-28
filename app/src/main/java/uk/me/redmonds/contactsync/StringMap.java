@@ -12,4 +12,8 @@ class StringMap extends HashMap<String, Object> {
 	{
 		return (byte[])super.get(key);
 	}
+	
+	public Boolean isByteArray (String key) {
+		return super.get(key) instanceof byte[];
+	}
 }
