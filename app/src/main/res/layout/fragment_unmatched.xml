@@ -29,7 +29,6 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/button_bar"
         android:layout_alignParentTop="true"
-        android:background="#ccc"
         android:orientation="vertical">
         
         <include android:id="@+id/unmatched_group"
@@ -50,7 +49,6 @@
         <include android:id="@+id/matched_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/separator"
             layout="@layout/list_heading_2"
             />
 
