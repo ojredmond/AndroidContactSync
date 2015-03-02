@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import android.widget.*;
 
 public class MatchContact extends Fragment implements
         ExpandableListView.OnChildClickListener,
@@ -85,7 +86,6 @@ public class MatchContact extends Fragment implements
 
         //ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.list);
         LinearLayout listView = (LinearLayout) view.findViewById(R.id.list);
-        curGroupMap1.put(NAME, "Unmatched (" + children.size() + ")");
 
         List<Map<String, String>> groupData = new ArrayList<>();
         List<List<Map<String, String>>> childData = new ArrayList<>();
