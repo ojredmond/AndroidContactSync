@@ -8,7 +8,7 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
                                      implements SectionIndexer, AbsListView.OnScrollListener {
  
     private final ExpandableListView expandableListView;
-    private final Context context;
+    //private final Context context;
     private boolean manualScroll;
     private String[] groups;
  
@@ -17,11 +17,22 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
      *      ...
      */
     
-    public FastScrollExListAdapter(Context context, ExpandableListView expandableListView /* Your other arguments */) {
+public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int groupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
+    super(context,groupData,groupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo)
+}
+public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
+    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo)
+}
+public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, int lastChildLayout, String[] childFrom, int[] childTo) {
+    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,lastChildLayout,childFrom,childTo)
+}
+
+
+/*public FastScrollExListAdapter(Context context, ExpandableListView expandableListView ) {
         this.context = context;
         this.expandableListView = expandableListView;
         this.expandableListView.setOnScrollListener(this);
-    }
+    }*/
  
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
