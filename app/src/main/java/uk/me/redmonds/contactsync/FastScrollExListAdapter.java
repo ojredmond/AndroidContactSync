@@ -22,7 +22,7 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
     
 public FastScrollExListAdapter(
         Context context, 
-        ExpandableListView expandableListView
+        ExpandableListView expandableListView,
         List<? extends Map<String, ?>> groupData, 
         int groupLayout, String[] groupFrom, 
         int[] groupTo, 
@@ -36,7 +36,7 @@ public FastScrollExListAdapter(
 }
 public FastScrollExListAdapter(
         Context context, 
-        ExpandableListView expandableListView
+        ExpandableListView expandableListView,
         List<? extends Map<String, ?>> groupData, 
         int expandedGroupLayout, 
         int collapsedGroupLayout, 
@@ -52,7 +52,7 @@ public FastScrollExListAdapter(
 }
 public FastScrollExListAdapter(
         Context context, 
-        ExpandableListView expandableListView
+        ExpandableListView expandableListView,
         List<? extends Map<String, ?>> groupData,
         int expandedGroupLayout, 
         int collapsedGroupLayout, 
