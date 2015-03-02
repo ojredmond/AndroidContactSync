@@ -482,7 +482,7 @@ class ContactsHelper {
 							selection.add(type);
                             
 							for(String field: CONTACT_FIELDS) {
-								if(item.get(field) != null) {
+								if(!item.isByteArray(field) && item.get(field) != null) {
 									where += " AND ? = ?";
 									selection.add(field);
 									selection.add(item.get(field));
@@ -497,8 +497,8 @@ class ContactsHelper {
                                     .withValue(Data.RAW_CONTACT_ID, id)
                                     .withValue(Data.MIMETYPE, type);
 							for(String field: CONTACT_FIELDS) {
-								if(item.get(field) != null)
-									opBuilder.withValue(field, item.get(field));
+								if(item.getObject(field) != null)
+									opBuilder.withValue(field, item.getObject(field));
 							}
 
                             ops.add(opBuilder.build());

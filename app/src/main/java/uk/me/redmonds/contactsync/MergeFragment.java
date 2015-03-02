@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import android.view.*;
 import javax.xml.datatype.*;
+import java.util.*;
 
 public class MergeFragment extends Fragment {
     private final static String STATE_CONTACT = "merge_contact";
@@ -40,6 +41,8 @@ public class MergeFragment extends Fragment {
                 case R.id.contact_confirm:
 					if(contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
 						Toast.makeText(main, "Needs to be only 1 name", Toast.LENGTH_LONG).show();
+					} else if(contact.get(ContactsHelper.TYPE_PHOTO).size() != 1) {
+						Toast.makeText(main, "Multiple contact photos not supported"+contact.get(ContactsHelper.TYPE_PHOTO).size(), Toast.LENGTH_LONG).show();
 					} else if (cObject.saveMergedContact(contact)) {
                         main.Compare(listType, listItem, null);
                     } else {
@@ -54,7 +57,8 @@ public class MergeFragment extends Fragment {
                     String type = (String) row.getTag();
                     Integer pos = layout.indexOfChild(row);
                     StringMap item = (StringMap) p1.getTag();
-
+					
+					
                     if (contact.get(type).size() == 1 &&
 						type.equals(ContactsHelper.TYPE_NAME)) {
                         Toast.makeText(main, "A name is required!", Toast.LENGTH_SHORT).show();

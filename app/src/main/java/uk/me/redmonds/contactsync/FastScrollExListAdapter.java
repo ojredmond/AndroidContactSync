@@ -1,4 +1,10 @@
-public class FastScrollExListAdapter extends extends BaseExpandableListAdapter 
+import android.widget.ExpandableListView;
+import android.widget.SimpleExpandableListAdapter;
+import android.content.Context;
+import android.widget.AbsListView;
+import android.widget.SectionIndexer;
+
+public class FastScrollExListAdapter extends SimpleExpandableListAdapter
                                      implements SectionIndexer, AbsListView.OnScrollListener {
  
     private final ExpandableListView expandableListView;
@@ -11,7 +17,7 @@ public class FastScrollExListAdapter extends extends BaseExpandableListAdapter
      *      ...
      */
     
-    public MyExpandableListAdapter(Context context, ExpandableListView expandableListView /* Your other arguments */) {
+    public FastScrollExListAdapter(Context context, ExpandableListView expandableListView /* Your other arguments */) {
         this.context = context;
         this.expandableListView = expandableListView;
         this.expandableListView.setOnScrollListener(this);
