@@ -41,7 +41,7 @@
             android:id="@+id/unmatched_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
             />
@@ -56,7 +56,7 @@
             android:id="@+id/matched_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@android:color/white"
+            android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
             />
