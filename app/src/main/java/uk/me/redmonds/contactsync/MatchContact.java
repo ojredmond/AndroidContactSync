@@ -143,7 +143,7 @@ public class MatchContact extends Fragment implements
         curGroupMap2.put(NAME, "Matched (" + children.size() + ")");
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
         
-        //add unmatched heading
+        //add matched heading
         ((TextView)listView.findViewById(R.id.matched_group).findViewById(android.R.id.text1)).setText("Matched");
         ((TextView)listView.findViewById(R.id.matched_group).findViewById(android.R.id.text2)).setText("Count "+children.size());
         
