@@ -49,6 +49,7 @@
         <include android:id="@+id/matched_group"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/separator"
             layout="@layout/list_heading_2"
             />
 
