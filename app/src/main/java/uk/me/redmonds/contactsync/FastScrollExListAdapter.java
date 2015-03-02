@@ -9,6 +9,7 @@ import android.widget.SectionIndexer;
 import java.util.List;
 import java.util.Map;
 import android.widget.*;
+import java.util.*;
 
 public class FastScrollExListAdapter extends SimpleExpandableListAdapter
                                      implements SectionIndexer, AbsListView.OnScrollListener {
@@ -22,7 +23,8 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
             Context context, 
             ExpandableListView exListView,
             List<? extends Map<String, ?>> groupData, 
-            int groupLayout, String[] groupFrom, 
+            int groupLayout, 
+			String[] groupFrom, 
             int[] groupTo, 
             List<? extends List<? extends Map<String, ?>>> childData, 
             int childLayout, 
@@ -32,6 +34,11 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
     	this.expandableListView = exListView;
         this.expandableListView.setOnScrollListener(this);
     	appContext = context;
+		ArrayList<String> grps = new ArrayList<>();
+		for (Map<String,?> group: childData.get(0)) {
+			grps.add((String)group.get(childFrom[0]));
+		}
+		groups = grps.toArray(new String[grps.size()]);
     }
     public FastScrollExListAdapter(
             Context context, 
@@ -49,7 +56,12 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
         this.expandableListView = exListView;
         this.expandableListView.setOnScrollListener(this);
     	appContext = context;
-    }
+		ArrayList<String> grps = new ArrayList<>();
+		for (Map<String,?> group: childData.get(0)) {
+			grps.add((String)group.get(childFrom[0]));
+		}
+		groups = grps.toArray(new String[grps.size()]);
+	}
     public FastScrollExListAdapter(
             Context context, 
             ExpandableListView exListView,
@@ -67,7 +79,12 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
         this.expandableListView = exListView;
         this.expandableListView.setOnScrollListener(this);
     	appContext = context;
-    }
+		ArrayList<String> grps = new ArrayList<>();
+		for (Map<String,?> group: groupData) {
+			grps.add((String)group.get(groupFrom[0]));
+		}
+		groups = grps.toArray(new String[grps.size()]);
+	}
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -97,4 +114,10 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
                    expandableListView
                        .getExpandableListPosition(position));
     }
+
+	@Override
+	public Object[] getSections()
+	{
+		return groups;
+	}
 }
