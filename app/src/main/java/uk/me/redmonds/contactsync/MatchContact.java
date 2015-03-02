@@ -83,7 +83,9 @@ public class MatchContact extends Fragment implements
         Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(ButtonClick);
 
-        ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.list);
+        //ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.list);
+        LinearLayout listView = (LinearLayout) view.findViewById(R.id.list);
+        curGroupMap1.put(NAME, "Unmatched (" + children.size() + ")");
 
         List<Map<String, String>> groupData = new ArrayList<>();
         List<List<Map<String, String>>> childData = new ArrayList<>();
@@ -105,6 +107,10 @@ public class MatchContact extends Fragment implements
         }
         Collections.sort(children, new ListSortMap());
         childData.add(children);
+
+        //add unmatched heading
+        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(android.R.id.text1)).setText("Unmatched");
+        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(android.R.id.text2)).setText("Count "+children.size());
 
         Map<String, String> curGroupMap1 = new HashMap<>();
         groupData.add(curGroupMap1);
@@ -136,9 +142,14 @@ public class MatchContact extends Fragment implements
         groupData.add(curGroupMap2);
         curGroupMap2.put(NAME, "Matched (" + children.size() + ")");
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
+        
+        //add unmatched heading
+        ((TextView)listView.findViewById(R.id.matched_group).findViewById(android.R.id.text1)).setText("Matched");
+        ((TextView)listView.findViewById(R.id.matched_group).findViewById(android.R.id.text2)).setText("Count "+children.size());
+        
 
         // Set up our adapter
-        FastScrollExListAdapter mAdapter = new FastScrollExListAdapter(
+        /*FastScrollExListAdapter mAdapter = new FastScrollExListAdapter(
                 main,
 				listView,
                 groupData,
@@ -149,11 +160,11 @@ public class MatchContact extends Fragment implements
                 R.layout.list_detail,
                 new String[]{NAME},
                 new int[]{R.id.value}
-        );
+        );*/
 
-        listView.setAdapter(mAdapter);
-        listView.setOnChildClickListener(this);
-        listView.setOnGroupClickListener(this);
+        //listView.setAdapter(mAdapter);
+        //listView.setOnChildClickListener(this);
+        //listView.setOnGroupClickListener(this);
 
         return view;
     }
