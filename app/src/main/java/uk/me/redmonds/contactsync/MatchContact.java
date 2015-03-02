@@ -138,8 +138,9 @@ public class MatchContact extends Fragment implements
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
 
         // Set up our adapter
-        SimpleExpandableListAdapter mAdapter = new SimpleExpandableListAdapter(
+        FastScrollExListAdapter mAdapter = new FastScrollExListAdapter(
                 main,
+				listView,
                 groupData,
                 R.layout.list_heading_2,
                 new String[]{NAME, DESCRIPTION},

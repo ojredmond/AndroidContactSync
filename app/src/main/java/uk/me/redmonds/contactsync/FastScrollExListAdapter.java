@@ -1,3 +1,5 @@
+package uk.me.redmonds.contactsync;
+
 import android.widget.ExpandableListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.content.Context;
@@ -6,12 +8,13 @@ import android.widget.SectionIndexer;
 
 import java.util.List;
 import java.util.Map;
+import android.widget.*;
 
 public class FastScrollExListAdapter extends SimpleExpandableListAdapter
                                      implements SectionIndexer, AbsListView.OnScrollListener {
  
     private final ExpandableListView expandableListView;
-    //private final Context context;
+    private final Context appContext;
     private boolean manualScroll;
     private String[] groups;
  
@@ -22,7 +25,7 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
     
 public FastScrollExListAdapter(
         Context context, 
-        ExpandableListView expandableListView,
+        ExpandableListView exListView,
         List<? extends Map<String, ?>> groupData, 
         int groupLayout, String[] groupFrom, 
         int[] groupTo, 
@@ -30,13 +33,14 @@ public FastScrollExListAdapter(
         int childLayout, 
         String[] childFrom, 
         int[] childTo) {
-    this.expandableListView = expandableListView;
+	super(context,groupData,groupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
+	this.expandableListView = exListView;
     this.expandableListView.setOnScrollListener(this);
-    super(context,groupData,groupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
+	appContext = context;
 }
 public FastScrollExListAdapter(
         Context context, 
-        ExpandableListView expandableListView,
+        ExpandableListView exListView,
         List<? extends Map<String, ?>> groupData, 
         int expandedGroupLayout, 
         int collapsedGroupLayout, 
@@ -46,13 +50,14 @@ public FastScrollExListAdapter(
         int childLayout, 
         String[] childFrom, 
         int[] childTo) {
-    this.expandableListView = expandableListView;
+	super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
+    this.expandableListView = exListView;
     this.expandableListView.setOnScrollListener(this);
-    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
+	appContext = context;
 }
 public FastScrollExListAdapter(
         Context context, 
-        ExpandableListView expandableListView,
+        ExpandableListView exListView,
         List<? extends Map<String, ?>> groupData,
         int expandedGroupLayout, 
         int collapsedGroupLayout, 
@@ -63,17 +68,12 @@ public FastScrollExListAdapter(
         int lastChildLayout, 
         String[] childFrom, 
         int[] childTo) {
-    this.expandableListView = expandableListView;
+	super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,lastChildLayout,childFrom,childTo);
+    this.expandableListView = exListView;
     this.expandableListView.setOnScrollListener(this);
-    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,lastChildLayout,childFrom,childTo);
+	appContext = context;
 }
 
-
-/*public FastScrollExListAdapter(Context context, ExpandableListView expandableListView ) {
-        this.context = context;
-        this.expandableListView = expandableListView;
-        this.expandableListView.setOnScrollListener(this);
-    }*/
  
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -87,6 +87,7 @@ public FastScrollExListAdapter(
  
     @Override
     public String[] getSections() {
+		Toast.makeText(appContext,"test",Toast.LENGTH_SHORT).show();
         // Provide your custom sections here
         return groups;
     }
@@ -97,12 +98,14 @@ public FastScrollExListAdapter(
      */
     @Override
     public int getPositionForSection(int section) {
+		Toast.makeText(appContext,"test0",Toast.LENGTH_SHORT).show();
         if (manualScroll) {
             // If we are scrolling manually return only the section
             return section;
         } else {
             // If we are scrolling via fast scrollbars get the packed position from the group(section) and
             // transform it into a flat position
+			Toast.makeText(appContext,"test1",Toast.LENGTH_SHORT).show();
             return expandableListView.getFlatListPosition(ExpandableListView.getPackedPositionForGroup(section));
         }
     }
