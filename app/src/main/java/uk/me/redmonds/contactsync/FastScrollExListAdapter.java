@@ -20,13 +20,51 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
      *      ...
      */
     
-public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int groupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
+public FastScrollExListAdapter(
+        Context context, 
+        ExpandableListView expandableListView
+        List<? extends Map<String, ?>> groupData, 
+        int groupLayout, String[] groupFrom, 
+        int[] groupTo, 
+        List<? extends List<? extends Map<String, ?>>> childData, 
+        int childLayout, 
+        String[] childFrom, 
+        int[] childTo) {
+    this.expandableListView = expandableListView;
+    this.expandableListView.setOnScrollListener(this);
     super(context,groupData,groupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
 }
-public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
+public FastScrollExListAdapter(
+        Context context, 
+        ExpandableListView expandableListView
+        List<? extends Map<String, ?>> groupData, 
+        int expandedGroupLayout, 
+        int collapsedGroupLayout, 
+        String[] groupFrom, 
+        int[] groupTo, 
+        List<? extends List<? extends Map<String, ?>>> childData, 
+        int childLayout, 
+        String[] childFrom, 
+        int[] childTo) {
+    this.expandableListView = expandableListView;
+    this.expandableListView.setOnScrollListener(this);
     super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
 }
-public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, int lastChildLayout, String[] childFrom, int[] childTo) {
+public FastScrollExListAdapter(
+        Context context, 
+        ExpandableListView expandableListView
+        List<? extends Map<String, ?>> groupData,
+        int expandedGroupLayout, 
+        int collapsedGroupLayout, 
+        String[] groupFrom, 
+        int[] groupTo, 
+        List<? extends List<? extends Map<String, ?>>> childData, 
+        int childLayout, 
+        int lastChildLayout, 
+        String[] childFrom, 
+        int[] childTo) {
+    this.expandableListView = expandableListView;
+    this.expandableListView.setOnScrollListener(this);
     super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,lastChildLayout,childFrom,childTo);
 }
 
