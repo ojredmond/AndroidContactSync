@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ExpandableListView;
+import android.widget.ListView;
 import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
 
@@ -22,7 +22,7 @@ import java.util.Map;
 import android.widget.*;
 
 public class MatchContact extends Fragment implements
-        ExpandableListView.OnChildClickListener,
+		OnClickListener,
         ExpandableListView.OnGroupClickListener {
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
@@ -47,6 +47,31 @@ public class MatchContact extends Fragment implements
     public boolean onGroupClick(ExpandableListView p1, View p2, int p3, long p4) {
         return ((String) ((TextView) p2.findViewById(android.R.id.text1)).getText()).endsWith("(0)");
     }
+
+	@Override
+	public void onClick(View p1)
+	{
+		View unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
+		View matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
+		if(p1.getId() == R.id.unmatched_group) {
+			if(unmatchedList.getVisibility() == View.GONE) {
+				matchedList.setVisibility(View.GONE);
+				unmatchedList.setVisibility(View.VISIBLE);
+			} else {
+				unmatchedList.setVisibility(View.GONE);
+				matchedList.setVisibility(View.GONE);
+			}
+		} else if (p1.getId() == R.id.matched_group) {
+			if(matchedList.getVisibility() == View.GONE) {
+				unmatchedList.setVisibility(View.GONE);
+				matchedList.setVisibility(View.VISIBLE);
+			} else {
+				unmatchedList.setVisibility(View.GONE);
+				matchedList.setVisibility(View.GONE);
+			}
+		}
+			
+	}
 
     public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5) {
         //unmatched list
@@ -96,11 +121,13 @@ public class MatchContact extends Fragment implements
         SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
+		ArrayList<String> unmatchedItems = new ArrayList<>();
         children = new ArrayList<>();
         // To get the Iterator use the iterator() operation
         for (String anUm : um) {
             String[] itemArray = (anUm).split(":");
             unmatchedList.put(itemArray[0], itemArray[1]);
+			unmatchedItems.add(itemArray[0]);
             contactMap = new HashMap<>();
             contactMap.put(NAME, itemArray[0]);
             children.add(contactMap);
@@ -109,9 +136,14 @@ public class MatchContact extends Fragment implements
         childData.add(children);
 
         //add unmatched heading
-        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(android.R.id.text1)).setText("Unmatched");
-        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(android.R.id.text2)).setText("Count "+children.size());
-
+        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
+        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedItems.size()+")");
+		((ListView)listView.findViewById(R.id.unmatched_list)).setAdapter(new ArrayAdapter<String>(
+																			main,
+																			R.layout.list_row_1,
+																			R.id.value,
+																			unmatchedItems));
+		listView.findViewById(R.id.unmatched_group).setOnClickListener(this);			
         Map<String, String> curGroupMap1 = new HashMap<>();
         groupData.add(curGroupMap1);
         curGroupMap1.put(NAME, "Unmatched (" + children.size() + ")");
@@ -127,11 +159,13 @@ public class MatchContact extends Fragment implements
 
         HashSet<String> md = (HashSet<String>) pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
         matchedList = new HashMap<>();
+		ArrayList<String> matchedItems = new ArrayList<>();
         children = new ArrayList<>();
         for (String item : md) {
             String[] itemArray = (item).split(":");
             String itemName = account.get(itemArray[0]);
             matchedList.put(itemName, item);
+			matchedItems.add(itemName);
             contactMap = new HashMap<>();
             contactMap.put(NAME, itemName);
             children.add(contactMap);
@@ -144,10 +178,14 @@ public class MatchContact extends Fragment implements
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
         
         //add matched heading
-        ((TextView)listView.findViewById(R.id.matched_group).findViewById(android.R.id.text1)).setText("Matched");
-        ((TextView)listView.findViewById(R.id.matched_group).findViewById(android.R.id.text2)).setText("Count "+children.size());
-        
-
+        ((TextView)listView.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("Matched");
+        ((TextView)listView.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedItems.size()+")");
+        ((ListView)listView.findViewById(R.id.matched_list)).setAdapter(new ArrayAdapter<String>(
+																			main,
+																			R.layout.list_row_1,
+																			R.id.value,
+																			matchedItems));
+		listView.findViewById(R.id.matched_group).setOnClickListener(this);
         // Set up our adapter
         /*FastScrollExListAdapter mAdapter = new FastScrollExListAdapter(
                 main,

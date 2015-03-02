@@ -29,18 +29,20 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/button_bar"
         android:layout_alignParentTop="true"
-        android:orientation="vertical">
+        android:orientation="vertical"
+		android:animateLayoutChanges="true"
+		>
         
         <include android:id="@+id/unmatched_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/list_heading_2"
+            layout="@layout/list_border_none_2"
             />
         
         <ListView
             android:id="@+id/unmatched_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
@@ -50,13 +52,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/separator"
-            layout="@layout/list_heading_2"
+            layout="@layout/list_border_top_2"
             />
 
         <ListView
             android:id="@+id/matched_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
