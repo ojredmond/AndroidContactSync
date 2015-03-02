@@ -4,6 +4,9 @@ import android.content.Context;
 import android.widget.AbsListView;
 import android.widget.SectionIndexer;
 
+import java.util.List;
+import java.util.Map;
+
 public class FastScrollExListAdapter extends SimpleExpandableListAdapter
                                      implements SectionIndexer, AbsListView.OnScrollListener {
  
@@ -18,13 +21,13 @@ public class FastScrollExListAdapter extends SimpleExpandableListAdapter
      */
     
 public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int groupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
-    super(context,groupData,groupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo)
+    super(context,groupData,groupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
 }
 public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, String[] childFrom, int[] childTo) {
-    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo)
+    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,childFrom,childTo);
 }
 public FastScrollExListAdapter(Context context, List<? extends Map<String, ?>> groupData, int expandedGroupLayout, int collapsedGroupLayout, String[] groupFrom, int[] groupTo, List<? extends List<? extends Map<String, ?>>> childData, int childLayout, int lastChildLayout, String[] childFrom, int[] childTo) {
-    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,lastChildLayout,childFrom,childTo)
+    super(context,groupData,expandedGroupLayout,collapsedGroupLayout,groupFrom,groupTo,childData,childLayout,lastChildLayout,childFrom,childTo);
 }
 
 
