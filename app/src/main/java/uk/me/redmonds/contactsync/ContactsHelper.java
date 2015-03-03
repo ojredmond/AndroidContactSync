@@ -93,7 +93,7 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = ids;
-        pref = main.getPreferences(Context.MODE_PRIVATE);
+        pref = main.getPreferences(Context.MODE_WORLD_READABLE);
         createContacts();
    }
 
@@ -102,7 +102,7 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = new HashSet<>(Arrays.asList(ids));
-        pref = main.getPreferences(Context.MODE_PRIVATE);
+        pref = main.getPreferences(Context.MODE_WORLD_READABLE);
         createContacts();
     }
 
@@ -697,7 +697,6 @@ class ContactsHelper {
             return true;
         
         for (String item: set) {
-            //Toast.makeText(main,item,Toast.LENGTH_SHORT).show();
             String itemArray[] = item.split(":");
             ArrayList<String> idList = (ArrayList)Arrays.asList(itemArray[1].split(","));
             if(idList.contains(id)) {
@@ -723,7 +722,6 @@ class ContactsHelper {
 
     private void removeEntry(String listRef, String ref1, String ref2) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
-        Toast.makeText(main,listRef + " " + ref1 + " " + ref2,Toast.LENGTH_SHORT).show();
         if (set == null)
             return;
         set.remove(ref2 + ":" + ref1);
