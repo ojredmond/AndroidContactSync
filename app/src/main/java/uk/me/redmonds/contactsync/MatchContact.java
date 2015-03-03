@@ -31,10 +31,13 @@ public class MatchContact extends Fragment implements OnClickListener {
     private String listItem;
     private String name;
 
-	@Override
-	public void onClick(View p1)
-	{
-        Switch (p1.getId()) {
+    @Override
+    public void onClick(View p1)
+    {
+        View unmatchedList;
+        View matchedList;
+        
+        switch (p1.getId()) {
             case R.id.delete_contact:
                 HashSet<String> list = new HashSet<>();
                 list.add(String.valueOf(id));
@@ -42,31 +45,31 @@ public class MatchContact extends Fragment implements OnClickListener {
                 contacts.deleteContacts();
                 break;
             case R.id.unmatched_group:
-                View unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
-    		    View matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
-    			
-    			if(unmatchedList.getVisibility() == View.GONE) {
-    				matchedList.setVisibility(View.GONE);
-    				unmatchedList.setVisibility(View.VISIBLE);
-    			} else {
-    				unmatchedList.setVisibility(View.GONE);
-    				matchedList.setVisibility(View.GONE);
-    			}
-    			break;
-		    case R.id.matched_group:
-                View unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
-    		    View matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
+                unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
+                matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
+                
+                if(unmatchedList.getVisibility() == View.GONE) {
+                    matchedList.setVisibility(View.GONE);
+                    unmatchedList.setVisibility(View.VISIBLE);
+                } else {
+                    unmatchedList.setVisibility(View.GONE);
+                    matchedList.setVisibility(View.GONE);
+                }
+                break;
+            case R.id.matched_group:
+                unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
+                matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
     
-    			if(matchedList.getVisibility() == View.GONE) {
-    				unmatchedList.setVisibility(View.GONE);
-    				matchedList.setVisibility(View.VISIBLE);
-    			} else {
-    				unmatchedList.setVisibility(View.GONE);
-    				matchedList.setVisibility(View.GONE);
-    			}
-    			break;
-		}
-	}
+                if(matchedList.getVisibility() == View.GONE) {
+                    unmatchedList.setVisibility(View.GONE);
+                    matchedList.setVisibility(View.VISIBLE);
+                } else {
+                    unmatchedList.setVisibility(View.GONE);
+                    matchedList.setVisibility(View.GONE);
+                }
+                break;
+        }
+    }
 
     public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5) {
         //unmatched list
@@ -107,12 +110,12 @@ public class MatchContact extends Fragment implements OnClickListener {
         SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
-		ArrayList<String> unmatchedItems = new ArrayList<>();
+        ArrayList<String> unmatchedItems = new ArrayList<>();
 
         for (String anUm : um) {
             String[] itemArray = (anUm).split(":");
             unmatchedList.put(itemArray[0], itemArray[1]);
-			unmatchedItems.add(itemArray[0]);
+            unmatchedItems.add(itemArray[0]);
         }
         Collections.sort(unmatchedItems);
 
@@ -120,11 +123,11 @@ public class MatchContact extends Fragment implements OnClickListener {
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedItems.size()+")");
         ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new ArrayAdapter<String>(
-																			main,
-																			R.layout.list_row_1,
-																			R.id.value,
-																			unmatchedItems));
-		view.findViewById(R.id.unmatched_group).setOnClickListener(this);			
+                                                                            main,
+                                                                            R.layout.list_row_1,
+                                                                            R.id.value,
+                                                                            unmatchedItems));
+        view.findViewById(R.id.unmatched_group).setOnClickListener(this);            
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
@@ -136,25 +139,25 @@ public class MatchContact extends Fragment implements OnClickListener {
 
         HashSet<String> md = (HashSet<String>) pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
         matchedList = new HashMap<>();
-		ArrayList<String> matchedItems = new ArrayList<>();
+        ArrayList<String> matchedItems = new ArrayList<>();
 
         for (String item : md) {
             String[] itemArray = (item).split(":");
             String itemName = account.get(itemArray[0]);
             matchedList.put(itemName, item);
-			matchedItems.add(itemName);
+            matchedItems.add(itemName);
         }
-		Collections.sort(matchedItems);
+        Collections.sort(matchedItems);
 
         //add matched heading
         ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("Matched");
         ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedItems.size()+")");
         ((ListView)view.findViewById(R.id.matched_list)).setAdapter(new ArrayAdapter<String>(
-																			main,
-																			R.layout.list_row_1,
-																			R.id.value,
-																			matchedItems));
-		view.findViewById(R.id.matched_group).setOnClickListener(this);
+                                                                            main,
+                                                                            R.layout.list_row_1,
+                                                                            R.id.value,
+                                                                            matchedItems));
+        view.findViewById(R.id.matched_group).setOnClickListener(this);
 
         return view;
     }
