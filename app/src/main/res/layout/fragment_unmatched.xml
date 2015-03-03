@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:animateLayoutChanges="true"
     >
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,42 +25,50 @@
 
     </LinearLayout>
 
-    <include android:id="@+id/unmatched_group"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:keepScreenOn="true"
-        layout="@layout/list_border_none_2"
-        />
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        >
+        <include android:id="@+id/unmatched_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:keepScreenOn="true"
+            layout="@layout/list_border_none_2"
+            />
+        
+        <include android:id="@+id/matched_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/unmatched_list"
+            android:keepScreenOn="true"
+            layout="@layout/list_border_top_2"
+            />
     
-    <ListView
-        android:id="@+id/unmatched_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/unmatched_group"
-        android:background="#ccc"
-        android:choiceMode="singleChoice"
-        android:visibility="gone"
-        android:fastScrollEnabled="true"
-        />
+        <ListView
+            android:id="@+id/unmatched_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/unmatched_group"
+            android:layout_above="@id/matched_group"
+            android:background="#ccc"
+            android:choiceMode="singleChoice"
+            android:visibility="gone"
+            android:fastScrollEnabled="true"
+            />
+    
+    
+        <ListView
+            android:id="@+id/matched_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/matched_group"
+            android:background="#ccc"
+            android:choiceMode="singleChoice"
+            android:visibility="gone"
+            android:fastScrollEnabled="true"
+            />
 
-    <include android:id="@+id/matched_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/unmatched_list"
-        android:keepScreenOn="true"
-        layout="@layout/list_border_top_2"
-        />
-
-    <ListView
-        android:id="@+id/matched_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/matched_group"
-        android:background="#ccc"
-        android:choiceMode="singleChoice"
-        android:visibility="gone"
-        android:fastScrollEnabled="true"
-        />
-
+    </RelativeLayout>
 </RelativeLayout>
