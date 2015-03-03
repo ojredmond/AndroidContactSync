@@ -721,7 +721,7 @@ class ContactsHelper {
 
     private void removeEntry(String listRef, String ref1, String ref2) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
-        //Toast.makeText(main,listName,Toast.LENGTH_SHORT).show();
+        Toast.makeText(main,listRef + " " + ref1 + " " + ref2,Toast.LENGTH_SHORT).show();
         if (set == null)
             return;
         set.remove(ref2 + ":" + ref1);
