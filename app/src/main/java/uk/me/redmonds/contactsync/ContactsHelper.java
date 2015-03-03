@@ -690,7 +690,7 @@ class ContactsHelper {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
 
         if (set == null || set.size() == 0)
-            return true;
+            return;
         
         for (String item: set) {
             //Toast.makeText(main,item,Toast.LENGTH_SHORT).show();
@@ -730,7 +730,7 @@ class ContactsHelper {
     private void addEntry(String listRef, String entry) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
         if (set == null)
-            return true;
+            return;
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
