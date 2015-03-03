@@ -38,13 +38,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             layout="@layout/list_border_none_2"
-            android:layout_weight="0"
             />
         
         <ListView
             android:id="@+id/unmatched_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
@@ -56,13 +56,13 @@
             android:layout_height="wrap_content"
             android:background="@drawable/separator"
             layout="@layout/list_border_top_2"
-            android:layout_weight="0"
             />
 
         <ListView
             android:id="@+id/matched_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
