@@ -682,9 +682,9 @@ class ContactsHelper {
 
         SharedPreferences.Editor e = pref.edit();
         if(set.size() == 0)
-            e.remove(listRef);
+            e.remove(listName);
         else
-            e.putStringSet(listRef, set);
+            e.putStringSet(listName, set);
         e.apply();
     }
 
