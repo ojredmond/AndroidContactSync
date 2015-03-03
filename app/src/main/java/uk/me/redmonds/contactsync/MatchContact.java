@@ -20,8 +20,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import android.widget.*;
+import android.widget.AdapterView.*;
 
-public class MatchContact extends Fragment implements OnClickListener {
+public class MatchContact extends Fragment 
+        implements OnClickListener, OnItemClickListener {
     private final static String NAME = "Name";
     private final static String DESCRIPTION = "Desc";
     private MainActivity main;
@@ -30,6 +32,12 @@ public class MatchContact extends Fragment implements OnClickListener {
     private HashMap<String, String> matchedList;
     private String listItem;
     private String name;
+
+	@Override
+	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
+	{
+		Toast.makeText(main,""+((View)p2.getParent()).getId()+" " +R.id.unmatched_list,Toast.LENGTH_SHORT).show();
+	}
 
     @Override
     public void onClick(View p1)
@@ -68,8 +76,6 @@ public class MatchContact extends Fragment implements OnClickListener {
                     matchedList.setVisibility(View.GONE);
                 }
                 break;
-            default:
-                Toast.makeText(main,p1.toString(),Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -130,7 +136,7 @@ public class MatchContact extends Fragment implements OnClickListener {
                                                                             R.id.value,
                                                                             unmatchedItems));
         view.findViewById(R.id.unmatched_group).setOnClickListener(this);            
-        view.findViewById(R.id.unmatched_list).setOnClickListener(this);            
+        ((ListView)view.findViewById(R.id.unmatched_list)).setOnItemClickListener(this);            
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
@@ -161,7 +167,7 @@ public class MatchContact extends Fragment implements OnClickListener {
                                                                             R.id.value,
                                                                             matchedItems));
         view.findViewById(R.id.matched_group).setOnClickListener(this);
-        view.findViewById(R.id.matched_list).setOnClickListener(this);
+        ((ListView)view.findViewById(R.id.matched_list)).setOnItemClickListener(this);
 
         return view;
     }

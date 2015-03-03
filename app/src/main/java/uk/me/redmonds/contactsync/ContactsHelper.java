@@ -710,7 +710,8 @@ class ContactsHelper {
         }
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
-        return e.apply();
+        e.apply();
+		return true;
     }
 
     private void removeEntry(String listRef, String ref1, String ref2) {
@@ -731,6 +732,7 @@ class ContactsHelper {
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
-        return e.commit();
+        e.apply();
+		return true;
     }
 }
