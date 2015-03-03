@@ -36,7 +36,6 @@ public class MatchContact extends Fragment
     @Override
     public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
     {
-        Toast.makeText(main,""+((View)p2.getParent()).getId()+" " +R.id.unmatched_list,Toast.LENGTH_SHORT).show();
         String linkName = (String) ((TextView) p2).getText();
         ArrayList<String> ids = new ArrayList<>();
         ids.add(id);
