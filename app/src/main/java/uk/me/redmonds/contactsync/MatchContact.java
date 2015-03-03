@@ -109,18 +109,22 @@ public class MatchContact extends Fragment
         SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
+        int unmatchedCount = 0;
         ArrayList<String> unmatchedItems = new ArrayList<>();
-
-        for (String anUm : um) {
-            String[] itemArray = (anUm).split(":");
-            unmatchedList.put(itemArray[0], itemArray[1]);
-            unmatchedItems.add(itemArray[0]);
+        
+        if(um != null) {
+            for (String anUm : um) {
+                String[] itemArray = (anUm).split(":");
+                unmatchedList.put(itemArray[0], itemArray[1]);
+                unmatchedItems.add(itemArray[0]);
+            }
+            Collections.sort(unmatchedItems);
+            unmatchedCount = unmatchedItems.size();
         }
-        Collections.sort(unmatchedItems);
 
         //add unmatched heading
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
-        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedItems.size()+")");
+        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedCount+")");
         ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new ArrayAdapter<String>(
                                                                             main,
                                                                             R.layout.list_row_1,
@@ -140,18 +144,22 @@ public class MatchContact extends Fragment
         HashSet<String> md = (HashSet<String>) pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
         matchedList = new HashMap<>();
         ArrayList<String> matchedItems = new ArrayList<>();
+        int matchedCount = 0;
 
-        for (String item : md) {
-            String[] itemArray = (item).split(":");
-            String itemName = account.get(itemArray[0]);
-            matchedList.put(itemName, item);
-            matchedItems.add(itemName);
+        if(md != null) {
+            for (String item : md) {
+                String[] itemArray = (item).split(":");
+                String itemName = account.get(itemArray[0]);
+                matchedList.put(itemName, item);
+                matchedItems.add(itemName);
+            }
+            Collections.sort(matchedItems);
+            matchedCount = matchedItems.size();
         }
-        Collections.sort(matchedItems);
 
         //add matched heading
         ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("Matched");
-        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedItems.size()+")");
+        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedCount+")");
         ((ListView)view.findViewById(R.id.matched_list)).setAdapter(new ArrayAdapter<String>(
                                                                             main,
                                                                             R.layout.list_row_1,
