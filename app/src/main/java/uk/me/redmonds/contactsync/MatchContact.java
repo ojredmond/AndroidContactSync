@@ -54,8 +54,8 @@ public class MatchContact extends Fragment
     @Override
     public void onClick(View p1)
     {
-        View unmatchedList;
-        View matchedList;
+        View unmatchedListView;
+        View matchedListView;
         
         switch (p1.getId()) {
             case R.id.delete_contact:
@@ -65,27 +65,27 @@ public class MatchContact extends Fragment
                 contacts.deleteContacts();
                 break;
             case R.id.unmatched_group:
-                unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
-                matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
+                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
+                matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
                 
-                if(unmatchedList.getChildCount() == 0 && unmatchedList.getVisibility() == View.GONE) {
-                    matchedList.setVisibility(View.GONE);
-                    unmatchedList.setVisibility(View.VISIBLE);
+                if(unmatchedList.size() == 0 && unmatchedListView.getVisibility() == View.GONE) {
+                    matchedListView.setVisibility(View.GONE);
+                    unmatchedListView.setVisibility(View.VISIBLE);
                 } else {
-                    unmatchedList.setVisibility(View.GONE);
-                    matchedList.setVisibility(View.GONE);
+                    unmatchedListView.setVisibility(View.GONE);
+                    matchedListView.setVisibility(View.GONE);
                 }
                 break;
             case R.id.matched_group:
-                unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
-                matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
+                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
+                matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
     
-                if(matchedList.getVisibility() == View.GONE) {
-                    unmatchedList.setVisibility(View.GONE);
-                    matchedList.setVisibility(View.VISIBLE);
+                if(matchedListView.getVisibility() == View.GONE) {
+                    unmatchedListView.setVisibility(View.GONE);
+                    matchedListView.setVisibility(View.VISIBLE);
                 } else {
-                    unmatchedList.setVisibility(View.GONE);
-                    matchedList.setVisibility(View.GONE);
+                    unmatchedListView.setVisibility(View.GONE);
+                    matchedListView.setVisibility(View.GONE);
                 }
                 break;
         }
