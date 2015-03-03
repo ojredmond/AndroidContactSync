@@ -41,7 +41,7 @@
         <include android:id="@+id/matched_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/unmatched_list"
+            android:layout_below="@id/unmatched_group"
             android:keepScreenOn="true"
             layout="@layout/list_border_top_2"
             />
