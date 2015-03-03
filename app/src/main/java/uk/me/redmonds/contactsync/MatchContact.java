@@ -130,6 +130,7 @@ public class MatchContact extends Fragment implements OnClickListener {
                                                                             R.id.value,
                                                                             unmatchedItems));
         view.findViewById(R.id.unmatched_group).setOnClickListener(this);            
+        view.findViewById(R.id.unmatched_list).setOnClickListener(this);            
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
@@ -160,6 +161,7 @@ public class MatchContact extends Fragment implements OnClickListener {
                                                                             R.id.value,
                                                                             matchedItems));
         view.findViewById(R.id.matched_group).setOnClickListener(this);
+        view.findViewById(R.id.matched_list).setOnClickListener(this);
 
         return view;
     }
