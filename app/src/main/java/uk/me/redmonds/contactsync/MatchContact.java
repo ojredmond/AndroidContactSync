@@ -68,6 +68,8 @@ public class MatchContact extends Fragment implements OnClickListener {
                     matchedList.setVisibility(View.GONE);
                 }
                 break;
+            default:
+                Toast.makeText(main,p1.toString(),Toast.LENGTH_SHORT).show();
         }
     }
 
