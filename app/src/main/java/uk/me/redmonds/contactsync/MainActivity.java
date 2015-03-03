@@ -133,7 +133,7 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String account1Name = pref.getString(ACCOUNT1, null);
         String account2Name = pref.getString(ACCOUNT2, null);
-        SharedPreferences.Editor results = getPreferences(Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor results = getPreferences(Context.MODE_WORLD_READABLE).edit();
         results.putBoolean(Match.SYNCMATCHED, false);
         results.remove(Match.NUMCONTACTS + account1Name);
         results.remove(Match.NUMCONTACTS + account2Name);
@@ -232,7 +232,7 @@ public class MainActivity extends ActionBarActivity
             args.putString("listItem", listItem);
         }
 
-        SharedPreferences.Editor pref = getPreferences(Context.MODE_PRIVATE).edit();
+        SharedPreferences.Editor pref = getPreferences(Context.MODE_WORLD_READABLE).edit();
         pref.remove("contactMerge");
         pref.remove("contactsMerge");
         pref.apply();

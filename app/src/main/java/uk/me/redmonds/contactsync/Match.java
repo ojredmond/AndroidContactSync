@@ -443,7 +443,7 @@ class Match {
                 status.append(message);
             }
 
-            SharedPreferences.Editor results = mainActivity.getPreferences(Context.MODE_PRIVATE).edit();
+            SharedPreferences.Editor results = mainActivity.getPreferences(Context.MODE_WORLD_READABLE).edit();
 
             //store the number of contacts for account1 so that can display results even if no contacts
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
