@@ -243,6 +243,7 @@ class ContactsHelper {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
         for(String item: set) {
             listMap.put(item.split(":")[0],item.split(":")[1]);
+            listMap.put(item.split(":")[1],item.split(":")[0]);
         }
     }
     
