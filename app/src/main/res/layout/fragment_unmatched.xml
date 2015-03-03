@@ -31,14 +31,13 @@
         android:layout_above="@id/button_bar"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
-		android:animateLayoutChanges="true"
-		>
+        android:animateLayoutChanges="true"
+        >
         
         <include android:id="@+id/unmatched_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             layout="@layout/list_border_none_2"
-			android:keepScreenOn="true"
             />
         
         <ListView
@@ -48,7 +47,7 @@
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
-			android:fastScrollEnabled="true"
+            android:fastScrollEnabled="true"
             />
     
         <include android:id="@+id/matched_group"
@@ -56,7 +55,6 @@
             android:layout_height="wrap_content"
             android:background="@drawable/separator"
             layout="@layout/list_border_top_2"
-			android:keepScreenOn="true"
             />
 
         <ListView
@@ -66,7 +64,7 @@
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
-			android:fastScrollEnabled="true"
+            android:fastScrollEnabled="true"
             />
     </LinearLayout>
 </RelativeLayout>
