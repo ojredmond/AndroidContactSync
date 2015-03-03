@@ -33,11 +33,23 @@ public class MatchContact extends Fragment
     private String listItem;
     private String name;
 
-	@Override
-	public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
-	{
-		Toast.makeText(main,""+((View)p2.getParent()).getId()+" " +R.id.unmatched_list,Toast.LENGTH_SHORT).show();
-	}
+    @Override
+    public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
+    {
+        Toast.makeText(main,""+((View)p2.getParent()).getId()+" " +R.id.unmatched_list,Toast.LENGTH_SHORT).show();
+        String linkName = (String) ((TextView) p2).getText();
+        ArrayList<String> ids = new ArrayList<>();
+        ids.add(id);
+        //unmatched list
+        if (((View)p2.getParent()).getId() == R.id.unmatched_list) {
+            ids.add(unmatchedList.get(linkName));
+            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
+            //matched list
+        } else if (((View)p2.getParent()).getId() == R.id.matched_list) {
+            Collections.addAll(ids, matchedList.get(linkName).split(":"));
+            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
+        }
+    }
 
     @Override
     public void onClick(View p1)
