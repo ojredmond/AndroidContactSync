@@ -110,7 +110,7 @@ public class MatchContact extends Fragment implements
         btn.setOnClickListener(ButtonClick);
 
         //ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.list);
-        LinearLayout listView = (LinearLayout) view.findViewById(R.id.list);
+        //LinearLayout listView = (LinearLayout) view.findViewById(R.id.list);
 
         List<Map<String, String>> groupData = new ArrayList<>();
         List<List<Map<String, String>>> childData = new ArrayList<>();
@@ -136,15 +136,15 @@ public class MatchContact extends Fragment implements
         childData.add(children);
 
         //add unmatched heading
-		Collections.sort(unmatchedItems);
-        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
-        ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedItems.size()+")");
-		((ListView)listView.findViewById(R.id.unmatched_list)).setAdapter(new ArrayAdapter<String>(
+        Collections.sort(unmatchedItems);
+        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
+        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedItems.size()+")");
+        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new ArrayAdapter<String>(
 																			main,
 																			R.layout.list_row_1,
 																			R.id.value,
 																			unmatchedItems));
-		listView.findViewById(R.id.unmatched_group).setOnClickListener(this);			
+		view.findViewById(R.id.unmatched_group).setOnClickListener(this);			
         Map<String, String> curGroupMap1 = new HashMap<>();
         groupData.add(curGroupMap1);
         curGroupMap1.put(NAME, "Unmatched (" + children.size() + ")");
@@ -180,14 +180,14 @@ public class MatchContact extends Fragment implements
         
 		Collections.sort(matchedItems);
         //add matched heading
-        ((TextView)listView.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("Matched");
-        ((TextView)listView.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedItems.size()+")");
-        ((ListView)listView.findViewById(R.id.matched_list)).setAdapter(new ArrayAdapter<String>(
+        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("Matched");
+        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedItems.size()+")");
+        ((ListView)view.findViewById(R.id.matched_list)).setAdapter(new ArrayAdapter<String>(
 																			main,
 																			R.layout.list_row_1,
 																			R.id.value,
 																			matchedItems));
-		listView.findViewById(R.id.matched_group).setOnClickListener(this);
+		view.findViewById(R.id.matched_group).setOnClickListener(this);
         // Set up our adapter
         /*FastScrollExListAdapter mAdapter = new FastScrollExListAdapter(
                 main,
