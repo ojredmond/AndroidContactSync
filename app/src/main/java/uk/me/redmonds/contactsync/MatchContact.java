@@ -68,7 +68,7 @@ public class MatchContact extends Fragment
                 unmatchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
                 matchedList = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
                 
-                if(unmatchedList.getVisibility() == View.GONE) {
+                if(unmatchedList.getChildCount() == 0 && unmatchedList.getVisibility() == View.GONE) {
                     matchedList.setVisibility(View.GONE);
                     unmatchedList.setVisibility(View.VISIBLE);
                 } else {
@@ -89,26 +89,6 @@ public class MatchContact extends Fragment
                 }
                 break;
         }
-    }
-
-    public boolean onChildClick(ExpandableListView p1, View p2, int p3, int p4, long p5) {
-        //unmatched list
-        if (p3 == 0) {
-            String linkName = (String) ((TextView) p2).getText();
-            ArrayList<String> ids = new ArrayList<>();
-            ids.add(id);
-            ids.add(unmatchedList.get(linkName));
-            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
-            //matched list
-        } else if (p3 == 1) {
-            String linkName = (String) ((TextView) p2).getText();
-            ArrayList<String> ids = new ArrayList<>();
-            ids.add(id);
-            Collections.addAll(ids, matchedList.get(linkName).split(":"));
-            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
-        }
-
-        return false;
     }
 
     @Override
