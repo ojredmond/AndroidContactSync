@@ -106,6 +106,12 @@ public class MatchContact extends Fragment
         Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(this);
 
+        Comparator caseInsensitive = new Comparator<String>() {
+            @Override
+            public int compare(String s1, String s2) {
+                return s1.compareToIgnoreCase(s2);
+            }
+        }
         SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
@@ -118,7 +124,7 @@ public class MatchContact extends Fragment
                 unmatchedList.put(itemArray[0], itemArray[1]);
                 unmatchedItems.add(itemArray[0]);
             }
-            Collections.sort(unmatchedItems);
+            Collections.sort(unmatchedItems,caseInsensitive);
             unmatchedCount = unmatchedItems.size();
         }
 
@@ -153,7 +159,7 @@ public class MatchContact extends Fragment
                 matchedList.put(itemName, item);
                 matchedItems.add(itemName);
             }
-            Collections.sort(matchedItems);
+            Collections.sort(matchedItems,caseInsensitive);
             matchedCount = matchedItems.size();
         }
 
