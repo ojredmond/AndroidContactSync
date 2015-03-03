@@ -681,7 +681,10 @@ class ContactsHelper {
         }
 
         SharedPreferences.Editor e = pref.edit();
-        e.putStringSet(listName, set);
+        if(set.size() == 0)
+            e.remove(listRef);
+        else
+            e.putStringSet(listRef, set);
         e.apply();
     }
 
@@ -709,7 +712,10 @@ class ContactsHelper {
             }
         }
         SharedPreferences.Editor e = pref.edit();
-        e.putStringSet(listRef, set);
+        if(set.size() == 0)
+            e.remove(listRef);
+        else
+            e.putStringSet(listRef, set);
         e.apply();
     }
 
@@ -720,7 +726,11 @@ class ContactsHelper {
             return;
         set.remove(ref2 + ":" + ref1);
         SharedPreferences.Editor e = pref.edit();
-        e.putStringSet(listRef, set);
+        if(set.size() == 0)
+            e.remove(listRef);
+        else
+            e.putStringSet(listRef, set);
+            
         e.apply();
     }
 
