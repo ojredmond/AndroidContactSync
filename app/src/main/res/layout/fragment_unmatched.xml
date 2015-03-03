@@ -27,7 +27,7 @@
     <LinearLayout
         android:id="@+id/list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_above="@id/button_bar"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
@@ -37,6 +37,7 @@
         <include android:id="@+id/unmatched_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             layout="@layout/list_border_none_2"
             />
         
@@ -44,6 +45,7 @@
             android:id="@+id/unmatched_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
@@ -53,6 +55,7 @@
         <include android:id="@+id/matched_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="@drawable/separator"
             layout="@layout/list_border_top_2"
             />
@@ -61,6 +64,7 @@
             android:id="@+id/matched_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
             android:background="#ccc"
             android:choiceMode="singleChoice"
             android:visibility="gone"
