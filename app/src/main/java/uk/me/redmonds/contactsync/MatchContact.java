@@ -68,7 +68,7 @@ public class MatchContact extends Fragment
                 unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
                 matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
                 
-                if(unmatchedList.size() == 0 && unmatchedListView.getVisibility() == View.GONE) {
+                if(unmatchedList.size() != 0 && unmatchedListView.getVisibility() == View.GONE) {
                     matchedListView.setVisibility(View.GONE);
                     unmatchedListView.setVisibility(View.VISIBLE);
                 } else {
@@ -80,7 +80,7 @@ public class MatchContact extends Fragment
                 unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
                 matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
     
-                if(matchedListView.getVisibility() == View.GONE) {
+                if(matchedList.size() != 0 && matchedListView.getVisibility() == View.GONE) {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.VISIBLE);
                 } else {
