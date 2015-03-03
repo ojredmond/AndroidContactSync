@@ -681,7 +681,6 @@ class ContactsHelper {
         }
 
         SharedPreferences.Editor e = pref.edit();
-        e.clear();
         e.putStringSet(listName, set);
         e.apply();
     }
@@ -710,7 +709,6 @@ class ContactsHelper {
             }
         }
         SharedPreferences.Editor e = pref.edit();
-        e.clear();
         e.putStringSet(listRef, set);
         e.apply();
     }
@@ -722,7 +720,6 @@ class ContactsHelper {
             return;
         set.remove(ref2 + ":" + ref1);
         SharedPreferences.Editor e = pref.edit();
-        e.clear();
         e.putStringSet(listRef, set);
         e.apply();
     }
