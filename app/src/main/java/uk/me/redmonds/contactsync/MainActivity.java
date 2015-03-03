@@ -133,8 +133,8 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String account1Name = pref.getString(ACCOUNT1, null);
         String account2Name = pref.getString(ACCOUNT2, null);
-        SharedPreferences.Editor results = getSharedPreferences(Context.MODE_WORLD_READABLE).edit();
-        results.putBoolean(Match.SYNCMATCHED, false);
+        SharedPreferences.Editor results = getSharedPreferences("match",Context.MODE_WORLD_READABLE).edit();
+        /*results.putBoolean(Match.SYNCMATCHED, false);
         results.remove(Match.NUMCONTACTS + account1Name);
         results.remove(Match.NUMCONTACTS + account2Name);
         for (String type : Match.MIME_TYPE_LIST) {
@@ -148,7 +148,8 @@ public class MainActivity extends ActionBarActivity
         results.remove(Match.MATCHEDKEY + account1Name + ":" + account2Name);
         results.remove(Match.MATCHEDKEY + account2Name + ":" + account1Name);
         results.remove(Match.ACCOUNTKEY + account1Name + ":" + account2Name);
-        results.remove(Match.ACCOUNTKEY + account2Name + ":" + account1Name);
+        results.remove(Match.ACCOUNTKEY + account2Name + ":" + account1Name);*/
+		results.clear();
         results.apply();
 
         onNavigationDrawerItemSelected(2);
@@ -232,10 +233,10 @@ public class MainActivity extends ActionBarActivity
             args.putString("listItem", listItem);
         }
 
-        SharedPreferences.Editor pref = getSharedPreferences(Context.MODE_WORLD_READABLE).edit();
+        /*SharedPreferences.Editor pref = getSharedPreferences("match",Context.MODE_WORLD_READABLE).edit();
         pref.remove("contactMerge");
         pref.remove("contactsMerge");
-        pref.apply();
+        pref.apply();*/
 
         newFragment.setArguments(args);
 

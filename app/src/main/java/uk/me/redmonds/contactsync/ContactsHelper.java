@@ -93,7 +93,7 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = ids;
-        pref = main.getSharedPreferences(Context.MODE_WORLD_READABLE);
+        pref = main.getSharedPreferences("match",Context.MODE_WORLD_READABLE);
         createContacts();
    }
 
@@ -101,8 +101,10 @@ class ContactsHelper {
         main = (MainActivity)m;
         listName = l;
         listKey = key;
-        list = new HashSet<>(Arrays.asList(ids));
-        pref = main.getSharedPreferences(Context.MODE_WORLD_READABLE);
+        list = new HashSet<>();
+		for (String id:ids)
+			list.add(id);
+        pref = main.getSharedPreferences("match",Context.MODE_WORLD_READABLE);
         createContacts();
     }
 
@@ -402,6 +404,7 @@ class ContactsHelper {
                 
             
         }
+		pref.edit().commit();
 
         if (ops != null) {
             try {
@@ -572,6 +575,7 @@ class ContactsHelper {
                 }
             }
         }
+		pref.edit().commit();
     }
 
     public void addToMatched () {
@@ -605,6 +609,7 @@ class ContactsHelper {
                 addEntry(matchedName, id2 + ":" + id1);
             }
         }
+		pref.edit().commit();
     }
 
     /*private ContentProviderOperation.Builder setOpBuilder(ContentProviderOperation.Builder opBuilder, String value, String type) {
@@ -737,7 +742,7 @@ class ContactsHelper {
     private void addEntry(String listRef, String entry) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
         if (set == null)
-            return;
+            set = new HashSet<>();
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);

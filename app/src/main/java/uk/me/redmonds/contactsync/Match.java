@@ -95,10 +95,13 @@ class Match {
                 tempData.put(type, account1Other.get(data).get(type)
                         + "," + tempContactId.toString());
                 dup1ListOther.put(data, tempData);
-                Long removeId = unmatched1.remove(tempContactName);
-                unmatched1Id.remove(removeId);
+				//remove from unmatched
+			    Long removeId = Long.decode(account1Other.get(data).get(type));
+                String removeName = unmatched1Id.remove(removeId);
+			    unmatched1.remove(removeName);
+			   //unmatchedCount1--;
                 duplicate = true;
-                //unmatchedCount1--;
+                
             }
 
             //add all non-duplicate data to account variable
@@ -108,6 +111,7 @@ class Match {
 
         private Boolean[] performMatchingP2(
                 HashMap<Long, String> unmatched1Id,
+			    HashMap<Long, String> unmatched2Id,
                 HashMap<String, String> tempData,
                 String tempContactName,
                 Long tempContactId,
@@ -132,7 +136,10 @@ class Match {
                         + "," + tempContactId.toString());
                 dup2ListOther.put(data, tempData);
                 //remove from unmatched
-                unmatched2.remove(tempContactName);
+                Long removeId = Long.decode(account2Other.get(data).get(type));
+                String removeName = unmatched2Id.remove(removeId);
+			    unmatched2.remove(removeName);
+				//unmatchedCount2--;
                 //remove from matched
                 if (matched2Other.containsKey(type) && matched2Other.get(type).containsKey(tempContactId)) {
                     Long OtherId = matched2Other.get(type).get(tempContactId);
@@ -140,7 +147,7 @@ class Match {
                     matched1Other.get(type).remove(OtherId);
                 }
                 duplicate = true;
-                //unmatchedCount2--;
+                
             } else if (account1Other.containsKey(data)
                     && account1Other.get(data).get(type) != null
                     && !account1Other.get(data).get(type).contains(",")) {
@@ -183,6 +190,7 @@ class Match {
             unmatched1 = new HashMap<>();
             HashMap<Long, String> unmatched1Id = new HashMap<>();
             unmatched2 = new HashMap<>();
+			HashMap<Long, String> unmatched2Id = new HashMap<>();
             account1Other = new HashMap<>();
             account2Other = new HashMap<>();
             dup1ListOther = new HashMap<>();
@@ -203,7 +211,7 @@ class Match {
             int unmatchedCount2 = 0;
 
             // get sync status
-            SharedPreferences status = mainActivity.getSharedPreferences(Context.MODE_PRIVATE);
+            SharedPreferences status = mainActivity.getSharedPreferences("match",Context.MODE_PRIVATE);
             syncMatched = status.getBoolean(SYNCMATCHED, false);
 
             if (syncMatched) {
@@ -341,7 +349,8 @@ class Match {
                                         tempData.put(type, cItems.getString(0));
 
                                         Boolean returnValues[] = performMatchingP2(
-                                                unmatched1Id, tempData,
+                                                unmatched1Id, unmatched2Id,
+												tempData,
                                                 tempContactName, tempContactId,
                                                 type, data,
                                                 duplicate, matched
@@ -359,7 +368,8 @@ class Match {
                             tempData.put(ContactsHelper.TYPE_NAME, tempContactId.toString());
 
                             Boolean returnValues[] = performMatchingP2(
-                                    unmatched1Id, tempData,
+                                    unmatched1Id, unmatched2Id,
+									tempData,
                                     tempContactName, tempContactId,
                                     ContactsHelper.TYPE_NAME, tempContactName,
                                     duplicate, matched
@@ -373,6 +383,7 @@ class Match {
                         //store all non-duplicates as unmatched
                         if (!duplicate && !matched) {
                             unmatched2.put(tempContactName, tempContactId);
+							unmatched2Id.put(tempContactId,tempContactName);
                             unmatchedCount2++;
                         }
 
@@ -443,7 +454,7 @@ class Match {
                 status.append(message);
             }
 
-            SharedPreferences.Editor results = mainActivity.getSharedPreferences(Context.MODE_WORLD_READABLE).edit();
+            SharedPreferences.Editor results = mainActivity.getSharedPreferences("match",Context.MODE_WORLD_READABLE).edit();
 
             //store the number of contacts for account1 so that can display results even if no contacts
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);

@@ -56,7 +56,7 @@ public class CompareFragment extends Fragment {
             String seleted = args.getString("selected");
             HashMap selectedMap = null;
 
-            SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences pref = main.getSharedPreferences("match",Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);

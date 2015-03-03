@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import android.widget.*;
 import android.widget.AdapterView.*;
+import java.util.*;
 
 public class MatchContact extends Fragment 
         implements OnClickListener, OnItemClickListener {
@@ -111,8 +112,8 @@ public class MatchContact extends Fragment
             public int compare(String s1, String s2) {
                 return s1.compareToIgnoreCase(s2);
             }
-        }
-        SharedPreferences pref = main.getPreferences(Context.MODE_PRIVATE);
+        };
+        SharedPreferences pref = main.getSharedPreferences("match",Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
         int unmatchedCount = 0;
