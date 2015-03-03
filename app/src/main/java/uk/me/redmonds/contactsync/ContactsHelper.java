@@ -93,7 +93,7 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = ids;
-        pref = main.getPreferences(Context.MODE_WORLD_READABLE);
+        pref = main.getSharedPreferences(Context.MODE_WORLD_READABLE);
         createContacts();
    }
 
@@ -102,7 +102,7 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = new HashSet<>(Arrays.asList(ids));
-        pref = main.getPreferences(Context.MODE_WORLD_READABLE);
+        pref = main.getSharedPreferences(Context.MODE_WORLD_READABLE);
         createContacts();
     }
 
