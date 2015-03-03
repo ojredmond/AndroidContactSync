@@ -203,7 +203,7 @@ class Match {
             int unmatchedCount2 = 0;
 
             // get sync status
-            SharedPreferences status = mainActivity.getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences status = mainActivity.getSharedPreferences(Context.MODE_PRIVATE);
             syncMatched = status.getBoolean(SYNCMATCHED, false);
 
             if (syncMatched) {
@@ -443,7 +443,7 @@ class Match {
                 status.append(message);
             }
 
-            SharedPreferences.Editor results = mainActivity.getPreferences(Context.MODE_WORLD_READABLE).edit();
+            SharedPreferences.Editor results = mainActivity.getSharedPreferences(Context.MODE_WORLD_READABLE).edit();
 
             //store the number of contacts for account1 so that can display results even if no contacts
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
