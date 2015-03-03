@@ -685,7 +685,7 @@ class ContactsHelper {
         e.apply();
     }
 
-    private Boolean removeEntry(String listRef, String id) {
+    private void removeEntry(String listRef, String id) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
 
         if (set == null || set.size() == 0)
@@ -711,7 +711,6 @@ class ContactsHelper {
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
         e.apply();
-		return true;
     }
 
     private void removeEntry(String listRef, String ref1, String ref2) {
@@ -725,7 +724,7 @@ class ContactsHelper {
         e.apply();
     }
 
-    private Boolean addEntry(String listRef, String entry) {
+    private void addEntry(String listRef, String entry) {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
         if (set == null)
             return true;
@@ -733,6 +732,5 @@ class ContactsHelper {
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
         e.apply();
-		return true;
     }
 }
