@@ -26,6 +26,7 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
