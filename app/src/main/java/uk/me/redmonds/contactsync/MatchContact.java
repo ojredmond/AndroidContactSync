@@ -136,6 +136,7 @@ public class MatchContact extends Fragment implements
         childData.add(children);
 
         //add unmatched heading
+		Collections.sort(unmatchedItems);
         ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
         ((TextView)listView.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedItems.size()+")");
 		((ListView)listView.findViewById(R.id.unmatched_list)).setAdapter(new ArrayAdapter<String>(
@@ -177,6 +178,7 @@ public class MatchContact extends Fragment implements
         curGroupMap2.put(NAME, "Matched (" + children.size() + ")");
         curGroupMap2.put(DESCRIPTION, accountSelected + " " + accountOther);
         
+		Collections.sort(matchedItems);
         //add matched heading
         ((TextView)listView.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("Matched");
         ((TextView)listView.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedItems.size()+")");
