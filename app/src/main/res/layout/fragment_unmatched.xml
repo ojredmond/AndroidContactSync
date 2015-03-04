@@ -10,7 +10,7 @@
         android:layout_alignParentBottom="true"
         android:background="@drawable/button_border_top"
         android:orientation="horizontal"
-		>
+        >
 
         <Button
             android:id="@+id/delete_contact"
@@ -45,7 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#ccc"
+            android:background="@color/nav_background"
+            android:listSelector="@drawable/activatedbackground"
             android:choiceMode="singleChoice"
             android:visibility="gone"
             android:fastScrollEnabled="true"
@@ -63,7 +64,8 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="#ccc"
+            android:background="@color/nav_background"
+            android:listSelector="@drawable/activatedbackground"
             android:choiceMode="singleChoice"
             android:visibility="gone"
             android:fastScrollEnabled="true"
