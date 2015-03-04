@@ -34,6 +34,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import android.content.res.*;
+import java.io.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -442,7 +444,7 @@ class ContactsHelper {
             RawContacts.DisplayPhoto.CONTENT_DIRECTORY);
         try {
             AssetFileDescriptor fd =
-            getContentResolver().openAssetFileDescriptor(rawContactPhotoUri, "rw");
+            main.getContentResolver().openAssetFileDescriptor(rawContactPhotoUri, "rw");
             OutputStream os = fd.createOutputStream();
             os.write(photo);
             os.close();
@@ -515,8 +517,8 @@ class ContactsHelper {
                             ops.add(opBuilder.build());
                         }
                         for (StringMap item : adds) {
-                            if (type.equals(TYPE_PHOTO) {
-                                writeDisplayPhoto(id, item.getByteArray(PHOTO))
+                            if (type.equals(TYPE_PHOTO)) {
+                                writeDisplayPhoto(Long.decode(id), item.getByteArray(PHOTO));
                             } else {
                                 opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
                                         .withValue(Data.RAW_CONTACT_ID, id)
