@@ -568,8 +568,6 @@ class Match {
                 status.append(message);
             }
 
-            
-
             syncMatched = true;
 
             mainActivity.showResults();

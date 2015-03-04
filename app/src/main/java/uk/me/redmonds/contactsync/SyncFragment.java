@@ -20,7 +20,7 @@ public class SyncFragment extends ListFragment {
     private static final String FULL = "Full Sync";
     private static final String SYNC = "Sync Changes";
     private static final String DUP = "Duplicates";
-    private static final String UNMATCHED = "Unmatched from Account";
+    private static final String UNMATCHED = "Unmatched";
     private static final String PMATCHED = "Potential Matches";
     private static final String MATCHED = "Review matches";
     private static final String LAST = "View Last Results";

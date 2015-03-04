@@ -87,6 +87,7 @@ class ContactsHelper {
     private final HashMap<String, String> listMap = new HashMap<>();
     private final MainActivity main;
     private final HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = new HashMap<>();
+	private final static HashSet<String> emptySet = new HashSet<String>();
 
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
@@ -675,9 +676,9 @@ class ContactsHelper {
     }
 
     private void removeEntries() {
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
+        HashSet<String> set = new HashSet<String>(pref.getStringSet(listName, emptySet));
 
-        if (set == null || set.size() == 0)
+        if (set.size() == 0)
             return;
 
         for (String item : set) {
@@ -696,14 +697,14 @@ class ContactsHelper {
     }
 
     private void removeEntry(String listRef, String id) {
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
+        HashSet<String> set = new HashSet<String>(pref.getStringSet(listRef, emptySet));
 
-        if (set == null || set.size() == 0)
+        if (set.size() == 0)
             return;
         
         for (String item: set) {
             String itemArray[] = item.split(":");
-            ArrayList<String> idList = (ArrayList)Arrays.asList(itemArray[1].split(","));
+            ArrayList<String> idList = (ArrayList<String>)Arrays.asList(itemArray[1].split(","));
             if(idList.contains(id)) {
                 idList.remove(id);
                 set.remove(item);
@@ -726,8 +727,8 @@ class ContactsHelper {
     }
 
     private void removeEntry(String listRef, String ref1, String ref2) {
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
-        if (set == null)
+        HashSet<String> set = new HashSet<String>(pref.getStringSet(listRef, emptySet));
+        if (set.size() == 0)
             return;
         set.remove(ref2 + ":" + ref1);
         SharedPreferences.Editor e = pref.edit();
@@ -740,9 +741,8 @@ class ContactsHelper {
     }
 
     private void addEntry(String listRef, String entry) {
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
-        if (set == null)
-            set = new HashSet<>();
+        HashSet<String> set = new HashSet<String>(pref.getStringSet(listRef, emptySet));
+        
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);
