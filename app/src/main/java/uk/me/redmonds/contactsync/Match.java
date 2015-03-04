@@ -38,16 +38,16 @@ class Match {
     private MainActivity mainActivity = null;
     private TextView status = null;
     private String syncType = "";
-    private HashMap<String, Long> account1;
-    private HashMap<String, HashMap<String, String>> account1Other;
-    private HashMap<String, Long> account2;
-    private HashMap<String, HashMap<String, String>> account2Other;
-    private HashMap<String, HashMap<String, String>> dup1ListOther;
-    private HashMap<String, HashMap<String, String>> dup2ListOther;
-    private HashMap<String, Long> unmatched1;
-    private HashMap<String, Long> unmatched2;
-    private HashMap<String, HashMap<Long, Long>> matched1Other;
-    private HashMap<String, HashMap<Long, Long>> matched2Other;
+    //private HashMap<String, Long> account1;
+    //private HashMap<String, HashMap<String, String>> account1Other;
+    //private HashMap<String, Long> account2;
+    //private HashMap<String, HashMap<String, String>> account2Other;
+    //private HashMap<String, HashMap<String, String>> dup1ListOther;
+    //private HashMap<String, HashMap<String, String>> dup2ListOther;
+    //private HashMap<String, Long> unmatched1;
+    //private HashMap<String, Long> unmatched2;
+    //private HashMap<String, HashMap<Long, Long>> matched1Other;
+    //private HashMap<String, HashMap<Long, Long>> matched2Other;
     private String account1Name;
     private String account2Name;
     private Boolean syncMatched;
@@ -73,45 +73,63 @@ class Match {
         private Boolean syncStarted = false;
 
         private Boolean performMatchingP1(
-                HashMap<Long, String> unmatched1Id,
+				HashMap<String, HashMap<String, String>> accountOther,
+				HashMap<String, HashMap<String, String>> dupListOther,
+				HashMap<String, Long> unmatched,
+                HashMap<Long, String> unmatchedId,
                 HashMap<String, String> tempData,
                 String tempContactName,
                 Long tempContactId,
                 String type,
                 String data,
-                Boolean duplicate
+                Boolean duplicate,
+				Boolean secondPass,
+				HashMap<String, HashMap<Long, Long>> matched1Other,
+				HashMap<String, HashMap<Long, Long>> matched2Other
         ) {
-            if (dup1ListOther.containsKey(data)
-                    && dup1ListOther.get(data).get(type) != null) {
+            if (dupListOther.containsKey(data)
+                    && dupListOther.get(data).get(type) != null) {
                 //dupCount1++;
-                tempData.put(type, dup1ListOther.get(data).get(type)
+                tempData.put(type, dupListOther.get(data).get(type)
                         + "," + tempContactId.toString());
-                dup1ListOther.put(data, tempData);
+                dupListOther.put(data, tempData);
                 duplicate = true;
-            } else if (account1Other.containsKey(data) &&
-                    account1Other.get(data).get(type) != null
-					&& !account1Other.get(data).get(type).equals(tempContactId.toString())) {
+            } else if (accountOther.containsKey(data) &&
+                    accountOther.get(data).get(type) != null
+					&& !accountOther.get(data).get(type).equals(tempContactId.toString())) {
                 //dupCount1++;
-                tempData.put(type, account1Other.get(data).get(type)
+                tempData.put(type, accountOther.get(data).get(type)
                         + "," + tempContactId.toString());
-                dup1ListOther.put(data, tempData);
+                dupListOther.put(data, tempData);
 				//remove from unmatched
-			    Long removeId = Long.decode(account1Other.get(data).get(type));
-                String removeName = unmatched1Id.remove(removeId);
-			    unmatched1.remove(removeName);
-			   //unmatchedCount1--;
+			    Long removeId = Long.decode(accountOther.get(data).get(type));
+                String removeName = unmatchedId.remove(removeId);
+			    unmatched.remove(removeName);
+			    //unmatchedCount1--;
+			    //remove from matched
+			    if (secondPass && matched2Other.containsKey(type) && matched2Other.get(type).containsKey(tempContactId)) {
+				    Long OtherId = matched2Other.get(type).get(tempContactId);
+				    matched2Other.get(type).remove(tempContactId);
+				    matched1Other.get(type).remove(OtherId);
+			    }
                 duplicate = true;
                 
             }
 
             //add all non-duplicate data to account variable
-            account1Other.put(data, tempData);
+            accountOther.put(data, tempData);
             return duplicate;
         }
 
         private Boolean[] performMatchingP2(
+				HashMap<String, HashMap<String, String>> account1Other,
+				HashMap<String, HashMap<String, String>> account2Other,
+				HashMap<String, HashMap<String, String>> dup2ListOther,
                 HashMap<Long, String> unmatched1Id,
 			    HashMap<Long, String> unmatched2Id,
+				HashMap<String, Long> unmatched2,
+				HashMap<String, HashMap<Long, Long>> matched1Other,
+				HashMap<String, HashMap<Long, Long>> matched2Other,
                 HashMap<String, String> tempData,
                 String tempContactName,
                 Long tempContactId,
@@ -120,35 +138,15 @@ class Match {
                 Boolean duplicate,
                 Boolean matched
         ) {
-
-            if (dup2ListOther.containsKey(data)
-                    && dup2ListOther.get(data).get(type) != null) {
-                //dupCount2++;
-                tempData.put(type, dup2ListOther.get(data).get(type)
-                        + "," + tempContactId.toString());
-                dup2ListOther.put(data, tempData);
-                duplicate = true;
-            } else if (account2Other.containsKey(data) &&
-                    account2Other.get(data).get(type) != null
-					 && !account2Other.get(data).get(type).equals(tempContactId.toString())) {
-                //dupCount2++;
-                tempData.put(type, account2Other.get(data).get(type)
-                        + "," + tempContactId.toString());
-                dup2ListOther.put(data, tempData);
-                //remove from unmatched
-                Long removeId = Long.decode(account2Other.get(data).get(type));
-                String removeName = unmatched2Id.remove(removeId);
-			    unmatched2.remove(removeName);
-				//unmatchedCount2--;
-                //remove from matched
-                if (matched2Other.containsKey(type) && matched2Other.get(type).containsKey(tempContactId)) {
-                    Long OtherId = matched2Other.get(type).get(tempContactId);
-                    matched2Other.get(type).remove(tempContactId);
-                    matched1Other.get(type).remove(OtherId);
-                }
-                duplicate = true;
-                
-            } else if (account1Other.containsKey(data)
+			duplicate = performMatchingP1(
+				account2Other,dup2ListOther,
+				unmatched2, unmatched2Id,
+				tempData, tempContactName,
+				tempContactId,type, data,
+				duplicate, true, 
+				matched1Other, matched2Other);
+			if(!duplicate) {
+            if (account1Other.containsKey(data)
                     && account1Other.get(data).get(type) != null
                     && !account1Other.get(data).get(type).contains(",")) {
                 Long account1id = Long.decode(account1Other.get(data).get(type));
@@ -172,6 +170,7 @@ class Match {
                     matched = true;
                 }
             }
+			}
 
             //add all data to account info
             account2Other.put(data, tempData);
@@ -185,18 +184,18 @@ class Match {
             Long tempContactId;
             HashMap<String, String> tempData;
 
-            account1 = new HashMap<>();
-            account2 = new HashMap<>();
-            unmatched1 = new HashMap<>();
+            HashMap<String, Long> account1 = new HashMap<>();
+            HashMap<String, Long> account2 = new HashMap<>();
+            HashMap<String, Long> unmatched1 = new HashMap<>();
             HashMap<Long, String> unmatched1Id = new HashMap<>();
-            unmatched2 = new HashMap<>();
+            HashMap<String, Long> unmatched2 = new HashMap<>();
 			HashMap<Long, String> unmatched2Id = new HashMap<>();
-            account1Other = new HashMap<>();
-            account2Other = new HashMap<>();
-            dup1ListOther = new HashMap<>();
-            dup2ListOther = new HashMap<>();
-            matched1Other = new HashMap<>();
-            matched2Other = new HashMap<>();
+            HashMap<String, HashMap<String, String>> account1Other = new HashMap<>();
+            HashMap<String, HashMap<String, String>> account2Other = new HashMap<>();
+            HashMap<String, HashMap<String, String>> dup1ListOther = new HashMap<>();
+            HashMap<String, HashMap<String, String>> dup2ListOther = new HashMap<>();
+            HashMap<String, HashMap<Long, Long>> matched1Other = new HashMap<>();
+            HashMap<String, HashMap<Long, Long>> matched2Other = new HashMap<>();
 
 
             Cursor cursor;
@@ -268,10 +267,13 @@ class Match {
                                         tempData.put(type, cItems.getString(0));
 
                                         duplicate = performMatchingP1(
+												account1Other,dup1ListOther,
+												unmatched1,
                                                 unmatched1Id, tempData,
                                                 tempContactName, tempContactId,
                                                 type, data,
-                                                duplicate
+                                                duplicate, false,
+												null, null
                                         );
                                     }
                                 }
@@ -283,10 +285,13 @@ class Match {
                             tempData.put(ContactsHelper.TYPE_NAME, tempContactId.toString());
 
                             duplicate = performMatchingP1(
+									account1Other, dup1ListOther,
+									unmatched1,
                                     unmatched1Id, tempData,
                                     tempContactName, tempContactId,
                                     ContactsHelper.TYPE_NAME, tempContactName,
-                                    duplicate
+									duplicate, false,
+									null, null
                             );
                         }
                         //store all contacts
@@ -349,7 +354,11 @@ class Match {
                                         tempData.put(type, cItems.getString(0));
 
                                         Boolean returnValues[] = performMatchingP2(
+												account1Other, account2Other,
+												dup2ListOther,
                                                 unmatched1Id, unmatched2Id,
+												unmatched2,
+												matched1Other, matched2Other,
 												tempData,
                                                 tempContactName, tempContactId,
                                                 type, data,
@@ -368,7 +377,11 @@ class Match {
                             tempData.put(ContactsHelper.TYPE_NAME, tempContactId.toString());
 
                             Boolean returnValues[] = performMatchingP2(
+									account1Other,account2Other,
+									dup2ListOther,
                                     unmatched1Id, unmatched2Id,
+									unmatched2,
+									matched1Other, matched2Other,
 									tempData,
                                     tempContactName, tempContactId,
                                     ContactsHelper.TYPE_NAME, tempContactName,
@@ -430,6 +443,107 @@ class Match {
             message += "Matched: " + String.valueOf(matches) + "\n";
             message += "Unmatched from account 1: " + String.valueOf(unmatchedCount1) + "\n";
             message += "Unmatched from account 2: " + String.valueOf(unmatchedCount2) + "\n";
+			
+			SharedPreferences.Editor results = mainActivity.getSharedPreferences("match",Context.MODE_WORLD_READABLE).edit();
+
+            //store the number of contacts for account1 so that can display results even if no contacts
+            results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
+            results.apply();
+
+            HashMap<String, HashSet<String>> dup1Name = new HashMap<>();
+            for (String mime : MIME_TYPE_LIST)
+                dup1Name.put(mime, new HashSet<String>());
+            for (Map.Entry<String, HashMap<String, String>> e : dup1ListOther.entrySet()) {
+                for (Map.Entry<String, String> v : e.getValue().entrySet()) {
+                    dup1Name.get(v.getKey()).add(e.getKey() + ":" + v.getValue());
+                }
+            }
+            for (String mime : MIME_TYPE_LIST)
+                results.putStringSet(DUPKEY + mime + account1Name, dup1Name.get(mime));
+            results.apply();
+
+            HashSet<String> account1Set = new HashSet<>();
+            for (Map.Entry<String, Long> e : account1.entrySet()) {
+                account1Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
+            }
+            results.putStringSet(ACCOUNTKEY + account1Name, account1Set);
+            results.apply();
+
+            if (!account2Name.equals(account1Name)) {
+                //store the number of contacts for account2 so that can display results even if no contacts
+                results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
+                results.apply();
+
+                HashMap<String, HashSet<String>> dup2Name = new HashMap<>();
+                for (String mime : MIME_TYPE_LIST)
+                    dup2Name.put(mime, new HashSet<String>());
+                for (Map.Entry<String, HashMap<String, String>> e : dup2ListOther.entrySet()) {
+                    for (Map.Entry<String, String> v : e.getValue().entrySet()) {
+                        dup2Name.get(v.getKey()).add(e.getKey() + ":" + v.getValue());
+                    }
+                }
+                for (String mime : MIME_TYPE_LIST)
+                    results.putStringSet(DUPKEY + mime + account2Name, dup2Name.get(mime));
+                results.apply();
+
+
+                HashSet<String> unmatched1Name = new HashSet<>();
+                for (Map.Entry<String, Long> e : unmatched1.entrySet()) {
+                    unmatched1Name.add(e.getKey() + ":" + e.getValue());
+                }
+                results.putStringSet(UNMATCHNAMEKEY + account1Name + ":" + account2Name, unmatched1Name);
+
+                results.apply();
+
+                HashSet<String> unmatched2Name = new HashSet<>();
+                for (Map.Entry<String, Long> e : unmatched2.entrySet()) {
+                    unmatched2Name.add(e.getKey() + ":" + e.getValue());
+                }
+                results.putStringSet(UNMATCHNAMEKEY + account2Name + ":" + account1Name, unmatched2Name);
+
+                results.apply();
+
+                HashMap<String, HashSet<String>> matched1Name = new HashMap<>();
+                for (String mime : MIME_TYPE_LIST)
+                    matched1Name.put(mime, new HashSet<String>());
+                for (Map.Entry<String, HashMap<Long, Long>> e : matched1Other.entrySet()) {
+                    for (Map.Entry<Long, Long> v : e.getValue().entrySet()) {
+                        matched1Name.get(e.getKey()).add(v.getKey() + ":" + v.getValue());
+                    }
+                }
+                for (String mime : MIME_TYPE_LIST)
+                    if (mime.equals(ContactsHelper.TYPE_NAME))
+                        results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name.get(mime));
+                    else
+                        results.putStringSet(MATCHEDKEY + mime + account1Name + ":" + account2Name, matched1Name.get(mime));
+                results.apply();
+
+                HashMap<String, HashSet<String>> matched2Name = new HashMap<>();
+                for (String mime : MIME_TYPE_LIST)
+                    matched2Name.put(mime, new HashSet<String>());
+                for (Map.Entry<String, HashMap<Long, Long>> e : matched2Other.entrySet()) {
+                    for (Map.Entry<Long, Long> v : e.getValue().entrySet()) {
+                        matched2Name.get(e.getKey()).add(v.getKey() + ":" + v.getValue());
+                    }
+                }
+                for (String mime : MIME_TYPE_LIST)
+                    if (mime.equals(ContactsHelper.TYPE_NAME))
+                        results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name.get(mime));
+                    else
+                        results.putStringSet(MATCHEDKEY + mime + account2Name + ":" + account1Name, matched2Name.get(mime));
+                results.apply();
+
+                HashSet<String> account2Set = new HashSet<>();
+                for (Map.Entry<String, Long> e : account2.entrySet()) {
+                    account2Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
+                }
+                results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
+                results.apply();
+            }
+
+            results.putBoolean(SYNCMATCHED, true);
+            results.apply();
+			
             return message;
         }
 
@@ -454,105 +568,7 @@ class Match {
                 status.append(message);
             }
 
-            SharedPreferences.Editor results = mainActivity.getSharedPreferences("match",Context.MODE_WORLD_READABLE).edit();
-
-            //store the number of contacts for account1 so that can display results even if no contacts
-            results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
-            results.apply();
-
-            HashMap<String, HashSet<String>> dup1Name = new HashMap<>();
-            for (String type : MIME_TYPE_LIST)
-                dup1Name.put(type, new HashSet<String>());
-            for (Map.Entry<String, HashMap<String, String>> e : dup1ListOther.entrySet()) {
-                for (Map.Entry<String, String> v : e.getValue().entrySet()) {
-                    dup1Name.get(v.getKey()).add(e.getKey() + ":" + v.getValue());
-                }
-            }
-            for (String type : MIME_TYPE_LIST)
-                results.putStringSet(DUPKEY + type + account1Name, dup1Name.get(type));
-            results.apply();
-
-            HashSet<String> account1Set = new HashSet<>();
-            for (Map.Entry<String, Long> e : account1.entrySet()) {
-                account1Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
-            }
-            results.putStringSet(ACCOUNTKEY + account1Name, account1Set);
-            results.apply();
-
-            if (!account2Name.equals(account1Name)) {
-                //store the number of contacts for account2 so that can display results even if no contacts
-                results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
-                results.apply();
-
-                HashMap<String, HashSet<String>> dup2Name = new HashMap<>();
-                for (String type : MIME_TYPE_LIST)
-                    dup2Name.put(type, new HashSet<String>());
-                for (Map.Entry<String, HashMap<String, String>> e : dup2ListOther.entrySet()) {
-                    for (Map.Entry<String, String> v : e.getValue().entrySet()) {
-                        dup2Name.get(v.getKey()).add(e.getKey() + ":" + v.getValue());
-                    }
-                }
-                for (String type : MIME_TYPE_LIST)
-                    results.putStringSet(DUPKEY + type + account2Name, dup2Name.get(type));
-                results.apply();
-
-
-                HashSet<String> unmatched1Name = new HashSet<>();
-                for (Map.Entry<String, Long> e : unmatched1.entrySet()) {
-                    unmatched1Name.add(e.getKey() + ":" + e.getValue());
-                }
-                results.putStringSet(UNMATCHNAMEKEY + account1Name + ":" + account2Name, unmatched1Name);
-
-                results.apply();
-
-                HashSet<String> unmatched2Name = new HashSet<>();
-                for (Map.Entry<String, Long> e : unmatched2.entrySet()) {
-                    unmatched2Name.add(e.getKey() + ":" + e.getValue());
-                }
-                results.putStringSet(UNMATCHNAMEKEY + account2Name + ":" + account1Name, unmatched2Name);
-
-                results.apply();
-
-                HashMap<String, HashSet<String>> matched1Name = new HashMap<>();
-                for (String type : MIME_TYPE_LIST)
-                    matched1Name.put(type, new HashSet<String>());
-                for (Map.Entry<String, HashMap<Long, Long>> e : matched1Other.entrySet()) {
-                    for (Map.Entry<Long, Long> v : e.getValue().entrySet()) {
-                        matched1Name.get(e.getKey()).add(v.getKey() + ":" + v.getValue());
-                    }
-                }
-                for (String type : MIME_TYPE_LIST)
-                    if (type.equals(ContactsHelper.TYPE_NAME))
-                        results.putStringSet(MATCHEDKEY + account1Name + ":" + account2Name, matched1Name.get(type));
-                    else
-                        results.putStringSet(MATCHEDKEY + type + account1Name + ":" + account2Name, matched1Name.get(type));
-                results.apply();
-
-                HashMap<String, HashSet<String>> matched2Name = new HashMap<>();
-                for (String type : MIME_TYPE_LIST)
-                    matched2Name.put(type, new HashSet<String>());
-                for (Map.Entry<String, HashMap<Long, Long>> e : matched2Other.entrySet()) {
-                    for (Map.Entry<Long, Long> v : e.getValue().entrySet()) {
-                        matched2Name.get(e.getKey()).add(v.getKey() + ":" + v.getValue());
-                    }
-                }
-                for (String type : MIME_TYPE_LIST)
-                    if (type.equals(ContactsHelper.TYPE_NAME))
-                        results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name.get(type));
-                    else
-                        results.putStringSet(MATCHEDKEY + type + account2Name + ":" + account1Name, matched2Name.get(type));
-                results.apply();
-
-                HashSet<String> account2Set = new HashSet<>();
-                for (Map.Entry<String, Long> e : account2.entrySet()) {
-                    account2Set.add(String.valueOf(e.getValue()) + ":" + e.getKey());
-                }
-                results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
-                results.apply();
-            }
-
-            results.putBoolean(SYNCMATCHED, true);
-            results.apply();
+            
 
             syncMatched = true;
 
