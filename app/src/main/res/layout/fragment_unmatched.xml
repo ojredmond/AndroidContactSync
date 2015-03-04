@@ -40,18 +40,34 @@
             layout="@layout/list_border_none_2"
             />
         
-        <ListView
-            android:id="@+id/unmatched_list"
-            android:layout_width="match_parent"
+        <LinearLayout 
+            android:layout_width="match_parent" 
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/nav_background"
-            android:listSelector="@drawable/activatedbackground"
-            android:choiceMode="singleChoice"
-            android:visibility="gone"
-            android:fastScrollEnabled="true"
-            />
-    
+            >
+            <ListView
+                android:id="@+id/unmatched_list"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/nav_background"
+                android:listSelector="@drawable/activatedbackground"
+                android:choiceMode="singleChoice"
+                android:visibility="gone"
+                android:fastScrollEnabled="true"
+                />
+                
+            <LinearLayout
+                android:id="@+id/sideIndex"
+                android:layout_width="40dip"
+                android:layout_height="match_parent"
+                android:background="#FFF"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                />
+
+        </LinearLayout>
+
         <include android:id="@+id/matched_group"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
