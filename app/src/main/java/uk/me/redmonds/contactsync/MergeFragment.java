@@ -33,17 +33,17 @@ public class MergeFragment extends Fragment {
     private String listItem;
     private ViewGroup layoutContainer;
     private String listType;
-	private String selectedName;
+    private String selectedName;
     private final OnClickListener ButtonClick = new OnClickListener() {
 
         public void onClick(View p1) {
             switch (p1.getId()) {
                 case R.id.contact_confirm:
-					if(contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
-						Toast.makeText(main, "Needs to be only 1 name", Toast.LENGTH_LONG).show();
-					} else if(contact.get(ContactsHelper.TYPE_PHOTO).size() != 1) {
-						Toast.makeText(main, "Multiple contact photos not supported"+contact.get(ContactsHelper.TYPE_PHOTO).size(), Toast.LENGTH_LONG).show();
-					} else if (cObject.saveMergedContact(contact)) {
+                    if(contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
+                        Toast.makeText(main, "Needs to be only 1 name", Toast.LENGTH_LONG).show();
+                    } else if(contact.get(ContactsHelper.TYPE_PHOTO).size() != 1) {
+                        Toast.makeText(main, "Multiple contact photos not supported"+contact.get(ContactsHelper.TYPE_PHOTO).size(), Toast.LENGTH_LONG).show();
+                    } else if (cObject.saveMergedContact(contact)) {
                         main.Compare(listType, listItem, null);
                     } else {
                         Toast.makeText(main, "Save Failed", Toast.LENGTH_LONG).show();
@@ -57,10 +57,10 @@ public class MergeFragment extends Fragment {
                     String type = (String) row.getTag();
                     Integer pos = layout.indexOfChild(row);
                     StringMap item = (StringMap) p1.getTag();
-					
-					
+                    
+                    
                     if (contact.get(type).size() == 1 &&
-						type.equals(ContactsHelper.TYPE_NAME)) {
+                        type.equals(ContactsHelper.TYPE_NAME)) {
                         Toast.makeText(main, "A name is required!", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -91,22 +91,22 @@ public class MergeFragment extends Fragment {
                                 ((ViewGroup) rowOther).removeView(rowOther.findViewById(R.id.delete_button));
                         }
                     }
-					if(type.equals(ContactsHelper.TYPE_PHOTO)) {
-						row.removeView(row.findViewById(R.id.delete_button));
-						ImageView photo = (ImageView)row.findViewById(R.id.value);
-						photo.setImageBitmap(null);
-						row.setTag(null);
-						ViewGroup photoLayout = (ViewGroup)row.getParent();
-						int posPhoto = photoLayout.indexOfChild(row);
-						
-						if (posPhoto == 0 && photoLayout.getChildAt(1).getTag() == null) {
-							layout.removeView(photoLayout);
-						} else if (posPhoto == 1 && photoLayout.getChildAt(0).getTag() == null) {
-							layout.removeView(photoLayout);
-						}
-					} else {
-						layout.removeView(row);
-					}
+                    if(type.equals(ContactsHelper.TYPE_PHOTO)) {
+                        row.removeView(row.findViewById(R.id.delete_button));
+                        ImageView photo = (ImageView)row.findViewById(R.id.value);
+                        photo.setImageBitmap(null);
+                        row.setTag(null);
+                        ViewGroup photoLayout = (ViewGroup)row.getParent();
+                        int posPhoto = photoLayout.indexOfChild(row);
+                        
+                        if (posPhoto == 0 && photoLayout.getChildAt(1).getTag() == null) {
+                            layout.removeView(photoLayout);
+                        } else if (posPhoto == 1 && photoLayout.getChildAt(0).getTag() == null) {
+                            layout.removeView(photoLayout);
+                        }
+                    } else {
+                        layout.removeView(row);
+                    }
             }
         }
     };
@@ -118,7 +118,7 @@ public class MergeFragment extends Fragment {
         Bundle args = getArguments();
         listType = args.getString("listType");
         listItem = args.getString("listItem");
-		selectedName = args.getString("selected");
+        selectedName = args.getString("selected");
         String[] ids = args.getStringArray("ids");
         main = (MainActivity) this.getActivity();
 
@@ -150,73 +150,73 @@ public class MergeFragment extends Fragment {
     }
 
     void displayMergedContact() {
-		LinearLayout photoLayout = null;
-		LinearLayout.LayoutParams itemParams = 
+        LinearLayout photoLayout = null;
+        LinearLayout.LayoutParams itemParams = 
             new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 
-									  LinearLayout.LayoutParams.WRAP_CONTENT,1);
-		
-		LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 
-																			   LinearLayout.LayoutParams.WRAP_CONTENT);
+                                      LinearLayout.LayoutParams.WRAP_CONTENT,1);
+        
+        LinearLayout.LayoutParams linearParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 
+                                                                               LinearLayout.LayoutParams.WRAP_CONTENT);
         for (String type : ContactsHelper.TYPES) {
             if (contact.get(type) != null
                     && contact.get(type).size() > 0) {
                 Boolean first = true;
-				
+                
                 for (StringMap item : contact.get(type)) {
-					if (photoLayout != null &&
-							!type.equals(ContactsHelper.TYPE_PHOTO) 
-							&& photoLayout.getChildCount() > 0) {
-						if((photoLayout.getChildCount() & 1) == 1) {
-							View photoView = LayoutInflater.from(main)
-									.inflate(R.layout.thumb, layoutContainer, false);
-							ImageView photo = (ImageView)photoView.findViewById(R.id.value);
-							photo.setTag(null);
-							//photo.setImageResource(android.R.drawable.ic_delete);
-							photo.setLayoutParams(itemParams);
-							photoLayout.addView(photoView);
-						}
-						layout.addView(photoLayout,linearParams);
-						photoLayout = null;
-					}
-					if (item.get("value") == null && !type.equals(ContactsHelper.TYPE_PHOTO))
-						break;
-						if(first && !type.equals(ContactsHelper.TYPE_PHOTO)) {
-						TextView contactHeading = (TextView) LayoutInflater.from(main)
-							.inflate(R.layout.list_heading, layoutContainer, false);
-						contactHeading.setText(ContactsHelper.getGroupName(type));
-						contactHeading.setTag("Heading");
-						layout.addView(contactHeading);
-						first = false;
-					}
+                    if (photoLayout != null &&
+                            !type.equals(ContactsHelper.TYPE_PHOTO) 
+                            && photoLayout.getChildCount() > 0) {
+                        if((photoLayout.getChildCount() & 1) == 1) {
+                            View photoView = LayoutInflater.from(main)
+                                    .inflate(R.layout.thumb, layoutContainer, false);
+                            ImageView photo = (ImageView)photoView.findViewById(R.id.value);
+                            photo.setTag(null);
+                            //photo.setImageResource(android.R.drawable.ic_delete);
+                            photo.setLayoutParams(itemParams);
+                            photoLayout.addView(photoView);
+                        }
+                        layout.addView(photoLayout,linearParams);
+                        photoLayout = null;
+                    }
+                    if (item.get("value") == null && !type.equals(ContactsHelper.TYPE_PHOTO))
+                        break;
+                        if(first && !type.equals(ContactsHelper.TYPE_PHOTO)) {
+                        TextView contactHeading = (TextView) LayoutInflater.from(main)
+                            .inflate(R.layout.list_heading, layoutContainer, false);
+                        contactHeading.setText(ContactsHelper.getGroupName(type));
+                        contactHeading.setTag("Heading");
+                        layout.addView(contactHeading);
+                        first = false;
+                    }
                     TextView contactValue;
                     FrameLayout deleteLayout = new FrameLayout(main);
-					contactValue = null;
-					
-					if (type.equals(ContactsHelper.TYPE_PHOTO)) {
-						byte[] photoData = item.getByteArray(ContactsHelper.PHOTO);
-						if(photoData != null) {
-							View photoView = LayoutInflater.from(main)
-								.inflate(R.layout.thumb, layoutContainer, false);
-							ImageView photo = (ImageView)photoView.findViewById(R.id.value);
-							photo.setTag(item);
-							Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData,0,photoData.length);
-							photo.setImageBitmap(photoBitmap);
-							deleteLayout.addView(photoView);
-							deleteLayout.setLayoutParams(itemParams);
-							
-							if(photoLayout != null && 
-								(photoLayout.getChildCount()&1)==0) {
-									layout.addView(photoLayout);
-									photoLayout = null;
-							}
-							if(photoLayout == null) {
-								photoLayout = new LinearLayout(main);
-								photoLayout.setOrientation(LinearLayout.HORIZONTAL);
-							}
-							photoLayout.addView(deleteLayout);
-							
-						}
-					} else if (item.get("label") == null) {
+                    contactValue = null;
+                    
+                    if (type.equals(ContactsHelper.TYPE_PHOTO)) {
+                        byte[] photoData = item.getByteArray(ContactsHelper.PHOTO);
+                        if(photoData != null) {
+                            View photoView = LayoutInflater.from(main)
+                                .inflate(R.layout.thumb, layoutContainer, false);
+                            ImageView photo = (ImageView)photoView.findViewById(R.id.value);
+                            photo.setTag(item);
+                            Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData,0,photoData.length);
+                            photo.setImageBitmap(photoBitmap);
+                            deleteLayout.addView(photoView);
+                            deleteLayout.setLayoutParams(itemParams);
+                            
+                            if(photoLayout != null && 
+                                (photoLayout.getChildCount()&1)==0) {
+                                    layout.addView(photoLayout);
+                                    photoLayout = null;
+                            }
+                            if(photoLayout == null) {
+                                photoLayout = new LinearLayout(main);
+                                photoLayout.setOrientation(LinearLayout.HORIZONTAL);
+                            }
+                            photoLayout.addView(deleteLayout);
+                            
+                        }
+                    } else if (item.get("label") == null) {
                         contactValue = (TextView) LayoutInflater.from(main)
                                 .inflate(R.layout.list_row_1, layoutContainer, false);
                         contactValue.setText(item.get("value"));
@@ -235,18 +235,18 @@ public class MergeFragment extends Fragment {
                     }
 
                     // listener to delete button
-					ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
+                    ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
                             .inflate(R.layout.delete_button, layoutContainer, false);
                     deleteButton.setOnClickListener(ButtonClick);
-					deleteButton.setTag(item);
-					
-					FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-					params.gravity = Gravity.END;
-					
-					deleteLayout.addView(deleteButton,params);
+                    deleteButton.setTag(item);
+                    
+                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+                    params.gravity = Gravity.END;
+                    
+                    deleteLayout.addView(deleteButton,params);
 
-					deleteLayout.setTag(type);
-						
+                    deleteLayout.setTag(type);
+                        
                     //if only 1 name hide delete button
                     if (type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1) {
                         assert contactValue != null;
