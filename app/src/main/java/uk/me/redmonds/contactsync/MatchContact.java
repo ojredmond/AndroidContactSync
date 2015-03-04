@@ -146,11 +146,16 @@ public class MatchContact extends Fragment
         //add unmatched heading
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedCount+")");
-        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new SectionIndexingArrayAdapter <String>(
+        /*((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new SectionIndexingArrayAdapter <String>(
                                                                             main,
                                                                             R.layout.list_row_1,
                                                                             R.id.value,
+                                                                            unmatchedItems));*/
+        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new AlphabetListAdapter (
+                                                                            main,
+                                                                            R.id.sideIndex,
                                                                             unmatchedItems));
+
         view.findViewById(R.id.unmatched_group).setOnClickListener(this);
         ((ListView)view.findViewById(R.id.unmatched_list)).setOnItemClickListener(this);
         mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
