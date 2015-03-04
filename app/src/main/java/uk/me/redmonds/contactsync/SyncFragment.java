@@ -44,7 +44,7 @@ public class SyncFragment extends ListFragment {
 
         main = (MainActivity) this.getActivity();
 
-        pref = main.getSharedPreferences("match",Context.MODE_WORLD_READABLE);
+        pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE);
         settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);

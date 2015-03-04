@@ -28,6 +28,7 @@ class Match {
     public static final String MATCHEDKEY = "matched:";
     public static final String ACCOUNTKEY = "account:";
     public static final String NUMCONTACTS = "count:";
+	public static final String PREFKEY = "uk.me.redmonds.contactsync-match";
     public static final String MIME_TYPE_LIST[] = {
             StructuredName.CONTENT_ITEM_TYPE,
             Phone.CONTENT_ITEM_TYPE,
@@ -210,7 +211,7 @@ class Match {
             int unmatchedCount2 = 0;
 
             // get sync status
-            SharedPreferences status = mainActivity.getSharedPreferences("match",Context.MODE_PRIVATE);
+            SharedPreferences status = mainActivity.getSharedPreferences(PREFKEY,Context.MODE_PRIVATE);
             syncMatched = status.getBoolean(SYNCMATCHED, false);
 
             if (syncMatched) {
@@ -444,7 +445,7 @@ class Match {
             message += "Unmatched from account 1: " + String.valueOf(unmatchedCount1) + "\n";
             message += "Unmatched from account 2: " + String.valueOf(unmatchedCount2) + "\n";
 			
-			SharedPreferences.Editor results = mainActivity.getSharedPreferences("match",Context.MODE_WORLD_READABLE).edit();
+			SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREFKEY,Context.MODE_WORLD_READABLE).edit();
 
             //store the number of contacts for account1 so that can display results even if no contacts
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);

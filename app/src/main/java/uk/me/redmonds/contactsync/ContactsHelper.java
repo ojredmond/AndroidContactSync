@@ -94,7 +94,7 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = ids;
-        pref = main.getSharedPreferences("match",Context.MODE_WORLD_READABLE);
+        pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE);
         createContacts();
    }
 
@@ -105,7 +105,7 @@ class ContactsHelper {
         list = new HashSet<>();
 		for (String id:ids)
 			list.add(id);
-        pref = main.getSharedPreferences("match",Context.MODE_WORLD_READABLE);
+        pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE);
         createContacts();
     }
 

@@ -113,7 +113,7 @@ public class MatchContact extends Fragment
                 return s1.compareToIgnoreCase(s2);
             }
         };
-        SharedPreferences pref = main.getSharedPreferences("match",Context.MODE_PRIVATE);
+        SharedPreferences pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
         int unmatchedCount = 0;
