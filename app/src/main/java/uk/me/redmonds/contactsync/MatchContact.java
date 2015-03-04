@@ -34,6 +34,20 @@ public class MatchContact extends Fragment
     private String listItem;
     private String name;
 
+    class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            sideIndexX = sideIndexX - distanceX;
+            sideIndexY = sideIndexY - distanceY;
+
+            if (sideIndexX >= 0 && sideIndexY >= 0) {
+                displayListItem();
+            }
+
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+    }
+
     @Override
     public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
     {
@@ -137,8 +151,9 @@ public class MatchContact extends Fragment
                                                                             R.layout.list_row_1,
                                                                             R.id.value,
                                                                             unmatchedItems));
-        view.findViewById(R.id.unmatched_group).setOnClickListener(this);            
-        ((ListView)view.findViewById(R.id.unmatched_list)).setOnItemClickListener(this);            
+        view.findViewById(R.id.unmatched_group).setOnClickListener(this);
+        ((ListView)view.findViewById(R.id.unmatched_list)).setOnItemClickListener(this);
+        mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
