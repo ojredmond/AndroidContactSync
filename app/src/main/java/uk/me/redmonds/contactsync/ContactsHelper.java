@@ -214,7 +214,8 @@ class ContactsHelper {
                 if (!c.isNull(1) && !c.isNull(2) 
                         && (!c.getString(2).equals(TYPE_GROUP) || groupInc)
                         && (!c.getString(2).equals(TYPE_PHOTO) || photoInc)
-                        && ((c.getString(2).equals(TYPE_PHOTO) && !c.isNull(CONTACT_FIELDS.length + 3)) || !c.getString(2).equals(TYPE_PHOTO)) {
+                        && ((c.getString(2).equals(TYPE_PHOTO) && !c.isNull(CONTACT_FIELDS.length + 3)) || !c.getString(2).equals(TYPE_PHOTO))
+                        ) {
                     
                     if (!contact.containsKey(c.getString(2)))
                         contact.put(c.getString(2), new HashSet<StringMap>());
