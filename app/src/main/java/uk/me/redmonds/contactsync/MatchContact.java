@@ -132,7 +132,7 @@ public class MatchContact extends Fragment
         //add unmatched heading
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedCount+")");
-        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new ArrayAdapter<String>(
+        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new SectionIndexingArrayAdapter <String>(
                                                                             main,
                                                                             R.layout.list_row_1,
                                                                             R.id.value,
