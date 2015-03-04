@@ -42,7 +42,7 @@ public class MergeFragment extends Fragment {
                     if(contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
                         Toast.makeText(main, "Needs to be only 1 name", Toast.LENGTH_LONG).show();
                     } else if(contact.get(ContactsHelper.TYPE_PHOTO).size() != 1) {
-                        Toast.makeText(main, "Multiple contact photos not supported"+contact.get(ContactsHelper.TYPE_PHOTO).size(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(main, "Multiple contact photos not supported", Toast.LENGTH_LONG).show();
                     } else if (cObject.saveMergedContact(contact)) {
                         main.Compare(listType, listItem, null);
                     } else {
