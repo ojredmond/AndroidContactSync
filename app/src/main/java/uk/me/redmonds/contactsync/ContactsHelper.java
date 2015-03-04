@@ -87,7 +87,7 @@ class ContactsHelper {
     private final HashMap<String, String> listMap = new HashMap<>();
     private final MainActivity main;
     private final HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = new HashMap<>();
-	private final static HashSet<String> emptySet = new HashSet<String>();
+    private final static HashSet<String> emptySet = new HashSet<String>();
 
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
@@ -103,8 +103,8 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = new HashSet<>();
-		for (String id:ids)
-			list.add(id);
+        for (String id:ids)
+            list.add(id);
         pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE);
         createContacts();
     }
@@ -405,7 +405,7 @@ class ContactsHelper {
                 
             
         }
-		pref.edit().commit();
+        pref.edit().commit();
 
         if (ops != null) {
             try {
@@ -434,6 +434,22 @@ class ContactsHelper {
         }
         
         return contact;
+    }
+
+    private void writeDisplayPhoto(long rawContactId, byte[] photo) {
+        Uri rawContactPhotoUri = Uri.withAppendedPath(
+            ContentUris.withAppendedId(RawContacts.CONTENT_URI, rawContactId),
+            RawContacts.DisplayPhoto.CONTENT_DIRECTORY);
+        try {
+            AssetFileDescriptor fd =
+            getContentResolver().openAssetFileDescriptor(rawContactPhotoUri, "rw");
+            OutputStream os = fd.createOutputStream();
+            os.write(photo);
+            os.close();
+            fd.close();
+        } catch (IOException e) {
+            // Handle error cases.
+        }
     }
 
     public Boolean saveMergedContact (HashMap<String,HashSet<StringMap>> mergedContact) {
@@ -499,15 +515,19 @@ class ContactsHelper {
                             ops.add(opBuilder.build());
                         }
                         for (StringMap item : adds) {
-                            opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
-                                    .withValue(Data.RAW_CONTACT_ID, id)
-                                    .withValue(Data.MIMETYPE, type);
-                            for(String field: CONTACT_FIELDS) {
-                                if(item.getObject(field) != null)
-                                    opBuilder.withValue(field, item.getObject(field));
+                            if (type.equals(TYPE_PHOTO) {
+                                writeDisplayPhoto(id, item.getByteArray(PHOTO))
+                            } else {
+                                opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+                                        .withValue(Data.RAW_CONTACT_ID, id)
+                                        .withValue(Data.MIMETYPE, type);
+                                for(String field: CONTACT_FIELDS) {
+                                    if(item.getObject(field) != null)
+                                        opBuilder.withValue(field, item.getObject(field));
+                                }
+    
+                                ops.add(opBuilder.build());
                             }
-
-                            ops.add(opBuilder.build());
                         }
                     }
                 }
@@ -576,7 +596,7 @@ class ContactsHelper {
                 }
             }
         }
-		pref.edit().commit();
+        pref.edit().commit();
     }
 
     public void addToMatched () {
@@ -610,7 +630,7 @@ class ContactsHelper {
                 addEntry(matchedName, id2 + ":" + id1);
             }
         }
-		pref.edit().commit();
+        pref.edit().commit();
     }
 
     /*private ContentProviderOperation.Builder setOpBuilder(ContentProviderOperation.Builder opBuilder, String value, String type) {
