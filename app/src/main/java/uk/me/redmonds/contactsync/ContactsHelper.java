@@ -80,7 +80,7 @@ class ContactsHelper {
     };
     public static Boolean groupInc;
     public static Boolean photoInc;
-	public HashMap<String,String> groupNames = new HashMap<>();
+    public HashMap<String,String> groupNames = new HashMap<>();
     private static SharedPreferences pref;
     private static String account1Name;
     private static String account2Name;
@@ -94,9 +94,9 @@ class ContactsHelper {
     private final MainActivity main;
     private final HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = new HashMap<>();
     private final static HashSet<String> emptySet = new HashSet<String>();
-	
-    	
-	
+    
+        
+    
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
         main = (MainActivity)m;
         listName = l;
@@ -202,34 +202,34 @@ class ContactsHelper {
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
         groupInc = settings.getBoolean(MainActivity.GROUPS, false);
         photoInc = settings.getBoolean(MainActivity.PHOTOS, false);
-		
-		if(groupInc) {
-			c = main.getContentResolver().query(
-				ContactsContract.Groups.CONTENT_URI, 
-				new String[] {ContactsContract.Groups._ID, ContactsContract.Groups.TITLE },
-				ContactsContract.Groups.DELETED+"!='1' AND "+
-				ContactsContract.Groups.GROUP_VISIBLE+"!='0' ", null, 
-				null);
+        
+        if(groupInc) {
+            c = main.getContentResolver().query(
+                ContactsContract.Groups.CONTENT_URI, 
+                new String[] {ContactsContract.Groups._ID, ContactsContract.Groups.TITLE },
+                ContactsContract.Groups.DELETED+"!='1' AND "+
+                ContactsContract.Groups.GROUP_VISIBLE+"!='0' ", null, 
+                null);
 
 
-			while (c.moveToNext()) {
-				String id = c.getString(c.getColumnIndex(ContactsContract.Groups._ID));
-				String gTitle = (c.getString(c.getColumnIndex(ContactsContract.Groups.TITLE)));
+            while (c.moveToNext()) {
+                String id = c.getString(c.getColumnIndex(ContactsContract.Groups._ID));
+                String gTitle = (c.getString(c.getColumnIndex(ContactsContract.Groups.TITLE)));
 
-				if (gTitle.contains("Group:")) {
-					gTitle = gTitle.substring(gTitle.indexOf("Group:") + 6).trim();
+                if (gTitle.contains("Group:")) {
+                    gTitle = gTitle.substring(gTitle.indexOf("Group:") + 6).trim();
 
-				}
-				if (gTitle.contains("Favorite_")) {
-					gTitle = "Favorites";
-				}
-				if (gTitle.contains("Starred in Android")
-					|| gTitle.contains("My Contacts")) {
-					continue;
-				}
-				groupNames.put(id, gTitle);
-			}
-		}
+                }
+                if (gTitle.contains("Favorite_")) {
+                    gTitle = "Favorites";
+                }
+                if (gTitle.contains("Starred in Android")
+                    || gTitle.contains("My Contacts")) {
+                    continue;
+                }
+                groupNames.put(id, gTitle);
+            }
+        }
 
         ArrayList<String> selection = new ArrayList<>();
         selection.add(Data.RAW_CONTACT_ID);
@@ -256,10 +256,10 @@ class ContactsHelper {
                     HashSet<StringMap> field = contact.get(c.getString(2));
                     StringMap value = new StringMap();
                     if (!c.isNull(3) && !c.getString(3).equals(""))
-						if(c.getString(2).equals(TYPE_GROUP))
-                        	value.put("value", groupNames.get(c.getString(3)));
-						else
-							value.put("value", c.getString(3));
+                        if(c.getString(2).equals(TYPE_GROUP))
+                            value.put("value", groupNames.get(c.getString(3)));
+                        else
+                            value.put("value", c.getString(3));
                     value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
                     
                     for (int i = 0; i < CONTACT_FIELDS.length; i++)
@@ -429,7 +429,23 @@ class ContactsHelper {
         // listener to delete button
         ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
                 .inflate(R.layout.delete_button, layoutContainer, false);
-        deleteButton.setOnClickListener(ButtonClick);
+        deleteButton.setOnClickListener(new OnClickListener() {
+            public void onClick(View p1) {
+                if (p1.getId() == R.id.delete_button) {
+                    HashSet<String> idSet = new HashSet<>();
+                    idSet.add((String) p1.getTag());
+                    cObj.deleteContacts(idSet);
+    
+                    if (cObj.size() > 1)
+                        fillLayout();
+                    else if (cObj.size() == 1)
+                        cObj.addToUnmatched();
+                    else
+                        //reload comparefragement
+                        main.Compare(null, listItem, null);
+                }
+            }
+        });
         //store Id in tag
         deleteButton.setTag(id);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
