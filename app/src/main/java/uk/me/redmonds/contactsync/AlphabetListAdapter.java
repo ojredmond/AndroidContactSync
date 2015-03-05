@@ -45,15 +45,8 @@ public class AlphabetListAdapter extends BaseAdapter {
         }
         
         @Override
-        public boolean onTouch(View v, MotionEvent event) {
-            // now you know coordinates of touch
-            sideIndexX = event.getX();
-            sideIndexY = event.getY();
-
-            // and can display a proper item it country list
-            displayListItem();
-
-            return false;
+        public boolean onDown(MotionEvent e) {
+            return true;
         }
     }
 
