@@ -1,3 +1,10 @@
+package uk.me.redmonds.contactsync;
+
+import android.widget.ArrayAdapter;
+import android.widget.SectionIndexer;
+import java.util.*;
+import android.content.*;
+
 class SectionIndexingArrayAdapter<T> extends ArrayAdapter<T> implements
         SectionIndexer {
 
@@ -10,7 +17,16 @@ class SectionIndexingArrayAdapter<T> extends ArrayAdapter<T> implements
     public SectionIndexingArrayAdapter(Context context, int textViewResourceId,
             List<T> objects) {
         super(context, textViewResourceId, objects);
+		createSections(objects);
+	}
 
+	public SectionIndexingArrayAdapter(Context context, int textViewResourceLayout,
+										int textViewResourceId, List<T> objects) {
+		 super(context, textViewResourceLayout, textViewResourceId, objects);
+		createSections(objects);
+	}
+	
+	private void createSections (List<T> objects) {
         // Note that List<T> objects has already been sorted alphabetically
         // e.g. with Collections.sort(objects) **before** being passed to
         // this constructor.

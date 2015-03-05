@@ -9,8 +9,27 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
+import android.view.*;
+import java.util.*;
+import java.util.regex.*;
+import android.view.View.*;
+import android.widget.*;
 
 public class AlphabetListAdapter extends BaseAdapter {
+
+	public class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            sideIndexX = sideIndexX - distanceX;
+            sideIndexY = sideIndexY - distanceY;
+
+            if (sideIndexX >= 0 && sideIndexY >= 0) {
+                displayListItem();
+            }
+
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+    }
 
     public static abstract class Row {}
     
@@ -32,12 +51,24 @@ public class AlphabetListAdapter extends BaseAdapter {
     
     private List<Row> rows;
     private int alphabetListLayout;
-    
+	private int listLayout;
+	private Context context;
+	private View container;
+	private List<Object[]> alphabet = new ArrayList<Object[]>();
+    private HashMap<String, Integer> sections = new HashMap<String, Integer>();
+    private int sideIndexHeight;
+    private static float sideIndexX;
+    private static float sideIndexY;
+    private int indexListSize;
+	
     public void setRows(List<Row> rows) {
         this.rows = rows;
     }
 
-    AlphabetListAdapter (int aListLayout, ArrayList<String> Objects) {
+    AlphabetListAdapter (Context c, View v, int lLayout, int aListLayout, ArrayList<String> Objects) {
+		context = c;
+		container = v;
+		listLayout = lLayout;
         alphabetListLayout = aListLayout;
         this.rows = new ArrayList<Row>();
         int start = 0;
@@ -47,7 +78,7 @@ public class AlphabetListAdapter extends BaseAdapter {
         Pattern numberPattern = Pattern.compile("[0-9]");
 
         for (String object : Objects) {
-            String firstLetter = object.substring(0, 1);
+            String firstLetter = object.substring(0, 1).toUpperCase();
 
             // Group numbers together in the scroller
             if (numberPattern.matcher(firstLetter).matches()) {
@@ -87,10 +118,24 @@ public class AlphabetListAdapter extends BaseAdapter {
         }
         
         updateAlphabetList();
+		
+		//hide alphbet index if to few entries
+		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view1 = inflater.inflate(R.layout.row_item, (ViewGroup)container, false);
+		view1.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+		int rowHeight = view1.getMeasuredHeight();
+
+		container.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+		int height = container.getMeasuredHeight();
+
+		//Toast.makeText(context,""+height,Toast.LENGTH_LONG).show();
+		if(getCount() < ((height/rowHeight) * 2)) {
+			container.findViewById(alphabetListLayout).setVisibility(View.GONE);
+		}
     }
 
     public void updateAlphabetList() {
-        LinearLayout sideIndex = (LinearLayout) findViewById(alphabetListLayout);
+        LinearLayout sideIndex = (LinearLayout) container.findViewById(alphabetListLayout);
         sideIndex.removeAllViews();
         indexListSize = alphabet.size();
         if (indexListSize < 1) {
@@ -114,10 +159,10 @@ public class AlphabetListAdapter extends BaseAdapter {
             Object[] tmpIndexItem = alphabet.get((int) i - 1);
             String tmpLetter = tmpIndexItem[0].toString();
 
-            tmpTV = new TextView(this);
+            tmpTV = new TextView(context);
             tmpTV.setText(tmpLetter);
             tmpTV.setGravity(Gravity.CENTER);
-            tmpTV.setTextSize(15);
+            tmpTV.setTextSize(10);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
             tmpTV.setLayoutParams(params);
             sideIndex.addView(tmpTV);
@@ -140,8 +185,12 @@ public class AlphabetListAdapter extends BaseAdapter {
         });
     }
 
+	public void displayIndexer () {
+		
+	}
+	
     public void displayListItem() {
-        LinearLayout sideIndex = (LinearLayout) findViewById(alphabetListLayout);
+        LinearLayout sideIndex = (LinearLayout) container.findViewById(alphabetListLayout);
         sideIndexHeight = sideIndex.getHeight();
         // compute number of pixels for every side index item
         double pixelPerIndexItem = (double) sideIndexHeight / indexListSize;
@@ -154,8 +203,8 @@ public class AlphabetListAdapter extends BaseAdapter {
             Object[] indexItem = alphabet.get(itemPosition);
             int subitemPosition = sections.get(indexItem[0]);
 
-            //ListView listView = (ListView) findViewById(android.R.id.list);
-            getListView().setSelection(subitemPosition);
+            ListView listView = (ListView) container.findViewById(listLayout);
+            listView.setSelection(subitemPosition);
         }
     }
 
@@ -195,7 +244,7 @@ public class AlphabetListAdapter extends BaseAdapter {
         if (getItemViewType(position) == 0) { // Item
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = (LinearLayout) inflater.inflate(R.layout.row_item, parent, false);  
+                view = inflater.inflate(R.layout.row_item, parent, false);  
             }
             
             Item item = (Item) getItem(position);
@@ -204,7 +253,7 @@ public class AlphabetListAdapter extends BaseAdapter {
         } else { // Section
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = (LinearLayout) inflater.inflate(R.layout.row_section, parent, false);  
+                view = inflater.inflate(R.layout.row_section, parent, false);  
             }
             
             Section section = (Section) getItem(position);
@@ -215,4 +264,7 @@ public class AlphabetListAdapter extends BaseAdapter {
         return view;
     }
 
+	public SideIndexGestureListener getGestureListener() {
+		return new SideIndexGestureListener();
+	}
 }

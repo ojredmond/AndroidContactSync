@@ -22,6 +22,7 @@ import java.util.Map;
 import android.widget.*;
 import android.widget.AdapterView.*;
 import java.util.*;
+import android.view.*;
 
 public class MatchContact extends Fragment 
         implements OnClickListener, OnItemClickListener {
@@ -33,21 +34,9 @@ public class MatchContact extends Fragment
     private HashMap<String, String> matchedList;
     private String listItem;
     private String name;
-
-    class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            sideIndexX = sideIndexX - distanceX;
-            sideIndexY = sideIndexY - distanceY;
-
-            if (sideIndexX >= 0 && sideIndexY >= 0) {
-                displayListItem();
-            }
-
-            return super.onScroll(e1, e2, distanceX, distanceY);
-        }
-    }
-
+	private GestureDetector mGestureDetector;
+	private AlphabetListAdapter adapter1;
+    
     @Override
     public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
     {
@@ -79,19 +68,20 @@ public class MatchContact extends Fragment
                 contacts.deleteContacts();
                 break;
             case R.id.unmatched_group:
-                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
+                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list_group);
                 matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
                 
                 if(unmatchedList.size() != 0 && unmatchedListView.getVisibility() == View.GONE) {
                     matchedListView.setVisibility(View.GONE);
                     unmatchedListView.setVisibility(View.VISIBLE);
+					adapter1.displayIndexer();
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
                 }
                 break;
             case R.id.matched_group:
-                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list);
+                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list_group);
                 matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
     
                 if(matchedList.size() != 0 && matchedListView.getVisibility() == View.GONE) {
@@ -104,6 +94,8 @@ public class MatchContact extends Fragment
                 break;
         }
     }
+
+	
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -121,7 +113,7 @@ public class MatchContact extends Fragment
         Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(this);
 
-        Comparator caseInsensitive = new Comparator<String>() {
+        Comparator<String> caseInsensitive = new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
                 return s1.compareToIgnoreCase(s2);
@@ -151,14 +143,23 @@ public class MatchContact extends Fragment
                                                                             R.layout.list_row_1,
                                                                             R.id.value,
                                                                             unmatchedItems));*/
-        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new AlphabetListAdapter (
-                                                                            main,
-                                                                            R.id.sideIndex,
-                                                                            unmatchedItems));
-
+		adapter1 = new AlphabetListAdapter (
+			main,
+			view.findViewById(R.id.list),
+			R.id.unmatched_list,
+			R.id.sideIndex,
+			unmatchedItems);
+        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(adapter1);
+		((ListView)view.findViewById(R.id.unmatched_list)).setOnTouchListener(new OnTouchListener () {
+				@Override
+				public boolean onTouch(View view, MotionEvent event) {
+					return mGestureDetector.onTouchEvent(event);
+				}
+			});
+			
         view.findViewById(R.id.unmatched_group).setOnClickListener(this);
         ((ListView)view.findViewById(R.id.unmatched_list)).setOnItemClickListener(this);
-        mGestureDetector = new GestureDetector(this, new SideIndexGestureListener());
+        mGestureDetector = new GestureDetector(main, adapter1.getGestureListener());
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
