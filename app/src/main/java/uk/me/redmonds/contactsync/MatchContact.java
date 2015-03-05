@@ -171,13 +171,13 @@ public class MatchContact extends Fragment
             unmatchedItems);
 
         unmatchedList.setAdapter(unmatchedAdapter);
-        unmatchedGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
+        /*unmatchedGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
         unmatchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
                     return unmatchedGestureDetector.onTouchEvent(event);
                 }
-            });
+            });*/
         
         //add listners
         unmatchedLayout.setOnClickListener(this);
@@ -228,13 +228,13 @@ public class MatchContact extends Fragment
             matchedItems);
             
         matchedList.setAdapter(matchedAdapter);
-        matchedGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
+        /*matchedGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
         matchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
                     return matchedGestureDetector.onTouchEvent(event);
                 }
-            });
+            });*/
         
         //add listners
         matchedLayout.setOnClickListener(this);
