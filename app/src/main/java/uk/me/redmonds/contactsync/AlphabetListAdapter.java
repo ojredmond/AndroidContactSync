@@ -201,7 +201,7 @@ public class AlphabetListAdapter extends BaseAdapter {
 
         sideIndexHeight = sideIndex.getHeight();
 
-        mGestureDetector = new GestureDetector(context, getGestureListener());
+        mGestureDetector = new GestureDetector(context, new SideIndexGestureListener2());
         sideIndex.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
@@ -224,10 +224,6 @@ public class AlphabetListAdapter extends BaseAdapter {
         });*/
     }
 
-    public void displayIndexer () {
-        
-    }
-    
     public void displayListItem() {
         LinearLayout sideIndex = (LinearLayout) container.findViewById(alphabetListLayout);
         sideIndexHeight = sideIndex.getHeight();
