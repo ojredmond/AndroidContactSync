@@ -151,11 +151,15 @@ public class MatchContact extends Fragment
         }
 
         //add heading
+        View unmatchedLayout = view.findViewById(R.id.unmatched_group);
+        TextView unmatchedType = (TextView)unmatchedLayout.findViewById(R.id.type);
+        ListView unmatchedList = (ListView)view.findViewById(R.id.unmatched_list);
+        unmatchedType.setLayoutParams(new LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LayoutParams.WRAP_CONTENT));
         if(unmatchedCount == 0)
-            ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("  ");
+            unmatchedType.setText("  ");
         else
-            ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("+");
-        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("Unmatched ("+unmatchedCount+")");
+            unmatchedType.setText("+");
+        unmatchedLayout.findViewById(R.id.value)).setText("Unmatched ("+unmatchedCount+")");
 
         //add listview adapter
         AlphabetListAdapter unmatchedAdapter = new AlphabetListAdapter (
@@ -164,8 +168,8 @@ public class MatchContact extends Fragment
             R.id.unmatched_list,
             R.id.unmatched_sideIndex,
             unmatchedItems);
-        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(unmatchedAdapter);
-        ((ListView)view.findViewById(R.id.unmatched_list)).setOnTouchListener(new OnTouchListener () {
+        unmatchedList.setAdapter(unmatchedAdapter);
+        unmatchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
                     return mGestureDetector.onTouchEvent(event);
@@ -173,8 +177,8 @@ public class MatchContact extends Fragment
             });
         
         //add listners
-        view.findViewById(R.id.unmatched_group).setOnClickListener(this);
-        ((ListView)view.findViewById(R.id.unmatched_list)).setOnItemClickListener(this);
+        unmatchedLayout.setOnClickListener(this);
+        unmatchedList.setOnItemClickListener(this);
         mGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
@@ -202,11 +206,14 @@ public class MatchContact extends Fragment
         }
 
         //add heading
+        View unmatchedLayout = view.findViewById(R.id.matched_group);
+        TextView matchedType = (TextView)matchedLayout.findViewById(R.id.type);
+        ListView matchedList = (ListView)view.findViewById(R.id.matched_list);
         if(matchedCount == 0)
-            ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("  ");
+            matchedType.setText("  ");
         else
-            ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("+");
-        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("Matched ("+matchedCount+")");
+            matchedType.setText("+");
+        matchedLayout.findViewById(R.id.value)).setText("Matched ("+matchedCount+")");
 
         //add listview adapter
         AlphabetListAdapter matchedAdapter = new AlphabetListAdapter (
@@ -215,8 +222,8 @@ public class MatchContact extends Fragment
             R.id.matched_list,
             R.id.matched_sideIndex,
             matchedItems);
-        ((ListView)view.findViewById(R.id.matched_list)).setAdapter(matchedAdapter);
-        ((ListView)view.findViewById(R.id.matched_list)).setOnTouchListener(new OnTouchListener () {
+        matchedList.setAdapter(matchedAdapter);
+        matchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
                     return mGestureDetector.onTouchEvent(event);
@@ -224,8 +231,8 @@ public class MatchContact extends Fragment
             });
         
         //add listners
-        view.findViewById(R.id.matched_group).setOnClickListener(this);
-        ((ListView)view.findViewById(R.id.matched_list)).setOnItemClickListener(this);
+        matchedLayout.setOnClickListener(this);
+        matchedList.setOnItemClickListener(this);
         mGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
 
         return view;
