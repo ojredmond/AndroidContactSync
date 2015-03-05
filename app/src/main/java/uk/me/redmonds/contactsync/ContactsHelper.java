@@ -392,6 +392,91 @@ class ContactsHelper {
         return contacts.size();
     }
 
+    public View getContactView (String id) {
+        String account = getAccountName(id);
+        // create a new view for the contact
+        View contactView = LayoutInflater.from(main)
+                .inflate(R.layout.contact, layoutContainer, false);
+        contactView.setTag(account + ":" + id);
+        LinearLayout contactInfo = (LinearLayout) contactView.findViewById(R.id.contact_info);
+
+        // Display photo if it exists
+        if (ContactsHelper.photoInc) {
+            byte[] photoData = getPhoto(id);
+            if (photoData != null) {
+                View photoView = LayoutInflater.from(main)
+                        .inflate(R.layout.image, layoutContainer, false);
+                ImageView photo = (ImageView) photoView.findViewById(R.id.photo);
+                Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
+                photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight() / 2);
+                photo.setImageBitmap(photoBitmap);
+                contactInfo.addView(photoView);
+            }
+        }
+
+        // Display account name
+        FrameLayout deleteLayout = new FrameLayout(main);
+        deleteLayout.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
+        View accountInfo = LayoutInflater.from(main)
+                .inflate(R.layout.list_account, layoutContainer, false);
+        ((TextView) accountInfo.findViewById(R.id.type)).setText("Account");
+        ((TextView) accountInfo.findViewById(R.id.value)).setText(getAccountName(id));
+        //deleteLayout.setBackgroundColor(R.color.nav_background);
+
+        // listener to delete button
+        ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
+                .inflate(R.layout.delete_button, layoutContainer, false);
+        deleteButton.setOnClickListener(ButtonClick);
+        //store Id in tag
+        deleteButton.setTag(id);
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
+        params.gravity = Gravity.END;
+
+        deleteLayout.addView(accountInfo);
+        deleteLayout.addView(deleteButton, params);
+        contactInfo.addView(deleteLayout);
+
+        // Display contact id
+        accountInfo = LayoutInflater.from(main)
+                .inflate(R.layout.list_row_2, layoutContainer, false);
+        ((TextView) accountInfo.findViewById(R.id.type)).setText("ID");
+        ((TextView) accountInfo.findViewById(R.id.value)).setText(id);
+        contactInfo.addView(accountInfo);
+
+        HashMap<String, HashSet<StringMap>> contact = contacts.get(id);
+        for (String type : ContactsHelper.TYPES) {
+            if (contact.get(type) != null
+                    && contact.get(type).size() > 0) {
+
+                Boolean first = true;
+                for (StringMap item : contact.get(type)) {
+                    if (item.get("value") == null)
+                        break;
+                    if (first) {
+                        TextView contactHeading = (TextView) LayoutInflater.from(main)
+                                .inflate(R.layout.list_heading, layoutContainer, false);
+                        contactHeading.setText(ContactsHelper.getGroupName(type));
+                        contactInfo.addView(contactHeading);
+                        first = false;
+                    }
+                    if (item.get("label") == null) {
+                        TextView contactValue = (TextView) LayoutInflater.from(main)
+                                .inflate(R.layout.list_row_1, layoutContainer, false);
+                        contactValue.setText(item.get("value"));
+                        contactInfo.addView(contactValue);
+                    } else {
+                        LinearLayout rowLayout = (LinearLayout) LayoutInflater.from(main)
+                                .inflate(R.layout.list_row_2, layoutContainer, false);
+                        ((TextView) rowLayout.findViewById(R.id.value)).setText(item.get("value"));
+                        ((TextView) rowLayout.findViewById(R.id.type)).setText(item.get("label"));
+                        contactInfo.addView(rowLayout);
+                    }
+                }
+            }
+        }
+        return contactView;
+    }
+    
     public void deleteContacts() {
         deleteContacts(list);
     }
