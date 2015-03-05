@@ -58,7 +58,9 @@ public class MatchContact extends Fragment
     {
         View unmatchedListView;
         View matchedListView;
-        
+        TextView typeView; 
+        String type;
+
         switch (p1.getId()) {
             case R.id.delete_contact:
                 HashSet<String> list = new HashSet<>();
@@ -69,25 +71,33 @@ public class MatchContact extends Fragment
             case R.id.unmatched_group:
                 unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list_group);
                 matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
+                typeView = (TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type);
+                type = typeView.getText();
                 
                 if(unmatchedList.size() != 0 && unmatchedListView.getVisibility() == View.GONE) {
                     matchedListView.setVisibility(View.GONE);
                     unmatchedListView.setVisibility(View.VISIBLE);
+                    typeView.setText(type.replace('+','-'));
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
+                    typeView.setText(type.replace('-','+'));
                 }
                 break;
             case R.id.matched_group:
                 unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list_group);
                 matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
-    
+                typeView = (TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type);
+                type = typeView.getText();
+
                 if(matchedList.size() != 0 && matchedListView.getVisibility() == View.GONE) {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.VISIBLE);
+                    typeView.setText(type.replace('+','-'));
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
+                    typeView.setText(type.replace('-','+'));
                 }
                 break;
         }
@@ -135,7 +145,7 @@ public class MatchContact extends Fragment
 
         //add heading
         if(unmatchedCount == 0)
-            ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText(" ");
+            ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("  ");
         else
             ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("+");
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("Unmatched ("+unmatchedCount+")");
@@ -186,7 +196,7 @@ public class MatchContact extends Fragment
 
         //add heading
         if(matchedCount == 0)
-            ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText(" ");
+            ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("  ");
         else
             ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("+");
         ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("Matched ("+matchedCount+")");
