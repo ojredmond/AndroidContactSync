@@ -201,7 +201,7 @@ public class AlphabetListAdapter extends BaseAdapter {
 
         sideIndexHeight = sideIndex.getHeight();
 
-        mGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
+        mGestureDetector = new GestureDetector(context, getGestureListener());
         sideIndex.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
