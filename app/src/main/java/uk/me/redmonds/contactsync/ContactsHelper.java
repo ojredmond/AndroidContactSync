@@ -39,6 +39,7 @@ import java.io.*;
 import android.view.*;
 import android.widget.*;
 import android.graphics.*;
+import android.view.View.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -434,15 +435,18 @@ class ContactsHelper {
                 if (p1.getId() == R.id.delete_button) {
                     HashSet<String> idSet = new HashSet<>();
                     idSet.add((String) p1.getTag());
-                    cObj.deleteContacts(idSet);
+                    deleteContacts(idSet);
     
-                    if (cObj.size() > 1)
-                        fillLayout();
-                    else if (cObj.size() == 1)
-                        cObj.addToUnmatched();
-                    else
+                    if (size() > 1) {
+                        View contact = (View)p1.getParent().getParent().getParent();
+						((ViewGroup)contact.getParent()).removeView(contact);
+                    } else {
+						if (size() == 1)
+                        	addToUnmatched();
+                    
                         //reload comparefragement
-                        main.Compare(null, listItem, null);
+                        main.Compare(null, listName, null);
+					}
                 }
             }
         });
@@ -866,12 +870,12 @@ class ContactsHelper {
         
         for (String item: set) {
             String itemArray[] = item.split(":");
-            ArrayList<String> idList = (ArrayList<String>)Arrays.asList(itemArray[1].split(","));
+            ArrayList<String> idList = new ArrayList<String> (Arrays.asList(itemArray[1].split(",")));
             if(idList.contains(id)) {
                 idList.remove(id);
                 set.remove(item);
                 if(idList.size() > 0) {
-                    item = itemArray[0];
+                    item = itemArray[0] + ":";
                     for(String itemId: idList)
                         item += itemId + ",";
                     item = item.substring(0,item.length()-1);

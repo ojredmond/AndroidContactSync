@@ -171,7 +171,7 @@ public class MergeFragment extends Fragment {
                                     .inflate(R.layout.thumb, layoutContainer, false);
                             ImageView photo = (ImageView)photoView.findViewById(R.id.value);
                             photo.setTag(null);
-                            //photo.setImageResource(android.R.drawable.ic_delete);
+                            
                             photo.setLayoutParams(itemParams);
                             photoLayout.addView(photoView);
                         }

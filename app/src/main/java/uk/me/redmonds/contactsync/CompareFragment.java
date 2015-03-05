@@ -53,7 +53,7 @@ public class CompareFragment extends Fragment {
             //get data to display
             Bundle args = getArguments();
             listItem = args.getString("listItem");
-            String seleted = args.getString("selected");
+            String selected = args.getString("selected");
             HashMap selectedMap = null;
 
             SharedPreferences pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_PRIVATE);
@@ -84,7 +84,7 @@ public class CompareFragment extends Fragment {
                     contactsName.put(contact[1], name);
                     contacts.add(contactsName);
                 }
-                if (name.equals(seleted))
+                if (selected != null && name.equals(selected))
                     selectedMap = contactsName;
             }
             Collections.sort(contacts, new ListSortMap());
