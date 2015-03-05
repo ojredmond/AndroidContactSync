@@ -74,7 +74,6 @@ public class MatchContact extends Fragment
                 if(unmatchedList.size() != 0 && unmatchedListView.getVisibility() == View.GONE) {
                     matchedListView.setVisibility(View.GONE);
                     unmatchedListView.setVisibility(View.VISIBLE);
-					adapter1.displayIndexer();
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
@@ -136,8 +135,8 @@ public class MatchContact extends Fragment
         }
 
         //add unmatched heading
-        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("Unmatched");
-        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("("+unmatchedCount+")");
+        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("+");
+        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("Unmatched ("+unmatchedCount+")");
         /*((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new SectionIndexingArrayAdapter <String>(
                                                                             main,
                                                                             R.layout.list_row_1,
