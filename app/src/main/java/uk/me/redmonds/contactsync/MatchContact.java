@@ -34,7 +34,7 @@ public class MatchContact extends Fragment
     private HashMap<String, String> matchedList;
     private String listItem;
     private String name;
-    private GestureDetector mGestureDetector;
+    private GestureDetector unmatchedGestureDetector, matchedGestureDetector;
 
     @Override
     public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
@@ -128,6 +128,8 @@ public class MatchContact extends Fragment
         Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(this);
 
+        unmatchedGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
+
         Comparator<String> caseInsensitive = new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
@@ -172,14 +174,15 @@ public class MatchContact extends Fragment
         unmatchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
-                    return mGestureDetector.onTouchEvent(event);
+                    return unmatchedGestureDetector.onTouchEvent(event);
                 }
             });
         
         //add listners
         unmatchedLayout.setOnClickListener(this);
         unmatchedList.setOnItemClickListener(this);
-        mGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
+
+        matchedGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
@@ -227,14 +230,13 @@ public class MatchContact extends Fragment
         matchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
-                    return mGestureDetector.onTouchEvent(event);
+                    return matchedGestureDetector.onTouchEvent(event);
                 }
             });
         
         //add listners
         matchedLayout.setOnClickListener(this);
         matchedList.setOnItemClickListener(this);
-        mGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
 
         return view;
     }
