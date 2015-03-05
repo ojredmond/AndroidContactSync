@@ -58,6 +58,7 @@ public class MatchContact extends Fragment
     {
         View unmatchedListView;
         View matchedListView;
+        ViewGroup container = (ViewGroup)p1.getParent();
         TextView typeView; 
         String type;
 
@@ -69,10 +70,10 @@ public class MatchContact extends Fragment
                 contacts.deleteContacts();
                 break;
             case R.id.unmatched_group:
-                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list_group);
-                matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
-                typeView = (TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type);
-                type = typeView.getText();
+                unmatchedListView = container.findViewById(R.id.unmatched_list_group);
+                matchedListView = container.findViewById(R.id.matched_list);
+                typeView = (TextView)container.findViewById(R.id.unmatched_group).findViewById(R.id.type);
+                type = (String)typeView.getText();
                 
                 if(unmatchedList.size() != 0 && unmatchedListView.getVisibility() == View.GONE) {
                     matchedListView.setVisibility(View.GONE);
@@ -82,13 +83,16 @@ public class MatchContact extends Fragment
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
                     typeView.setText(type.replace('-','+'));
+                    typeView = (TextView)container.findViewById(R.id.matched_group).findViewById(R.id.type);
+                    type = (String)typeView.getText();
+                    typeView.setText(type.replace('-','+'));
                 }
                 break;
             case R.id.matched_group:
-                unmatchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.unmatched_list_group);
-                matchedListView = ((ViewGroup)p1.getParent()).findViewById(R.id.matched_list);
-                typeView = (TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type);
-                type = typeView.getText();
+                unmatchedListView = container.findViewById(R.id.unmatched_list_group);
+                matchedListView = container.findViewById(R.id.matched_list);
+                typeView = (TextView)container.findViewById(R.id.matched_group).findViewById(R.id.type);
+                type = (String)typeView.getText();
 
                 if(matchedList.size() != 0 && matchedListView.getVisibility() == View.GONE) {
                     unmatchedListView.setVisibility(View.GONE);
@@ -97,6 +101,9 @@ public class MatchContact extends Fragment
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
+                    typeView.setText(type.replace('-','+'));
+                    typeView = (TextView)container.findViewById(R.id.unmatched_group).findViewById(R.id.type);
+                    type = (String)typeView.getText();
                     typeView.setText(type.replace('-','+'));
                 }
                 break;
