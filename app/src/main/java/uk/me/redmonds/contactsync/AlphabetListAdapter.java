@@ -41,7 +41,7 @@ public class AlphabetListAdapter extends BaseAdapter {
                 displayListItem();
             }
 
-            return super.onScroll(e1, e2, distanceX, distanceY);
+            return false;
         }
         
         @Override
