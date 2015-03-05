@@ -36,6 +36,9 @@ import java.util.Iterator;
 import java.util.Map;
 import android.content.res.*;
 import java.io.*;
+import android.view.*;
+import android.widget.*;
+import android.graphics.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -392,7 +395,7 @@ class ContactsHelper {
         return contacts.size();
     }
 
-    public View getContactView (String id) {
+    public View getContactView (ViewGroup layoutContainer, String id) {
         String account = getAccountName(id);
         // create a new view for the contact
         View contactView = LayoutInflater.from(main)
