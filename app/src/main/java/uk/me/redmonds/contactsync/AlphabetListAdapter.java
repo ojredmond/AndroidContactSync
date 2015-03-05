@@ -17,7 +17,7 @@ import android.widget.*;
 
 public class AlphabetListAdapter extends BaseAdapter {
 
-	public class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
+    public class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             sideIndexX = sideIndexX - distanceX;
@@ -70,9 +70,9 @@ public class AlphabetListAdapter extends BaseAdapter {
     }
 
     AlphabetListAdapter (Context c, View v, int lLayout, int aListLayout, ArrayList<String> Objects) {
-		context = c;
-		container = v;
-		listLayout = lLayout;
+        context = c;
+        container = v;
+        listLayout = lLayout;
         alphabetListLayout = aListLayout;
         this.rows = new ArrayList<Row>();
         int start = 0;
@@ -122,20 +122,20 @@ public class AlphabetListAdapter extends BaseAdapter {
         }
         
         updateAlphabetList();
-		
-		//hide alphbet index if to few entries
-		LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		View view1 = inflater.inflate(itemLayout, (ViewGroup)container, false);
-		view1.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-		int rowHeight = view1.getMeasuredHeight();
+        
+        //hide alphbet index if to few entries
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view1 = inflater.inflate(itemLayout, (ViewGroup)container, false);
+        view1.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+        int rowHeight = view1.getMeasuredHeight();
 
-		container.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-		int height = container.getMeasuredHeight();
+        container.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+        int height = container.getMeasuredHeight();
 
-		//Toast.makeText(context,""+height,Toast.LENGTH_LONG).show();
-		if(getCount() < ((height/rowHeight) * 2)) {
-			container.findViewById(alphabetListLayout).setVisibility(View.GONE);
-		}
+        //Toast.makeText(context,""+height,Toast.LENGTH_LONG).show();
+        if(getCount() < ((height/rowHeight) * 2)) {
+            container.findViewById(alphabetListLayout).setVisibility(View.GONE);
+        }
     }
 
     public void updateAlphabetList() {
@@ -176,6 +176,18 @@ public class AlphabetListAdapter extends BaseAdapter {
 
         sideIndex.setOnTouchListener(new OnTouchListener() {
             @Override
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                sideIndexX = sideIndexX - distanceX;
+                sideIndexY = sideIndexY - distanceY;
+    
+                if (sideIndexX >= 0 && sideIndexY >= 0) {
+                    displayListItem();
+                }
+    
+                return super.onScroll(e1, e2, distanceX, distanceY);
+            }
+
+            @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // now you know coordinates of touch
                 sideIndexX = event.getX();
@@ -189,10 +201,10 @@ public class AlphabetListAdapter extends BaseAdapter {
         });
     }
 
-	public void displayIndexer () {
-		
-	}
-	
+    public void displayIndexer () {
+        
+    }
+    
     public void displayListItem() {
         LinearLayout sideIndex = (LinearLayout) container.findViewById(alphabetListLayout);
         sideIndexHeight = sideIndex.getHeight();
@@ -268,7 +280,7 @@ public class AlphabetListAdapter extends BaseAdapter {
         return view;
     }
 
-	public SideIndexGestureListener getGestureListener() {
-		return new SideIndexGestureListener();
-	}
+    public SideIndexGestureListener getGestureListener() {
+        return new SideIndexGestureListener();
+    }
 }
