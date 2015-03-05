@@ -128,8 +128,6 @@ public class MatchContact extends Fragment
         Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(this);
 
-        unmatchedGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
-
         Comparator<String> caseInsensitive = new Comparator<String>() {
             @Override
             public int compare(String s1, String s2) {
@@ -170,7 +168,9 @@ public class MatchContact extends Fragment
             R.id.unmatched_list,
             R.id.unmatched_sideIndex,
             unmatchedItems);
+
         unmatchedList.setAdapter(unmatchedAdapter);
+        unmatchedGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
         unmatchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
@@ -181,8 +181,6 @@ public class MatchContact extends Fragment
         //add listners
         unmatchedLayout.setOnClickListener(this);
         unmatchedList.setOnItemClickListener(this);
-
-        matchedGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
@@ -226,7 +224,9 @@ public class MatchContact extends Fragment
             R.id.matched_list,
             R.id.matched_sideIndex,
             matchedItems);
+            
         matchedList.setAdapter(matchedAdapter);
+        matchedGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
         matchedList.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
