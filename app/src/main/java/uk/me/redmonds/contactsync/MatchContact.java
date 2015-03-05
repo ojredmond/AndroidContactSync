@@ -145,7 +145,7 @@ public class MatchContact extends Fragment
             main,
             view.findViewById(R.id.list),
             R.id.unmatched_list,
-            R.id.sideIndex,
+            R.id.unmatched_sideIndex,
             unmatchedItems);
         ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(unmatchedAdapter);
         ((ListView)view.findViewById(R.id.unmatched_list)).setOnTouchListener(new OnTouchListener () {
@@ -196,7 +196,7 @@ public class MatchContact extends Fragment
             main,
             view.findViewById(R.id.list),
             R.id.matched_list,
-            R.id.sideIndex,
+            R.id.matched_sideIndex,
             matchedItems);
         ((ListView)view.findViewById(R.id.matched_list)).setAdapter(matchedAdapter);
         ((ListView)view.findViewById(R.id.matched_list)).setOnTouchListener(new OnTouchListener () {
