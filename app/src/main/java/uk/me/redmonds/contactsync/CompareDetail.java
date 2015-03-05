@@ -141,7 +141,8 @@ public class CompareDetail extends Fragment {
 
         HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = cObj.getContacts();
         for (String id : ids) {
-            String account = cObj.getAccountName(id);
+            layout.addView(cObj.getContactView(id));
+            /*String account = cObj.getAccountName(id);
             // create a new view for the contact
             View contactView = LayoutInflater.from(main)
                     .inflate(R.layout.contact, layoutContainer, false);
@@ -222,7 +223,7 @@ public class CompareDetail extends Fragment {
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 }
