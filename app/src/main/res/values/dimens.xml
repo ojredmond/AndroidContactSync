@@ -7,9 +7,9 @@
     <dimen name="medium_gap">5dip</dimen>
     <dimen name="small_gap">2dip</dimen>
     <dimen name="large_gap">10dip</dimen>
-	<dimen name="xlarge_gap">20dip</dimen>
-	<dimen name="xxlarge_gap">40dip</dimen>
-	
+    <dimen name="xlarge_gap">20dip</dimen>
+    <dimen name="xxlarge_gap">40dip</dimen>
+    
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
