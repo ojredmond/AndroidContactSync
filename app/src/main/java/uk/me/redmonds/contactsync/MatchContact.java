@@ -206,7 +206,7 @@ public class MatchContact extends Fragment
         }
 
         //add heading
-        View unmatchedLayout = view.findViewById(R.id.matched_group);
+        View matchedLayout = view.findViewById(R.id.matched_group);
         TextView matchedType = (TextView)matchedLayout.findViewById(R.id.type);
         ListView matchedList = (ListView)view.findViewById(R.id.matched_list);
         if(matchedCount == 0)
