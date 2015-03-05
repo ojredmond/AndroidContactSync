@@ -36,7 +36,7 @@ public class AlphabetListAdapter extends BaseAdapter {
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             sideIndexX = sideIndexX - distanceX;
             sideIndexY = sideIndexY - distanceY;
-Toast.makeText(context,"test",Toast.LENGTH_SHORT).show();
+
             if (sideIndexX >= 0 && sideIndexY >= 0) {
                 displayListItem();
             }
