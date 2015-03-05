@@ -34,9 +34,8 @@ public class MatchContact extends Fragment
     private HashMap<String, String> matchedList;
     private String listItem;
     private String name;
-	private GestureDetector mGestureDetector;
-	private AlphabetListAdapter adapter1;
-    
+    private GestureDetector mGestureDetector;
+
     @Override
     public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
     {
@@ -94,7 +93,7 @@ public class MatchContact extends Fragment
         }
     }
 
-	
+    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,31 +133,32 @@ public class MatchContact extends Fragment
             unmatchedCount = unmatchedItems.size();
         }
 
-        //add unmatched heading
-        ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("+");
+        //add heading
+        if(unmatchedCount == 0)
+            ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText(" ");
+        else
+            ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.type)).setText("+");
         ((TextView)view.findViewById(R.id.unmatched_group).findViewById(R.id.value)).setText("Unmatched ("+unmatchedCount+")");
-        /*((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(new SectionIndexingArrayAdapter <String>(
-                                                                            main,
-                                                                            R.layout.list_row_1,
-                                                                            R.id.value,
-                                                                            unmatchedItems));*/
-		adapter1 = new AlphabetListAdapter (
-			main,
-			view.findViewById(R.id.list),
-			R.id.unmatched_list,
-			R.id.sideIndex,
-			unmatchedItems);
-        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(adapter1);
-		((ListView)view.findViewById(R.id.unmatched_list)).setOnTouchListener(new OnTouchListener () {
-				@Override
-				public boolean onTouch(View view, MotionEvent event) {
-					return mGestureDetector.onTouchEvent(event);
-				}
-			});
-			
+
+        //add listview adapter
+        AlphabetListAdapter unmatchedAdapter = new AlphabetListAdapter (
+            main,
+            view.findViewById(R.id.list),
+            R.id.unmatched_list,
+            R.id.sideIndex,
+            unmatchedItems);
+        ((ListView)view.findViewById(R.id.unmatched_list)).setAdapter(unmatchedAdapter);
+        ((ListView)view.findViewById(R.id.unmatched_list)).setOnTouchListener(new OnTouchListener () {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    return mGestureDetector.onTouchEvent(event);
+                }
+            });
+        
+        //add listners
         view.findViewById(R.id.unmatched_group).setOnClickListener(this);
         ((ListView)view.findViewById(R.id.unmatched_list)).setOnItemClickListener(this);
-        mGestureDetector = new GestureDetector(main, adapter1.getGestureListener());
+        mGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
 
         //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
@@ -184,16 +184,32 @@ public class MatchContact extends Fragment
             matchedCount = matchedItems.size();
         }
 
-        //add matched heading
-        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("Matched");
-        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("("+matchedCount+")");
-        ((ListView)view.findViewById(R.id.matched_list)).setAdapter(new ArrayAdapter<String>(
-                                                                            main,
-                                                                            R.layout.list_row_1,
-                                                                            R.id.value,
-                                                                            matchedItems));
+        //add heading
+        if(matchedCount == 0)
+            ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText(" ");
+        else
+            ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.type)).setText("+");
+        ((TextView)view.findViewById(R.id.matched_group).findViewById(R.id.value)).setText("Matched ("+matchedCount+")");
+
+        //add listview adapter
+        AlphabetListAdapter matchedAdapter = new AlphabetListAdapter (
+            main,
+            view.findViewById(R.id.list),
+            R.id.matched_list,
+            R.id.sideIndex,
+            matchedItems);
+        ((ListView)view.findViewById(R.id.matched_list)).setAdapter(matchedAdapter);
+        ((ListView)view.findViewById(R.id.matched_list)).setOnTouchListener(new OnTouchListener () {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    return mGestureDetector.onTouchEvent(event);
+                }
+            });
+        
+        //add listners
         view.findViewById(R.id.matched_group).setOnClickListener(this);
         ((ListView)view.findViewById(R.id.matched_list)).setOnItemClickListener(this);
+        mGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
 
         return view;
     }
