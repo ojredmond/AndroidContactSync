@@ -90,6 +90,7 @@ public class AlphabetListAdapter extends BaseAdapter {
     private static float sideIndexX;
     private static float sideIndexY;
     private int indexListSize;
+    private GestureDetector mGestureDetector;
 
     public void setRows(List<Row> rows) {
         this.rows = rows;
@@ -200,7 +201,7 @@ public class AlphabetListAdapter extends BaseAdapter {
 
         sideIndexHeight = sideIndex.getHeight();
 
-        GestureDetector mGestureDetector = new SideIndexGestureListener();
+        mGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
         sideIndex.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
