@@ -17,26 +17,12 @@ import android.widget.*;
 
 public class AlphabetListAdapter extends BaseAdapter {
 
-    public class SideIndexGestureListener extends GestureDetector.SimpleOnGestureListener {
+    public class SlideGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            sideIndexX = sideIndexX - distanceX;
-            sideIndexY = sideIndexY - distanceY;
-
-            if (sideIndexX >= 0 && sideIndexY >= 0) {
-                displayListItem();
-            }
-
-            return super.onScroll(e1, e2, distanceX, distanceY);
-        }
-    }
-
-    public class SideIndexGestureListener2 extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            sideIndexX = sideIndexX - distanceX;
-            sideIndexY = sideIndexY - distanceY;
-
+            sideIndexX = e2.getX();
+			sideIndexY = e2.getY();
+			
             if (sideIndexX >= 0 && sideIndexY >= 0) {
                 displayListItem();
             }
@@ -46,6 +32,12 @@ public class AlphabetListAdapter extends BaseAdapter {
         
         @Override
         public boolean onDown(MotionEvent e) {
+			// now you know coordinates of touch
+			sideIndexX = e.getX();
+			sideIndexY = e.getY();
+
+			// and can display a proper item it country list
+			displayListItem();
             return true;
         }
     }
@@ -194,27 +186,13 @@ public class AlphabetListAdapter extends BaseAdapter {
 
         sideIndexHeight = sideIndex.getHeight();
 
-        mGestureDetector = new GestureDetector(context, new SideIndexGestureListener2());
+        mGestureDetector = new GestureDetector(context, new SlideGestureListener());
         sideIndex.setOnTouchListener(new OnTouchListener () {
                 @Override
                 public boolean onTouch(View view, MotionEvent event) {
                     return mGestureDetector.onTouchEvent(event);
                 }
             });
-
-        /*sideIndex.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                // now you know coordinates of touch
-                sideIndexX = event.getX();
-                sideIndexY = event.getY();
-
-                // and can display a proper item it country list
-                displayListItem();
-
-                return false;
-            }
-        });*/
     }
 
     public void displayListItem() {
@@ -290,9 +268,5 @@ public class AlphabetListAdapter extends BaseAdapter {
         }
         
         return view;
-    }
-
-    public SideIndexGestureListener getGestureListener() {
-        return new SideIndexGestureListener();
     }
 }
