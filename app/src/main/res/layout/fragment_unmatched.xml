@@ -41,23 +41,23 @@
             />
         
         <RelativeLayout
-			android:id="@+id/unmatched_list_group"
+            android:id="@+id/unmatched_list_group"
             android:layout_width="match_parent" 
             android:layout_height="0dp"
             android:layout_weight="1"
-			android:visibility="gone"
+            android:visibility="gone"
             >
-			
-			<LinearLayout
-                android:id="@+id/sideIndex"
+            
+            <LinearLayout
+                android:id="@+id/unmatched_sideIndex"
                 android:layout_width="@dimen/xlarge_gap"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-				android:layout_alignParentRight="true"
-			/>
-		
+                android:layout_alignParentRight="true"
+            />
+        
             <ListView
                 android:id="@+id/unmatched_list"
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                 android:listSelector="@drawable/activatedbackground"
                 android:choiceMode="singleChoice"
                 android:layout_alignParentLeft="true"
-				android:layout_toLeftOf="@id/sideIndex"
+                android:layout_toLeftOf="@id/unmatched_sideIndex"
                 />
 
         </RelativeLayout>
@@ -78,16 +78,35 @@
             layout="@layout/list_border_top_2"
             />
 
-        <ListView
-            android:id="@+id/matched_list"
-            android:layout_width="match_parent"
+        <RelativeLayout
+            android:id="@+id/matched_list_group"
+            android:layout_width="match_parent" 
             android:layout_height="0dp"
             android:layout_weight="1"
-            android:background="@color/nav_background"
-            android:listSelector="@drawable/activatedbackground"
-            android:choiceMode="singleChoice"
             android:visibility="gone"
-            android:fastScrollEnabled="true"
+            >
+            
+            <LinearLayout
+                android:id="@+id/matched_sideIndex"
+                android:layout_width="@dimen/xlarge_gap"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_alignParentRight="true"
             />
+        
+            <ListView
+                android:id="@+id/matched_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                android:listSelector="@drawable/activatedbackground"
+                android:choiceMode="singleChoice"
+                android:layout_alignParentLeft="true"
+                android:layout_toLeftOf="@id/matched_sideIndex"
+                />
+
+        </RelativeLayout>
     </LinearLayout>
 </RelativeLayout>
