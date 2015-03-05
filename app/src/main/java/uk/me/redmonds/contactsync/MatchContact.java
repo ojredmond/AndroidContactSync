@@ -209,6 +209,7 @@ public class MatchContact extends Fragment
         View matchedLayout = view.findViewById(R.id.matched_group);
         TextView matchedType = (TextView)matchedLayout.findViewById(R.id.type);
         ListView matchedList = (ListView)view.findViewById(R.id.matched_list);
+        matchedType.setLayoutParams(new LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LayoutParams.WRAP_CONTENT));
         if(matchedCount == 0)
             matchedType.setText("  ");
         else
