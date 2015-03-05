@@ -71,7 +71,7 @@ public class MatchContact extends Fragment
                 break;
             case R.id.unmatched_group:
                 unmatchedListView = container.findViewById(R.id.unmatched_list_group);
-                matchedListView = container.findViewById(R.id.matched_list);
+                matchedListView = container.findViewById(R.id.matched_list_group);
                 typeView = (TextView)container.findViewById(R.id.unmatched_group).findViewById(R.id.type);
                 type = (String)typeView.getText();
                 
@@ -90,7 +90,7 @@ public class MatchContact extends Fragment
                 break;
             case R.id.matched_group:
                 unmatchedListView = container.findViewById(R.id.unmatched_list_group);
-                matchedListView = container.findViewById(R.id.matched_list);
+                matchedListView = container.findViewById(R.id.matched_list_group);
                 typeView = (TextView)container.findViewById(R.id.matched_group).findViewById(R.id.type);
                 type = (String)typeView.getText();
 
