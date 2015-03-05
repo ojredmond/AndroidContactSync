@@ -50,7 +50,7 @@
             
             <LinearLayout
                 android:id="@+id/unmatched_sideIndex"
-                android:layout_width="@dimen/xlarge_gap"
+                android:layout_width="@dimen/xxlarge_gap"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
@@ -88,7 +88,7 @@
             
             <LinearLayout
                 android:id="@+id/matched_sideIndex"
-                android:layout_width="@dimen/xlarge_gap"
+                android:layout_width="@dimen/xxlarge_gap"
                 android:layout_height="match_parent"
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
