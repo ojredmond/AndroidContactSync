@@ -159,7 +159,7 @@ public class MatchContact extends Fragment
             unmatchedType.setText("  ");
         else
             unmatchedType.setText("+");
-        unmatchedLayout.findViewById(R.id.value)).setText("Unmatched ("+unmatchedCount+")");
+        unmatchedLayout.findViewById(R.id.value).setText("Unmatched ("+unmatchedCount+")");
 
         //add listview adapter
         AlphabetListAdapter unmatchedAdapter = new AlphabetListAdapter (
@@ -213,7 +213,7 @@ public class MatchContact extends Fragment
             matchedType.setText("  ");
         else
             matchedType.setText("+");
-        matchedLayout.findViewById(R.id.value)).setText("Matched ("+matchedCount+")");
+        matchedLayout.findViewById(R.id.value).setText("Matched ("+matchedCount+")");
 
         //add listview adapter
         AlphabetListAdapter matchedAdapter = new AlphabetListAdapter (
