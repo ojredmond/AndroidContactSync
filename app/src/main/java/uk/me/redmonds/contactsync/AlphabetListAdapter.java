@@ -31,6 +31,32 @@ public class AlphabetListAdapter extends BaseAdapter {
         }
     }
 
+    public class SideIndexGestureListener2 extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            sideIndexX = sideIndexX - distanceX;
+            sideIndexY = sideIndexY - distanceY;
+
+            if (sideIndexX >= 0 && sideIndexY >= 0) {
+                displayListItem();
+            }
+
+            return super.onScroll(e1, e2, distanceX, distanceY);
+        }
+        
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            // now you know coordinates of touch
+            sideIndexX = event.getX();
+            sideIndexY = event.getY();
+
+            // and can display a proper item it country list
+            displayListItem();
+
+            return false;
+        }
+    }
+
     public static abstract class Row {}
     
     public static final class Section extends Row {
@@ -174,19 +200,14 @@ public class AlphabetListAdapter extends BaseAdapter {
 
         sideIndexHeight = sideIndex.getHeight();
 
-        sideIndex.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-                sideIndexX = sideIndexX - distanceX;
-                sideIndexY = sideIndexY - distanceY;
-    
-                if (sideIndexX >= 0 && sideIndexY >= 0) {
-                    displayListItem();
+        sideIndex.setOnTouchListener(new OnTouchListener () {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    return mGestureDetector.onTouchEvent(event);
                 }
-    
-                return super.onScroll(e1, e2, distanceX, distanceY);
-            }
+            });
 
+        /*sideIndex.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 // now you know coordinates of touch
@@ -198,7 +219,7 @@ public class AlphabetListAdapter extends BaseAdapter {
 
                 return false;
             }
-        });
+        });*/
     }
 
     public void displayIndexer () {
