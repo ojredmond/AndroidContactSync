@@ -154,7 +154,7 @@ public class MatchContact extends Fragment
         View unmatchedLayout = view.findViewById(R.id.unmatched_group);
         TextView unmatchedType = (TextView)unmatchedLayout.findViewById(R.id.type);
         ListView unmatchedList = (ListView)view.findViewById(R.id.unmatched_list);
-        unmatchedType.setLayoutParams(new LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LayoutParams.WRAP_CONTENT));
+        unmatchedType.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LayoutParams.WRAP_CONTENT));
         if(unmatchedCount == 0)
             unmatchedType.setText("  ");
         else
@@ -209,7 +209,7 @@ public class MatchContact extends Fragment
         View matchedLayout = view.findViewById(R.id.matched_group);
         TextView matchedType = (TextView)matchedLayout.findViewById(R.id.type);
         ListView matchedList = (ListView)view.findViewById(R.id.matched_list);
-        matchedType.setLayoutParams(new LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LayoutParams.WRAP_CONTENT));
+        matchedType.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LayoutParams.WRAP_CONTENT));
         if(matchedCount == 0)
             matchedType.setText("  ");
         else
