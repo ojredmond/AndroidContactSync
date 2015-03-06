@@ -120,7 +120,7 @@ public class CompareDetail extends Fragment {
             cObj = new ContactsHelper(main, listItem, name, ids);
 
         for (String id : ids) {
-            layout.addView(cObj.getContactView(layoutContainer,id));
+            layout.addView(cObj.getContactView(layoutContainer,name,id));
         }
 
         return compareView;

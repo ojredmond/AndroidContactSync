@@ -134,21 +134,7 @@ public class MainActivity extends ActionBarActivity
         String account1Name = pref.getString(ACCOUNT1, null);
         String account2Name = pref.getString(ACCOUNT2, null);
         SharedPreferences.Editor results = getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE).edit();
-        /*results.putBoolean(Match.SYNCMATCHED, false);
-        results.remove(Match.NUMCONTACTS + account1Name);
-        results.remove(Match.NUMCONTACTS + account2Name);
-        for (String type : Match.MIME_TYPE_LIST) {
-            results.remove(Match.DUPKEY + type + account1Name);
-            results.remove(Match.DUPKEY + type + account2Name);
-            results.remove(Match.MATCHEDKEY + type + account1Name + ":" + account2Name);
-            results.remove(Match.MATCHEDKEY + type + account2Name + ":" + account1Name);
-        }
-        results.remove(Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name);
-        results.remove(Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name);
-        results.remove(Match.MATCHEDKEY + account1Name + ":" + account2Name);
-        results.remove(Match.MATCHEDKEY + account2Name + ":" + account1Name);
-        results.remove(Match.ACCOUNTKEY + account1Name + ":" + account2Name);
-        results.remove(Match.ACCOUNTKEY + account2Name + ":" + account1Name);*/
+        
 		results.clear();
         results.apply();
 
@@ -224,7 +210,7 @@ public class MainActivity extends ActionBarActivity
         // Pass what list to show
         Bundle args = new Bundle();
         if (name != null) {
-            args.putString("name", name);
+            args.putString("selected", name);
         }
         if (ids != null) {
             args.putStringArray("ids", ids);
@@ -232,11 +218,6 @@ public class MainActivity extends ActionBarActivity
         if (listItem != null) {
             args.putString("listItem", listItem);
         }
-
-        /*SharedPreferences.Editor pref = getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE).edit();
-        pref.remove("contactMerge");
-        pref.remove("contactsMerge");
-        pref.apply();*/
 
         newFragment.setArguments(args);
 
@@ -283,7 +264,7 @@ public class MainActivity extends ActionBarActivity
                 case "uk.me.redmonds.contactsync.MergeFragment":
                     item = (String) currentFragment.getArguments().get("listItem");
                     type = (String) currentFragment.getArguments().get("listType");
-                    name = (String) currentFragment.getArguments().get("name");
+                    name = (String) currentFragment.getArguments().get("selected");
                     Compare(type, item, name);
                     break;
                 default:

@@ -41,10 +41,11 @@ public class MergeFragment extends Fragment {
                 case R.id.contact_confirm:
                     if(contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
                         Toast.makeText(main, "Needs to be only 1 name", Toast.LENGTH_LONG).show();
-                    } else if(contact.get(ContactsHelper.TYPE_PHOTO).size() != 1) {
+                    } else if(contact.get(ContactsHelper.TYPE_PHOTO) != null
+					        && contact.get(ContactsHelper.TYPE_PHOTO).size() != 1) {
                         Toast.makeText(main, "Multiple contact photos not supported", Toast.LENGTH_LONG).show();
                     } else if (cObject.saveMergedContact(contact)) {
-                        main.Compare(listType, listItem, null);
+                        main.Compare(listType, listItem, selectedName);
                     } else {
                         Toast.makeText(main, "Save Failed", Toast.LENGTH_LONG).show();
                     }
@@ -163,6 +164,7 @@ public class MergeFragment extends Fragment {
                 Boolean first = true;
                 
                 for (StringMap item : contact.get(type)) {
+					
                     if (photoLayout != null &&
                             !type.equals(ContactsHelper.TYPE_PHOTO) 
                             && photoLayout.getChildCount() > 0) {
@@ -178,9 +180,9 @@ public class MergeFragment extends Fragment {
                         layout.addView(photoLayout,linearParams);
                         photoLayout = null;
                     }
-                    if (item.get("value") == null && !type.equals(ContactsHelper.TYPE_PHOTO))
-                        break;
-                        if(first && !type.equals(ContactsHelper.TYPE_PHOTO)) {
+                    //if (item.get("value") == null && !type.equals(ContactsHelper.TYPE_PHOTO))
+                        //break;
+                    if(first && !type.equals(ContactsHelper.TYPE_PHOTO)) {
                         TextView contactHeading = (TextView) LayoutInflater.from(main)
                             .inflate(R.layout.list_heading, layoutContainer, false);
                         contactHeading.setText(ContactsHelper.getGroupName(type));

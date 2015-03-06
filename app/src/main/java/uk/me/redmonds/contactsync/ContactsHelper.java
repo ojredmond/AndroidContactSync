@@ -40,6 +40,7 @@ import android.view.*;
 import android.widget.*;
 import android.graphics.*;
 import android.view.View.*;
+import java.util.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -93,7 +94,7 @@ class ContactsHelper {
     private final HashMap<String, String> accounts = new HashMap<>();
     private final HashMap<String, String> listMap = new HashMap<>();
     private final MainActivity main;
-    private final HashMap<String, HashMap<String, HashSet<StringMap>>> contacts = new HashMap<>();
+    private final HashMap<String, HashMap<String, HashMap<Long, StringMap>>> contacts = new HashMap<>();
     private final static HashSet<String> emptySet = new HashSet<String>();
     
         
@@ -175,7 +176,7 @@ class ContactsHelper {
         String ids = "";
 
         for (String i : list) {
-            contacts.put(i, new HashMap<String, HashSet<StringMap>>());
+            contacts.put(i, new HashMap<String, HashMap<Long, StringMap>>());
             ids += i + ",";
             Long id = Long.decode(i);
 
@@ -245,7 +246,7 @@ class ContactsHelper {
 
         try {
             while (c.moveToNext()) {
-                HashMap<String, HashSet<StringMap>> contact = contacts.get(c.getString(0));
+                HashMap<String, HashMap<Long, StringMap>> contact = contacts.get(c.getString(0));
                 if (!c.isNull(1) && !c.isNull(2) 
                         && (!c.getString(2).equals(TYPE_GROUP) || groupInc)
                         && (!c.getString(2).equals(TYPE_PHOTO) || photoInc)
@@ -253,8 +254,8 @@ class ContactsHelper {
                         ) {
                     
                     if (!contact.containsKey(c.getString(2)))
-                        contact.put(c.getString(2), new HashSet<StringMap>());
-                    HashSet<StringMap> field = contact.get(c.getString(2));
+                        contact.put(c.getString(2), new HashMap<Long, StringMap>());
+                    HashMap<Long, StringMap> field = contact.get(c.getString(2));
                     StringMap value = new StringMap();
                     if (!c.isNull(3) && !c.getString(3).equals(""))
                         if(c.getString(2).equals(TYPE_GROUP))
@@ -268,7 +269,7 @@ class ContactsHelper {
                             value.put(CONTACT_FIELDS[i], c.getBlob(i + 3));
                         else
                             value.put(CONTACT_FIELDS[i], c.getString(i + 3));
-                    field.add(value);
+                    field.put(c.getLong(1),value);
                 }
             }
         } finally {
@@ -364,9 +365,9 @@ class ContactsHelper {
         return (String)label;
     }
 
-    public HashMap<String,HashMap<String,HashSet<StringMap>>> getContacts() {
+    /*public HashMap<String,HashMap<String,HashSet<StringMap>>> getContacts() {
         return contacts;
-    }
+    }*/
 
     public String getAccountName (String id) {
         return accounts.get(id);
@@ -374,8 +375,8 @@ class ContactsHelper {
     
     public HashSet<byte[]> getPhotos() {
         HashSet<byte[]> photos = new HashSet<>();
-        for(HashMap<String,HashSet<StringMap>> contact:contacts.values()) {
-            for(StringMap photo:contact.get(TYPE_PHOTO)) {
+        for(HashMap<String,HashMap<Long,StringMap>> contact:contacts.values()) {
+            for(StringMap photo:contact.get(TYPE_PHOTO).values()) {
                 photos.add(photo.getByteArray(Data.DATA15));
             }
         }
@@ -385,7 +386,7 @@ class ContactsHelper {
     public byte[] getPhoto(String contactId) {
         if(contacts.get(contactId).get(TYPE_PHOTO) == null)
             return null;
-        Iterator it = contacts.get(contactId).get(TYPE_PHOTO).iterator();
+        Iterator it = contacts.get(contactId).get(TYPE_PHOTO).values().iterator();
         if(it.hasNext())
             return ((StringMap)it.next()).getByteArray(Data.DATA15);
         else
@@ -396,7 +397,7 @@ class ContactsHelper {
         return contacts.size();
     }
 
-    public View getContactView (ViewGroup layoutContainer, String id) {
+    public View getContactView (ViewGroup layoutContainer, String name, String id) {
         String account = getAccountName(id);
         // create a new view for the contact
         View contactView = LayoutInflater.from(main)
@@ -425,11 +426,13 @@ class ContactsHelper {
                 .inflate(R.layout.list_account, layoutContainer, false);
         ((TextView) accountInfo.findViewById(R.id.type)).setText("Account");
         ((TextView) accountInfo.findViewById(R.id.value)).setText(getAccountName(id));
-        //deleteLayout.setBackgroundColor(R.color.nav_background);
 
-        // listener to delete button
-        ImageButton deleteButton = (ImageButton) LayoutInflater.from(main)
-                .inflate(R.layout.delete_button, layoutContainer, false);
+        // add action buttons
+        View buttons = LayoutInflater.from(main)
+                .inflate(R.layout.buttons, layoutContainer, false);
+		ImageButton deleteButton = (ImageButton)buttons.findViewById(R.id.delete_button);
+		
+		// add delete listener
         deleteButton.setOnClickListener(new OnClickListener() {
             public void onClick(View p1) {
                 if (p1.getId() == R.id.delete_button) {
@@ -452,11 +455,29 @@ class ContactsHelper {
         });
         //store Id in tag
         deleteButton.setTag(id);
+		
+		ImageButton editButton = (ImageButton)buttons.findViewById(R.id.edit_button);
+
+		// add delete listener
+        editButton.setOnClickListener(new OnClickListener() {
+				public void onClick(View p1) {
+					if (p1.getId() == R.id.edit_button) {
+						String tag[] = ((String) p1.getTag()).split(":");
+						String id[] = {tag[1]};
+						
+						//use merge fragment for editing
+						main.Merge(tag[0],id,listName);
+					}
+				}
+			});
+        //store Id in tag
+        editButton.setTag(name+":"+id);
+		
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.END;
+        params.gravity = Gravity.END|Gravity.CENTER_VERTICAL;
 
         deleteLayout.addView(accountInfo);
-        deleteLayout.addView(deleteButton, params);
+        deleteLayout.addView(buttons, params);
         contactInfo.addView(deleteLayout);
 
         // Display contact id
@@ -466,13 +487,13 @@ class ContactsHelper {
         ((TextView) accountInfo.findViewById(R.id.value)).setText(id);
         contactInfo.addView(accountInfo);
 
-        HashMap<String, HashSet<StringMap>> contact = contacts.get(id);
+        HashMap<String, HashMap<Long, StringMap>> contact = contacts.get(id);
         for (String type : ContactsHelper.TYPES) {
             if (contact.get(type) != null
                     && contact.get(type).size() > 0) {
 
                 Boolean first = true;
-                for (StringMap item : contact.get(type)) {
+                for (StringMap item : contact.get(type).values()) {
                     if (item.get("value") == null)
                         break;
                     if (first) {
@@ -518,9 +539,8 @@ class ContactsHelper {
                     .withSelection(where, params)
                     .build());
 
-            String name = contacts.get(id).get(TYPE_NAME).iterator().next().get("value");
-            contacts.remove(id);
-            list.remove(id);
+            String name = contacts.get(id).get(TYPE_NAME).values().iterator().next().get("value");
+            
             if (listName.startsWith(Match.MATCHEDKEY)) {
                 String id1,id2;
                 if (accounts.get(id).equals(account1Name)) {
@@ -549,7 +569,8 @@ class ContactsHelper {
             String accountList = Match.ACCOUNTKEY + getAccountName(id);
             removeEntry(accountList, id, name);
                 
-            
+            contacts.remove(id);
+            list.remove(id);
         }
         pref.edit().commit();
 
@@ -573,7 +594,7 @@ class ContactsHelper {
             for(String id: contacts.keySet())
                 if(contacts.get(id).get(type) != null 
                     && contacts.get(id).get(type).size() > 0)
-                    values.addAll(contacts.get(id).get(type));
+                    values.addAll(contacts.get(id).get(type).values());
 
             if(values.size() > 0)
                 contact.put(type, values);
@@ -609,8 +630,26 @@ class ContactsHelper {
         if (accounts.size() == 0) {
             return false;
         }
-
+		
+		Boolean addToUnmatched = true;
         for (String id : list) {
+			if (list.size() == 1 
+				&& listName.startsWith(Match.DUPKEY)) {
+				String tmp[] = getListEntries();
+				String tmpType = listName.substring(Match.DUPKEY.length(),
+													listName.length()-accounts.get(id).length());
+				for(StringMap tmpMap: mergedContact.get(tmpType))
+					if(tmpMap.get("value").equals(listKey))
+						addToUnmatched = false;
+				
+				if(addToUnmatched && tmp.length == 2) {
+					HashSet<String> tmpList = new HashSet<String>(Arrays.asList(tmp));
+					tmpList.remove(id);
+					ContactsHelper tmpContactHelper = new ContactsHelper(main,listName,listKey,tmpList);
+					tmpContactHelper.addToUnmatched();
+				}
+			}
+			
             if(accountsUsed.contains(accounts.get(id))) {
                 HashSet<String> deList = new HashSet<>();
                 deList.add(id);
@@ -620,47 +659,21 @@ class ContactsHelper {
                 ops = new ArrayList<>();
                 for (String type: TYPES) {
                     //exclude types based on settings
-                    if((!type.equals(TYPE_GROUP) || groupInc)
-                       && (!type.equals(TYPE_PHOTO) || photoInc)) {
-                        HashSet<StringMap> dels;
-                        HashSet<StringMap> adds;
-
-                        if (mergedContact.get(type) != null)
-                            adds = new HashSet<>(mergedContact.get(type));
-                        else
-                            adds = new HashSet<>();
-
-                        if (contacts.get(id).get(type) != null) {
-                            adds.removeAll(contacts.get(id).get(type));
-                            dels = new HashSet<>(contacts.get(id).get(type));
-                            if (mergedContact.get(type) != null)
-                                dels.removeAll(mergedContact.get(type));
-                        } else {
-                            dels = new HashSet<>();
-                        }
-                        for (StringMap item : dels) {
-                            opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
-                            ArrayList<String> selection = new ArrayList<>();
-                            where = "? = ?";
-                            selection.add(Data.RAW_CONTACT_ID);
-                            selection.add(id);
-                            
-                            where += " AND ? = ?";
-                            selection.add(Data.MIMETYPE);
-                            selection.add(type);
-                            
-                            for(String field: CONTACT_FIELDS) {
-                                if(!item.isByteArray(field) && item.get(field) != null) {
-                                    where += " AND ? = ?";
-                                    selection.add(field);
-                                    selection.add(item.get(field));
-                                }
-                            }
-
-                            opBuilder.withSelection(where, selection.toArray(new String[selection.size()]));
-                            ops.add(opBuilder.build());
-                        }
-                        for (StringMap item : adds) {
+                    if ((!type.equals(TYPE_GROUP) || groupInc)
+                        && (!type.equals(TYPE_PHOTO) || photoInc)){
+						if (contacts.get(id).get(type) != null) {
+							for(Map.Entry item:contacts.get(id).get(type).entrySet()) {
+								if (mergedContact.containsValue(item.getValue())) {
+									mergedContact.remove(item.getValue());
+								} else {
+									opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
+									opBuilder.withSelection(Data._ID + "=?",new String[]{item.getKey().toString()});
+									ops.add(opBuilder.build());
+								}
+							}
+						}
+						
+                        for (StringMap item : mergedContact.get(type)) {
                             if (type.equals(TYPE_PHOTO)) {
                                 writeDisplayPhoto(Long.decode(id), item.getByteArray(PHOTO));
                             } else {
@@ -690,9 +703,9 @@ class ContactsHelper {
             }
         }
 
-        if (list.size() == 1)
+        if (addToUnmatched && listName.startsWith(Match.DUPKEY))
             addToUnmatched();
-        else
+        else if (listName.startsWith(Match.UNMATCHNAMEKEY))
             addToMatched();
 
         return true;
@@ -710,11 +723,9 @@ class ContactsHelper {
                 uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
             }
 
-            String name = contacts.get(id).get(TYPE_NAME).iterator().next().get("value");
-            
+            String name = contacts.get(id).get(TYPE_NAME).values().iterator().next().get("value");
             
             if (listName.startsWith(Match.DUPKEY)) {
-                
                 for(String type: Match.MIME_TYPE_LIST) {
                     if (findEntries(Match.DUPKEY + type + accounts.get(id), id))
                         return;
@@ -753,11 +764,11 @@ class ContactsHelper {
         for (String id1: account1) {
             for (String id2: account2) {
                 if(listName.startsWith(Match.UNMATCHNAMEKEY)) {
-                    name = contacts.get(id1).get(TYPE_NAME).iterator().next().get("value");
+                    name = contacts.get(id1).get(TYPE_NAME).values().iterator().next().get("value");
                     uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
                     removeEntry(uName, id1, name);
 
-                    name = contacts.get(id2).get(TYPE_NAME).iterator().next().get("value");
+                    name = contacts.get(id2).get(TYPE_NAME).values().iterator().next().get("value");
                     uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
                     removeEntry(uName, id2, name);
                 } else if (listName.startsWith(Match.MATCHEDKEY)) {
@@ -841,6 +852,20 @@ class ContactsHelper {
         return false;
     }
 
+	private String[] getListEntries() {
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
+
+        if (set == null || set.size() == 0)
+            return null;
+
+        for (String item : set) {
+            if (item.startsWith(listKey)) {
+				return item.split(":")[1].split(",");
+			}
+        }
+        return null;
+    }
+	
     private void removeEntries() {
         HashSet<String> set = new HashSet<String>(pref.getStringSet(listName, emptySet));
 
@@ -849,7 +874,22 @@ class ContactsHelper {
 
         for (String item : set) {
             if (item.startsWith(listKey)) {
+				HashSet<String> tmpIds = new HashSet<String> (
+					Arrays.asList(item.split(":")[1].split(",")));
+					
+				for(String id: list)
+					tmpIds.remove(id);
+				
+				
                 set.remove(item);
+				if(tmpIds.size() > 0) {
+					item = listKey + ":";
+					for (String id: tmpIds)
+						item += id + ",";
+					
+					item = item.substring(0, item.length()-1);
+					set.add(item);
+				}
                 break;
             }
         }
