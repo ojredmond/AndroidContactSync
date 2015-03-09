@@ -82,7 +82,8 @@ class ContactsHelper {
     };
     public static Boolean groupInc;
     public static Boolean photoInc;
-    public HashMap<String,String> groupNames = new HashMap<>();
+    private HashMap<String,HashMap<String,HashMap<String,String>>> groupIds = new HashMap<>();
+	private HashMap<String,String> groupNames = new HashMap<>();
     private static SharedPreferences pref;
     private static String account1Name;
     private static String account2Name;
@@ -208,31 +209,48 @@ class ContactsHelper {
         if(groupInc) {
             c = main.getContentResolver().query(
                 ContactsContract.Groups.CONTENT_URI, 
-                new String[] {ContactsContract.Groups._ID, ContactsContract.Groups.TITLE },
-                ContactsContract.Groups.DELETED+"!='1' AND "+
-                ContactsContract.Groups.GROUP_VISIBLE+"!='0' ", null, 
-                null);
+				new String[] {ContactsContract.Groups.ACCOUNT_NAME,
+							  ContactsContract.Groups.ACCOUNT_TYPE,
+							  ContactsContract.Groups._ID,
+							  ContactsContract.Groups.TITLE, 
+							  ContactsContract.Groups.NOTES,
+							  ContactsContract.Groups.SYSTEM_ID},
+				ContactsContract.Groups.DELETED+"!='1'", 
+				null, null);
 
 
             while (c.moveToNext()) {
-                String id = c.getString(c.getColumnIndex(ContactsContract.Groups._ID));
-                String gTitle = (c.getString(c.getColumnIndex(ContactsContract.Groups.TITLE)));
+				if(!c.isNull(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_TYPE)) && c.getString(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_TYPE)).equals(MainActivity.ACCOUNT_TYPE)) {
+                	String id = c.getString(c.getColumnIndex(ContactsContract.Groups._ID));
+					String title = c.getString(c.getColumnIndex(ContactsContract.Groups.TITLE));
+					String account = c.getString(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_NAME));
+					String system = c.getString(c.getColumnIndex(ContactsContract.Groups.SYSTEM_ID));
+					HashMap<String,String> groupItem = new HashMap<>();
+					groupItem.put("id", c.getString(c.getColumnIndex(ContactsContract.Groups._ID)));
+					groupItem.put("notes", c.getString(c.getColumnIndex(ContactsContract.Groups.NOTES)));
+					groupItem.put("system", system);
 
-                if (gTitle.contains("Group:")) {
-                    gTitle = gTitle.substring(gTitle.indexOf("Group:") + 6).trim();
-
-                }
-                if (gTitle.contains("Favorite_")) {
-                    gTitle = "Favorites";
-                }
-                if (gTitle.contains("Starred in Android")
-                    || gTitle.contains("My Contacts")) {
-                    continue;
-                }
-                groupNames.put(id, gTitle);
+					HashMap<String,HashMap<String,String>> group;
+					
+					if((groupIds.containsKey(title) && !groupIds.get(title).equals(account))
+					   || (groupIds.containsKey(title) && groupIds.get(title).equals(account) && system != null)
+						) {
+						groupIds.get(title).put(account,groupItem);
+					}
+					
+					if(!groupIds.containsKey(title)) {
+						group = new HashMap<>();
+						group.put(account,groupItem);
+						groupIds.put(title, group);
+						//Toast.makeText(main,title + group.toString(),Toast.LENGTH_LONG).show();
+					}
+					
+					groupNames.put(id,title);
+				}
             }
         }
-
+//Toast.makeText(main,groupNames.toString(),Toast.LENGTH_LONG).show();
+		
         ArrayList<String> selection = new ArrayList<>();
         selection.add(Data.RAW_CONTACT_ID);
         selection.add(Data._ID);
@@ -246,30 +264,57 @@ class ContactsHelper {
 
         try {
             while (c.moveToNext()) {
-                HashMap<String, HashMap<Long, StringMap>> contact = contacts.get(c.getString(0));
-                if (!c.isNull(1) && !c.isNull(2) 
-                        && (!c.getString(2).equals(TYPE_GROUP) || groupInc)
-                        && (!c.getString(2).equals(TYPE_PHOTO) || photoInc)
-                        && ((c.getString(2).equals(TYPE_PHOTO) && !c.isNull(CONTACT_FIELDS.length + 2)) || !c.getString(2).equals(TYPE_PHOTO))
+				String id = c.getString(c.getColumnIndex(Data.RAW_CONTACT_ID));
+                HashMap<String, HashMap<Long, StringMap>> contact = contacts.get(id);
+                if (!c.isNull(c.getColumnIndex(Data._ID)) && !c.isNull(c.getColumnIndex(Data.MIMETYPE)) 
+						&& (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) || groupInc)
+						&& (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_PHOTO) || photoInc)
+						&& ((c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_PHOTO) && !c.isNull(CONTACT_FIELDS.length + 2)) || !c.getString(2).equals(TYPE_PHOTO))
                         ) {
+                    //only add to content if row has content
+					Boolean hasContent = false;
                     
-                    if (!contact.containsKey(c.getString(2)))
-                        contact.put(c.getString(2), new HashMap<Long, StringMap>());
-                    HashMap<Long, StringMap> field = contact.get(c.getString(2));
                     StringMap value = new StringMap();
-                    if (!c.isNull(3) && !c.getString(3).equals(""))
-                        if(c.getString(2).equals(TYPE_GROUP))
-                            value.put("value", groupNames.get(c.getString(3)));
-                        else
-                            value.put("value", c.getString(3));
-                    value.put("label", getTypeLabel(c.getString(2), c.getInt(4), c.getString(5)));
+					if(c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP)) {
+						if(c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) && groupNames.containsKey(c.getString(c.getColumnIndex(Data.DATA1)))) {
+							String groupName = groupNames.get(c.getString(c.getColumnIndex(Data.DATA1)));
+							HashMap<String,HashMap<String,String>> group = null;
+							if(groupIds.containsKey(groupName))
+								group = groupIds.get(groupName);
+
+							//Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
+							if(group != null) {
+								value.put("group",group);
+								hasContent = true;
+							}
+							value.put("value", groupName);
+						}
+                    } else {
+					//add value if Data 1 has content
+					if (!c.isNull(c.getColumnIndex(Data.DATA1)) && !c.getString(c.getColumnIndex(Data.DATA1)).equals("")) {
+						value.put("value", c.getString(c.getColumnIndex(Data.DATA1)));
+					}
+					//add label to store common extra information
+					value.put("label", getTypeLabel(c.getString(c.getColumnIndex(Data.MIMETYPE)), c.getInt(c.getColumnIndex(Data.DATA2)), c.getString(c.getColumnIndex(Data.DATA3))));
                     
-                    for (int i = 0; i < CONTACT_FIELDS.length; i++)
-                        if(c.getType(i + 3) == Cursor.FIELD_TYPE_BLOB)
-                            value.put(CONTACT_FIELDS[i], c.getBlob(i + 3));
+					//loop through the data fields & store in contact
+                    for (int i = 0; i < CONTACT_FIELDS.length; i++) {
+						if(!c.isNull(c.getColumnIndex(CONTACT_FIELDS[i])) && (c.getType(c.getColumnIndex(CONTACT_FIELDS[i])) == Cursor.FIELD_TYPE_BLOB
+							   || !c.getString(c.getColumnIndex(CONTACT_FIELDS[i])).equals("")))
+							hasContent = true;
+						if(c.getType(c.getColumnIndex(CONTACT_FIELDS[i])) == Cursor.FIELD_TYPE_BLOB)
+								value.put(CONTACT_FIELDS[i], c.getBlob(c.getColumnIndex(CONTACT_FIELDS[i])));
                         else
-                            value.put(CONTACT_FIELDS[i], c.getString(i + 3));
-                    field.put(c.getLong(1),value);
+								value.put(CONTACT_FIELDS[i], c.getString(c.getColumnIndex(CONTACT_FIELDS[i])));
+					}
+					}
+					
+					if (hasContent) {
+							if (!contact.containsKey(c.getString(c.getColumnIndex(Data.MIMETYPE))))
+								contact.put(c.getString(c.getColumnIndex(Data.MIMETYPE)), new HashMap<Long, StringMap>());
+							HashMap<Long, StringMap> field = contact.get(c.getString(c.getColumnIndex(Data.MIMETYPE)));
+							field.put(c.getLong(c.getColumnIndex(Data._ID)),value);
+					}
                 }
             }
         } finally {
@@ -593,7 +638,7 @@ class ContactsHelper {
             HashSet<StringMap> values = new HashSet<>();
             for(String id: contacts.keySet())
                 if(contacts.get(id).get(type) != null 
-                    && contacts.get(id).get(type).size() > 0)
+                    	&& contacts.get(id).get(type).size() > 0)
                     values.addAll(contacts.get(id).get(type).values());
 
             if(values.size() > 0)
@@ -623,16 +668,16 @@ class ContactsHelper {
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
         //String value;
-        String where;
         //String origValue;
         HashSet<String> accountsUsed = new HashSet<>();
-
+		HashMap<String,HashSet<StringMap>> tmpMContact;
         if (accounts.size() == 0) {
             return false;
         }
 		
 		Boolean addToUnmatched = true;
         for (String id : list) {
+			
 			if (list.size() == 1 
 				&& listName.startsWith(Match.DUPKEY)) {
 				String tmp[] = getListEntries();
@@ -650,6 +695,10 @@ class ContactsHelper {
 				}
 			}
 			
+			//clone merged contact
+			tmpMContact = new HashMap<String,HashSet<StringMap>>();
+			for(Map.Entry item: mergedContact.entrySet())
+				tmpMContact.put((String)item.getKey(),(HashSet<StringMap>)((HashSet)item.getValue()).clone());
             if(accountsUsed.contains(accounts.get(id))) {
                 HashSet<String> deList = new HashSet<>();
                 deList.add(id);
@@ -663,9 +712,11 @@ class ContactsHelper {
                         && (!type.equals(TYPE_PHOTO) || photoInc)){
 						if (contacts.get(id).get(type) != null) {
 							for(Map.Entry item:contacts.get(id).get(type).entrySet()) {
-								if (mergedContact.containsValue(item.getValue())) {
-									mergedContact.remove(item.getValue());
-								} else {
+								//Toast.makeText(main,tmpMContact.get(type).size()+((StringMap)item.getValue()).get("value"),Toast.LENGTH_LONG).show();
+								if (tmpMContact.get(type).contains(item.getValue())) {
+									//Toast.makeText(main,"found",Toast.LENGTH_LONG).show();
+									tmpMContact.get(type).remove(item.getValue());
+								} else if(!type.equals(TYPE_GROUP) || ((StringMap)item.getValue()).get("value") == null || !((StringMap)item.getValue()).get("value").equals("My Contacts")) {
 									opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
 									opBuilder.withSelection(Data._ID + "=?",new String[]{item.getKey().toString()});
 									ops.add(opBuilder.build());
@@ -673,21 +724,51 @@ class ContactsHelper {
 							}
 						}
 						
-                        for (StringMap item : mergedContact.get(type)) {
-                            if (type.equals(TYPE_PHOTO)) {
-                                writeDisplayPhoto(Long.decode(id), item.getByteArray(PHOTO));
-                            } else {
-                                opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+						if (tmpMContact.get(type) != null) {
+							for (StringMap item : tmpMContact.get(type)) {
+								if (type.equals(TYPE_PHOTO)) {
+									writeDisplayPhoto(Long.decode(id), item.getByteArray(PHOTO));
+								} else if (type.equals(TYPE_GROUP)) {
+									HashMap<String,String> group = (HashMap<String,String>)((HashMap)item.getObject("group")).get(accounts.get(id));
+									if(group == null) {
+										//create group
+										group = (HashMap<String,String>)((HashMap)item.getObject("group")).values().iterator().next();
+										//Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
+										int groupInsertIndex = ops.size();
+										opBuilder = ContentProviderOperation.newInsert(ContactsContract.Groups.CONTENT_URI)
+											.withValue(ContactsContract.Groups.TITLE, item.get("value"))
+											.withValue(ContactsContract.Groups.NOTES, item.get("notes"))
+											.withValue(ContactsContract.Groups.GROUP_VISIBLE, 1)
+											.withValue(ContactsContract.Groups.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
+											.withValue(ContactsContract.Groups.ACCOUNT_NAME, accounts.get(id));
+										ops.add(opBuilder.build());
+										opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+											.withValueBackReference(Data.DATA1, groupInsertIndex)
+											.withValue(Data.RAW_CONTACT_ID, id)
+											.withValue(Data.MIMETYPE, type);
+										ops.add(opBuilder.build());
+									} else {
+										opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+											.withValue(Data.RAW_CONTACT_ID, id)
+											.withValue(Data.MIMETYPE, type)
+											.withValue(Data.DATA1, group.get("id"));
+										ops.add(opBuilder.build());
+										//Toast.makeText(main,group.get("id"),Toast.LENGTH_LONG).show();
+									}
+									//Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
+								} else {
+									opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
                                         .withValue(Data.RAW_CONTACT_ID, id)
                                         .withValue(Data.MIMETYPE, type);
-                                for(String field: CONTACT_FIELDS) {
-                                    if(item.getObject(field) != null)
-                                        opBuilder.withValue(field, item.getObject(field));
-                                }
-    
-                                ops.add(opBuilder.build());
-                            }
-                        }
+									for(String field: CONTACT_FIELDS) {
+										if(item.getObject(field) != null)
+											opBuilder.withValue(field, item.getObject(field));
+									}
+
+									ops.add(opBuilder.build());
+								}
+							}
+						}
                     }
                 }
 

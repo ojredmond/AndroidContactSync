@@ -223,8 +223,9 @@ public class MergeFragment extends Fragment {
                                 .inflate(R.layout.list_row_1, layoutContainer, false);
                         contactValue.setText(item.get("value"));
                         contactValue.setTag(item);
-                        //if only 1 name hide delete button
-                        if (!(type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1))
+                        //hide delete button if only 1 name or group is My Contacts
+                        if (!(type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1)
+								&& !(type.equals(ContactsHelper.TYPE_GROUP) && item.get("value")!= null && item.get("value").equals("My Contacts")))
                             deleteLayout.addView(contactValue);
                     } else {
                         LinearLayout rowLayout = (LinearLayout) LayoutInflater.from(main)
@@ -250,7 +251,8 @@ public class MergeFragment extends Fragment {
                     deleteLayout.setTag(type);
                         
                     //if only 1 name hide delete button
-                    if (type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1) {
+                    if ((type.equals(ContactsHelper.TYPE_NAME) && contact.get(type).size() == 1) 
+							|| (type.equals(ContactsHelper.TYPE_GROUP) && item.get("value") != null && item.get("value").equals("My Contacts"))) {
                         assert contactValue != null;
                         layout.addView(contactValue, linearParams);
                     } else if (!type.equals(ContactsHelper.TYPE_PHOTO))
