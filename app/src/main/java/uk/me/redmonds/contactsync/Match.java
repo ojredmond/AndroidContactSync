@@ -567,7 +567,8 @@ class Match {
 
             syncMatched = true;
 
-            mainActivity.showResults();
+			if(!mainActivity.isDestroyed())
+            	mainActivity.showResults();
         }
     }
 }
