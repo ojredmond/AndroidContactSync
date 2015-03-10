@@ -786,7 +786,7 @@ class ContactsHelper {
 
         if (addToUnmatched && listName.startsWith(Match.DUPKEY))
             addToUnmatched();
-        else if (listName.startsWith(Match.UNMATCHNAMEKEY))
+        else if (!listName.startsWith(Match.DUPKEY))
             addToMatched();
 
         return true;
