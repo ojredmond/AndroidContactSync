@@ -21,6 +21,14 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="WhiteStyle">
+        <item name="android:background">@android:color/white</item>
+    </style>
+
+    <style name="GreyStyle">
+        <item name="android:background">@color/nav_background</item>
+    </style>
+
     <style name="SpinnerStyle">
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:padding">@dimen/medium_gap</item>

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-	
-	<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-		android:id="@+id/textView1"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:textColor="@android:color/white"
-		android:background="@color/material_orange_500"
-		android:paddingBottom="@dimen/small_gap"
-		android:paddingStart="@dimen/large_gap"
-		android:paddingTop="@dimen/small_gap"
-		android:paddingEnd="@dimen/large_gap"
-		/>
+
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/textView1"
+    style="@style/HeadingStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/small_gap"
+    android:paddingEnd="@dimen/large_gap"
+    android:paddingStart="@dimen/large_gap"
+    android:paddingTop="@dimen/small_gap" />
