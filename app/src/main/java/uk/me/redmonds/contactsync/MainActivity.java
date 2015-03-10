@@ -107,8 +107,12 @@ public class MainActivity extends ActionBarActivity
                 break;
             case 2:
                 String tag = PACKAGE_NAME + "-" + getString(R.string.title_logs);
-                if (log == null)
-                    log = new StatusFragment(logText);
+                if (log == null) {
+                    Bundle args = new Bundle();
+                    args.putString("logText", logText);
+                    log = new StatusFragment();
+                    log.setArguments(args);
+                }
 
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, log, tag)
@@ -133,9 +137,9 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String account1Name = pref.getString(ACCOUNT1, null);
         String account2Name = pref.getString(ACCOUNT2, null);
-        SharedPreferences.Editor results = getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE).edit();
-        
-		results.clear();
+        SharedPreferences.Editor results = getSharedPreferences(Match.PREFKEY, Context.MODE_WORLD_READABLE).edit();
+
+        results.clear();
         results.apply();
 
         onNavigationDrawerItemSelected(2);

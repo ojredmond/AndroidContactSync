@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item type="id" name="delete_contact" />
-    <item type="id" name="merge_contact" />
-    <item type="id" name="unmatched_contact" />
+    <item name="delete_contact" type="id" />
+    <item name="merge_contact" type="id" />
+    <item name="unmatched_contact" type="id" />
+    <item name="row" type="id" />
+    <item name="type" type="id" />
+    <item name="value" type="id" />
 </resources>

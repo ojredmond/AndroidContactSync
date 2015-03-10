@@ -9,30 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button__bar_height"
         android:layout_alignParentBottom="true"
+        android:background="@color/material_orange_500"
         android:orientation="horizontal"
-        android:background="@drawable/button_border_top"
         >
 
         <Button
             android:id="@+id/contact_cancel"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="@dimen/button_min_width"
             android:layout_weight="1"
+            android:minWidth="@dimen/button_min_width"
             android:text="@string/cancel"
-            android:background="@drawable/button"
-            android:textColor="@color/material_orange_500"
+            android:textColor="@android:color/white"
             />
 
         <Button
             android:id="@+id/contact_confirm"
+            style="?android:attr/borderlessButtonStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:minWidth="@dimen/button_min_width"
             android:layout_weight="1"
+            android:minWidth="@dimen/button_min_width"
             android:text="@string/confirm"
-            android:background="@drawable/button"
-            android:textColor="@color/material_orange_500"
+            android:textColor="@android:color/white"
             />
 
     </LinearLayout>
@@ -41,9 +41,9 @@
         android:id="@+id/contact_scroll"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@id/button_bar"
         android:fillViewport="true"
         android:orientation="vertical"
-        android:layout_above="@id/button_bar"
         >
 
         <include layout="@layout/contact"/>

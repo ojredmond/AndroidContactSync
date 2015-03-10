@@ -5,7 +5,10 @@ import android.content.ContentProviderOperation;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.AssetFileDescriptor;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -26,21 +29,25 @@ import android.provider.ContactsContract.CommonDataKinds.StructuredPostal;
 import android.provider.ContactsContract.CommonDataKinds.Website;
 import android.provider.ContactsContract.Data;
 import android.provider.ContactsContract.RawContacts;
-import android.widget.Toast;
+import android.util.LongSparseArray;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import android.content.res.*;
-import java.io.*;
-import android.view.*;
-import android.widget.*;
-import android.graphics.*;
-import android.view.View.*;
-import java.util.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -80,10 +87,9 @@ class ContactsHelper {
             Data.DATA14,
             Data.DATA15
     };
+    private final static HashSet<String> emptySet = new HashSet<String>();
     public static Boolean groupInc;
     public static Boolean photoInc;
-    private HashMap<String,HashMap<String,HashMap<String,String>>> groupIds = new HashMap<>();
-	private HashMap<String,String> groupNames = new HashMap<>();
     private static SharedPreferences pref;
     private static String account1Name;
     private static String account2Name;
@@ -95,8 +101,9 @@ class ContactsHelper {
     private final HashMap<String, String> accounts = new HashMap<>();
     private final HashMap<String, String> listMap = new HashMap<>();
     private final MainActivity main;
-    private final HashMap<String, HashMap<String, HashMap<Long, StringMap>>> contacts = new HashMap<>();
-    private final static HashSet<String> emptySet = new HashSet<String>();
+    private final HashMap<String, HashMap<String, LongSparseArray<StringMap>>> contacts = new HashMap<>();
+    private HashMap<String, HashMap<String, HashMap<String, String>>> groupIds = new HashMap<>();
+    private HashMap<String, String> groupNames = new HashMap<>();
     
         
     
@@ -177,7 +184,7 @@ class ContactsHelper {
         String ids = "";
 
         for (String i : list) {
-            contacts.put(i, new HashMap<String, HashMap<Long, StringMap>>());
+            contacts.put(i, new HashMap<String, LongSparseArray<StringMap>>());
             ids += i + ",";
             Long id = Long.decode(i);
 
@@ -265,7 +272,7 @@ class ContactsHelper {
         try {
             while (c.moveToNext()) {
 				String id = c.getString(c.getColumnIndex(Data.RAW_CONTACT_ID));
-                HashMap<String, HashMap<Long, StringMap>> contact = contacts.get(id);
+                HashMap<String, LongSparseArray<StringMap>> contact = contacts.get(id);
                 if (!c.isNull(c.getColumnIndex(Data._ID)) && !c.isNull(c.getColumnIndex(Data.MIMETYPE)) 
 						&& (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) || groupInc)
 						&& (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_PHOTO) || photoInc)
@@ -311,9 +318,9 @@ class ContactsHelper {
 					
 					if (hasContent) {
 							if (!contact.containsKey(c.getString(c.getColumnIndex(Data.MIMETYPE))))
-								contact.put(c.getString(c.getColumnIndex(Data.MIMETYPE)), new HashMap<Long, StringMap>());
-							HashMap<Long, StringMap> field = contact.get(c.getString(c.getColumnIndex(Data.MIMETYPE)));
-							field.put(c.getLong(c.getColumnIndex(Data._ID)),value);
+                                contact.put(c.getString(c.getColumnIndex(Data.MIMETYPE)), new LongSparseArray<StringMap>());
+                        LongSparseArray<StringMap> field = contact.get(c.getString(c.getColumnIndex(Data.MIMETYPE)));
+                        field.put(c.getLong(c.getColumnIndex(Data._ID)),value);
 					}
                 }
             }
@@ -418,24 +425,11 @@ class ContactsHelper {
         return accounts.get(id);
     }
     
-    public HashSet<byte[]> getPhotos() {
-        HashSet<byte[]> photos = new HashSet<>();
-        for(HashMap<String,HashMap<Long,StringMap>> contact:contacts.values()) {
-            for(StringMap photo:contact.get(TYPE_PHOTO).values()) {
-                photos.add(photo.getByteArray(Data.DATA15));
-            }
-        }
-        return photos;
-    }
-    
     public byte[] getPhoto(String contactId) {
         if(contacts.get(contactId).get(TYPE_PHOTO) == null)
             return null;
-        Iterator it = contacts.get(contactId).get(TYPE_PHOTO).values().iterator();
-        if(it.hasNext())
-            return ((StringMap)it.next()).getByteArray(Data.DATA15);
-        else
-            return null;
+
+        return contacts.get(contactId).get(TYPE_PHOTO).valueAt(0).getByteArray(Data.DATA15);
     }
     
     public int size() {
@@ -532,13 +526,15 @@ class ContactsHelper {
         ((TextView) accountInfo.findViewById(R.id.value)).setText(id);
         contactInfo.addView(accountInfo);
 
-        HashMap<String, HashMap<Long, StringMap>> contact = contacts.get(id);
+        HashMap<String, LongSparseArray<StringMap>> contact = contacts.get(id);
         for (String type : ContactsHelper.TYPES) {
             if (contact.get(type) != null
                     && contact.get(type).size() > 0) {
 
                 Boolean first = true;
-                for (StringMap item : contact.get(type).values()) {
+
+                for (int i = 0; i < contact.get(type).size(); i++) {
+                    StringMap item = contact.get(type).get(i);
                     if (item.get("value") == null)
                         break;
                     if (first) {
@@ -584,7 +580,7 @@ class ContactsHelper {
                     .withSelection(where, params)
                     .build());
 
-            String name = contacts.get(id).get(TYPE_NAME).values().iterator().next().get("value");
+            String name = contacts.get(id).get(TYPE_NAME).valueAt(0).get("value");
             
             if (listName.startsWith(Match.MATCHEDKEY)) {
                 String id1,id2;
@@ -639,7 +635,8 @@ class ContactsHelper {
             for(String id: contacts.keySet())
                 if(contacts.get(id).get(type) != null 
                     	&& contacts.get(id).get(type).size() > 0)
-                    values.addAll(contacts.get(id).get(type).values());
+                    for (int i = 0; i < contacts.get(id).get(type).size(); i++)
+                        values.add(contacts.get(id).get(type).valueAt(i));
 
             if(values.size() > 0)
                 contact.put(type, values);
@@ -660,7 +657,8 @@ class ContactsHelper {
             os.close();
             fd.close();
         } catch (IOException e) {
-            // Handle error cases.
+            // send error report
+            TopExceptionHandler.sendReport(main, TopExceptionHandler.generateReport(e));
         }
     }
 
@@ -711,15 +709,17 @@ class ContactsHelper {
                     if ((!type.equals(TYPE_GROUP) || groupInc)
                         && (!type.equals(TYPE_PHOTO) || photoInc)){
 						if (contacts.get(id).get(type) != null) {
-							for(Map.Entry item:contacts.get(id).get(type).entrySet()) {
-								//Toast.makeText(main,tmpMContact.get(type).size()+((StringMap)item.getValue()).get("value"),Toast.LENGTH_LONG).show();
-								if (tmpMContact.get(type).contains(item.getValue())) {
-									//Toast.makeText(main,"found",Toast.LENGTH_LONG).show();
-									tmpMContact.get(type).remove(item.getValue());
-								} else if(!type.equals(TYPE_GROUP) || ((StringMap)item.getValue()).get("value") == null || !((StringMap)item.getValue()).get("value").equals("My Contacts")) {
-									opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
-									opBuilder.withSelection(Data._ID + "=?",new String[]{item.getKey().toString()});
-									ops.add(opBuilder.build());
+                            for (int i = 0; i < contacts.get(id).get(type).size(); i++) {
+                                Long key = contacts.get(id).get(type).keyAt(i);
+                                StringMap value = contacts.get(id).get(type).valueAt(i);
+                                //Toast.makeText(main,tmpMContact.get(type).size()+((StringMap)item.getValue()).get("value"),Toast.LENGTH_LONG).show();
+                                if (tmpMContact.get(type).contains(value)) {
+                                    //Toast.makeText(main,"found",Toast.LENGTH_LONG).show();
+                                    tmpMContact.get(type).remove(value);
+                                } else if (!type.equals(TYPE_GROUP) || value.get("value") == null || !value.get("value").equals("My Contacts")) {
+                                    opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
+                                    opBuilder.withSelection(Data._ID + "=?", new String[]{key.toString()});
+                                    ops.add(opBuilder.build());
 								}
 							}
 						}
@@ -804,7 +804,7 @@ class ContactsHelper {
                 uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
             }
 
-            String name = contacts.get(id).get(TYPE_NAME).values().iterator().next().get("value");
+            String name = contacts.get(id).get(TYPE_NAME).valueAt(0).get("value");
             
             if (listName.startsWith(Match.DUPKEY)) {
                 for(String type: Match.MIME_TYPE_LIST) {
@@ -845,11 +845,11 @@ class ContactsHelper {
         for (String id1: account1) {
             for (String id2: account2) {
                 if(listName.startsWith(Match.UNMATCHNAMEKEY)) {
-                    name = contacts.get(id1).get(TYPE_NAME).values().iterator().next().get("value");
+                    name = contacts.get(id1).get(TYPE_NAME).valueAt(0).get("value");
                     uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
                     removeEntry(uName, id1, name);
 
-                    name = contacts.get(id2).get(TYPE_NAME).values().iterator().next().get("value");
+                    name = contacts.get(id2).get(TYPE_NAME).valueAt(0).get("value");
                     uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
                     removeEntry(uName, id2, name);
                 } else if (listName.startsWith(Match.MATCHEDKEY)) {

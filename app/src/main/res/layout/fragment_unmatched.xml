@@ -30,14 +30,14 @@
         android:layout_height="wrap_content"
         android:layout_above="@id/button_bar"
         android:layout_alignParentTop="true"
-        android:orientation="vertical"
         android:animateLayoutChanges="true"
+        android:orientation="vertical"
         >
         
         <include android:id="@+id/unmatched_group"
+            layout="@layout/list_border_none_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            layout="@layout/list_border_none_2"
             />
         
         <RelativeLayout
@@ -52,30 +52,30 @@
                 android:id="@+id/unmatched_sideIndex"
                 android:layout_width="@dimen/xxlarge_gap"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:layout_alignParentRight="true"
             />
         
             <ListView
                 android:id="@+id/unmatched_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none"
-                android:listSelector="@drawable/activatedbackground"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/unmatched_sideIndex"
                 android:choiceMode="singleChoice"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@id/unmatched_sideIndex"
+                android:listSelector="@drawable/activatedbackground"
+                android:scrollbars="none"
                 />
 
         </RelativeLayout>
 
         <include android:id="@+id/matched_group"
+            layout="@layout/list_border_top_2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/separator"
-            layout="@layout/list_border_top_2"
             />
 
         <RelativeLayout
@@ -90,21 +90,21 @@
                 android:id="@+id/matched_sideIndex"
                 android:layout_width="@dimen/xxlarge_gap"
                 android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
                 android:background="@android:color/white"
                 android:gravity="center_horizontal"
                 android:orientation="vertical"
-                android:layout_alignParentRight="true"
             />
         
             <ListView
                 android:id="@+id/matched_list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none"
-                android:listSelector="@drawable/activatedbackground"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@id/matched_sideIndex"
                 android:choiceMode="singleChoice"
-                android:layout_alignParentLeft="true"
-                android:layout_toLeftOf="@id/matched_sideIndex"
+                android:listSelector="@drawable/activatedbackground"
+                android:scrollbars="none"
                 />
 
         </RelativeLayout>

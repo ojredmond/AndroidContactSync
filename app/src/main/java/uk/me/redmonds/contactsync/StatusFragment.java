@@ -15,11 +15,8 @@ public class StatusFragment extends Fragment {
     private TextView log;
 
     public StatusFragment() {
-        logText = "";
-    }
-
-    public StatusFragment(String text) {
-        logText = text;
+        Bundle args = getArguments();
+        logText = args.getString("logText", "");
     }
 
     @Override
