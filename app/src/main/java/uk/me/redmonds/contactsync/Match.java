@@ -432,11 +432,16 @@ class Match {
 				message += "Account 2 Duplicates: " + String.valueOf(dupCount2) + "\n";
 				publishProgress(message);
 
-				int matches = numContactsAccount1 + numContactsAccount2
-				          - dupCount1 - dupCount2
-						  - unmatched1.size() - unmatched2.size();
+				int matches = 0;
+				for (String mime : MIME_TYPE_LIST)
+                    if (!mime.equals(ContactsHelper.TYPE_NAME))
+						if(matched1Other.get(mime) != null)
+                        	matches += matched1Other.get(mime).size();
+                    
+                        
 				message = "Results:\n";
-				message += "Matched: " + String.valueOf(matches) + "\n";
+				message += "Matched: " + String.valueOf(matched1Other.get(ContactsHelper.TYPE_NAME).size()) + "\n";
+				message += "Potential Matches: " + String.valueOf(matches) + "\n";
 				message += "Unmatched from account 1: " + String.valueOf(unmatched1.size()) + "\n";
 				message += "Unmatched from account 2: " + String.valueOf(unmatched2.size()) + "\n";
 			}
