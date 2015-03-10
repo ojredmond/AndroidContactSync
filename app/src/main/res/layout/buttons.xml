@@ -1,22 +1,22 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
->
-	<ImageButton 
-    	android:id="@+id/delete_button"
-    	android:layout_width="wrap_content"
-    	android:layout_height="wrap_content"
-    	android:background="@android:color/transparent"
-    	android:src="@drawable/ic_action_discard"
-		android:layout_alignParentRight="true"
-		/>
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
-	<ImageButton 
-		android:id="@+id/edit_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:background="@android:color/transparent"
-		android:src="@drawable/ic_action_edit"
-		android:layout_toLeftOf="@id/delete_button"
-	/>
+    <ImageButton
+        android:id="@+id/delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/edit_contact"
+        android:src="@drawable/ic_action_discard" />
+
+    <ImageButton
+        android:id="@+id/edit_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/delete_button"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/delete_contact"
+        android:src="@drawable/ic_action_edit" />
 </RelativeLayout>

@@ -104,30 +104,29 @@ class ContactsHelper {
     private final HashMap<String, HashMap<String, LongSparseArray<StringMap>>> contacts = new HashMap<>();
     private HashMap<String, HashMap<String, HashMap<String, String>>> groupIds = new HashMap<>();
     private HashMap<String, String> groupNames = new HashMap<>();
-    
-        
-    
+
+
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
-        main = (MainActivity)m;
+        main = (MainActivity) m;
         listName = l;
         listKey = key;
         list = ids;
-        pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE);
-        createContacts();
-   }
-
-    ContactsHelper(Activity m, String l, String key, String[] ids) {
-        main = (MainActivity)m;
-        listName = l;
-        listKey = key;
-        list = new HashSet<>();
-        for (String id:ids)
-            list.add(id);
-        pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_WORLD_READABLE);
+        pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
         createContacts();
     }
 
-    public static String getGroupName (String mime) {
+    ContactsHelper(Activity m, String l, String key, String[] ids) {
+        main = (MainActivity) m;
+        listName = l;
+        listKey = key;
+        list = new HashSet<>();
+        for (String id : ids)
+            list.add(id);
+        pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
+        createContacts();
+    }
+
+    public static String getGroupName(String mime) {
         String group;
         switch (mime) {
             case StructuredName.CONTENT_ITEM_TYPE:
@@ -212,52 +211,52 @@ class ContactsHelper {
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
         groupInc = settings.getBoolean(MainActivity.GROUPS, false);
         photoInc = settings.getBoolean(MainActivity.PHOTOS, false);
-        
-        if(groupInc) {
+
+        if (groupInc) {
             c = main.getContentResolver().query(
-                ContactsContract.Groups.CONTENT_URI, 
-				new String[] {ContactsContract.Groups.ACCOUNT_NAME,
-							  ContactsContract.Groups.ACCOUNT_TYPE,
-							  ContactsContract.Groups._ID,
-							  ContactsContract.Groups.TITLE, 
-							  ContactsContract.Groups.NOTES,
-							  ContactsContract.Groups.SYSTEM_ID},
-				ContactsContract.Groups.DELETED+"!='1'", 
-				null, null);
+                    ContactsContract.Groups.CONTENT_URI,
+                    new String[]{ContactsContract.Groups.ACCOUNT_NAME,
+                            ContactsContract.Groups.ACCOUNT_TYPE,
+                            ContactsContract.Groups._ID,
+                            ContactsContract.Groups.TITLE,
+                            ContactsContract.Groups.NOTES,
+                            ContactsContract.Groups.SYSTEM_ID},
+                    ContactsContract.Groups.DELETED + "!='1'",
+                    null, null);
 
 
             while (c.moveToNext()) {
-				if(!c.isNull(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_TYPE)) && c.getString(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_TYPE)).equals(MainActivity.ACCOUNT_TYPE)) {
-                	String id = c.getString(c.getColumnIndex(ContactsContract.Groups._ID));
-					String title = c.getString(c.getColumnIndex(ContactsContract.Groups.TITLE));
-					String account = c.getString(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_NAME));
-					String system = c.getString(c.getColumnIndex(ContactsContract.Groups.SYSTEM_ID));
-					HashMap<String,String> groupItem = new HashMap<>();
-					groupItem.put("id", c.getString(c.getColumnIndex(ContactsContract.Groups._ID)));
-					groupItem.put("notes", c.getString(c.getColumnIndex(ContactsContract.Groups.NOTES)));
-					groupItem.put("system", system);
+                if (!c.isNull(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_TYPE)) && c.getString(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_TYPE)).equals(MainActivity.ACCOUNT_TYPE)) {
+                    String id = c.getString(c.getColumnIndex(ContactsContract.Groups._ID));
+                    String title = c.getString(c.getColumnIndex(ContactsContract.Groups.TITLE));
+                    String account = c.getString(c.getColumnIndex(ContactsContract.Groups.ACCOUNT_NAME));
+                    String system = c.getString(c.getColumnIndex(ContactsContract.Groups.SYSTEM_ID));
+                    HashMap<String, String> groupItem = new HashMap<>();
+                    groupItem.put("id", c.getString(c.getColumnIndex(ContactsContract.Groups._ID)));
+                    groupItem.put("notes", c.getString(c.getColumnIndex(ContactsContract.Groups.NOTES)));
+                    groupItem.put("system", system);
 
-					HashMap<String,HashMap<String,String>> group;
-					
-					if((groupIds.containsKey(title) && !groupIds.get(title).equals(account))
-					   || (groupIds.containsKey(title) && groupIds.get(title).equals(account) && system != null)
-						) {
-						groupIds.get(title).put(account,groupItem);
-					}
-					
-					if(!groupIds.containsKey(title)) {
-						group = new HashMap<>();
-						group.put(account,groupItem);
-						groupIds.put(title, group);
-						//Toast.makeText(main,title + group.toString(),Toast.LENGTH_LONG).show();
-					}
-					
-					groupNames.put(id,title);
-				}
+                    HashMap<String, HashMap<String, String>> group;
+
+                    if ((groupIds.containsKey(title) && !groupIds.get(title).equals(account))
+                            || (groupIds.containsKey(title) && groupIds.get(title).equals(account) && system != null)
+                            ) {
+                        groupIds.get(title).put(account, groupItem);
+                    }
+
+                    if (!groupIds.containsKey(title)) {
+                        group = new HashMap<>();
+                        group.put(account, groupItem);
+                        groupIds.put(title, group);
+                        //Toast.makeText(main,title + group.toString(),Toast.LENGTH_LONG).show();
+                    }
+
+                    groupNames.put(id, title);
+                }
             }
         }
 //Toast.makeText(main,groupNames.toString(),Toast.LENGTH_LONG).show();
-		
+
         ArrayList<String> selection = new ArrayList<>();
         selection.add(Data.RAW_CONTACT_ID);
         selection.add(Data._ID);
@@ -271,57 +270,57 @@ class ContactsHelper {
 
         try {
             while (c.moveToNext()) {
-				String id = c.getString(c.getColumnIndex(Data.RAW_CONTACT_ID));
+                String id = c.getString(c.getColumnIndex(Data.RAW_CONTACT_ID));
                 HashMap<String, LongSparseArray<StringMap>> contact = contacts.get(id);
-                if (!c.isNull(c.getColumnIndex(Data._ID)) && !c.isNull(c.getColumnIndex(Data.MIMETYPE)) 
-						&& (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) || groupInc)
-						&& (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_PHOTO) || photoInc)
-						&& ((c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_PHOTO) && !c.isNull(CONTACT_FIELDS.length + 2)) || !c.getString(2).equals(TYPE_PHOTO))
+                if (!c.isNull(c.getColumnIndex(Data._ID)) && !c.isNull(c.getColumnIndex(Data.MIMETYPE))
+                        && (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) || groupInc)
+                        && (!c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_PHOTO) || photoInc)
+                        && ((c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_PHOTO) && !c.isNull(CONTACT_FIELDS.length + 2)) || !c.getString(2).equals(TYPE_PHOTO))
                         ) {
                     //only add to content if row has content
-					Boolean hasContent = false;
-                    
-                    StringMap value = new StringMap();
-					if(c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP)) {
-						if(c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) && groupNames.containsKey(c.getString(c.getColumnIndex(Data.DATA1)))) {
-							String groupName = groupNames.get(c.getString(c.getColumnIndex(Data.DATA1)));
-							HashMap<String,HashMap<String,String>> group = null;
-							if(groupIds.containsKey(groupName))
-								group = groupIds.get(groupName);
+                    Boolean hasContent = false;
 
-							//Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
-							if(group != null) {
-								value.put("group",group);
-								hasContent = true;
-							}
-							value.put("value", groupName);
-						}
+                    StringMap value = new StringMap();
+                    if (c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP)) {
+                        if (c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) && groupNames.containsKey(c.getString(c.getColumnIndex(Data.DATA1)))) {
+                            String groupName = groupNames.get(c.getString(c.getColumnIndex(Data.DATA1)));
+                            HashMap<String, HashMap<String, String>> group = null;
+                            if (groupIds.containsKey(groupName))
+                                group = groupIds.get(groupName);
+
+                            //Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
+                            if (group != null) {
+                                value.put("group", group);
+                                hasContent = true;
+                            }
+                            value.put("value", groupName);
+                        }
                     } else {
-					//add value if Data 1 has content
-					if (!c.isNull(c.getColumnIndex(Data.DATA1)) && !c.getString(c.getColumnIndex(Data.DATA1)).equals("")) {
-						value.put("value", c.getString(c.getColumnIndex(Data.DATA1)));
-					}
-					//add label to store common extra information
-					value.put("label", getTypeLabel(c.getString(c.getColumnIndex(Data.MIMETYPE)), c.getInt(c.getColumnIndex(Data.DATA2)), c.getString(c.getColumnIndex(Data.DATA3))));
-                    
-					//loop through the data fields & store in contact
-                    for (int i = 0; i < CONTACT_FIELDS.length; i++) {
-						if(!c.isNull(c.getColumnIndex(CONTACT_FIELDS[i])) && (c.getType(c.getColumnIndex(CONTACT_FIELDS[i])) == Cursor.FIELD_TYPE_BLOB
-							   || !c.getString(c.getColumnIndex(CONTACT_FIELDS[i])).equals("")))
-							hasContent = true;
-						if(c.getType(c.getColumnIndex(CONTACT_FIELDS[i])) == Cursor.FIELD_TYPE_BLOB)
-								value.put(CONTACT_FIELDS[i], c.getBlob(c.getColumnIndex(CONTACT_FIELDS[i])));
-                        else
-								value.put(CONTACT_FIELDS[i], c.getString(c.getColumnIndex(CONTACT_FIELDS[i])));
-					}
-					}
-					
-					if (hasContent) {
-							if (!contact.containsKey(c.getString(c.getColumnIndex(Data.MIMETYPE))))
-                                contact.put(c.getString(c.getColumnIndex(Data.MIMETYPE)), new LongSparseArray<StringMap>());
+                        //add value if Data 1 has content
+                        if (!c.isNull(c.getColumnIndex(Data.DATA1)) && !c.getString(c.getColumnIndex(Data.DATA1)).equals("")) {
+                            value.put("value", c.getString(c.getColumnIndex(Data.DATA1)));
+                        }
+                        //add label to store common extra information
+                        value.put("label", getTypeLabel(c.getString(c.getColumnIndex(Data.MIMETYPE)), c.getInt(c.getColumnIndex(Data.DATA2)), c.getString(c.getColumnIndex(Data.DATA3))));
+
+                        //loop through the data fields & store in contact
+                        for (int i = 0; i < CONTACT_FIELDS.length; i++) {
+                            if (!c.isNull(c.getColumnIndex(CONTACT_FIELDS[i])) && (c.getType(c.getColumnIndex(CONTACT_FIELDS[i])) == Cursor.FIELD_TYPE_BLOB
+                                    || !c.getString(c.getColumnIndex(CONTACT_FIELDS[i])).equals("")))
+                                hasContent = true;
+                            if (c.getType(c.getColumnIndex(CONTACT_FIELDS[i])) == Cursor.FIELD_TYPE_BLOB)
+                                value.put(CONTACT_FIELDS[i], c.getBlob(c.getColumnIndex(CONTACT_FIELDS[i])));
+                            else
+                                value.put(CONTACT_FIELDS[i], c.getString(c.getColumnIndex(CONTACT_FIELDS[i])));
+                        }
+                    }
+
+                    if (hasContent) {
+                        if (!contact.containsKey(c.getString(c.getColumnIndex(Data.MIMETYPE))))
+                            contact.put(c.getString(c.getColumnIndex(Data.MIMETYPE)), new LongSparseArray<StringMap>());
                         LongSparseArray<StringMap> field = contact.get(c.getString(c.getColumnIndex(Data.MIMETYPE)));
-                        field.put(c.getLong(c.getColumnIndex(Data._ID)),value);
-					}
+                        field.put(c.getLong(c.getColumnIndex(Data._ID)), value);
+                    }
                 }
             }
         } finally {
@@ -337,15 +336,15 @@ class ContactsHelper {
             else
                 account2.add(e.getKey());
         }
-        
+
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
-        for(String item: set) {
-            listMap.put(item.split(":")[0],item.split(":")[1]);
-            listMap.put(item.split(":")[1],item.split(":")[0]);
+        for (String item : set) {
+            listMap.put(item.split(":")[0], item.split(":")[1]);
+            listMap.put(item.split(":")[1], item.split(":")[0]);
         }
     }
-    
-    private String getTypeLabel (String mime, Integer type, CharSequence label) {
+
+    private String getTypeLabel(String mime, Integer type, CharSequence label) {
         switch (mime) {
             case StructuredName.CONTENT_ITEM_TYPE:
                 label = null;
@@ -413,30 +412,30 @@ class ContactsHelper {
                 label = SipAddress.getTypeLabel(main.getResources(), type, label);
                 break;
         }
-        
-        return (String)label;
+
+        return (String) label;
     }
 
     /*public HashMap<String,HashMap<String,HashSet<StringMap>>> getContacts() {
         return contacts;
     }*/
 
-    public String getAccountName (String id) {
+    public String getAccountName(String id) {
         return accounts.get(id);
     }
-    
+
     public byte[] getPhoto(String contactId) {
-        if(contacts.get(contactId).get(TYPE_PHOTO) == null)
+        if (contacts.get(contactId).get(TYPE_PHOTO) == null)
             return null;
 
         return contacts.get(contactId).get(TYPE_PHOTO).valueAt(0).getByteArray(Data.DATA15);
     }
-    
+
     public int size() {
         return contacts.size();
     }
 
-    public View getContactView (ViewGroup layoutContainer, String name, String id) {
+    public View getContactView(ViewGroup layoutContainer, String name, String id) {
         String account = getAccountName(id);
         // create a new view for the contact
         View contactView = LayoutInflater.from(main)
@@ -469,51 +468,51 @@ class ContactsHelper {
         // add action buttons
         View buttons = LayoutInflater.from(main)
                 .inflate(R.layout.buttons, layoutContainer, false);
-		ImageButton deleteButton = (ImageButton)buttons.findViewById(R.id.delete_button);
-		
-		// add delete listener
+        ImageButton deleteButton = (ImageButton) buttons.findViewById(R.id.delete_button);
+
+        // add delete listener
         deleteButton.setOnClickListener(new OnClickListener() {
             public void onClick(View p1) {
                 if (p1.getId() == R.id.delete_button) {
                     HashSet<String> idSet = new HashSet<>();
                     idSet.add((String) p1.getTag());
                     deleteContacts(idSet);
-    
+
                     if (size() > 1) {
-                        View contact = (View)p1.getParent().getParent().getParent();
-						((ViewGroup)contact.getParent()).removeView(contact);
+                        View contact = (View) p1.getParent().getParent().getParent();
+                        ((ViewGroup) contact.getParent()).removeView(contact);
                     } else {
-						if (size() == 1)
-                        	addToUnmatched();
-                    
+                        if (size() == 1)
+                            addToUnmatched();
+
                         //reload comparefragement
                         main.Compare(null, listName, null);
-					}
+                    }
                 }
             }
         });
         //store Id in tag
         deleteButton.setTag(id);
-		
-		ImageButton editButton = (ImageButton)buttons.findViewById(R.id.edit_button);
 
-		// add delete listener
+        ImageButton editButton = (ImageButton) buttons.findViewById(R.id.edit_button);
+
+        // add delete listener
         editButton.setOnClickListener(new OnClickListener() {
-				public void onClick(View p1) {
-					if (p1.getId() == R.id.edit_button) {
-						String tag[] = ((String) p1.getTag()).split(":");
-						String id[] = {tag[1]};
-						
-						//use merge fragment for editing
-						main.Merge(tag[0],id,listName);
-					}
-				}
-			});
+            public void onClick(View p1) {
+                if (p1.getId() == R.id.edit_button) {
+                    String tag[] = ((String) p1.getTag()).split(":");
+                    String id[] = {tag[1]};
+
+                    //use merge fragment for editing
+                    main.Merge(tag[0], id, listName);
+                }
+            }
+        });
         //store Id in tag
-        editButton.setTag(name+":"+id);
-		
+        editButton.setTag(name + ":" + id);
+
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-        params.gravity = Gravity.END|Gravity.CENTER_VERTICAL;
+        params.gravity = Gravity.END | Gravity.CENTER_VERTICAL;
 
         deleteLayout.addView(accountInfo);
         deleteLayout.addView(buttons, params);
@@ -561,19 +560,19 @@ class ContactsHelper {
         }
         return contactView;
     }
-    
+
     public void deleteContacts() {
         deleteContacts(list);
     }
 
-    public Boolean deleteContacts (HashSet<String> delList) {
+    public Boolean deleteContacts(HashSet<String> delList) {
         String where;
         String[] params;
         ArrayList<ContentProviderOperation> ops = null;
 
         for (String id : delList) {
             where = RawContacts._ID + " = ?";
-            params = new String[] {id};
+            params = new String[]{id};
 
             ops = new ArrayList<>();
             ops.add(ContentProviderOperation.newDelete(RawContacts.CONTENT_URI)
@@ -581,9 +580,9 @@ class ContactsHelper {
                     .build());
 
             String name = contacts.get(id).get(TYPE_NAME).valueAt(0).get("value");
-            
+
             if (listName.startsWith(Match.MATCHEDKEY)) {
-                String id1,id2;
+                String id1, id2;
                 if (accounts.get(id).equals(account1Name)) {
                     id1 = id;
                     id2 = listMap.get(id);
@@ -591,36 +590,35 @@ class ContactsHelper {
                     id1 = listMap.get(id);
                     id2 = id;
                 }
-                if(listName.equals(Match.MATCHEDKEY + account1Name + ":" + account2Name)) {
+                if (listName.equals(Match.MATCHEDKEY + account1Name + ":" + account2Name)) {
                     removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id2, id1);
                     removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id1, id2);
                 } else {
-                    for(String type: Match.MIME_TYPE_LIST) {
+                    for (String type : Match.MIME_TYPE_LIST) {
                         removeEntry(Match.MATCHEDKEY + type + account1Name + ":" + account2Name, id2, id1);
                         removeEntry(Match.MATCHEDKEY + type + account2Name + ":" + account1Name, id1, id2);
                     }
                 }
             } else if (listName.startsWith(Match.DUPKEY)) {
-                for(String type: Match.MIME_TYPE_LIST) {
+                for (String type : Match.MIME_TYPE_LIST) {
                     removeEntry(Match.DUPKEY + type + accounts.get(id), id);
                 }
             }
             removeEntry(listName, id, name);
-            
+
             String accountList = Match.ACCOUNTKEY + getAccountName(id);
             removeEntry(accountList, id, name);
-                
+
             contacts.remove(id);
             list.remove(id);
         }
-        pref.edit().commit();
 
         if (ops != null) {
             try {
                 main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
             } catch (Exception e) {
                 // send error report
-                TopExceptionHandler.sendReport (main, TopExceptionHandler.generateReport(e));
+                TopExceptionHandler.sendReport(main, TopExceptionHandler.generateReport(e));
                 return false;
             }
         }
@@ -628,30 +626,30 @@ class ContactsHelper {
         return true;
     }
 
-    public HashMap<String,HashSet<StringMap>> mergeContact () {
-        HashMap<String,HashSet<StringMap>> contact = new HashMap<>();
-        for(String type: TYPES) {
+    public HashMap<String, HashSet<StringMap>> mergeContact() {
+        HashMap<String, HashSet<StringMap>> contact = new HashMap<>();
+        for (String type : TYPES) {
             HashSet<StringMap> values = new HashSet<>();
-            for(String id: contacts.keySet())
-                if(contacts.get(id).get(type) != null 
-                    	&& contacts.get(id).get(type).size() > 0)
+            for (String id : contacts.keySet())
+                if (contacts.get(id).get(type) != null
+                        && contacts.get(id).get(type).size() > 0)
                     for (int i = 0; i < contacts.get(id).get(type).size(); i++)
                         values.add(contacts.get(id).get(type).valueAt(i));
 
-            if(values.size() > 0)
+            if (values.size() > 0)
                 contact.put(type, values);
         }
-        
+
         return contact;
     }
 
     private void writeDisplayPhoto(long rawContactId, byte[] photo) {
         Uri rawContactPhotoUri = Uri.withAppendedPath(
-            ContentUris.withAppendedId(RawContacts.CONTENT_URI, rawContactId),
-            RawContacts.DisplayPhoto.CONTENT_DIRECTORY);
+                ContentUris.withAppendedId(RawContacts.CONTENT_URI, rawContactId),
+                RawContacts.DisplayPhoto.CONTENT_DIRECTORY);
         try {
             AssetFileDescriptor fd =
-            main.getContentResolver().openAssetFileDescriptor(rawContactPhotoUri, "rw");
+                    main.getContentResolver().openAssetFileDescriptor(rawContactPhotoUri, "rw");
             OutputStream os = fd.createOutputStream();
             os.write(photo);
             os.close();
@@ -662,53 +660,53 @@ class ContactsHelper {
         }
     }
 
-    public Boolean saveMergedContact (HashMap<String,HashSet<StringMap>> mergedContact) {
+    public Boolean saveMergedContact(HashMap<String, HashSet<StringMap>> mergedContact) {
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
         //String value;
         //String origValue;
         HashSet<String> accountsUsed = new HashSet<>();
-		HashMap<String,HashSet<StringMap>> tmpMContact;
+        HashMap<String, HashSet<StringMap>> tmpMContact;
         if (accounts.size() == 0) {
             return false;
         }
-		
-		Boolean addToUnmatched = true;
+
+        Boolean addToUnmatched = true;
         for (String id : list) {
-			
-			if (list.size() == 1 
-				&& listName.startsWith(Match.DUPKEY)) {
-				String tmp[] = getListEntries();
-				String tmpType = listName.substring(Match.DUPKEY.length(),
-													listName.length()-accounts.get(id).length());
-				for(StringMap tmpMap: mergedContact.get(tmpType))
-					if(tmpMap.get("value").equals(listKey))
-						addToUnmatched = false;
-				
-				if(addToUnmatched && tmp.length == 2) {
-					HashSet<String> tmpList = new HashSet<String>(Arrays.asList(tmp));
-					tmpList.remove(id);
-					ContactsHelper tmpContactHelper = new ContactsHelper(main,listName,listKey,tmpList);
-					tmpContactHelper.addToUnmatched();
-				}
-			}
-			
-			//clone merged contact
-			tmpMContact = new HashMap<String,HashSet<StringMap>>();
-			for(Map.Entry item: mergedContact.entrySet())
-				tmpMContact.put((String)item.getKey(),(HashSet<StringMap>)((HashSet)item.getValue()).clone());
-            if(accountsUsed.contains(accounts.get(id))) {
+
+            if (list.size() == 1
+                    && listName.startsWith(Match.DUPKEY)) {
+                String tmp[] = getListEntries();
+                String tmpType = listName.substring(Match.DUPKEY.length(),
+                        listName.length() - accounts.get(id).length());
+                for (StringMap tmpMap : mergedContact.get(tmpType))
+                    if (tmpMap.get("value").equals(listKey))
+                        addToUnmatched = false;
+
+                if (addToUnmatched && tmp.length == 2) {
+                    HashSet<String> tmpList = new HashSet<String>(Arrays.asList(tmp));
+                    tmpList.remove(id);
+                    ContactsHelper tmpContactHelper = new ContactsHelper(main, listName, listKey, tmpList);
+                    tmpContactHelper.addToUnmatched();
+                }
+            }
+
+            //clone merged contact
+            tmpMContact = new HashMap<String, HashSet<StringMap>>();
+            for (Map.Entry item : mergedContact.entrySet())
+                tmpMContact.put((String) item.getKey(), (HashSet<StringMap>) ((HashSet) item.getValue()).clone());
+            if (accountsUsed.contains(accounts.get(id))) {
                 HashSet<String> deList = new HashSet<>();
                 deList.add(id);
                 deleteContacts(deList);
             } else {
                 accountsUsed.add(accounts.get(id));
                 ops = new ArrayList<>();
-                for (String type: TYPES) {
+                for (String type : TYPES) {
                     //exclude types based on settings
                     if ((!type.equals(TYPE_GROUP) || groupInc)
-                        && (!type.equals(TYPE_PHOTO) || photoInc)){
-						if (contacts.get(id).get(type) != null) {
+                            && (!type.equals(TYPE_PHOTO) || photoInc)) {
+                        if (contacts.get(id).get(type) != null) {
                             for (int i = 0; i < contacts.get(id).get(type).size(); i++) {
                                 Long key = contacts.get(id).get(type).keyAt(i);
                                 StringMap value = contacts.get(id).get(type).valueAt(i);
@@ -720,55 +718,55 @@ class ContactsHelper {
                                     opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
                                     opBuilder.withSelection(Data._ID + "=?", new String[]{key.toString()});
                                     ops.add(opBuilder.build());
-								}
-							}
-						}
-						
-						if (tmpMContact.get(type) != null) {
-							for (StringMap item : tmpMContact.get(type)) {
-								if (type.equals(TYPE_PHOTO)) {
-									writeDisplayPhoto(Long.decode(id), item.getByteArray(PHOTO));
-								} else if (type.equals(TYPE_GROUP)) {
-									HashMap<String,String> group = (HashMap<String,String>)((HashMap)item.getObject("group")).get(accounts.get(id));
-									if(group == null) {
-										//create group
-										group = (HashMap<String,String>)((HashMap)item.getObject("group")).values().iterator().next();
-										//Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
-										int groupInsertIndex = ops.size();
-										opBuilder = ContentProviderOperation.newInsert(ContactsContract.Groups.CONTENT_URI)
-											.withValue(ContactsContract.Groups.TITLE, item.get("value"))
-											.withValue(ContactsContract.Groups.NOTES, item.get("notes"))
-											.withValue(ContactsContract.Groups.GROUP_VISIBLE, 1)
-											.withValue(ContactsContract.Groups.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
-											.withValue(ContactsContract.Groups.ACCOUNT_NAME, accounts.get(id));
-										ops.add(opBuilder.build());
-										opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
-											.withValueBackReference(Data.DATA1, groupInsertIndex)
-											.withValue(Data.RAW_CONTACT_ID, id)
-											.withValue(Data.MIMETYPE, type);
-										ops.add(opBuilder.build());
-									} else {
-										opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
-											.withValue(Data.RAW_CONTACT_ID, id)
-											.withValue(Data.MIMETYPE, type)
-											.withValue(Data.DATA1, group.get("id"));
-										ops.add(opBuilder.build());
-										//Toast.makeText(main,group.get("id"),Toast.LENGTH_LONG).show();
-									}
-									//Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
-								} else {
-									opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
-                                        .withValue(Data.RAW_CONTACT_ID, id)
-                                        .withValue(Data.MIMETYPE, type);
-									for(String field: CONTACT_FIELDS) {
-										if(item.getObject(field) != null)
-											opBuilder.withValue(field, item.getObject(field));
-									}
+                                }
+                            }
+                        }
 
-									ops.add(opBuilder.build());
-								}
-							}
-						}
+                        if (tmpMContact.get(type) != null) {
+                            for (StringMap item : tmpMContact.get(type)) {
+                                if (type.equals(TYPE_PHOTO)) {
+                                    writeDisplayPhoto(Long.decode(id), item.getByteArray(PHOTO));
+                                } else if (type.equals(TYPE_GROUP)) {
+                                    HashMap<String, String> group = (HashMap<String, String>) ((HashMap) item.getObject("group")).get(accounts.get(id));
+                                    if (group == null) {
+                                        //create group
+                                        group = (HashMap<String, String>) ((HashMap) item.getObject("group")).values().iterator().next();
+                                        //Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
+                                        int groupInsertIndex = ops.size();
+                                        opBuilder = ContentProviderOperation.newInsert(ContactsContract.Groups.CONTENT_URI)
+                                                .withValue(ContactsContract.Groups.TITLE, item.get("value"))
+                                                .withValue(ContactsContract.Groups.NOTES, item.get("notes"))
+                                                .withValue(ContactsContract.Groups.GROUP_VISIBLE, 1)
+                                                .withValue(ContactsContract.Groups.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
+                                                .withValue(ContactsContract.Groups.ACCOUNT_NAME, accounts.get(id));
+                                        ops.add(opBuilder.build());
+                                        opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+                                                .withValueBackReference(Data.DATA1, groupInsertIndex)
+                                                .withValue(Data.RAW_CONTACT_ID, id)
+                                                .withValue(Data.MIMETYPE, type);
+                                        ops.add(opBuilder.build());
+                                    } else {
+                                        opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+                                                .withValue(Data.RAW_CONTACT_ID, id)
+                                                .withValue(Data.MIMETYPE, type)
+                                                .withValue(Data.DATA1, group.get("id"));
+                                        ops.add(opBuilder.build());
+                                        //Toast.makeText(main,group.get("id"),Toast.LENGTH_LONG).show();
+                                    }
+                                    //Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
+                                } else {
+                                    opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
+                                            .withValue(Data.RAW_CONTACT_ID, id)
+                                            .withValue(Data.MIMETYPE, type);
+                                    for (String field : CONTACT_FIELDS) {
+                                        if (item.getObject(field) != null)
+                                            opBuilder.withValue(field, item.getObject(field));
+                                    }
+
+                                    ops.add(opBuilder.build());
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -792,12 +790,12 @@ class ContactsHelper {
         return true;
     }
 
-    public void addToUnmatched () {
+    public void addToUnmatched() {
         String uName = null;
 
         removeEntries();
         Boolean first = true;
-        for (String id: list) {
+        for (String id : list) {
             if (accounts.get(id).equals(account1Name)) {
                 uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
             } else if (accounts.get(id).equals(account2Name)) {
@@ -805,9 +803,9 @@ class ContactsHelper {
             }
 
             String name = contacts.get(id).get(TYPE_NAME).valueAt(0).get("value");
-            
+
             if (listName.startsWith(Match.DUPKEY)) {
-                for(String type: Match.MIME_TYPE_LIST) {
+                for (String type : Match.MIME_TYPE_LIST) {
                     if (findEntries(Match.DUPKEY + type + accounts.get(id), id))
                         return;
                 }
@@ -823,28 +821,27 @@ class ContactsHelper {
                     id1 = listMap.get(id);
                     id2 = id;
                 }
-                if(listName.equals(Match.MATCHEDKEY + account1Name + ":" + account2Name)) {
+                if (listName.equals(Match.MATCHEDKEY + account1Name + ":" + account2Name)) {
                     removeEntry(Match.MATCHEDKEY + account1Name + ":" + account2Name, id2, id1);
                     removeEntry(Match.MATCHEDKEY + account2Name + ":" + account1Name, id1, id2);
                 } else {
-                    for(String type: Match.MIME_TYPE_LIST) {
+                    for (String type : Match.MIME_TYPE_LIST) {
                         removeEntry(Match.MATCHEDKEY + type + account1Name + ":" + account2Name, id2, id1);
                         removeEntry(Match.MATCHEDKEY + type + account2Name + ":" + account1Name, id1, id2);
                     }
                 }
             }
         }
-        pref.edit().commit();
     }
 
-    public void addToMatched () {
+    public void addToMatched() {
         String matchedName;
         String uName;
         String name;
 
-        for (String id1: account1) {
-            for (String id2: account2) {
-                if(listName.startsWith(Match.UNMATCHNAMEKEY)) {
+        for (String id1 : account1) {
+            for (String id2 : account2) {
+                if (listName.startsWith(Match.UNMATCHNAMEKEY)) {
                     name = contacts.get(id1).get(TYPE_NAME).valueAt(0).get("value");
                     uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
                     removeEntry(uName, id1, name);
@@ -853,13 +850,13 @@ class ContactsHelper {
                     uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
                     removeEntry(uName, id2, name);
                 } else if (listName.startsWith(Match.MATCHEDKEY)) {
-                    removeEntry(listName,id2,id1);
-                    for(String type: Match.MIME_TYPE_LIST) {
+                    removeEntry(listName, id2, id1);
+                    for (String type : Match.MIME_TYPE_LIST) {
                         removeEntry(Match.MATCHEDKEY + type + account1Name + ":" + account2Name, id2, id1);
                         removeEntry(Match.MATCHEDKEY + type + account2Name + ":" + account1Name, id1, id2);
                     }
                 }
-            
+
 
                 matchedName = Match.MATCHEDKEY + account1Name + ":" + account2Name;
                 addEntry(matchedName, id1 + ":" + id2);
@@ -868,7 +865,6 @@ class ContactsHelper {
                 addEntry(matchedName, id2 + ":" + id1);
             }
         }
-        pref.edit().commit();
     }
 
     /*private ContentProviderOperation.Builder setOpBuilder(ContentProviderOperation.Builder opBuilder, String value, String type) {
@@ -933,7 +929,7 @@ class ContactsHelper {
         return false;
     }
 
-	private String[] getListEntries() {
+    private String[] getListEntries() {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
 
         if (set == null || set.size() == 0)
@@ -941,12 +937,12 @@ class ContactsHelper {
 
         for (String item : set) {
             if (item.startsWith(listKey)) {
-				return item.split(":")[1].split(",");
-			}
+                return item.split(":")[1].split(",");
+            }
         }
         return null;
     }
-	
+
     private void removeEntries() {
         HashSet<String> set = new HashSet<String>(pref.getStringSet(listName, emptySet));
 
@@ -955,28 +951,28 @@ class ContactsHelper {
 
         for (String item : set) {
             if (item.startsWith(listKey)) {
-				HashSet<String> tmpIds = new HashSet<String> (
-					Arrays.asList(item.split(":")[1].split(",")));
-					
-				for(String id: list)
-					tmpIds.remove(id);
-				
-				
+                HashSet<String> tmpIds = new HashSet<String>(
+                        Arrays.asList(item.split(":")[1].split(",")));
+
+                for (String id : list)
+                    tmpIds.remove(id);
+
+
                 set.remove(item);
-				if(tmpIds.size() > 0) {
-					item = listKey + ":";
-					for (String id: tmpIds)
-						item += id + ",";
-					
-					item = item.substring(0, item.length()-1);
-					set.add(item);
-				}
+                if (tmpIds.size() > 0) {
+                    item = listKey + ":";
+                    for (String id : tmpIds)
+                        item += id + ",";
+
+                    item = item.substring(0, item.length() - 1);
+                    set.add(item);
+                }
                 break;
             }
         }
 
         SharedPreferences.Editor e = pref.edit();
-        if(set.size() == 0)
+        if (set.size() == 0)
             e.remove(listName);
         else
             e.putStringSet(listName, set);
@@ -988,25 +984,25 @@ class ContactsHelper {
 
         if (set.size() == 0)
             return;
-        
-        for (String item: set) {
+
+        for (String item : set) {
             String itemArray[] = item.split(":");
-            ArrayList<String> idList = new ArrayList<String> (Arrays.asList(itemArray[1].split(",")));
-            if(idList.contains(id)) {
+            ArrayList<String> idList = new ArrayList<String>(Arrays.asList(itemArray[1].split(",")));
+            if (idList.contains(id)) {
                 idList.remove(id);
                 set.remove(item);
-                if(idList.size() > 0) {
+                if (idList.size() > 0) {
                     item = itemArray[0] + ":";
-                    for(String itemId: idList)
+                    for (String itemId : idList)
                         item += itemId + ",";
-                    item = item.substring(0,item.length()-1);
+                    item = item.substring(0, item.length() - 1);
                     set.add(item);
                 }
                 break;
             }
         }
         SharedPreferences.Editor e = pref.edit();
-        if(set.size() == 0)
+        if (set.size() == 0)
             e.remove(listRef);
         else
             e.putStringSet(listRef, set);
@@ -1019,17 +1015,17 @@ class ContactsHelper {
             return;
         set.remove(ref2 + ":" + ref1);
         SharedPreferences.Editor e = pref.edit();
-        if(set.size() == 0)
+        if (set.size() == 0)
             e.remove(listRef);
         else
             e.putStringSet(listRef, set);
-            
+
         e.apply();
     }
 
     private void addEntry(String listRef, String entry) {
         HashSet<String> set = new HashSet<String>(pref.getStringSet(listRef, emptySet));
-        
+
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
         e.putStringSet(listRef, set);

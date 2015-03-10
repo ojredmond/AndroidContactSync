@@ -5,9 +5,20 @@
         <item name="colorPrimary">@color/material_orange_500</item>
         <item name="colorPrimaryDark">@color/material_orange_700</item>
         <item name="colorAccent">@color/material_orange_A200</item>
-        <item name="android:activatedBackgroundIndicator">@drawable/activatedbackground</item>
+        <item name="android:activatedBackgroundIndicator">@drawable/activated_background</item>
         <item name="android:spinnerItemStyle">@style/SpinnerStyle</item>
         <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownStyle</item>
+        <item name="android:borderlessButtonStyle">@style/ButtonStyle</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="android:background">@color/material_orange_500</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="HeadingStyle">
+        <item name="android:background">@color/material_orange_500</item>
+        <item name="android:textColor">@android:color/white</item>
     </style>
 
     <style name="SpinnerStyle">

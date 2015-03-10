@@ -29,6 +29,9 @@
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
 
+    <string name="contact_photo">Contact Photo</string>
+    <string name="edit_contact">Contact Photo</string>
+
     <string name="type">com.google</string>
 
 </resources>

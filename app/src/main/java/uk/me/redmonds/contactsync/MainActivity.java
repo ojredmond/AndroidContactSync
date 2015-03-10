@@ -137,7 +137,7 @@ public class MainActivity extends ActionBarActivity
         SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
         String account1Name = pref.getString(ACCOUNT1, null);
         String account2Name = pref.getString(ACCOUNT2, null);
-        SharedPreferences.Editor results = getSharedPreferences(Match.PREFKEY, Context.MODE_WORLD_READABLE).edit();
+        SharedPreferences.Editor results = getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE).edit();
 
         results.clear();
         results.apply();

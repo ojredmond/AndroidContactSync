@@ -6,13 +6,12 @@
     android:paddingTop="@dimen/medium_gap">
 
     <TextView
+        style="@style/HeadingStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/material_orange_500"
         android:padding="@dimen/medium_gap"
         android:text="@string/accounts"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white" />
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,15 +44,13 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
+        style="@style/HeadingStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/large_gap"
-        android:background="@color/material_orange_500"
         android:padding="@dimen/medium_gap"
         android:text="@string/options"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/white"
-
         />
 
     <GridLayout
