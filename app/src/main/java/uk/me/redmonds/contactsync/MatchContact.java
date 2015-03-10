@@ -23,37 +23,35 @@ import android.widget.*;
 import android.widget.AdapterView.*;
 import java.util.*;
 import android.view.*;
+import android.animation.*;
 
 public class MatchContact extends Fragment 
         implements OnClickListener, OnItemClickListener {
-    private final static String NAME = "Name";
-    private final static String DESCRIPTION = "Desc";
     private MainActivity main;
     private String id;
     private HashMap<String, String> unmatchedList;
     private HashMap<String, String> matchedList;
     private String listItem;
     private String name;
-    private GestureDetector unmatchedGestureDetector, matchedGestureDetector;
 
     @Override
     public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4)
     {
 		if (((AlphabetListAdapter)p1.getAdapter()).getItemViewType(p3) == 0) {
 			//Toast.makeText(main, "yes",Toast.LENGTH_LONG).show();
-		
-        String linkName = (String) ((TextView) p2).getText();
-        ArrayList<String> ids = new ArrayList<>();
-        ids.add(id);
-        //unmatched list
-        if (((View)p2.getParent()).getId() == R.id.unmatched_list) {
-            ids.add(unmatchedList.get(linkName));
-            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
-            //matched list
-        } else if (((View)p2.getParent()).getId() == R.id.matched_list) {
-            Collections.addAll(ids, matchedList.get(linkName).split(":"));
-            main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
-        }
+
+			String linkName = (String) ((TextView) p2).getText();
+			ArrayList<String> ids = new ArrayList<>();
+			ids.add(id);
+			//unmatched list
+			if (((View)p2.getParent()).getId() == R.id.unmatched_list) {
+				ids.add(unmatchedList.get(linkName));
+				main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
+				//matched list
+			} else if (((View)p2.getParent()).getId() == R.id.matched_list) {
+				Collections.addAll(ids, matchedList.get(linkName).split(":"));
+				main.Merge(name, ids.toArray(new String[ids.size()]), listItem);
+			}
 		}
     }
 
@@ -81,16 +79,16 @@ public class MatchContact extends Fragment
                 
                 if(unmatchedList.size() != 0 && unmatchedListView.getVisibility() == View.GONE) {
                     matchedListView.setVisibility(View.GONE);
-                    unmatchedListView.setVisibility(View.VISIBLE);
+					unmatchedListView.setVisibility(View.VISIBLE);
                     typeView.setText(type.replace('+','-'));
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
                     typeView.setText(type.replace('-','+'));
-                    typeView = (TextView)container.findViewById(R.id.matched_group).findViewById(R.id.type);
-                    type = (String)typeView.getText();
-                    typeView.setText(type.replace('-','+'));
                 }
+                typeView = (TextView)container.findViewById(R.id.matched_group).findViewById(R.id.type);
+				type = (String)typeView.getText();
+				typeView.setText(type.replace('-','+'));
                 break;
             case R.id.matched_group:
                 unmatchedListView = container.findViewById(R.id.unmatched_list_group);
@@ -99,17 +97,24 @@ public class MatchContact extends Fragment
                 type = (String)typeView.getText();
 
                 if(matchedList.size() != 0 && matchedListView.getVisibility() == View.GONE) {
-                    unmatchedListView.setVisibility(View.GONE);
-                    matchedListView.setVisibility(View.VISIBLE);
+					
+					if(unmatchedListView.getVisibility() == View.GONE) {
+						matchedListView.setVisibility(View.VISIBLE);
+						unmatchedListView.setVisibility(View.GONE);
+					} else {
+						container.findViewById(R.id.matched_group).setTag(matchedListView);
+						unmatchedListView.setVisibility(View.GONE);
+					}
+                    
                     typeView.setText(type.replace('+','-'));
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
                     typeView.setText(type.replace('-','+'));
-                    typeView = (TextView)container.findViewById(R.id.unmatched_group).findViewById(R.id.type);
-                    type = (String)typeView.getText();
-                    typeView.setText(type.replace('-','+'));
                 }
+				typeView = (TextView)container.findViewById(R.id.unmatched_group).findViewById(R.id.type);
+				type = (String)typeView.getText();
+				typeView.setText(type.replace('-','+'));
                 break;
         }
     }
@@ -128,7 +133,24 @@ public class MatchContact extends Fragment
         String accountSelected = listItem.split(":")[1];
         String accountOther = listItem.split(":")[2];
 
+		//add trandotion handler to delay appear animation
         View view = inflater.inflate(R.layout.fragment_unmatched, container, false);
+		final LayoutTransition transitioner = new LayoutTransition();
+		transitioner.getAnimator(LayoutTransition.CHANGE_DISAPPEARING).addListener(new AnimatorListenerAdapter() {
+				public void onAnimationEnd(Animator anim) {
+					View view = (View) ((ObjectAnimator) anim).getTarget();
+					//Toast.makeText(main,anim.toString(),Toast.LENGTH_LONG).show();
+					if(view.getTag() != null && view.getTag() instanceof View) {
+						//get current start delay
+						Long delay = transitioner.getStartDelay(LayoutTransition.APPEARING);
+						transitioner.setStartDelay(LayoutTransition.APPEARING,0);
+						((View)view.getTag()).setVisibility(View.VISIBLE);
+						view.setTag(null);
+						transitioner.setStartDelay(LayoutTransition.APPEARING,delay);
+					}
+				}
+			});
+        ((LinearLayout)view.findViewById(R.id.list)).setLayoutTransition(transitioner);
         Button btn = (Button) view.findViewById(R.id.delete_contact);
         btn.setOnClickListener(this);
 
@@ -175,13 +197,6 @@ public class MatchContact extends Fragment
             unmatchedItems);
 
         unmatchedList.setAdapter(unmatchedAdapter);
-        /*unmatchedGestureDetector = new GestureDetector(main, unmatchedAdapter.getGestureListener());
-        unmatchedList.setOnTouchListener(new OnTouchListener () {
-                @Override
-                public boolean onTouch(View view, MotionEvent event) {
-                    return unmatchedGestureDetector.onTouchEvent(event);
-                }
-            });*/
         
         //add listners
         unmatchedLayout.setOnClickListener(this);
@@ -232,13 +247,6 @@ public class MatchContact extends Fragment
             matchedItems);
             
         matchedList.setAdapter(matchedAdapter);
-        /*matchedGestureDetector = new GestureDetector(main, matchedAdapter.getGestureListener());
-        matchedList.setOnTouchListener(new OnTouchListener () {
-                @Override
-                public boolean onTouch(View view, MotionEvent event) {
-                    return matchedGestureDetector.onTouchEvent(event);
-                }
-            });*/
         
         //add listners
         matchedLayout.setOnClickListener(this);

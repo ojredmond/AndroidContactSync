@@ -137,30 +137,30 @@ class Match {
 				duplicate, true, 
 				matched1Other, matched2Other);
 			if(!duplicate) {
-            if (account1Other.containsKey(data)
+				if (account1Other.containsKey(data)
                     && account1Other.get(data).get(type) != null
                     && !account1Other.get(data).get(type).contains(",")) {
-                Long account1id = Long.decode(account1Other.get(data).get(type));
-                if (unmatched1Id.containsKey(account1id)) {
-                    HashMap<Long, Long> idsMap;
-                    if (matched1Other.containsKey(type))
-                        idsMap = matched1Other.get(type);
-                    else
-                        idsMap = new HashMap<>();
+					Long account1id = Long.decode(account1Other.get(data).get(type));
+					if (unmatched1Id.containsKey(account1id)) {
+						HashMap<Long, Long> idsMap;
+						if (matched1Other.containsKey(type))
+							idsMap = matched1Other.get(type);
+						else
+							idsMap = new HashMap<>();
 
-                    idsMap.put(account1id, tempContactId);
-                    matched1Other.put(type, idsMap);
-                    if (matched2Other.containsKey(type))
-                        idsMap = matched2Other.get(type);
-                    else
-                        idsMap = new HashMap<>();
-                    idsMap.put(tempContactId, account1id);
-                    matched2Other.put(type, idsMap);
+						idsMap.put(account1id, tempContactId);
+						matched1Other.put(type, idsMap);
+						if (matched2Other.containsKey(type))
+							idsMap = matched2Other.get(type);
+						else
+							idsMap = new HashMap<>();
+						idsMap.put(tempContactId, account1id);
+						matched2Other.put(type, idsMap);
 
-                    //matches++;
-                    matched = true;
-                }
-            }
+						//matches++;
+						matched = true;
+					}
+				}
 			}
 
             //add all data to account info

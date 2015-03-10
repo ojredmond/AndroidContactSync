@@ -14,6 +14,7 @@ import java.util.*;
 import java.util.regex.*;
 import android.view.View.*;
 import android.widget.*;
+import android.graphics.*;
 
 public class AlphabetListAdapter extends BaseAdapter {
 
@@ -60,6 +61,7 @@ public class AlphabetListAdapter extends BaseAdapter {
         }
     }
     
+	private static final int TIMES_OVERFLOW = 2;
     private List<Row> rows;
     private int alphabetListLayout;
     private int listLayout;
@@ -140,12 +142,15 @@ public class AlphabetListAdapter extends BaseAdapter {
         View view1 = inflater.inflate(itemLayout, (ViewGroup)container, false);
         view1.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
         int rowHeight = view1.getMeasuredHeight();
-
-        container.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-        int height = container.getMeasuredHeight();
-
-        //Toast.makeText(context,""+height,Toast.LENGTH_LONG).show();
-        if(getCount() < ((height/rowHeight) * 2)) {
+		
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		Display display = wm.getDefaultDisplay();
+		Point size = new Point();
+		display.getSize(size);
+		int height = size.y;
+		
+        //Toast.makeText(context,height+"/"+rowHeight+"="+(height/rowHeight),Toast.LENGTH_LONG).show();
+        if(getCount() < ((height/rowHeight) * TIMES_OVERFLOW)) {
             container.findViewById(alphabetListLayout).setVisibility(View.GONE);
         }
     }
