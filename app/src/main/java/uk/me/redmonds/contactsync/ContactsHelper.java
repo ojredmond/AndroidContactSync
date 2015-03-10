@@ -534,7 +534,7 @@ class ContactsHelper {
                 Boolean first = true;
 
                 for (int i = 0; i < contact.get(type).size(); i++) {
-                    StringMap item = contact.get(type).get(i);
+                    StringMap item = contact.get(type).valueAt(i);
                     if (item.get("value") == null)
                         break;
                     if (first) {

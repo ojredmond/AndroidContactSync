@@ -17,15 +17,8 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: uk.me.redmonds.contactsync" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="adding functionality">
+    <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="Optimizing">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/MainActivity.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/MatchContact.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/MatchContact.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/StatusFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/StatusFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_merge.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_merge.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/fragment_unmatched.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/fragment_unmatched.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/ids.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/ids.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/list_border_none_2.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/list_border_none_2.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Contact Sync.iws" />
@@ -56,10 +49,10 @@
               <caret line="24" column="14" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
               <folding>
                 <element signature="e#392#419#0" expanded="true" />
-                <element signature="e#763#788#0" expanded="true" />
-                <element signature="e#852#868#0" expanded="true" />
-                <element signature="e#1182#1207#0" expanded="true" />
-                <element signature="e#1271#1288#0" expanded="true" />
+                <element signature="e#775#789#0" expanded="true" />
+                <element signature="e#857#882#0" expanded="true" />
+                <element signature="e#1194#1208#0" expanded="true" />
+                <element signature="e#1276#1301#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,7 +65,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_border_none_2.xml">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="-12.692307" vertical-offset="0" max-vertical-offset="465">
-              <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+              <caret line="22" column="67" selection-start-line="22" selection-start-column="67" selection-end-line="22" selection-end-column="67" />
               <folding />
             </state>
           </provider>
@@ -84,10 +77,11 @@
       <file leaf-file-name="ContactsHelper.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="1.3717948" vertical-offset="10865" max-vertical-offset="15405">
-              <caret line="770" column="27" selection-start-line="770" selection-start-column="22" selection-end-line="770" selection-end-column="27" />
+            <state vertical-scroll-proportion="0.2948718" vertical-offset="7805" max-vertical-offset="15510">
+              <caret line="536" column="63" selection-start-line="536" selection-start-column="63" selection-end-line="536" selection-end-column="63" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#3547#3555#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -1685,7 +1679,11 @@
       <created>1425077639276</created>
       <updated>1425077639276</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="Optimizing">
+      <created>1426023171202</created>
+      <updated>1426023171202</updated>
+    </task>
+    <option name="localTasksCounter" value="64" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1774,7 +1772,8 @@
     <MESSAGE value="settings fragment fixed" />
     <MESSAGE value="adding option settings fragment" />
     <MESSAGE value="adding functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding functionality" />
+    <MESSAGE value="Optimizing" />
+    <option name="LAST_COMMIT_MESSAGE" value="Optimizing" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -2162,10 +2161,10 @@
           <caret line="24" column="14" selection-start-line="24" selection-start-column="14" selection-end-line="24" selection-end-column="14" />
           <folding>
             <element signature="e#392#419#0" expanded="true" />
-            <element signature="e#763#788#0" expanded="true" />
-            <element signature="e#852#868#0" expanded="true" />
-            <element signature="e#1182#1207#0" expanded="true" />
-            <element signature="e#1271#1288#0" expanded="true" />
+            <element signature="e#775#789#0" expanded="true" />
+            <element signature="e#857#882#0" expanded="true" />
+            <element signature="e#1194#1208#0" expanded="true" />
+            <element signature="e#1276#1301#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2213,8 +2212,8 @@
         <state vertical-scroll-proportion="0.205074" vertical-offset="2948" max-vertical-offset="3525">
           <caret line="231" column="78" selection-start-line="231" selection-start-column="78" selection-end-line="231" selection-end-column="78" />
           <folding>
-            <element signature="e#7652#7700#0" expanded="true" />
-            <element signature="e#9880#9928#0" expanded="true" />
+            <element signature="e#8246#8294#0" expanded="false" />
+            <element signature="e#10495#10543#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -2230,7 +2229,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/list_border_none_2.xml">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-12.692307" vertical-offset="0" max-vertical-offset="465">
-          <caret line="22" column="42" selection-start-line="22" selection-start-column="42" selection-end-line="22" selection-end-column="42" />
+          <caret line="22" column="67" selection-start-line="22" selection-start-column="67" selection-end-line="22" selection-end-column="67" />
           <folding />
         </state>
       </provider>
@@ -2240,10 +2239,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3717948" vertical-offset="10865" max-vertical-offset="15405">
-          <caret line="770" column="27" selection-start-line="770" selection-start-column="22" selection-end-line="770" selection-end-column="27" />
+        <state vertical-scroll-proportion="0.2948718" vertical-offset="7805" max-vertical-offset="15510">
+          <caret line="536" column="63" selection-start-line="536" selection-start-column="63" selection-end-line="536" selection-end-column="63" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#3547#3555#0" expanded="true" />
           </folding>
         </state>
       </provider>
