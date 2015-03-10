@@ -18,7 +18,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="Optimizing">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="Contact Sync.iws" />
@@ -78,7 +77,7 @@
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.2948718" vertical-offset="7805" max-vertical-offset="15510">
-              <caret line="536" column="63" selection-start-line="536" selection-start-column="63" selection-end-line="536" selection-end-column="63" />
+              <caret line="536" column="66" selection-start-line="536" selection-start-column="66" selection-end-line="536" selection-end-column="66" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#3547#3555#0" expanded="true" />
@@ -1683,7 +1682,11 @@
       <created>1426023171202</created>
       <updated>1426023171202</updated>
     </task>
-    <option name="localTasksCounter" value="64" />
+    <task id="LOCAL-00064" summary="Optimizing">
+      <created>1426023524734</created>
+      <updated>1426023524734</updated>
+    </task>
+    <option name="localTasksCounter" value="65" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -2240,7 +2243,7 @@
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/ContactsHelper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.2948718" vertical-offset="7805" max-vertical-offset="15510">
-          <caret line="536" column="63" selection-start-line="536" selection-start-column="63" selection-end-line="536" selection-end-column="63" />
+          <caret line="536" column="66" selection-start-line="536" selection-start-column="66" selection-end-line="536" selection-end-column="66" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#3547#3555#0" expanded="true" />
