@@ -690,8 +690,8 @@ class ContactsHelper {
 
             //clone merged contact
             tmpMContact = new HashMap<>();
-            for (Map.Entry item : mergedContact.entrySet())
-                tmpMContact.put((String) item.getKey(), (HashSet<StringMap>) ((HashSet) item.getValue()).clone());
+            for (Map.Entry<String, HashSet<StringMap>> item : mergedContact.entrySet())
+                tmpMContact.put(item.getKey(), item.getValue()).clone();
             if (accountsUsed.contains(accounts.get(id))) {
                 HashSet<String> deList = new HashSet<>();
                 deList.add(id);
@@ -726,11 +726,8 @@ class ContactsHelper {
                                         writeDisplayPhoto(Long.decode(id), item.getByteArray(PHOTO));
                                         break;
                                     case TYPE_GROUP:
-                                        HashMap<String, String> group = (HashMap<String, String>) ((HashMap) item.getObject("group")).get(accounts.get(id));
+                                        HashMap<String, String> group = ((HashMap<String, HashMap<String, String>>) item.getObject("group")).get(accounts.get(id));
                                         if (group == null) {
-                                            //create group
-                                            group = (HashMap<String, String>) ((HashMap) item.getObject("group")).values().iterator().next();
-                                            //Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
                                             int groupInsertIndex = ops.size();
                                             opBuilder = ContentProviderOperation.newInsert(ContactsContract.Groups.CONTENT_URI)
                                                     .withValue(ContactsContract.Groups.TITLE, item.get("value"))

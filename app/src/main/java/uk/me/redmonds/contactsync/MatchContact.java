@@ -37,7 +37,7 @@ public class MatchContact extends Fragment
 
     @Override
     public void onItemClick(AdapterView<?> p1, View p2, int p3, long p4) {
-        if (((AlphabetListAdapter) p1.getAdapter()).getItemViewType(p3) == 0) {
+        if (p1.getAdapter().getItemViewType(p3) == 0) {
             //Toast.makeText(main, "yes",Toast.LENGTH_LONG).show();
 
             String linkName = (String) ((TextView) p2).getText();

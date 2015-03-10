@@ -47,9 +47,9 @@ public class AlphabetListAdapter extends BaseAdapter {
         alphabetListLayout = aListLayout;
         this.rows = new ArrayList<>();
         int start = 0;
-        int end = 0;
+        int end;
         String previousLetter = null;
-        Object[] tmpIndexItem = null;
+        Object[] tmpIndexItem;
         Pattern numberPattern = Pattern.compile("[0-9]");
 
         for (String object : Objects) {

@@ -12,7 +12,7 @@
     </style>
 
     <style name="ButtonStyle">
-        <item name="android:background">@color/material_orange_500</item>
+        <item name="android:background">@color/material_orange_300</item>
         <item name="android:textColor">@android:color/white</item>
     </style>
 

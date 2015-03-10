@@ -149,7 +149,7 @@ public class SyncFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        HashMap<String, Object> clickedItem = (HashMap<String, Object>) l.getAdapter().getItem(position);
+        HashMap<String, Object> clickedItem = ((FlexibleListAdapter) l.getAdapter()).getItem(position);
 
         if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(MATCH)) {
             settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());

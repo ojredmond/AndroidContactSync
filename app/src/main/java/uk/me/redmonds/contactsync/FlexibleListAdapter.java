@@ -20,13 +20,13 @@ class FlexibleListAdapter extends BaseAdapter {
     public final static String LAYOUT = "Layout";
     public final static String LAYOUTIDS = "Layout IDs";
     public final static String LISTITEM = "List Item";
-    private final HashMap[] items;
+    private final HashMap<String, Object>[] items;
     private final Activity context;
     private int defaultLayout = android.R.layout.simple_list_item_2;
     private int defaultTitleId = android.R.id.text1;
     private int defaultDescriptionId = android.R.id.text2;
 
-    public FlexibleListAdapter(HashMap[] i, Activity a, int layout, int id1, int id2) {
+    public FlexibleListAdapter(HashMap<String, Object>[] i, Activity a, int layout, int id1, int id2) {
         items = i;
         context = a;
         defaultLayout = layout;
@@ -34,7 +34,7 @@ class FlexibleListAdapter extends BaseAdapter {
         defaultDescriptionId = id2;
     }
 
-    public FlexibleListAdapter(HashMap[] i, Activity a) {
+    public FlexibleListAdapter(HashMap<String, Object>[] i, Activity a) {
         items = i;
         context = a;
     }
@@ -45,7 +45,7 @@ class FlexibleListAdapter extends BaseAdapter {
     }
 
     @Override
-    public HashMap getItem(int i) {
+    public HashMap<String, Object> getItem(int i) {
         return items[i];
     }
 

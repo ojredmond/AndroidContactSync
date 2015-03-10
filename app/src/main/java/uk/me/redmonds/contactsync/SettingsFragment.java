@@ -84,7 +84,7 @@ public class SettingsFragment extends Fragment
         Spinner account1 = (Spinner) preferenceView.findViewById(R.id.account1selector);
         Spinner account2 = (Spinner) preferenceView.findViewById(R.id.account2selector);
         // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter adapter = new ArrayAdapter(getActivity(),
+        ArrayAdapter adapter = new ArrayAdapter<>(getActivity(),
                 android.R.layout.simple_spinner_item,
                 listArray);
         // Specify the layout to use when the list of choices appears

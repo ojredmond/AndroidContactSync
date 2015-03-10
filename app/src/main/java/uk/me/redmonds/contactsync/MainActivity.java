@@ -3,7 +3,6 @@ package uk.me.redmonds.contactsync;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -133,9 +132,6 @@ public class MainActivity extends ActionBarActivity
 
     public void matchStatus() {
         // get accounts to matched
-        SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(this);
-        String account1Name = pref.getString(ACCOUNT1, null);
-        String account2Name = pref.getString(ACCOUNT2, null);
         SharedPreferences.Editor results = getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE).edit();
 
         results.clear();
