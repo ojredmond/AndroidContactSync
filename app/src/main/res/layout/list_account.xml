@@ -5,19 +5,17 @@
     android:layout_height="wrap_content"
     android:background="@color/nav_background"
     android:orientation="horizontal"
-	android:padding="@dimen/large_gap"
-	>
+    android:padding="@dimen/large_gap">
 
     <TextView
         android:id="@+id/type"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/value"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-		android:paddingStart="@dimen/medium_gap"
-        />
+        android:paddingEnd="@dimen/medium_gap"
+        android:paddingStart="@dimen/medium_gap" />
 </LinearLayout>

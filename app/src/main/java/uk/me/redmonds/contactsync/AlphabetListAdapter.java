@@ -1,94 +1,51 @@
 package uk.me.redmonds.contactsync;
 
 import android.content.Context;
+import android.graphics.Point;
+import android.view.Display;
+import android.view.GestureDetector;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.MeasureSpec;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import android.view.*;
-import java.util.*;
-import java.util.regex.*;
-import android.view.View.*;
-import android.widget.*;
-import android.graphics.*;
+import java.util.Locale;
+import java.util.regex.Pattern;
 
 public class AlphabetListAdapter extends BaseAdapter {
 
-    public class SlideGestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            sideIndexX = e2.getX();
-			sideIndexY = e2.getY();
-			
-            if (sideIndexX >= 0 && sideIndexY >= 0) {
-                displayListItem();
-            }
-
-            return false;
-        }
-        
-        @Override
-        public boolean onDown(MotionEvent e) {
-			// now you know coordinates of touch
-			sideIndexX = e.getX();
-			sideIndexY = e.getY();
-
-			// and can display a proper item it country list
-			displayListItem();
-            return true;
-        }
-    }
-
-    public static abstract class Row {}
-    
-    public static final class Section extends Row {
-        public final String text;
-
-        public Section(String text) {
-            this.text = text;
-        }
-    }
-    
-    public static final class Item extends Row {
-        public final String text;
-
-        public Item(String text) {
-            this.text = text;
-        }
-    }
-    
 	private static final int TIMES_OVERFLOW = 2;
-    private List<Row> rows;
-    private int alphabetListLayout;
-    private int listLayout;
-    private int itemLayout = R.layout.row_item;
-    private int itemId = R.id.textView1;
-    private int sectionLayout = R.layout.row_section;
-    private int sectionId = R.id.textView1;
-    private Context context;
-    private View container;
-    private List<Object[]> alphabet = new ArrayList<Object[]>();
-    private HashMap<String, Integer> sections = new HashMap<String, Integer>();
-    private int sideIndexHeight;
     private static float sideIndexX;
     private static float sideIndexY;
+    private final List<Row> rows;
+    private final int alphabetListLayout;
+    private final int listLayout;
+    private final int itemLayout = R.layout.row_item;
+    private final Context context;
+    private final View container;
+    private final List<Object[]> alphabet = new ArrayList<>();
+    private final HashMap<String, Integer> sections = new HashMap<>();
+    private int sideIndexHeight;
     private int indexListSize;
     private GestureDetector mGestureDetector;
 
-    public void setRows(List<Row> rows) {
-        this.rows = rows;
-    }
-
-    AlphabetListAdapter (Context c, View v, int lLayout, int aListLayout, ArrayList<String> Objects) {
+    AlphabetListAdapter(Context c, View v, int lLayout, int aListLayout, ArrayList<String> Objects) {
         context = c;
         container = v;
         listLayout = lLayout;
         alphabetListLayout = aListLayout;
-        this.rows = new ArrayList<Row>();
+        this.rows = new ArrayList<>();
         int start = 0;
         int end = 0;
         String previousLetter = null;
@@ -134,28 +91,28 @@ public class AlphabetListAdapter extends BaseAdapter {
             tmpIndexItem[2] = rows.size() - 1;
             alphabet.add(tmpIndexItem);
         }
-        
+
         updateAlphabetList();
-        
+
         //hide alphbet index if to few entries
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view1 = inflater.inflate(itemLayout, (ViewGroup)container, false);
+        View view1 = inflater.inflate(itemLayout, (ViewGroup) container, false);
         view1.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
         int rowHeight = view1.getMeasuredHeight();
-		
-		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		int height = size.y;
-		
+
+        WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        Display display = wm.getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        int height = size.y;
+
         //Toast.makeText(context,height+"/"+rowHeight+"="+(height/rowHeight),Toast.LENGTH_LONG).show();
-        if(getCount() < ((height/rowHeight) * TIMES_OVERFLOW)) {
+        if (getCount() < ((height / rowHeight) * TIMES_OVERFLOW)) {
             container.findViewById(alphabetListLayout).setVisibility(View.GONE);
         }
     }
 
-    public void updateAlphabetList() {
+    void updateAlphabetList() {
         LinearLayout sideIndex = (LinearLayout) container.findViewById(alphabetListLayout);
         sideIndex.removeAllViews();
         indexListSize = alphabet.size();
@@ -192,15 +149,15 @@ public class AlphabetListAdapter extends BaseAdapter {
         sideIndexHeight = sideIndex.getHeight();
 
         mGestureDetector = new GestureDetector(context, new SlideGestureListener());
-        sideIndex.setOnTouchListener(new OnTouchListener () {
-                @Override
-                public boolean onTouch(View view, MotionEvent event) {
-                    return mGestureDetector.onTouchEvent(event);
-                }
-            });
+        sideIndex.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                return mGestureDetector.onTouchEvent(event);
+            }
+        });
     }
 
-    public void displayListItem() {
+    void displayListItem() {
         LinearLayout sideIndex = (LinearLayout) container.findViewById(alphabetListLayout);
         sideIndexHeight = sideIndex.getHeight();
         // compute number of pixels for every side index item
@@ -233,12 +190,12 @@ public class AlphabetListAdapter extends BaseAdapter {
     public long getItemId(int position) {
         return position;
     }
-    
+
     @Override
     public int getViewTypeCount() {
         return 2;
     }
-    
+
     @Override
     public int getItemViewType(int position) {
         if (getItem(position) instanceof Section) {
@@ -251,27 +208,74 @@ public class AlphabetListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        
+
         if (getItemViewType(position) == 0) { // Item
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(itemLayout, parent, false);  
+                view = inflater.inflate(itemLayout, parent, false);
             }
-            
+
             Item item = (Item) getItem(position);
+            int itemId = R.id.textView1;
             TextView textView = (TextView) view.findViewById(itemId);
             textView.setText(item.text);
         } else { // Section
             if (view == null) {
                 LayoutInflater inflater = (LayoutInflater) parent.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-                view = inflater.inflate(sectionLayout, parent, false);  
+                int sectionLayout = R.layout.row_section;
+                view = inflater.inflate(sectionLayout, parent, false);
             }
-            
+
             Section section = (Section) getItem(position);
+            int sectionId = R.id.textView1;
             TextView textView = (TextView) view.findViewById(sectionId);
             textView.setText(section.text);
         }
-        
+
         return view;
+    }
+
+    public static abstract class Row {
+    }
+
+    public static final class Section extends Row {
+        public final String text;
+
+        public Section(String text) {
+            this.text = text;
+        }
+    }
+
+    public static final class Item extends Row {
+        public final String text;
+
+        public Item(String text) {
+            this.text = text;
+        }
+    }
+
+    private class SlideGestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            sideIndexX = e2.getX();
+            sideIndexY = e2.getY();
+
+            if (sideIndexX >= 0 && sideIndexY >= 0) {
+                displayListItem();
+            }
+
+            return false;
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            // now you know coordinates of touch
+            sideIndexX = e.getX();
+            sideIndexY = e.getY();
+
+            // and can display a proper item it country list
+            displayListItem();
+            return true;
+        }
     }
 }

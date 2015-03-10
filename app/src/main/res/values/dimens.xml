@@ -9,17 +9,12 @@
     <dimen name="large_gap">10dip</dimen>
     <dimen name="xlarge_gap">20dip</dimen>
     <dimen name="xxlarge_gap">40dip</dimen>
-    
+
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
 
     <!-- Buttons -->
-    <dimen name="button__bar_top_padding">24dip</dimen>
-    <dimen name="button__bar_bottom_padding">24dip</dimen>
-    <dimen name="button__bar_left_padding">16dip</dimen>
-    <dimen name="button__bar_right_padding">16dip</dimen>
-    <dimen name="button__bar_height">48dip</dimen>
+    <dimen name="button_bar_height">48dip</dimen>
     <dimen name="button_min_width">68dip</dimen>
-    <dimen name="button_height">36dip</dimen>
 </resources>

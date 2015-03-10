@@ -54,9 +54,6 @@ public class NavigationDrawerFragment extends Fragment {
     private boolean mUserLearnedDrawer;
     private boolean mFromSavedInstanceState;
 
-    public NavigationDrawerFragment() {
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,7 +93,7 @@ public class NavigationDrawerFragment extends Fragment {
                 selectItem(position);
             }
         });
-        mDrawerListView.setAdapter(new ArrayAdapter<String>(
+        mDrawerListView.setAdapter(new ArrayAdapter<>(
                 getActivity().getApplicationContext(),
                 android.R.layout.simple_list_item_activated_1,
                 android.R.id.text1,
@@ -117,11 +114,10 @@ public class NavigationDrawerFragment extends Fragment {
     /**
      * Users of this fragment must call this method to set up the navigation drawer interactions.
      *
-     * @param fragmentId   The android:id of this fragment in its activity's layout.
      * @param drawerLayout The DrawerLayout containing this fragment's UI.
      */
-    public void setUp(ActionBar actionBar, int fragmentId, DrawerLayout drawerLayout) {
-        mFragmentContainerView = getActivity().findViewById(fragmentId);
+    void setUp(ActionBar actionBar, DrawerLayout drawerLayout) {
+        mFragmentContainerView = getActivity().findViewById(R.id.navigation_drawer);
         mDrawerLayout = drawerLayout;
         mActionBar = actionBar;
 

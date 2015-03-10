@@ -1,33 +1,22 @@
 package uk.me.redmonds.contactsync;
 
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.FrameLayout;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
-
-import java.util.HashMap;
-import java.util.HashSet;
 
 public class CompareDetail extends Fragment {
     private ContactsHelper cObj;
     private MainActivity main;
     private String name;
     private String ids[];
-    private LinearLayout layout;
     private String listItem;
     private final OnClickListener ButtonClick = new OnClickListener() {
 
@@ -54,12 +43,10 @@ public class CompareDetail extends Fragment {
             }
         }
     };
-    private ViewGroup layoutContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        layoutContainer = container;
 
         View compareView = inflater.inflate(R.layout.compare, container, false);
 
@@ -112,15 +99,15 @@ public class CompareDetail extends Fragment {
         else if (listItem.startsWith(Match.MATCHEDKEY))
             main.setHeading(getString(R.string.title_activity_match));
 
-        layout = (LinearLayout) compareView.findViewById(R.id.compare);
-		
+        LinearLayout layout = (LinearLayout) compareView.findViewById(R.id.compare);
+
         if (listItem.startsWith(Match.MATCHEDKEY))
             cObj = new ContactsHelper(main, listItem, ids[0], ids);
         else
             cObj = new ContactsHelper(main, listItem, name, ids);
 
         for (String id : ids) {
-            layout.addView(cObj.getContactView(layoutContainer,name,id));
+            layout.addView(cObj.getContactView(container, name, id));
         }
 
         return compareView;

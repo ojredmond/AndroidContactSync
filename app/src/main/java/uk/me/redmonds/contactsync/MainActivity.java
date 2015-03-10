@@ -70,7 +70,6 @@ public class MainActivity extends ActionBarActivity
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(actionBar,
-                R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         String trace = "";

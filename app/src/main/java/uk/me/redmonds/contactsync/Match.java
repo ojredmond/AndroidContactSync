@@ -69,7 +69,6 @@ class Match {
                 HashMap<String, Long> unmatched,
                 HashMap<Long, String> unmatchedId,
                 HashMap<String, String> tempData,
-                String tempContactName,
                 Long tempContactId,
                 String type,
                 String data,
@@ -122,7 +121,6 @@ class Match {
                 HashMap<String, HashMap<Long, Long>> matched1Other,
                 HashMap<String, HashMap<Long, Long>> matched2Other,
                 HashMap<String, String> tempData,
-                String tempContactName,
                 Long tempContactId,
                 String type,
                 String data,
@@ -132,7 +130,7 @@ class Match {
             duplicate = performMatchingP1(
                     account2Other, dup2ListOther,
                     unmatched2, unmatched2Id,
-                    tempData, tempContactName,
+                    tempData,
                     tempContactId, type, data,
                     duplicate, true,
                     matched1Other, matched2Other);
@@ -260,7 +258,7 @@ class Match {
                                                 account1Other, dup1ListOther,
                                                 unmatched1,
                                                 unmatched1Id, tempData,
-                                                tempContactName, tempContactId,
+                                                tempContactId,
                                                 type, data,
                                                 duplicate, false,
                                                 null, null
@@ -278,7 +276,7 @@ class Match {
                                     account1Other, dup1ListOther,
                                     unmatched1,
                                     unmatched1Id, tempData,
-                                    tempContactName, tempContactId,
+                                    tempContactId,
                                     ContactsHelper.TYPE_NAME, tempContactName,
                                     duplicate, false,
                                     null, null
@@ -350,7 +348,7 @@ class Match {
                                                     unmatched2,
                                                     matched1Other, matched2Other,
                                                     tempData,
-                                                    tempContactName, tempContactId,
+                                                    tempContactId,
                                                     type, data,
                                                     duplicate, matched
                                             );
@@ -373,7 +371,7 @@ class Match {
                                         unmatched2,
                                         matched1Other, matched2Other,
                                         tempData,
-                                        tempContactName, tempContactId,
+                                        tempContactId,
                                         ContactsHelper.TYPE_NAME, tempContactName,
                                         duplicate, matched
                                 );

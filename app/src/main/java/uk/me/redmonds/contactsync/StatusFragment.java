@@ -10,14 +10,8 @@ import android.widget.TextView;
 
 public class StatusFragment extends Fragment {
     private final static String LOG = "log";
-    private final String logText;
     private OnViewCreatedListener mCallback;
     private TextView log;
-
-    public StatusFragment() {
-        Bundle args = getArguments();
-        logText = args.getString("logText", "");
-    }
 
     @Override
     public void onAttach(Activity activity) {
@@ -44,6 +38,9 @@ public class StatusFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View statusView = inflater.inflate(R.layout.fragment_status, container, false);
+
+        Bundle args = getArguments();
+        String logText = args.getString("logText", "");
 
         mCallback.onViewCreated(statusView);
         log = (TextView) statusView.findViewById(R.id.statuslog);

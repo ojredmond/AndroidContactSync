@@ -138,6 +138,7 @@ public class MatchContact extends Fragment
             public void onAnimationEnd(Animator anim) {
                 View view = (View) ((ObjectAnimator) anim).getTarget();
                 //Toast.makeText(main,anim.toString(),Toast.LENGTH_LONG).show();
+                assert view != null;
                 if (view.getTag() != null && view.getTag() instanceof View) {
                     //get current start delay
                     Long delay = transitioner.getStartDelay(LayoutTransition.APPEARING);

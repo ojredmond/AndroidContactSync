@@ -1,7 +1,8 @@
 package uk.me.redmonds.contactsync;
 
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.*;
+import java.util.Map;
 
 class StringMap extends HashMap<String, Object> {
     public String get(String key)
@@ -19,10 +20,6 @@ class StringMap extends HashMap<String, Object> {
 		return (byte[])super.get(key);
 	}
 	
-	public Boolean isByteArray (String key) {
-		return super.get(key) instanceof byte[];
-	}
-
 	@Override
 	public int hashCode()
 	{
@@ -30,20 +27,6 @@ class StringMap extends HashMap<String, Object> {
 		
 		for(Map.Entry<String,Object> e: this.entrySet()) {
 			hashCode += e.getKey().hashCode();
-			if (e.getValue() instanceof byte[])
-				hashCode += Arrays.hashCode((byte[]) e.getValue());
-			else if (e.getValue() != null)
-				hashCode += e.getValue().hashCode();
-		}
-		return hashCode;
-	}
-	
-	public int hashCode2()
-	{
-		int hashCode = 0;
-
-		for(Map.Entry<String,Object> e: this.entrySet()) {
-			//hashCode += e.getKey().hashCode();
 			if (e.getValue() instanceof byte[])
 				hashCode += Arrays.hashCode((byte[]) e.getValue());
 			else if (e.getValue() != null)

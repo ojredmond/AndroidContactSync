@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import android.widget.*;
 
 /**
  * Fragment used for comparison adds tabs to views
@@ -57,7 +56,7 @@ public class CompareFragment extends Fragment {
             String selected = args.getString("selected");
             HashMap selectedMap = null;
 
-            SharedPreferences pref = main.getSharedPreferences(Match.PREFKEY,Context.MODE_PRIVATE);
+            SharedPreferences pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
             contacts = new ArrayList<>();
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);

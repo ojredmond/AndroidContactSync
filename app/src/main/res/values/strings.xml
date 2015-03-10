@@ -14,24 +14,17 @@
     <string name="options">Options</string>
     <string name="groups">Sync Groups</string>
     <string name="photos">Sync Photos</string>
-	<string name="deep">Deep matching</string>
+    <string name="deep">Deep matching</string>
 
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_main">ContactSync</string>
-    <string name="title_activity_results">Matched Results</string>
-    <string name="title_activity_compare">Compare</string>
     <string name="title_activity_dup">Duplicates</string>
     <string name="title_activity_match">Matches</string>
     <string name="delete_contact">Delete</string>
     <string name="merge_contacts">Merge</string>
     <string name="add_to_unmatched">Split</string>
-    <string name="accounts_groups">ACCOUNTS</string>
     <string name="cancel">Cancel</string>
     <string name="confirm">Confirm</string>
 
     <string name="contact_photo">Contact Photo</string>
     <string name="edit_contact">Contact Photo</string>
-
-    <string name="type">com.google</string>
 
 </resources>
