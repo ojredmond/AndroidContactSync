@@ -25,14 +25,14 @@ public class SyncFragment extends ListFragment {
     private static final String MATCHED = "Review matches";
     private static final String LAST = "View Last Results";
     private static final String NODUP = "No Duplicates";
-    private final ArrayList<HashMap<String, Object>> values = new ArrayList<>();
+    private final ArrayList<StringMap> values = new ArrayList<>();
     private MainActivity main;
     private SharedPreferences pref;
     private SharedPreferences settings;
     private String list_type;
     private String account1Name;
     private String account2Name;
-    private HashMap<String, Object> value;
+    private StringMap value;
     private FlexibleListAdapter adapter;
 
     @Override
@@ -55,12 +55,12 @@ public class SyncFragment extends ListFragment {
         int account2Count = pref.getInt(Match.NUMCONTACTS + account2Name, -1);
 
         if (list_type.equals(OPTIONS) || !pref.getBoolean(Match.SYNCMATCHED, false)) {
-            value = new HashMap<>();
+            value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{"Match"});
             value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
             value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
             values.add(value);
-            value = new HashMap<>();
+            value = new StringMap();
 
             if (account1Name == null || account2Name == null) {
                 value.put(FlexibleListAdapter.TEXT, new String[]{MATCH, "Accounts need to be set"});
@@ -74,7 +74,7 @@ public class SyncFragment extends ListFragment {
             values.add(value);
 
             if (pref.getBoolean(Match.SYNCMATCHED, false)) {
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{LAST});
                 value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_r2);
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.title});
@@ -82,7 +82,7 @@ public class SyncFragment extends ListFragment {
             }
         } else if (list_type.equals(SUMMARY)) {
             if (account1Count == 0 && account2Count == 0) {
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TITLE, "ERROR");
                 value.put(FlexibleListAdapter.DESCRIPTION, "Their are no contacts in either account");
                 values.add(value);
@@ -118,18 +118,18 @@ public class SyncFragment extends ListFragment {
                 && !account1Name.equals(account2Name)
                 && pref.getBoolean(Match.SYNCMATCHED, false)
                 && !hideSync) {
-            value = new HashMap<>();
+            value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{"Sync"});
             value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
             value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
             values.add(value);
-            value = new HashMap<>();
+            value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{FULL});
             value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
             value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
             values.add(value);
             //add logic to detect a full sync has been performed
-            value = new HashMap<>();
+            value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{SYNC});
             value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_2);
             value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});
@@ -137,7 +137,7 @@ public class SyncFragment extends ListFragment {
         }
 
 
-        adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main);
+        adapter = new FlexibleListAdapter(values.toArray(new StringMap[values.size()]), main);
 
         setListAdapter(adapter);
         ListView lv = getListView();
@@ -189,19 +189,19 @@ public class SyncFragment extends ListFragment {
             if (dupSet != null && dupSet.size() > 0) {
                 if (!dup) {
                     dup = true;
-                    value = new HashMap<>();
+                    value = new StringMap();
                     value.put(FlexibleListAdapter.TEXT, new String[]{DUP});
                     value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
                     value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
                     values.add(value);
-                    value = new HashMap<>();
+                    value = new StringMap();
                     value.put(FlexibleListAdapter.TEXT, new String[]{"Account", account1Name});
                     value.put(FlexibleListAdapter.LAYOUT, R.layout.list_account);
                     value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
                     values.add(value);
                 }
 
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{ContactsHelper.getGroupName(type), "(" + dupSet.size() + ")"});
                 if (first)
                     value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
@@ -216,7 +216,7 @@ public class SyncFragment extends ListFragment {
         }
 
         if (!dup && account1Name.equals(account2Name)) {
-            value = new HashMap<>();
+            value = new StringMap();
             value.put(FlexibleListAdapter.TITLE, NODUP);
             value.put(FlexibleListAdapter.DESCRIPTION, account1Name);
             values.add(value);
@@ -230,21 +230,21 @@ public class SyncFragment extends ListFragment {
                 if (dupSet != null && dupSet.size() > 0) {
                     if (!dup) {
                         dup = true;
-                        value = new HashMap<>();
+                        value = new StringMap();
                         value.put(FlexibleListAdapter.TEXT, new String[]{DUP});
                         value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
                         value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
                         values.add(value);
                     }
                     if (first) {
-                        value = new HashMap<>();
+                        value = new StringMap();
                         value.put(FlexibleListAdapter.TEXT, new String[]{"Account", account2Name});
                         value.put(FlexibleListAdapter.LAYOUT, R.layout.list_account);
                         value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
                         values.add(value);
                     }
 
-                    value = new HashMap<>();
+                    value = new StringMap();
                     value.put(FlexibleListAdapter.TEXT, new String[]{ContactsHelper.getGroupName(type), "(" + dupSet.size() + ")"});
                     if (first)
                         value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
@@ -259,7 +259,7 @@ public class SyncFragment extends ListFragment {
 
             if ((unmatched1Name != null && unmatched1Name.size() > 0)
                     || (unmatched2Name != null && unmatched2Name.size() > 0)) {
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{UNMATCHED});
                 value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
@@ -267,7 +267,7 @@ public class SyncFragment extends ListFragment {
             }
 
             if (unmatched1Name != null && unmatched1Name.size() > 0) {
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{account1Name, "(" + unmatched1Name.size() + ")"});
                 value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
@@ -276,7 +276,7 @@ public class SyncFragment extends ListFragment {
             }
 
             if (unmatched2Name != null && unmatched2Name.size() > 0) {
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{account2Name, "(" + unmatched2Name.size() + ")"});
                 value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.type, R.id.value});
@@ -290,14 +290,14 @@ public class SyncFragment extends ListFragment {
                 HashSet<String> matchSet = (HashSet<String>) pref.getStringSet(matchLabel, null);
                 if (matchSet != null && matchSet.size() > 0) {
                     if (first) {
-                        value = new HashMap<>();
+                        value = new StringMap();
                         value.put(FlexibleListAdapter.TEXT, new String[]{PMATCHED});
                         value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
                         value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
                         values.add(value);
                     }
 
-                    value = new HashMap<>();
+                    value = new StringMap();
                     value.put(FlexibleListAdapter.TEXT, new String[]{ContactsHelper.getGroupName(type), "(" + matchSet.size() + ")"});
                     if (first)
                         value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_2);
@@ -311,13 +311,13 @@ public class SyncFragment extends ListFragment {
             }
 
             if (matched1 != null && matched1.size() > 0) {
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{MATCHED});
                 value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.heading});
                 values.add(value);
 
-                value = new HashMap<>();
+                value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{matched1.size() + " matches"});
                 value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_none_1);
                 value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.value});

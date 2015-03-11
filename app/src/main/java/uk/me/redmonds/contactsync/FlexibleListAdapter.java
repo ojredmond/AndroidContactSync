@@ -7,8 +7,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import java.util.HashMap;
-
 /**
  * A Flexibale list adapter that allows each row to specify layout
  * Created by oli on 21/02/15.
@@ -20,13 +18,13 @@ class FlexibleListAdapter extends BaseAdapter {
     public final static String LAYOUT = "Layout";
     public final static String LAYOUTIDS = "Layout IDs";
     public final static String LISTITEM = "List Item";
-    private final HashMap<String, Object>[] items;
+    private final StringMap[] items;
     private final Activity context;
     private int defaultLayout = android.R.layout.simple_list_item_2;
     private int defaultTitleId = android.R.id.text1;
     private int defaultDescriptionId = android.R.id.text2;
 
-    public FlexibleListAdapter(HashMap<String, Object>[] i, Activity a, int layout, int id1, int id2) {
+    public FlexibleListAdapter(StringMap[] i, Activity a, int layout, int id1, int id2) {
         items = i;
         context = a;
         defaultLayout = layout;
@@ -34,7 +32,7 @@ class FlexibleListAdapter extends BaseAdapter {
         defaultDescriptionId = id2;
     }
 
-    public FlexibleListAdapter(HashMap<String, Object>[] i, Activity a) {
+    public FlexibleListAdapter(StringMap[] i, Activity a) {
         items = i;
         context = a;
     }
@@ -45,7 +43,7 @@ class FlexibleListAdapter extends BaseAdapter {
     }
 
     @Override
-    public HashMap<String, Object> getItem(int i) {
+    public StringMap getItem(int i) {
         return items[i];
     }
 
@@ -59,13 +57,13 @@ class FlexibleListAdapter extends BaseAdapter {
         if (view == null) {
             LayoutInflater mInflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             if (items[i].containsKey(LAYOUT))
-                view = mInflater.inflate((int) items[i].get(LAYOUT), null);
+                view = mInflater.inflate((int) items[i].getObject(LAYOUT), null);
             else
                 view = mInflater.inflate(defaultLayout, null);
 
             if (items[i].containsKey(TEXT) && items[i].containsKey(LAYOUTIDS)) {
-                String text[] = (String[]) items[i].get(TEXT);
-                int ids[] = (int[]) items[i].get(LAYOUTIDS);
+                String text[] = (String[]) items[i].getObject(TEXT);
+                int ids[] = (int[]) items[i].getObject(LAYOUTIDS);
                 if (text.length == ids.length)
                     for (int y = 0; y < text.length; y++)
                         ((TextView) view.findViewById(ids[y])).setText(text[y]);
