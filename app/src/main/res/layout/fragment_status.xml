@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
         android:freezesText="true"
+        android:background="@drawable/icon"
         />
 
 </ScrollView>
