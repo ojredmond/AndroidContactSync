@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.view.View;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -34,6 +33,7 @@ public class SyncFragment extends ListFragment {
     private String account1Name;
     private String account2Name;
     private HashMap<String, Object> value;
+    private FlexibleListAdapter adapter;
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -137,7 +137,7 @@ public class SyncFragment extends ListFragment {
         }
 
 
-        FlexibleListAdapter adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main);
+        adapter = new FlexibleListAdapter(values.toArray(new HashMap[values.size()]), main);
 
         setListAdapter(adapter);
         ListView lv = getListView();
@@ -150,7 +150,8 @@ public class SyncFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        HashMap<String, Object> clickedItem = (HashMap<String, Object>) ((ListAdapter) l.getAdapter()).getItem(position);
+        //HashMap<String, Object> clickedItem = ((FlexibleListAdapter) l.getAdapter()).getItem(position);
+        HashMap<String, Object> clickedItem = adapter.getItem(position - 1);
 
         if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(MATCH)) {
             settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
