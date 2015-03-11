@@ -17,7 +17,7 @@
     <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="app: uk.me.redmonds.contactsync" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="app_icon">
+    <list default="true" id="54e8a2aa-2d2c-485a-9d54-9aec69acc658" name="Default" comment="fixes">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/SyncFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/SyncFragment.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
@@ -45,8 +45,18 @@
       <file leaf-file-name="SyncFragment.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/SyncFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.30864197" vertical-offset="1980" max-vertical-offset="4965">
-              <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.7962963" vertical-offset="1698" max-vertical-offset="4950">
+              <caret line="151" column="56" selection-start-line="151" selection-start-column="56" selection-end-line="151" selection-end-column="56" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FlexibleListAdapter.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/FlexibleListAdapter.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="423" max-vertical-offset="1110">
+              <caret line="47" column="39" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
               <folding />
             </state>
           </provider>
@@ -1524,7 +1534,11 @@
       <created>1426037994935</created>
       <updated>1426037994936</updated>
     </task>
-    <option name="localTasksCounter" value="72" />
+    <task id="LOCAL-00072" summary="fixes">
+      <created>1426038482024</created>
+      <updated>1426038482024</updated>
+    </task>
+    <option name="localTasksCounter" value="73" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -1615,7 +1629,8 @@
     <MESSAGE value="adding functionality" />
     <MESSAGE value="Optimizing" />
     <MESSAGE value="app_icon" />
-    <option name="LAST_COMMIT_MESSAGE" value="app_icon" />
+    <MESSAGE value="fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixes" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
@@ -2028,17 +2043,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/FlexibleListAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="153" max-vertical-offset="1140">
-          <caret line="28" column="11" selection-start-line="28" selection-start-column="11" selection-end-line="28" selection-end-column="11" />
-          <folding>
-            <element signature="e#1498#1499#0" expanded="true" />
-            <element signature="e#1529#1530#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/MergeFragment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3319239" vertical-offset="1673" max-vertical-offset="4035">
@@ -2069,10 +2073,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/FlexibleListAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="423" max-vertical-offset="1110">
+          <caret line="47" column="39" selection-start-line="47" selection-start-column="39" selection-end-line="47" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/uk/me/redmonds/contactsync/SyncFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.30864197" vertical-offset="1980" max-vertical-offset="4965">
-          <caret line="153" column="0" selection-start-line="153" selection-start-column="0" selection-end-line="153" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.7962963" vertical-offset="1698" max-vertical-offset="4950">
+          <caret line="151" column="56" selection-start-line="151" selection-start-column="56" selection-end-line="151" selection-end-column="56" />
           <folding />
         </state>
       </provider>
