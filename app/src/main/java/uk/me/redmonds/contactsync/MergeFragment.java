@@ -35,7 +35,8 @@ public class MergeFragment extends Fragment {
         public void onClick(View p1) {
             switch (p1.getId()) {
                 case R.id.contact_confirm:
-                    if (contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
+                    if (contact.get(ContactsHelper.TYPE_NAME) != null
+						&& contact.get(ContactsHelper.TYPE_NAME).size() != 1) {
                         Toast.makeText(main, "Needs to be only 1 name", Toast.LENGTH_LONG).show();
                     } else if (contact.get(ContactsHelper.TYPE_PHOTO) != null
                             && contact.get(ContactsHelper.TYPE_PHOTO).size() != 1) {

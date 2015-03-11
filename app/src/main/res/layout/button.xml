@@ -3,4 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_weight="1"
-    android:minWidth="@dimen/button_min_width" />
+    android:minWidth="@dimen/button_min_width"
+	android:text="@string/delete_contact"
+	/>

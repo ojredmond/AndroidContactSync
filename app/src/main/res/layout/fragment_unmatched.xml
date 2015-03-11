@@ -11,17 +11,14 @@
         android:background="@drawable/button_border_top"
         android:orientation="horizontal">
 
-        <Button
+        <include
             android:id="@+id/delete_contact"
-            style="?android:attr/borderlessButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/material_orange_500"
-            android:minWidth="@dimen/button_min_width"
-            android:text="@string/delete_contact"
-            android:textColor="@android:color/white" />
-
+			android:layout_margin="@dimen/medium_gap"
+			layout="@layout/button"
+            />
     </LinearLayout>
 
     <LinearLayout

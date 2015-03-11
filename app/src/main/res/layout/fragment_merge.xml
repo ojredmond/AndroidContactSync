@@ -8,30 +8,30 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_bar_height"
         android:layout_alignParentBottom="true"
+		android:background="@drawable/button_border_top"
         android:orientation="horizontal">
 
         <Button
             android:id="@+id/contact_cancel"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/material_orange_500"
-            android:minWidth="@dimen/button_min_width"
-            android:text="@string/cancel"
-            android:textColor="@android:color/white" />
+			android:text="@string/cancel"
+			style="?android:attr/borderlessButtonStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:minWidth="@dimen/button_min_width"
+			android:layout_margin="@dimen/medium_gap"
+			/>
 
         <Button
             android:id="@+id/contact_confirm"
-            style="?android:attr/borderlessButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/material_orange_500"
-            android:minWidth="@dimen/button_min_width"
-            android:text="@string/confirm"
-            android:textColor="@android:color/white" />
-
+			android:text="@string/confirm"
+			style="?android:attr/borderlessButtonStyle"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:minWidth="@dimen/button_min_width"
+			android:layout_margin="@dimen/medium_gap"
+			/>
     </LinearLayout>
 
     <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"

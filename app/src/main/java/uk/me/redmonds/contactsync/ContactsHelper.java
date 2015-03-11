@@ -691,7 +691,7 @@ class ContactsHelper {
             //clone merged contact
             tmpMContact = new HashMap<>();
             for (Map.Entry<String, HashSet<StringMap>> item : mergedContact.entrySet())
-                tmpMContact.put(item.getKey(), item.getValue()).clone();
+                tmpMContact.put(item.getKey(), (HashSet<StringMap>)item.getValue().clone());
             if (accountsUsed.contains(accounts.get(id))) {
                 HashSet<String> deList = new HashSet<>();
                 deList.add(id);
