@@ -28,7 +28,8 @@ class Match {
     public static final String MATCHEDKEY = "matched:";
     public static final String ACCOUNTKEY = "account:";
     public static final String NUMCONTACTS = "count:";
-    public static final String PREFKEY = "uk.me.redmonds.contactsync-match";
+    public static final String PREF_KEY_ACCOUNT = PACKAGE_NAME + "-duplicate";
+    public static final String PREF_KEY_MATCH = PACKAGE_NAME + "-match";
     public static final String MIME_TYPE_LIST[] = {
             StructuredName.CONTENT_ITEM_TYPE,
             Phone.CONTENT_ITEM_TYPE,
@@ -41,6 +42,7 @@ class Match {
     private String syncType = "";
     private String account1Name;
     private String account2Name;
+    private String accountsKey;
     private Boolean syncMatched;
     private Boolean deep;
 
@@ -52,6 +54,11 @@ class Match {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
+        if(account1Name.compareTo(accountName2) > 0)
+            accountsKey = account1Name + account2Name;
+        else
+            accountsKey = account2Name + account1Name;
+        
         deep = settings.getBoolean(MainActivity.DEEP, false);
 
         MatchContacts task = new MatchContacts();
@@ -198,7 +205,7 @@ class Match {
             //int unmatchedCount2 = 0;
 
             // get sync status
-            SharedPreferences status = mainActivity.getSharedPreferences(PREFKEY, Context.MODE_PRIVATE);
+            SharedPreferences status = mainActivity.getSharedPreferences(PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
             syncMatched = status.getBoolean(SYNCMATCHED, false);
 
             if (syncMatched) {
@@ -444,7 +451,7 @@ class Match {
                 message += "Unmatched from account 2: " + String.valueOf(unmatched2.size()) + "\n";
             }
 
-            SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREFKEY, Context.MODE_PRIVATE).edit();
+            SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE).edit();
 
             //store the number of contacts for account1 so that can display results even if no contacts
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
@@ -470,6 +477,7 @@ class Match {
             results.apply();
 
             if (!account2Name.equals(account1Name)) {
+                SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE).edit();
                 //store the number of contacts for account2 so that can display results even if no contacts
                 results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
                 results.apply();
@@ -486,6 +494,14 @@ class Match {
                     results.putStringSet(DUPKEY + mime + account2Name, dup2Name.get(mime));
                 results.apply();
 
+                HashSet<String> account2Set = new HashSet<>();
+                for (Map.Entry<Long, String> e : account2.entrySet()) {
+                    account2Set.add(String.valueOf(e.getKey()) + ":" + e.getValue());
+                }
+                results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
+                results.apply();
+
+                SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE).edit();
 
                 HashSet<String> unmatched1Name = new HashSet<>();
                 for (Map.Entry<String, Long> e : unmatched1.entrySet()) {
@@ -531,13 +547,6 @@ class Match {
                         results.putStringSet(MATCHEDKEY + account2Name + ":" + account1Name, matched2Name.get(mime));
                     else
                         results.putStringSet(MATCHEDKEY + mime + account2Name + ":" + account1Name, matched2Name.get(mime));
-                results.apply();
-
-                HashSet<String> account2Set = new HashSet<>();
-                for (Map.Entry<Long, String> e : account2.entrySet()) {
-                    account2Set.add(String.valueOf(e.getKey()) + ":" + e.getValue());
-                }
-                results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
                 results.apply();
             }
 
