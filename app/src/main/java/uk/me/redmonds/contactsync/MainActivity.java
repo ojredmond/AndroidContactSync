@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity
     public static final String GROUPS = "GroupsOnOff";
     public static final String PHOTOS = "PicturesOnOff";
     public static final String DEEP = "DeepOnOff";
-    public static String PACKAGE_NAME;
+    public static final String PACKAGE_NAME = "uk.me.redmonds.contactsync";
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
@@ -43,8 +43,6 @@ public class MainActivity extends ActionBarActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        PACKAGE_NAME = getApplicationContext().getPackageName();
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(R.string.app_name);
