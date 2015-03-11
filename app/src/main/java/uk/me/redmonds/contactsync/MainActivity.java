@@ -26,7 +26,7 @@ public class MainActivity extends ActionBarActivity
     public static final String GROUPS = "GroupsOnOff";
     public static final String PHOTOS = "PicturesOnOff";
     public static final String DEEP = "DeepOnOff";
-    private static String PACKAGE_NAME;
+    public static String PACKAGE_NAME;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
