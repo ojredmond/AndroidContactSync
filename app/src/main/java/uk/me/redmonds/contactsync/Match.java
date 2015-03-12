@@ -22,14 +22,15 @@ import java.util.HashSet;
 import java.util.Map;
 
 class Match {
+	private static final String SYNCING = "syncing";
     public static final String SYNCMATCHED = "syncMatched";
     public static final String DUPKEY = "dup:";
     public static final String UNMATCHNAMEKEY = "unmatchedName:";
     public static final String MATCHEDKEY = "matched:";
     public static final String ACCOUNTKEY = "account:";
     public static final String NUMCONTACTS = "count:";
-    public static final String PREF_KEY_ACCOUNT = PACKAGE_NAME + "-duplicate";
-    public static final String PREF_KEY_MATCH = PACKAGE_NAME + "-match";
+    public static final String PREF_KEY_ACCOUNT = MainActivity.PACKAGE_NAME + "-duplicate";
+    public static final String PREF_KEY_MATCH = MainActivity.PACKAGE_NAME + "-match";
     public static final String MIME_TYPE_LIST[] = {
             StructuredName.CONTENT_ITEM_TYPE,
             Phone.CONTENT_ITEM_TYPE,
@@ -54,13 +55,13 @@ class Match {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
-        if(account1Name.compareTo(accountName2) > 0)
+        if(account1Name.compareTo(account2Name) > 0)
             accountsKey = account1Name + account2Name;
         else
             accountsKey = account2Name + account1Name;
         
         deep = settings.getBoolean(MainActivity.DEEP, false);
-
+		
         MatchContacts task = new MatchContacts();
         task.execute();
     }
@@ -206,13 +207,31 @@ class Match {
 
             // get sync status
             SharedPreferences status = mainActivity.getSharedPreferences(PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
-            syncMatched = status.getBoolean(SYNCMATCHED, false);
+            Boolean syncStatus = status.getBoolean(SYNCING, false);
+			syncMatched = status.getBoolean(SYNCMATCHED, false);
 
-            if (syncMatched) {
+            if (syncStatus || syncMatched) {
                 return null;
             }
 
+			//store current syncing
+			status.edit().putBoolean(SYNCING, true).apply();
+			
+			//remove duplicates and account1 contact names
+			SharedPreferences.Editor results = mainActivity.getSharedPreferences(Match.PREF_KEY_ACCOUNT + account1Name, Context.MODE_PRIVATE).edit();
+			results.clear();
+			results.apply();
 
+			//remove duplicates and account2 contact names
+			results = mainActivity.getSharedPreferences(Match.PREF_KEY_ACCOUNT + account2Name, Context.MODE_PRIVATE).edit();
+			results.clear();
+			results.apply();
+
+			//remove match results
+			results = mainActivity.getSharedPreferences(Match.PREF_KEY_MATCH + accountsKey, Context.MODE_PRIVATE).edit();
+			results.clear();
+			results.apply();
+			
             //creates mime types list for query
             String types = "";
             if (deep) {
@@ -451,7 +470,7 @@ class Match {
                 message += "Unmatched from account 2: " + String.valueOf(unmatched2.size()) + "\n";
             }
 
-            SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE).edit();
+            results = mainActivity.getSharedPreferences(PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE).edit();
 
             //store the number of contacts for account1 so that can display results even if no contacts
             results.putInt(NUMCONTACTS + account1Name, numContactsAccount1);
@@ -477,7 +496,7 @@ class Match {
             results.apply();
 
             if (!account2Name.equals(account1Name)) {
-                SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE).edit();
+                results = mainActivity.getSharedPreferences(PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE).edit();
                 //store the number of contacts for account2 so that can display results even if no contacts
                 results.putInt(NUMCONTACTS + account2Name, numContactsAccount2);
                 results.apply();
@@ -501,7 +520,7 @@ class Match {
                 results.putStringSet(ACCOUNTKEY + account2Name, account2Set);
                 results.apply();
 
-                SharedPreferences.Editor results = mainActivity.getSharedPreferences(PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE).edit();
+                results = mainActivity.getSharedPreferences(PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE).edit();
 
                 HashSet<String> unmatched1Name = new HashSet<>();
                 for (Map.Entry<String, Long> e : unmatched1.entrySet()) {
@@ -553,6 +572,8 @@ class Match {
             results.putBoolean(SYNCMATCHED, true);
             results.apply();
 
+			status.edit().putBoolean(SYNCING, false).apply();
+			
             return message;
         }
 

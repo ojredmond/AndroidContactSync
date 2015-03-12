@@ -27,7 +27,9 @@ public class SyncFragment extends ListFragment {
     private static final String NODUP = "No Duplicates";
     private final ArrayList<StringMap> values = new ArrayList<>();
     private MainActivity main;
-    private SharedPreferences pref;
+    private SharedPreferences prefMatch;
+	private SharedPreferences prefAccount1;
+	private SharedPreferences prefAccount2;
     private SharedPreferences settings;
     private String list_type;
     private String account1Name;
@@ -45,16 +47,24 @@ public class SyncFragment extends ListFragment {
 
         main = (MainActivity) this.getActivity();
 
-        pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
         settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
-
+		String accountsKey;
+		if(account1Name.compareTo(account2Name) > 0)
+            accountsKey = account1Name + account2Name;
+        else
+            accountsKey = account2Name + account1Name;
+        
+		prefAccount1 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
+		prefAccount2 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE);
+		prefMatch = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
+		
         // get he number of contacts in each account to chek they are not both empty
-        int account1Count = pref.getInt(Match.NUMCONTACTS + account1Name, -1);
-        int account2Count = pref.getInt(Match.NUMCONTACTS + account2Name, -1);
+        int account1Count = prefAccount1.getInt(Match.NUMCONTACTS + account1Name, -1);
+        int account2Count = prefAccount2.getInt(Match.NUMCONTACTS + account2Name, -1);
 
-        if (list_type.equals(OPTIONS) || !pref.getBoolean(Match.SYNCMATCHED, false)) {
+        if (list_type.equals(OPTIONS) || !prefMatch.getBoolean(Match.SYNCMATCHED, false)) {
             value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{"Match"});
             value.put(FlexibleListAdapter.LAYOUT, R.layout.heading_surround);
@@ -73,7 +83,7 @@ public class SyncFragment extends ListFragment {
             value.put(FlexibleListAdapter.LAYOUTIDS, new int[]{R.id.title, R.id.value});
             values.add(value);
 
-            if (pref.getBoolean(Match.SYNCMATCHED, false)) {
+            if (prefMatch.getBoolean(Match.SYNCMATCHED, false)) {
                 value = new StringMap();
                 value.put(FlexibleListAdapter.TEXT, new String[]{LAST});
                 value.put(FlexibleListAdapter.LAYOUT, R.layout.list_border_top_r2);
@@ -94,29 +104,29 @@ public class SyncFragment extends ListFragment {
         Boolean hideSync = false;
         for (String type : Match.MIME_TYPE_LIST) {
             String label = Match.DUPKEY + type + account1Name;
-            HashSet<String> set = (HashSet<String>) pref.getStringSet(label, null);
+            HashSet<String> set = (HashSet<String>) prefAccount1.getStringSet(label, null);
             if (set != null && set.size() > 0) {
                 hideSync = true;
             }
             label = Match.DUPKEY + type + account2Name;
-            set = (HashSet<String>) pref.getStringSet(label, null);
+            set = (HashSet<String>) prefAccount2.getStringSet(label, null);
             if (set != null && set.size() > 0) {
                 hideSync = true;
             }
             label = Match.MATCHEDKEY + type + account1Name + ":" + account2Name;
-            set = (HashSet<String>) pref.getStringSet(label, null);
+            set = (HashSet<String>) prefMatch.getStringSet(label, null);
             if (set != null && set.size() > 0) {
                 hideSync = true;
             }
             label = Match.MATCHEDKEY + type + account2Name + ":" + account1Name;
-            set = (HashSet<String>) pref.getStringSet(label, null);
+            set = (HashSet<String>) prefMatch.getStringSet(label, null);
             if (set != null && set.size() > 0) {
                 hideSync = true;
             }
         }
         if (account1Name != null && account2Name != null
                 && !account1Name.equals(account2Name)
-                && pref.getBoolean(Match.SYNCMATCHED, false)
+				&& prefMatch.getBoolean(Match.SYNCMATCHED, false)
                 && !hideSync) {
             value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{"Sync"});
@@ -162,7 +172,8 @@ public class SyncFragment extends ListFragment {
                 Toast.makeText(v.getContext(), "Can not find 2 accounts set, please go to settings", Toast.LENGTH_LONG).show();
                 return;
             }
-
+			
+			prefMatch.edit().putBoolean(Match.SYNCMATCHED, false).apply();
             main.matchStatus();
         } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)) {
             main.showResults();
@@ -177,15 +188,15 @@ public class SyncFragment extends ListFragment {
         String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
         String un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
 
-        HashSet<String> unmatched1Name = (HashSet<String>) pref.getStringSet(un1, null);
-        HashSet<String> unmatched2Name = (HashSet<String>) pref.getStringSet(un2, null);
-        HashSet<String> matched1 = (HashSet<String>) pref.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
+        HashSet<String> unmatched1Name = (HashSet<String>) prefMatch.getStringSet(un1, null);
+        HashSet<String> unmatched2Name = (HashSet<String>) prefMatch.getStringSet(un2, null);
+        HashSet<String> matched1 = (HashSet<String>) prefMatch.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
 
         Boolean first = true;
         Boolean dup = false;
         for (String type : Match.MIME_TYPE_LIST) {
             String dupLabel = Match.DUPKEY + type + account1Name;
-            HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
+            HashSet<String> dupSet = (HashSet<String>) prefAccount1.getStringSet(dupLabel, null);
             if (dupSet != null && dupSet.size() > 0) {
                 if (!dup) {
                     dup = true;
@@ -226,7 +237,7 @@ public class SyncFragment extends ListFragment {
         if (!account1Name.equals(account2Name)) {
             for (String type : Match.MIME_TYPE_LIST) {
                 String dupLabel = Match.DUPKEY + type + account2Name;
-                HashSet<String> dupSet = (HashSet<String>) pref.getStringSet(dupLabel, null);
+                HashSet<String> dupSet = (HashSet<String>) prefAccount2.getStringSet(dupLabel, null);
                 if (dupSet != null && dupSet.size() > 0) {
                     if (!dup) {
                         dup = true;
@@ -287,7 +298,7 @@ public class SyncFragment extends ListFragment {
             first = true;
             for (String type : Match.MIME_TYPE_LIST) {
                 String matchLabel = Match.MATCHEDKEY + type + account1Name + ":" + account2Name;
-                HashSet<String> matchSet = (HashSet<String>) pref.getStringSet(matchLabel, null);
+                HashSet<String> matchSet = (HashSet<String>) prefMatch.getStringSet(matchLabel, null);
                 if (matchSet != null && matchSet.size() > 0) {
                     if (first) {
                         value = new StringMap();

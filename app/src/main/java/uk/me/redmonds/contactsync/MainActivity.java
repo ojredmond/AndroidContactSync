@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import android.preference.*;
 
 public class MainActivity extends ActionBarActivity
         implements StatusFragment.OnViewCreatedListener,
@@ -129,27 +130,6 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void matchStatus() {
-        // remove last match results
-        if(account1Name.compareTo(accountName2) > 0)
-            accountsKey = account1Name + account2Name;
-        else
-            accountsKey = account2Name + account1Name;
-
-        //remove duplicates and account1 contact names
-        SharedPreferences.Editor results = getSharedPreferences(Match.PREF_KEY_ACCOUNT + account1Name, Context.MODE_PRIVATE).edit();
-        results.clear();
-        results.apply();
-
-        //remove duplicates and account2 contact names
-        results = getSharedPreferences(Match.PREF_KEY_ACCOUNT + account2Name, Context.MODE_PRIVATE).edit();
-        results.clear();
-        results.apply();
-
-        //remove match results
-        results = getSharedPreferences(Match.PREF_KEY_MATCH + accountsKey, Context.MODE_PRIVATE).edit();
-        results.clear();
-        results.apply();
-
         onNavigationDrawerItemSelected(2);
     }
 

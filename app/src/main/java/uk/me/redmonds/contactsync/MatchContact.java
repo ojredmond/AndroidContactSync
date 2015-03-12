@@ -159,7 +159,14 @@ public class MatchContact extends Fragment
                 return s1.compareToIgnoreCase(s2);
             }
         };
-        SharedPreferences pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
+		
+		String accountsKey;
+		if(accountSelected.compareTo(accountOther) > 0)
+            accountsKey = accountSelected + accountOther;
+        else
+            accountsKey = accountOther + accountSelected;
+        
+        SharedPreferences pref = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
         HashSet<String> um = (HashSet<String>) pref.getStringSet(Match.UNMATCHNAMEKEY + accountOther + ":" + accountSelected, null);
         unmatchedList = new HashMap<>();
         int unmatchedCount = 0;
@@ -201,18 +208,18 @@ public class MatchContact extends Fragment
         unmatchedLayout.setOnClickListener(this);
         unmatchedList.setOnItemClickListener(this);
 
-        //SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-        HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
+        HashSet<String> md = (HashSet<String>) pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
+        matchedList = new HashMap<>();
+        ArrayList<String> matchedItems = new ArrayList<>();
+        int matchedCount = 0;
+
+		pref = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+accountSelected, Context.MODE_PRIVATE);
+		HashSet<String> accountSet = (HashSet<String>) pref.getStringSet(Match.ACCOUNTKEY + accountSelected, null);
         HashMap<String, String> account = new HashMap<>();
         for (String entry : accountSet) {
             String contact[] = entry.split(":");
             account.put(contact[0], contact[1]);
         }
-
-        HashSet<String> md = (HashSet<String>) pref.getStringSet(Match.MATCHEDKEY + accountSelected + ":" + accountOther, null);
-        matchedList = new HashMap<>();
-        ArrayList<String> matchedItems = new ArrayList<>();
-        int matchedCount = 0;
 
         if (md != null) {
             for (String item : md) {

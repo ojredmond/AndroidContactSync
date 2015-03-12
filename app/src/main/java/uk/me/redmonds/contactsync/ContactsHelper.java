@@ -49,6 +49,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import android.widget.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -91,7 +92,9 @@ class ContactsHelper {
     private final static HashSet<String> emptySet = new HashSet<>();
     private static Boolean groupInc;
     private static Boolean photoInc;
-    private static SharedPreferences pref;
+    private static SharedPreferences prefMatch;
+	private static SharedPreferences prefAccount1;
+	private static SharedPreferences prefAccount2;
     private static String account1Name;
     private static String account2Name;
     private static HashSet<String> account1;
@@ -105,6 +108,7 @@ class ContactsHelper {
     private final HashMap<String, HashMap<String, LongSparseArray<StringMap>>> contacts = new HashMap<>();
     private final HashMap<String, HashMap<String, HashMap<String, String>>> groupIds = new HashMap<>();
     private final HashMap<String, String> groupNames = new HashMap<>();
+	private String accountsKey;
 
 
     ContactsHelper(Activity m, String l, String key, HashSet<String> ids) {
@@ -112,7 +116,7 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = ids;
-        pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
+        //pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
         createContacts();
     }
 
@@ -122,7 +126,7 @@ class ContactsHelper {
         listKey = key;
         list = new HashSet<>();
         Collections.addAll(list, ids);
-        pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
+        //pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
         createContacts();
     }
 
@@ -209,6 +213,11 @@ class ContactsHelper {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
+		if(account1Name.compareTo(account2Name) > 0)
+            accountsKey = account1Name + account2Name;
+        else
+            accountsKey = account2Name + account1Name;
+        
         groupInc = settings.getBoolean(MainActivity.GROUPS, false);
         photoInc = settings.getBoolean(MainActivity.PHOTOS, false);
 
@@ -255,7 +264,6 @@ class ContactsHelper {
                 }
             }
         }
-//Toast.makeText(main,groupNames.toString(),Toast.LENGTH_LONG).show();
 
         ArrayList<String> selection = new ArrayList<>();
         selection.add(Data.RAW_CONTACT_ID);
@@ -336,12 +344,18 @@ class ContactsHelper {
             else
                 account2.add(e.getKey());
         }
-
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
-        for (String item : set) {
-            listMap.put(item.split(":")[0], item.split(":")[1]);
-            listMap.put(item.split(":")[1], item.split(":")[0]);
-        }
+		
+		prefAccount1 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT + account1Name, Context.MODE_PRIVATE);
+		prefAccount2 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT + account2Name, Context.MODE_PRIVATE);
+		prefMatch = main.getSharedPreferences(Match.PREF_KEY_MATCH + accountsKey, Context.MODE_PRIVATE);
+        HashSet<String> set;
+		if(listName.startsWith(Match.MATCHEDKEY)) {
+			set = (HashSet<String>) prefMatch.getStringSet(listName, null);
+			for (String item : set) {
+				listMap.put(item.split(":")[0], item.split(":")[1]);
+				listMap.put(item.split(":")[1], item.split(":")[0]);
+			}
+		}
     }
 
     private String getTypeLabel(String mime, Integer type, CharSequence label) {
@@ -913,7 +927,14 @@ class ContactsHelper {
     }*/
 
     private Boolean findEntries(String listRef, String id) {
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listRef, null);
+        HashSet<String> set;
+		if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account1Name))
+			set = (HashSet<String>) prefAccount1.getStringSet(listRef, null);
+		else if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account2Name))
+			set = (HashSet<String>) prefAccount2.getStringSet(listRef, null);
+		else
+			set = (HashSet<String>) prefMatch.getStringSet(listRef, null);
+		
 
         if (set == null || set.size() == 0)
             return false;
@@ -928,7 +949,13 @@ class ContactsHelper {
     }
 
     private String[] getListEntries() {
-        HashSet<String> set = (HashSet<String>) pref.getStringSet(listName, null);
+        HashSet<String> set;
+		if(listName.startsWith(Match.DUPKEY) && listName.endsWith(account1Name))
+			set = (HashSet<String>) prefAccount1.getStringSet(listName, null);
+		else if(listName.startsWith(Match.DUPKEY) && listName.endsWith(account2Name))
+			set = (HashSet<String>) prefAccount2.getStringSet(listName, null);
+		else
+			set = (HashSet<String>) prefMatch.getStringSet(listName, null);
 
         if (set == null || set.size() == 0)
             return null;
@@ -942,14 +969,22 @@ class ContactsHelper {
     }
 
     private void removeEntries() {
-        HashSet<String> set = new HashSet<>(pref.getStringSet(listName, emptySet));
+		SharedPreferences pref;
+		if(listName.startsWith(Match.DUPKEY) && listName.endsWith(account1Name))
+			pref = prefAccount1;
+		else if(listName.startsWith(Match.DUPKEY) && listName.endsWith(account2Name))
+			pref = prefAccount2;
+		else
+			pref = prefMatch;
+		
+        HashSet<String> set = new HashSet<String>(pref.getStringSet(listName, emptySet));
 
         if (set.size() == 0)
             return;
 
         for (String item : set) {
             if (item.startsWith(listKey)) {
-                HashSet<String> tmpIds = new HashSet<>(
+                HashSet<String> tmpIds = new HashSet<String>(
                         Arrays.asList(item.split(":")[1].split(",")));
 
                 for (String id : list)
@@ -978,7 +1013,15 @@ class ContactsHelper {
     }
 
     private void removeEntry(String listRef, String id) {
-        HashSet<String> set = new HashSet<>(pref.getStringSet(listRef, emptySet));
+        SharedPreferences pref;
+		if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account1Name))
+			pref = prefAccount1;
+		else if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account2Name))
+			pref = prefAccount2;
+		else
+			pref = prefMatch;
+		
+		HashSet<String> set = new HashSet<>(pref.getStringSet(listRef, emptySet));
 
         if (set.size() == 0)
             return;
@@ -1008,7 +1051,15 @@ class ContactsHelper {
     }
 
     private void removeEntry(String listRef, String ref1, String ref2) {
-        HashSet<String> set = new HashSet<>(pref.getStringSet(listRef, emptySet));
+		SharedPreferences pref;
+		if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account1Name))
+			pref = prefAccount1;
+		else if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account2Name))
+			pref = prefAccount2;
+		else
+			pref = prefMatch;
+		
+		HashSet<String> set = new HashSet<>(pref.getStringSet(listRef, emptySet));
         if (set.size() == 0)
             return;
         set.remove(ref2 + ":" + ref1);
@@ -1022,7 +1073,15 @@ class ContactsHelper {
     }
 
     private void addEntry(String listRef, String entry) {
-        HashSet<String> set = new HashSet<>(pref.getStringSet(listRef, emptySet));
+		SharedPreferences pref;
+		if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account1Name))
+			pref = prefAccount1;
+		else if(listRef.startsWith(Match.DUPKEY) && listRef.endsWith(account2Name))
+			pref = prefAccount2;
+		else
+			pref = prefMatch;
+		
+		HashSet<String> set = new HashSet<>(pref.getStringSet(listRef, emptySet));
 
         set.add(entry);
         SharedPreferences.Editor e = pref.edit();
