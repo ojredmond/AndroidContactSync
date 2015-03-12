@@ -31,15 +31,75 @@ public class CompareFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         main = getActivity();
+        int selectedIndex = 0;
 
-        TabsAdapter mTabsAdapter = new TabsAdapter(
-                getFragmentManager());
+        //get data to display
+        Bundle args = getArguments();
+        String listItem = args.getString("listItem");
+        String selected = args.getString("selected");
+        HashMap selectedMap = null;
+
+        ArrayList<HashMap<String, String>> contacts = new ArrayList<>();
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
+        String account1Name = settings.getString(MainActivity.ACCOUNT1, null);
+        String account2Name = settings.getString(MainActivity.ACCOUNT2, null);
+        String accountsKey;
+        if(account1Name.compareTo(account2Name) > 0)
+            accountsKey = account1Name + account2Name;
+        else
+            accountsKey = account2Name + account1Name;
+        
+        SharedPreferences prefAccount = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
+        
+        HashSet<String> account1Set = (HashSet<String>) prefAccount.getStringSet(Match.ACCOUNTKEY + account1Name, null);
+        HashMap<String, String> account1 = new HashMap<>();
+        for (String entry : account1Set) {
+            String contact[] = entry.split(":");
+            account1.put(contact[0], contact[1]);
+        }
+        
+        SharedPreferences pref;
+        if(listItem.startsWith(Match.DUPKEY) && listItem.endsWith(account1Name))
+            pref = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
+        else if(listItem.startsWith(Match.DUPKEY) && listItem.endsWith(account2Name))
+            pref = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE);
+        else
+            pref = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
+        
+        HashSet<String> set = (HashSet<String>) pref.getStringSet(listItem, null);
+        if (set == null || set.size() == 0) {
+            main.onBackPressed();
+            return;
+        }
+        for (String aSet : set) {
+            HashMap<String, String> contactsName = new HashMap<>();
+            String contact[] = aSet.split(":");
+            String name;
+            if (listItem.startsWith(Match.MATCHEDKEY)) {
+                name = account1.get(contact[0]);
+                contactsName.put(contact[0] + "," + contact[1], name);
+                contacts.add(contactsName);
+            } else {
+                name = contact[0];
+                contactsName.put(contact[1], name);
+                contacts.add(contactsName);
+            }
+            if (selected != null && name.equals(selected))
+                selectedMap = contactsName;
+        }
+        Collections.sort(contacts, new ListSortMap());
+        if (selectedMap != null) {
+            selectedIndex = contacts.indexOf(selectedMap);
+        }
+            
+        TabsAdapter mTabsAdapter = new TabsAdapter(getFragmentManager(), contacts);
 
         ViewGroup tabs = (ViewGroup)inflater.inflate(R.layout.fragment_pager, container, false);
 
         ViewPager mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
-        mViewPager.setCurrentItem(mTabsAdapter.selectedIndex);
+        mViewPager.setCurrentItem(selectedIndex);
         mViewPager.setOffscreenPageLimit(3);
         
         RecyclerView mRecyclerView = (RecyclerView) tabs.findViewById(R.id.my_recycler_view);
@@ -53,29 +113,80 @@ public class CompareFragment extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
     
             // specify an adapter (see also next example)
-            //mAdapter = new MyAdapter(myDataset);
-            //mRecyclerView.setAdapter(mAdapter);
+            TabsListAdapter mAdapter = new TabsListAdapter(contacts);
+            mRecyclerView.setAdapter(mAdapter);
         }
         
         return tabs;
     }
 
+    public class TabsListAdapter extends RecyclerView.Adapter<TabsListAdapter.ViewHolder> {
+        private HashMap<String, String>[] mDataset;
+    
+        // Provide a reference to the views for each data item
+        // Complex data items may need more than one view per item, and
+        // you provide access to all the views for a data item in a view holder
+        public static class ViewHolder extends RecyclerView.ViewHolder {
+            // each data item is just a string in this case
+            public TextView mTextView;
+            public ViewHolder(TextView v) {
+                super(v);
+                mTextView = v;
+            }
+        }
+    
+        // Provide a suitable constructor (depends on the kind of dataset)
+        public TabsListAdapter(HashMap<String, String>[] myDataset) {
+            mDataset = myDataset;
+        }
+    
+        // Create new views (invoked by the layout manager)
+        @Override
+        public TabsListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                       int viewType) {
+            // create a new view
+            View v = LayoutInflater.from(parent.getContext())
+                                   .inflate(R.layout.my_text_view, parent, false);
+            // set the view's size, margins, paddings and layout parameters
+            ...
+            ViewHolder vh = new ViewHolder(v);
+            return vh;
+        }
+    
+        // Replace the contents of a view (invoked by the layout manager)
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            // - get element from your dataset at this position
+            // - replace the contents of the view with that element
+            holder.mTextView.setText(mDataset[position].values().toArray()[0]);
+    
+        }
+    
+        // Return the size of your dataset (invoked by the layout manager)
+        @Override
+        public int getItemCount() {
+            return mDataset.length;
+        }
+    }
+
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private final ArrayList<HashMap<String, String>> contacts;
         private final String listItem;
-        public int selectedIndex = 0;
+        //public int selectedIndex = 0;
 
-        public TabsAdapter(FragmentManager fm) {
+        public TabsAdapter(FragmentManager fm, ArrayList<HashMap<String, String>> c) {
             super(fm);
+            
+            contacts = c;
 
             //get data to display
             Bundle args = getArguments();
             listItem = args.getString("listItem");
-            String selected = args.getString("selected");
-            HashMap selectedMap = null;
+            //String selected = args.getString("selected");
+            //HashMap selectedMap = null;
 
             
-            contacts = new ArrayList<>();
+            /*contacts = new ArrayList<>();
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
             String account1Name = settings.getString(MainActivity.ACCOUNT1, null);
@@ -125,9 +236,10 @@ public class CompareFragment extends Fragment {
                     selectedMap = contactsName;
             }
             Collections.sort(contacts, new ListSortMap());
+            
             if (selectedMap != null) {
                 selectedIndex = contacts.indexOf(selectedMap);
-            }
+            }*/
         }
 
         @Override
