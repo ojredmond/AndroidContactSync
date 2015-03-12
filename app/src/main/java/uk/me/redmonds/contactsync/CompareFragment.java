@@ -33,7 +33,7 @@ public class CompareFragment extends Fragment {
         TabsAdapter mTabsAdapter = new TabsAdapter(
                 getFragmentManager());
 
-        View tabs = inflater.inflate(R.layout.fragment_pager, null);
+        ViewGroup tabs = (ViewGroup)inflater.inflate(R.layout.fragment_pager, container, false);
 
         ViewPager mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
