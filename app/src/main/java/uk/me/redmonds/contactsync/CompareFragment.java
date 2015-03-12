@@ -49,7 +49,7 @@ public class CompareFragment extends Fragment {
             mRecyclerView.setHasFixedSize(true);
     
             // use a linear layout manager
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(main);
             mRecyclerView.setLayoutManager(mLayoutManager);
     
             // specify an adapter (see also next example)
