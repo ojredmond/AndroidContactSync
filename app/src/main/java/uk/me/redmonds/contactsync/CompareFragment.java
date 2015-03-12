@@ -60,31 +60,31 @@ public class CompareFragment extends Fragment {
             contacts = new ArrayList<>();
 
             SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
-			String account1Name = settings.getString(MainActivity.ACCOUNT1, null);
-			String account2Name = settings.getString(MainActivity.ACCOUNT2, null);
-			String accountsKey;
-			if(account1Name.compareTo(account2Name) > 0)
-				accountsKey = account1Name + account2Name;
-			else
-				accountsKey = account2Name + account1Name;
-			
-			SharedPreferences prefAccount = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
-			
+            String account1Name = settings.getString(MainActivity.ACCOUNT1, null);
+            String account2Name = settings.getString(MainActivity.ACCOUNT2, null);
+            String accountsKey;
+            if(account1Name.compareTo(account2Name) > 0)
+                accountsKey = account1Name + account2Name;
+            else
+                accountsKey = account2Name + account1Name;
+            
+            SharedPreferences prefAccount = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
+            
             HashSet<String> account1Set = (HashSet<String>) prefAccount.getStringSet(Match.ACCOUNTKEY + account1Name, null);
             HashMap<String, String> account1 = new HashMap<>();
             for (String entry : account1Set) {
                 String contact[] = entry.split(":");
                 account1.put(contact[0], contact[1]);
             }
-			
-			SharedPreferences pref;
-			if(listItem.startsWith(Match.DUPKEY) && listItem.endsWith(account1Name))
-				pref = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
-			else if(listItem.startsWith(Match.DUPKEY) && listItem.endsWith(account2Name))
-				pref = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE);
-			else
-				pref = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
-			
+            
+            SharedPreferences pref;
+            if(listItem.startsWith(Match.DUPKEY) && listItem.endsWith(account1Name))
+                pref = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
+            else if(listItem.startsWith(Match.DUPKEY) && listItem.endsWith(account2Name))
+                pref = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE);
+            else
+                pref = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
+            
             HashSet<String> set = (HashSet<String>) pref.getStringSet(listItem, null);
             if (set == null || set.size() == 0) {
                 main.onBackPressed();
