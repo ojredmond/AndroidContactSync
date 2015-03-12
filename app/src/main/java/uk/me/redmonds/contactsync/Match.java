@@ -87,7 +87,6 @@ class Match {
         ) {
             if (dupListOther.containsKey(data)
                     && dupListOther.get(data).get(type) != null) {
-                //dupCount1++;
                 tempData.put(type, dupListOther.get(data).get(type)
                         + "," + tempContactId.toString());
                 dupListOther.put(data, tempData);
@@ -330,11 +329,13 @@ class Match {
                     + String.valueOf(numContactsAccount1)
                     + " contacts\n";
             message += "Account 1 Duplicates: " + String.valueOf(dupCount1) + "\n";
-            message += "Loading Account 2\n";
 
             publishProgress(message);
 
             if (!account2Name.equals(account1Name)) {
+				message += "Loading Account 2\n";
+
+				publishProgress(message);
                 cursor = mContentResolver.query(
                         rawContactUri,
                         new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
@@ -569,8 +570,7 @@ class Match {
                 results.apply();
             }
 
-            results.putBoolean(SYNCMATCHED, true);
-            results.apply();
+            results.putBoolean(SYNCMATCHED, true).apply();
 
 			status.edit().putBoolean(SYNCING, false).apply();
 			
