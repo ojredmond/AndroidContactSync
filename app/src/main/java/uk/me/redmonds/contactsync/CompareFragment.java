@@ -40,7 +40,7 @@ public class CompareFragment extends Fragment {
         mViewPager.setCurrentItem(mTabsAdapter.selectedIndex);
         mViewPager.setOffscreenPageLimit(3);
         
-        return mViewPager;
+        return tabs;
     }
 
     public class TabsAdapter extends FragmentStatePagerAdapter {
