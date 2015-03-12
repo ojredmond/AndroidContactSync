@@ -33,6 +33,8 @@ public class CompareFragment extends Fragment {
         main = getActivity();
         int selectedIndex = 0;
 
+        View tabs = inflater.inflate(R.layout.fragment_pager, container, false);
+
         //get data to display
         Bundle args = getArguments();
         String listItem = args.getString("listItem");
@@ -70,7 +72,7 @@ public class CompareFragment extends Fragment {
         HashSet<String> set = (HashSet<String>) pref.getStringSet(listItem, null);
         if (set == null || set.size() == 0) {
             main.onBackPressed();
-            return;
+            return tabs;
         }
         for (String aSet : set) {
             HashMap<String, String> contactsName = new HashMap<>();
@@ -95,8 +97,6 @@ public class CompareFragment extends Fragment {
             
         TabsAdapter mTabsAdapter = new TabsAdapter(getFragmentManager(), contacts);
 
-        ViewGroup tabs = (ViewGroup)inflater.inflate(R.layout.fragment_pager, container, false);
-
         ViewPager mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
         mViewPager.setCurrentItem(selectedIndex);
@@ -113,7 +113,7 @@ public class CompareFragment extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
     
             // specify an adapter (see also next example)
-            TabsListAdapter mAdapter = new TabsListAdapter(contacts);
+            TabsListAdapter mAdapter = new TabsListAdapter(contacts.toArray());
             mRecyclerView.setAdapter(mAdapter);
         }
         
@@ -148,7 +148,6 @@ public class CompareFragment extends Fragment {
             View v = LayoutInflater.from(parent.getContext())
                                    .inflate(R.layout.my_text_view, parent, false);
             // set the view's size, margins, paddings and layout parameters
-            ...
             ViewHolder vh = new ViewHolder(v);
             return vh;
         }
