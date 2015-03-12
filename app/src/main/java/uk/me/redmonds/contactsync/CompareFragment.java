@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.LinearLayoutManager;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,14 +42,14 @@ public class CompareFragment extends Fragment {
         mViewPager.setCurrentItem(mTabsAdapter.selectedIndex);
         mViewPager.setOffscreenPageLimit(3);
         
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
+        RecyclerView mRecyclerView = (RecyclerView) tabs.findViewById(R.id.my_recycler_view);
         if(mRecyclerView != null) {
             // use this setting to improve performance if you know that changes
             // in content do not change the layout size of the RecyclerView
             mRecyclerView.setHasFixedSize(true);
     
             // use a linear layout manager
-            mLayoutManager = new LinearLayoutManager(this);
+            LinearLayoutManager mLayoutManager = new LinearLayoutManager(this);
             mRecyclerView.setLayoutManager(mLayoutManager);
     
             // specify an adapter (see also next example)
