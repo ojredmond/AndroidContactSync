@@ -38,7 +38,8 @@ public class CompareFragment extends Fragment {
         ViewPager mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
         mViewPager.setCurrentItem(mTabsAdapter.selectedIndex);
-
+        mViewPager.setOffscreenPageLimit(3);
+        
         return mViewPager;
     }
 
