@@ -9,26 +9,29 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.LinearLayoutManager;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
-import android.widget.*;
+import android.view.View.*;
 
 /**
  * Fragment used for comparison adds tabs to views
  * Created by oli on 31/01/15.
  */
-public class CompareFragment extends Fragment {
+public class CompareFragment extends Fragment  {
     private Activity main;
 	private ViewPager mViewPager;
-
+	
 	@Override
 	public void onSaveInstanceState(Bundle outState)
 	{
@@ -89,6 +92,7 @@ public class CompareFragment extends Fragment {
             main.onBackPressed();
             return tabs;
         }
+		
         for (String aSet : set) {
             HashMap<String, String> contactsName = new HashMap<>();
             String contact[] = aSet.split(":");
@@ -110,12 +114,13 @@ public class CompareFragment extends Fragment {
             selectedIndex = contacts.indexOf(selectedMap);
         }
 		
-        TabsAdapter mTabsAdapter = new TabsAdapter(getFragmentManager(), contacts);
+        final TabsAdapter mTabsAdapter = new TabsAdapter(getFragmentManager(), contacts);
 
         mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
         mViewPager.setCurrentItem(selectedIndex);
         mViewPager.setOffscreenPageLimit(3);
+		
         
         RecyclerView mRecyclerView = (RecyclerView) tabs.findViewById(R.id.my_recycler_view);
         if(mRecyclerView != null) {
@@ -124,21 +129,52 @@ public class CompareFragment extends Fragment {
             mRecyclerView.setHasFixedSize(true);
     
             // use a linear layout manager
-            LinearLayoutManager mLayoutManager = new LinearLayoutManager(main);
+            final LinearLayoutManager mLayoutManager = new LinearLayoutManager(main);
             mRecyclerView.setLayoutManager(mLayoutManager);
     
             // specify an adapter (see also next example)
-            TabsListAdapter mAdapter = new TabsListAdapter((HashMap<String,String>[])contacts.toArray(new HashMap[contacts.size()]),mViewPager);
+            final TabsListAdapter mAdapter = new TabsListAdapter(
+					(HashMap<String,String>[])contacts.toArray(new HashMap[contacts.size()]),
+					mLayoutManager);
+			
+			mAdapter.setOnClickListener(new OnClickListener () {
+						@Override
+						public void onClick(View v) {
+							int pos = mLayoutManager.getPosition(v);
+							mAdapter.setSelectedItem(pos);
+							mViewPager.setCurrentItem(pos);
+						}
+					});
             mRecyclerView.setAdapter(mAdapter);
 			mAdapter.setSelectedItem(selectedIndex);
+			
+			// set listeners to keep list and viewpager in sync
+			mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+					@Override
+					public void onPageScrolled(int position, float arg1, int arg2) {
+						//Toast.makeText(main,"onPageScrolled",Toast.LENGTH_LONG).show();
+					}
+
+					@Override
+					public void onPageSelected(int position) {
+						//Toast.makeText(main,"onPageSelected "+position,Toast.LENGTH_LONG).show();
+						mAdapter.setSelectedItem(position);
+					}
+
+					@Override
+					public void onPageScrollStateChanged(int state) {
+						//Toast.makeText(main,"onPageScrollStateChanged",Toast.LENGTH_LONG).show();
+					}
+				});
         }
         
         return tabs;
     }
 
     public class TabsListAdapter extends RecyclerView.Adapter<TabsListAdapter.ViewHolder> {
+		private OnClickListener clickListener;
         private HashMap<String, String>[] mDataset;
-		private ViewPager mViewPager;
+		private LinearLayoutManager mLayoutManager;
 		private int currentSelected = 0;
 		
         // Provide a reference to the views for each data item
@@ -154,17 +190,24 @@ public class CompareFragment extends Fragment {
         }
     
         // Provide a suitable constructor (depends on the kind of dataset)
-        public TabsListAdapter(HashMap<String, String>[] myDataset, ViewPager viewPager) {
+        public TabsListAdapter(HashMap<String, String>[] myDataset, LinearLayoutManager lm) {
             mDataset = myDataset;
-			mViewPager = viewPager;
+			mLayoutManager = lm;
         }
+		
+		public void setOnClickListener (OnClickListener l) {
+			clickListener = l;
+		}
 		
 		public void setSelectedItem (int position) {
 			int lastPosition = currentSelected;
 			currentSelected = position;
-			Toast.makeText(main,""+position,Toast.LENGTH_LONG).show();
+			
 			notifyItemChanged(lastPosition);
 			notifyItemChanged(position);
+			
+			int offset = getResources().getDimensionPixelOffset(R.dimen.land_list_offset);
+			mLayoutManager.scrollToPositionWithOffset(position,offset);
 		}
     
         // Create new views (invoked by the layout manager)
@@ -177,9 +220,13 @@ public class CompareFragment extends Fragment {
 			
             // set the view's size, margins, paddings and layout parameters
 	  		v.setBackgroundResource(R.drawable.tabs_background_selector);
+			v.setTextColor(getResources().getColor(android.R.color.white));
 			int padding = (int)getResources().getDimension(R.dimen.medium_gap);
 			v.setPadding(padding,padding,padding,padding);
+			v.setOnClickListener(clickListener);
+			
             ViewHolder vh = new ViewHolder(v);
+	  
             return vh;
         }
     
@@ -210,7 +257,6 @@ public class CompareFragment extends Fragment {
     public class TabsAdapter extends FragmentStatePagerAdapter {
         private final ArrayList<HashMap<String, String>> contacts;
         private final String listItem;
-        //public int selectedIndex = 0;
 
         public TabsAdapter(FragmentManager fm, ArrayList<HashMap<String, String>> c) {
             super(fm);
@@ -229,7 +275,6 @@ public class CompareFragment extends Fragment {
             argsDetail.putString("listItem", listItem);
             argsDetail.putString("name", (String) contacts.get(i).values().toArray()[0]);
             argsDetail.putString("ids", (String) contacts.get(i).keySet().toArray()[0]);
-
 
             Fragment fragment;
             if (listItem.startsWith(Match.UNMATCHNAMEKEY))

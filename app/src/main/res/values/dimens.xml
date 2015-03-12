@@ -9,6 +9,9 @@
     <dimen name="large_gap">10dip</dimen>
     <dimen name="xlarge_gap">20dip</dimen>
     <dimen name="xxlarge_gap">40dip</dimen>
+	
+	<!-- set list selected offset for landscape view -->
+	<dimen name="land_list_offset">70dip</dimen>
 
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
