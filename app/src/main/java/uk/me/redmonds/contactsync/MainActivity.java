@@ -126,17 +126,16 @@ public class MainActivity extends ActionBarActivity
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setTitle(mTitle);
-
     }
 
     public void matchStatus() {
         onNavigationDrawerItemSelected(2);
     }
 
-    public void onViewCreated(View statusView) {
+    public void onViewCreated(StatusFragment status) {
         Match m = new Match();
         String syncType = "";
-        m.startMatch(this, statusView, syncType);
+        m.startMatch(this, status, syncType);
     }
 
     void showOptions() {
@@ -273,4 +272,12 @@ public class MainActivity extends ActionBarActivity
             outState.putString("log", log.getLog());
         super.onSaveInstanceState(outState);
     }
+
+	@Override
+	protected void onDestroy()
+	{
+		getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE).edit().clear().apply();
+		
+		super.onDestroy();
+	}
 }

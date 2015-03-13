@@ -68,6 +68,9 @@ public class SyncFragment extends ListFragment {
 			account2Count = prefAccount2.getInt(Match.NUMCONTACTS + account2Name, -1);
 		}
 		
+		if(list_type.equals(SUMMARY) && !prefMatch.getBoolean(Match.SYNCMATCHED, false))
+			main.onNavigationDrawerItemSelected(2);
+		
         if (list_type.equals(OPTIONS) || !prefMatch.getBoolean(Match.SYNCMATCHED, false)) {
             value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{"Match"});

@@ -583,17 +583,19 @@ class ContactsHelper {
         String where;
         String[] params;
         ArrayList<ContentProviderOperation> ops = null;
-
-        for (String id : delList) {
+		ops = new ArrayList<>();
+		
+        for (String id : (HashSet<String>)delList.clone()) {
             where = RawContacts._ID + " = ?";
             params = new String[]{id};
 
-            ops = new ArrayList<>();
             ops.add(ContentProviderOperation.newDelete(RawContacts.CONTENT_URI)
                     .withSelection(where, params)
                     .build());
 
-            String name = contacts.get(id).get(TYPE_NAME).valueAt(0).get("value");
+            String name = null;
+			if(contacts.get(id).get(TYPE_NAME) != null)
+				name = contacts.get(id).get(TYPE_NAME).valueAt(0).get("value");
 
             if (listName.startsWith(Match.MATCHEDKEY)) {
                 String id1, id2;
@@ -617,8 +619,8 @@ class ContactsHelper {
                 for (String type : Match.MIME_TYPE_LIST) {
                     removeEntry(Match.DUPKEY + type + accounts.get(id), id);
                 }
-            }
-            removeEntry(listName, id, name);
+            } else
+            	removeEntry(listName, id, name);
 
             String accountList = Match.ACCOUNTKEY + getAccountName(id);
             removeEntry(accountList, id, name);

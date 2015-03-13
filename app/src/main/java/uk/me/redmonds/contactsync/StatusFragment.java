@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.content.*;
+import android.widget.*;
 
 public class StatusFragment extends Fragment {
-    private final static String LOG = "log";
+    //private final static String LOG = "log";
     private OnViewCreatedListener mCallback;
     private TextView log;
+	private ScrollView scroll;
 
     @Override
     public void onAttach(Activity activity) {
@@ -29,6 +32,7 @@ public class StatusFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
+		//scroll.fullScroll(ScrollView.FOCUS_DOWN);
         //set actionbar title
         ((MainActivity) getActivity()).setHeading(getString(R.string.title_logs));
     }
@@ -39,17 +43,24 @@ public class StatusFragment extends Fragment {
 
         View statusView = inflater.inflate(R.layout.fragment_status, container, false);
 
-        Bundle args = getArguments();
-        String logText = args.getString("logText", "");
+        //Bundle args = getArguments();
+        //String logText = args.getString("logText", "");
 
-        mCallback.onViewCreated(statusView);
+        mCallback.onViewCreated(this);
         log = (TextView) statusView.findViewById(R.id.statuslog);
-        log.setText(logText);
+		
+		refresh();
+		/*scroll = (ScrollView) statusView.findViewById(R.id.scroll);
+		scroll.post(new Runnable () {
+				public void run () {
+					scroll.fullScroll(ScrollView.FOCUS_DOWN);
+				}
+			});*/
 
-        if (savedInstanceState != null) {
+        /*if (savedInstanceState != null) {
             // Restore last state for checked position.
             log.setText(savedInstanceState.getString(LOG, ""));
-        }
+        }*/
 
         // Inflate the layout for this fragment
         return statusView;
@@ -59,14 +70,20 @@ public class StatusFragment extends Fragment {
         return log.getText().toString();
     }
 
-    @Override
+	public void refresh () {
+		SharedPreferences logPref = getActivity().getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE);
+		String logText = logPref.getString(Match.LOG_TAG,"");
+		log.setText(logText);
+	}
+	
+    /*@Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putString(LOG, log.getText().toString());
         super.onSaveInstanceState(outState);
-    }
+    }*/
 
     //Container Activity must implement this interface
     public interface OnViewCreatedListener {
-        public void onViewCreated(View statusView);
+        public void onViewCreated(StatusFragment status);
     }
 }

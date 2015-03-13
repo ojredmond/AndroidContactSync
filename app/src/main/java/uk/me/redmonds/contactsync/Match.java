@@ -20,9 +20,12 @@ import android.widget.TextView;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import android.util.*;
+import android.widget.*;
 
 class Match {
 	private static final String SYNCING = "syncing";
+	public static final String LOG_TAG = "MATCH_STATUS";
     public static final String SYNCMATCHED = "syncMatched";
     public static final String DUPKEY = "dup:";
     public static final String UNMATCHNAMEKEY = "unmatchedName:";
@@ -39,7 +42,7 @@ class Match {
             SipAddress.CONTENT_ITEM_TYPE
     };
     private MainActivity mainActivity = null;
-    private TextView status = null;
+    private StatusFragment status = null;
     private String syncType = "";
     private String account1Name;
     private String account2Name;
@@ -47,10 +50,10 @@ class Match {
     private Boolean syncMatched;
     private Boolean deep;
 
-    public void startMatch(MainActivity main, View statusView, String type) {
+    public void startMatch(MainActivity main, StatusFragment frag, String type) {
         mainActivity = main;
         syncType = type;
-        status = (TextView) statusView.findViewById(R.id.statuslog);
+        status = frag;
 
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(main);
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
@@ -240,8 +243,8 @@ class Match {
                 types = "'" + ContactsHelper.TYPE_NAME + "'";
 
             message = "Starting " + syncType + "...\n";
-            message += "Loading Account 1\n";
-            publishProgress(message);
+            message += "Loading Account 1: " + account1Name + "\n";
+            publishProgress(message,"0.0");
 
             ContentResolver mContentResolver = mainActivity.getContentResolver();
             Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
@@ -258,6 +261,7 @@ class Match {
 
             try {
                 while (cursor.moveToNext()) {
+					publishProgress("", Float.toString((cursor.getPosition()+1)/numContactsAccount1));
                     if (!cursor.isNull(0) && !cursor.isNull(1)) {
                         tempContactName = cursor.getString(1);
                         tempContactId = cursor.getLong(0);
@@ -333,9 +337,10 @@ class Match {
             publishProgress(message);
 
             if (!account2Name.equals(account1Name)) {
-				message += "Loading Account 2\n";
-
-				publishProgress(message);
+				message = "Loading Account 2: " + account2Name + "\n";
+				publishProgress(message, "0.0");
+				
+				// get contracts list from account 2
                 cursor = mContentResolver.query(
                         rawContactUri,
                         new String[]{RawContacts._ID, RawContacts.DISPLAY_NAME_PRIMARY},
@@ -346,6 +351,7 @@ class Match {
 
                 try {
                     while (cursor.moveToNext()) {
+						publishProgress("", Float.toString((cursor.getPosition()+1)/numContactsAccount2));
                         if (!cursor.isNull(0) && !cursor.isNull(1)) {
                             tempContactName = cursor.getString(1);
                             tempContactId = cursor.getLong(0);
@@ -569,7 +575,8 @@ class Match {
                         results.putStringSet(MATCHEDKEY + mime + account2Name + ":" + account1Name, matched2Name.get(mime));
                 results.apply();
             }
-
+			
+			results = mainActivity.getSharedPreferences(PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE).edit();
             results.putBoolean(SYNCMATCHED, true).apply();
 
 			status.edit().putBoolean(SYNCING, false).apply();
@@ -577,14 +584,29 @@ class Match {
             return message;
         }
 
+		@Override
+		protected void onPreExecute()
+		{
+			syncStarted = true;
+			
+			super.onPreExecute();
+		}
+
         @Override
         protected void onProgressUpdate(String... message) {
-            if (syncStarted) {
-                status.append(message[0]);
-            } else {
-                status.setText(message[0]);
-                syncStarted = true;
-            }
+			SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
+			String log = logPref.getString(LOG_TAG,"");
+            
+			log = message[0] + log;
+			logPref.edit().putString(LOG_TAG,log).apply();
+			
+			if(message.length > 1) {
+				float progress = Float.parseFloat(message[1]);
+				logPref.edit().putFloat("PROGRESS",progress).apply();
+			} else
+				logPref.edit().remove("PROGRESS").apply();
+			
+			status.refresh();
         }
 
         @Override
@@ -595,12 +617,17 @@ class Match {
                 return;
             }
             if (!message.equals("")) {
-                status.append(message);
+                SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
+				String log = logPref.getString(LOG_TAG,"");
+
+				log = message + log;
+				logPref.edit().putString(LOG_TAG,log).apply();
+				status.refresh();
             }
 
             syncMatched = true;
 
-            if (!mainActivity.isDestroyed())
+            if (!mainActivity.isChangingConfigurations()&&!mainActivity.isRestricted()&&!mainActivity.isFinishing() && !mainActivity.isDestroyed())
                 mainActivity.showResults();
         }
     }

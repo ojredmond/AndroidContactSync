@@ -23,7 +23,7 @@ public class CompareDetail extends Fragment {
         public void onClick(View p1) {
 
             switch (p1.getId()) {
-                case R.id.delete_contact:
+                case R.id.delete_button:
                     cObj.deleteContacts();
 
                     //reload comparefragement
