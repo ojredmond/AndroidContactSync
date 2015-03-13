@@ -9,12 +9,14 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.content.*;
 import android.widget.*;
+import java.util.*;
 
 public class StatusFragment extends Fragment {
     //private final static String LOG = "log";
     private OnViewCreatedListener mCallback;
     private TextView log;
-	private ScrollView scroll;
+	private ProgressBar progress;
+	private TextView progressText;
 
     @Override
     public void onAttach(Activity activity) {
@@ -32,7 +34,6 @@ public class StatusFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-		//scroll.fullScroll(ScrollView.FOCUS_DOWN);
         //set actionbar title
         ((MainActivity) getActivity()).setHeading(getString(R.string.title_logs));
     }
@@ -43,24 +44,11 @@ public class StatusFragment extends Fragment {
 
         View statusView = inflater.inflate(R.layout.fragment_status, container, false);
 
-        //Bundle args = getArguments();
-        //String logText = args.getString("logText", "");
-
         mCallback.onViewCreated(this);
         log = (TextView) statusView.findViewById(R.id.statuslog);
-		
+		progressText = (TextView) statusView.findViewById(R.id.progresstext);
+		progress = (ProgressBar) statusView.findViewById(R.id.progressbar);
 		refresh();
-		/*scroll = (ScrollView) statusView.findViewById(R.id.scroll);
-		scroll.post(new Runnable () {
-				public void run () {
-					scroll.fullScroll(ScrollView.FOCUS_DOWN);
-				}
-			});*/
-
-        /*if (savedInstanceState != null) {
-            // Restore last state for checked position.
-            log.setText(savedInstanceState.getString(LOG, ""));
-        }*/
 
         // Inflate the layout for this fragment
         return statusView;
@@ -72,15 +60,32 @@ public class StatusFragment extends Fragment {
 
 	public void refresh () {
 		SharedPreferences logPref = getActivity().getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE);
-		String logText = logPref.getString(Match.LOG_TAG,"");
+		String logText = "";
+		TreeMap<String,Object> map = new TreeMap<String,Object>();
+		map.putAll(logPref.getAll());
+		Map<String,Object> mapR = map.descendingMap();
+		for(Map.Entry <String,?> item: mapR.entrySet())
+			if(item.getKey().startsWith(Match.LOG_TAG))
+				logText += item.getValue() + "\n";
+		
 		log.setText(logText);
+		
+		//update progress bar
+		int prog = logPref.getInt("PROGRESS",-1);
+		int max = logPref.getInt("MAX",0);
+		String account = logPref.getString("ACCOUNT", "");
+		if(prog == -1) {
+			progress.setVisibility(View.GONE);
+			progressText.setVisibility(View.GONE);
+		} else {
+			progress.setVisibility(View.VISIBLE);
+			progressText.setVisibility(View.VISIBLE);
+			progress.setProgress(prog);
+			progress.setMax(max);
+			progressText.setText(account);
+		}
+			
 	}
-	
-    /*@Override
-    public void onSaveInstanceState(Bundle outState) {
-        outState.putString(LOG, log.getText().toString());
-        super.onSaveInstanceState(outState);
-    }*/
 
     //Container Activity must implement this interface
     public interface OnViewCreatedListener {

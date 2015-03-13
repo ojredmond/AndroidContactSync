@@ -22,6 +22,9 @@ import java.util.HashSet;
 import java.util.Map;
 import android.util.*;
 import android.widget.*;
+import java.text.*;
+import java.util.*;
+
 
 class Match {
 	private static final String SYNCING = "syncing";
@@ -49,6 +52,7 @@ class Match {
     private String accountsKey;
     private Boolean syncMatched;
     private Boolean deep;
+	private String syncTimeStamp;
 
     public void startMatch(MainActivity main, StatusFragment frag, String type) {
         mainActivity = main;
@@ -242,9 +246,10 @@ class Match {
             } else
                 types = "'" + ContactsHelper.TYPE_NAME + "'";
 
-            message = "Starting " + syncType + "...\n";
+			message = syncTimeStamp + "\n\n";
+            message += "Starting " + syncType + "...\n";
             message += "Loading Account 1: " + account1Name + "\n";
-            publishProgress(message,"0.0");
+            publishProgress(message,"0", String.valueOf(numContactsAccount1), account1Name);
 
             ContentResolver mContentResolver = mainActivity.getContentResolver();
             Uri rawContactUri = RawContacts.CONTENT_URI.buildUpon()
@@ -261,7 +266,7 @@ class Match {
 
             try {
                 while (cursor.moveToNext()) {
-					publishProgress("", Float.toString((cursor.getPosition()+1)/numContactsAccount1));
+					publishProgress("", String.valueOf(cursor.getPosition()+1), String.valueOf(numContactsAccount1));
                     if (!cursor.isNull(0) && !cursor.isNull(1)) {
                         tempContactName = cursor.getString(1);
                         tempContactId = cursor.getLong(0);
@@ -338,7 +343,7 @@ class Match {
 
             if (!account2Name.equals(account1Name)) {
 				message = "Loading Account 2: " + account2Name + "\n";
-				publishProgress(message, "0.0");
+				publishProgress(message, "0", String.valueOf(numContactsAccount2), account2Name);
 				
 				// get contracts list from account 2
                 cursor = mContentResolver.query(
@@ -351,7 +356,7 @@ class Match {
 
                 try {
                     while (cursor.moveToNext()) {
-						publishProgress("", Float.toString((cursor.getPosition()+1)/numContactsAccount2));
+						publishProgress("", String.valueOf(cursor.getPosition()+1), String.valueOf(numContactsAccount2));
                         if (!cursor.isNull(0) && !cursor.isNull(1)) {
                             tempContactName = cursor.getString(1);
                             tempContactId = cursor.getLong(0);
@@ -588,6 +593,8 @@ class Match {
 		protected void onPreExecute()
 		{
 			syncStarted = true;
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			syncTimeStamp = dateFormat.format(new Date());
 			
 			super.onPreExecute();
 		}
@@ -595,17 +602,23 @@ class Match {
         @Override
         protected void onProgressUpdate(String... message) {
 			SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
-			String log = logPref.getString(LOG_TAG,"");
+			String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
             
-			log = message[0] + log;
-			logPref.edit().putString(LOG_TAG,log).apply();
+			log += message[0];
+			logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
 			
 			if(message.length > 1) {
-				float progress = Float.parseFloat(message[1]);
-				logPref.edit().putFloat("PROGRESS",progress).apply();
+				int progress = Integer.parseInt(message[1]);
+				int max = Integer.parseInt(message[2]);
+				logPref.edit().putInt("PROGRESS",progress)
+					.putInt("MAX",max)
+					.apply();
 			} else
 				logPref.edit().remove("PROGRESS").apply();
 			
+			if (message.length > 3) {
+				logPref.edit().putString("ACCOUNT",message[3]).apply();
+			}
 			status.refresh();
         }
 
@@ -618,10 +631,11 @@ class Match {
             }
             if (!message.equals("")) {
                 SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
-				String log = logPref.getString(LOG_TAG,"");
+				String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
 
-				log = message + log;
-				logPref.edit().putString(LOG_TAG,log).apply();
+				log += message;
+				logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
+				logPref.edit().remove("PROGRESS").apply();
 				status.refresh();
             }
 
