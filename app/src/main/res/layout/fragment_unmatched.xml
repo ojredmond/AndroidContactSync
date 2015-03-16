@@ -16,8 +16,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-			android:layout_margin="@dimen/medium_gap"
-			layout="@layout/button"
+            android:layout_margin="@dimen/medium_gap"
+            layout="@layout/button"
             />
     </LinearLayout>
 
@@ -31,13 +31,13 @@
         android:orientation="vertical">
 
         <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="match_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/unmatched_group"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:background="@drawable/activated_background"
-			android:padding="@dimen/large_gap"
-		/>
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/expandable_list_no_border"
+            android:padding="@dimen/large_gap"
+        />
 
         <RelativeLayout
             android:id="@+id/unmatched_list_group"
@@ -67,15 +67,15 @@
 
         </RelativeLayout>
 
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="match_parent"
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/matched_group"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:background="@drawable/activated_background"
-			android:padding="@dimen/large_gap"
-		/>
-	
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/expandable_list_no_border"
+            android:padding="@dimen/large_gap"
+        />
+    
         <RelativeLayout
             android:id="@+id/matched_list_group"
             android:layout_width="match_parent"
