@@ -37,6 +37,10 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:background="@drawable/expandable_list_no_border"
             android:padding="@dimen/large_gap"
+            android:paddingStart="@dimen/xxlarge_gap"
+            android:paddingEnd="@dimen/large_gap"
+            android:paddingTop="@dimen/large_gap"
+            android:paddingBottom="@dimen/large_gap"
         />
 
         <RelativeLayout
