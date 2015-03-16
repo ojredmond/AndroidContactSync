@@ -65,7 +65,6 @@ public class MatchContact extends Fragment
         ViewGroup container = (ViewGroup) p1.getParent();
         TextView unmatchedGroup;
 		TextView matchedGroup;
-        //String type;
 
         switch (p1.getId()) {
             case R.id.delete_contact:
@@ -79,32 +78,23 @@ public class MatchContact extends Fragment
                 matchedListView = container.findViewById(R.id.matched_list_group);
 				unmatchedGroup  = (TextView)container.findViewById(R.id.unmatched_group);
 				matchedGroup  = (TextView)container.findViewById(R.id.matched_group);
-                //typeView = (TextView) container.findViewById(R.id.unmatched_group).findViewById(R.id.type);
-                //type = (String) typeView.getText();
 
                 if (unmatchedList.size() != 0 && unmatchedListView.getVisibility() == View.GONE) {
                     matchedListView.setVisibility(View.GONE);
                     unmatchedListView.setVisibility(View.VISIBLE);
 					unmatchedGroup.setActivated(true);
-                    //typeView.setText(type.replace('+', '-'));
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
 					unmatchedGroup.setActivated(false);
-                    //typeView.setText(type.replace('-', '+'));
                 }
 				matchedGroup.setActivated(false);
-                /*typeView = (TextView) container.findViewById(R.id.matched_group).findViewById(R.id.type);
-                type = (String) typeView.getText();
-                typeView.setText(type.replace('-', '+'));*/
                 break;
             case R.id.matched_group:
                 unmatchedListView = container.findViewById(R.id.unmatched_list_group);
                 matchedListView = container.findViewById(R.id.matched_list_group);
 				unmatchedGroup  = (TextView)container.findViewById(R.id.unmatched_group);
 				matchedGroup  = (TextView)container.findViewById(R.id.matched_group);
-                //typeView = (TextView) container.findViewById(R.id.matched_group).findViewById(R.id.type);
-                //type = (String) typeView.getText();
 
                 if (matchedList.size() != 0 && matchedListView.getVisibility() == View.GONE) {
 
@@ -116,17 +106,12 @@ public class MatchContact extends Fragment
                         unmatchedListView.setVisibility(View.GONE);
                     }
 					matchedGroup.setActivated(true);
-                    //typeView.setText(type.replace('+', '-'));
                 } else {
                     unmatchedListView.setVisibility(View.GONE);
                     matchedListView.setVisibility(View.GONE);
 					matchedGroup.setActivated(false);
-                    //typeView.setText(type.replace('-', '+'));
                 }
 				unmatchedGroup.setActivated(false);
-                //typeView = (TextView) container.findViewById(R.id.unmatched_group).findViewById(R.id.type);
-                //type = (String) typeView.getText();
-                //typeView.setText(type.replace('-', '+'));
                 break;
         }
     }
@@ -209,15 +194,11 @@ public class MatchContact extends Fragment
 
         //add heading
         View unmatchedLayout = view.findViewById(R.id.unmatched_group);
-        //TextView unmatchedType = (TextView) unmatchedLayout.findViewById(R.id.type);
         ListView unmatchedList = (ListView) view.findViewById(R.id.unmatched_list);
-        /*unmatchedType.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LinearLayout.LayoutParams.WRAP_CONTENT));
-        unmatchedType.setGravity(Gravity.CENTER);
-        if (unmatchedCount == 0)
-            unmatchedType.setText("  ");
-        else
-            unmatchedType.setText("+");*/
+        
         ((TextView) unmatchedLayout).setText("Unmatched (" + unmatchedCount + ")");
+		if (unmatchedCount == 0)
+			unmatchedLayout.setBackgroundResource(R.drawable.white_background);
 
         //add listview adapter
         AlphabetListAdapter unmatchedAdapter = new AlphabetListAdapter(
@@ -259,16 +240,12 @@ public class MatchContact extends Fragment
 
         //add heading
         View matchedLayout = view.findViewById(R.id.matched_group);
-        //TextView matchedType = (TextView) matchedLayout.findViewById(R.id.type);
         ListView matchedList = (ListView) view.findViewById(R.id.matched_list);
-        /*matchedType.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.xxlarge_gap), LinearLayout.LayoutParams.WRAP_CONTENT));
-        matchedType.setGravity(Gravity.CENTER);
-        if (matchedCount == 0)
-            matchedType.setText("  ");
-        else
-            matchedType.setText("+");*/
+        
         ((TextView) matchedLayout).setText("Matched (" + matchedCount + ")");
-
+		if (matchedCount == 0)
+			matchedLayout.setBackgroundResource(R.drawable.separator);
+			
         //add listview adapter
         AlphabetListAdapter matchedAdapter = new AlphabetListAdapter(
                 main,
