@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_bar_height"
         android:layout_alignParentBottom="true"
-        android:background="@drawable/button_border_top"
+        android:background="@drawable/button_border_top_left"
         android:orientation="horizontal">
 
         <include
@@ -18,7 +17,7 @@
             android:layout_weight="1"
 			android:layout_margin="@dimen/medium_gap"
 			layout="@layout/button"
-            />
+		/>
     </LinearLayout>
 
     <LinearLayout
@@ -30,14 +29,11 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <include
             android:id="@+id/unmatched_group"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:background="@drawable/activated_background"
-			android:padding="@dimen/large_gap"
-		/>
+            layout="@layout/list_border_none_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <RelativeLayout
             android:id="@+id/unmatched_list_group"
@@ -67,15 +63,13 @@
 
         </RelativeLayout>
 
-		<TextView xmlns:android="http://schemas.android.com/apk/res/android"
-			android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <include
             android:id="@+id/matched_group"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:background="@drawable/activated_background"
-			android:padding="@dimen/large_gap"
-		/>
-	
+            layout="@layout/list_border_top_2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/separator" />
+
         <RelativeLayout
             android:id="@+id/matched_list_group"
             android:layout_width="match_parent"
