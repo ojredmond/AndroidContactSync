@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-	<item> 
+    <item android:drawable="@drawable/white_background" />
+    <item> 
         <bitmap
             android:src="@drawable/ic_action_collapse"
             android:tileMode="disabled" android:gravity="top" >
         </bitmap>
     </item>
-    
-    <item android:drawable="@drawable/white_background" />
 </layer-list>
