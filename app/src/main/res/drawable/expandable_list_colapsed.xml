@@ -4,7 +4,7 @@
     <item> 
         <bitmap
             android:src="@drawable/ic_action_collapse"
-            android:tileMode="disabled" android:gravity="top" >
+            android:tileMode="disabled" android:gravity="left" >
         </bitmap>
     </item>
 </layer-list>
