@@ -1,0 +1,5 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/list_selector_pressed" android:state_pressed="true" android:top="1dp"/>
+    <item android:drawable="@drawable/expandable_list_expanded" android:state_activated="true" android:top="1dp"/>
+    <item android:drawable="@drawable/expandable_list_colapsed" android:top="1dp"/>
+</selector>
