@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/matched_group"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:background="@drawable/expandable_list_no_border"
+            android:background="@drawable/expandable_list_top_border"
             android:padding="@dimen/large_gap"
         />
     
