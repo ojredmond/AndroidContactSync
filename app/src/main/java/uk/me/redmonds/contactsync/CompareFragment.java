@@ -114,7 +114,7 @@ public class CompareFragment extends Fragment  {
             selectedIndex = contacts.indexOf(selectedMap);
         }
 		
-        final TabsAdapter mTabsAdapter = new TabsAdapter(getFragmentManager(), contacts);
+        final TabsAdapter mTabsAdapter = new TabsAdapter(getFragmentManager(), contacts, listItem);
 
         mViewPager = (ViewPager) tabs.findViewById(R.id.pager);
         mViewPager.setAdapter(mTabsAdapter);
@@ -258,14 +258,12 @@ public class CompareFragment extends Fragment  {
         private final ArrayList<HashMap<String, String>> contacts;
         private final String listItem;
 
-        public TabsAdapter(FragmentManager fm, ArrayList<HashMap<String, String>> c) {
+        public TabsAdapter(FragmentManager fm, ArrayList<HashMap<String, String>> c, String l) {
             super(fm);
             
             contacts = c;
 
-            //get data to display
-            Bundle args = getArguments();
-            listItem = args.getString("listItem");
+            listItem = l;
         }
 
         @Override

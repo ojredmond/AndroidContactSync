@@ -4,6 +4,7 @@
     <item>
         <bitmap
             android:src="@drawable/ic_action_collapse"
+			android:filter="true"
             android:gravity="left"
 			/>
     </item>

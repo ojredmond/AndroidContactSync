@@ -29,11 +29,17 @@
         android:animateLayoutChanges="true"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/unmatched_group"
-            layout="@layout/list_border_none_2"
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:id="@+id/unmatched_group"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/expandable_list_no_border"
+            android:paddingStart="@dimen/xxlarge_gap"
+            android:paddingEnd="@dimen/large_gap"
+            android:paddingTop="@dimen/large_gap"
+            android:paddingBottom="@dimen/large_gap"
+        />
 
         <RelativeLayout
             android:id="@+id/unmatched_list_group"
@@ -63,12 +69,17 @@
 
         </RelativeLayout>
 
-        <include
-            android:id="@+id/matched_group"
-            layout="@layout/list_border_top_2"
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/separator" />
+            android:id="@+id/matched_group"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:background="@drawable/expandable_list_top_border"
+            android:paddingStart="@dimen/xxlarge_gap"
+            android:paddingEnd="@dimen/large_gap"
+            android:paddingTop="@dimen/large_gap"
+            android:paddingBottom="@dimen/large_gap"
+        />
 
         <RelativeLayout
             android:id="@+id/matched_list_group"
