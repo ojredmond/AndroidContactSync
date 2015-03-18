@@ -50,6 +50,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import android.widget.*;
+import java.util.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -116,7 +117,6 @@ class ContactsHelper {
         listName = l;
         listKey = key;
         list = ids;
-        //pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
         createContacts();
     }
 
@@ -126,7 +126,6 @@ class ContactsHelper {
         listKey = key;
         list = new HashSet<>();
         Collections.addAll(list, ids);
-        //pref = main.getSharedPreferences(Match.PREFKEY, Context.MODE_PRIVATE);
         createContacts();
     }
 
@@ -257,7 +256,6 @@ class ContactsHelper {
                         group = new HashMap<>();
                         group.put(account, groupItem);
                         groupIds.put(title, group);
-                        //Toast.makeText(main,title + group.toString(),Toast.LENGTH_LONG).show();
                     }
 
                     groupNames.put(id, title);
@@ -296,7 +294,6 @@ class ContactsHelper {
                             if (groupIds.containsKey(groupName))
                                 group = groupIds.get(groupName);
 
-                            //Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
                             if (group != null) {
                                 value.put("group", group);
                                 hasContent = true;
@@ -429,10 +426,6 @@ class ContactsHelper {
 
         return (String) label;
     }
-
-    /*public HashMap<String,HashMap<String,HashSet<StringMap>>> getContacts() {
-        return contacts;
-    }*/
 
     String getAccountName(String id) {
         return accounts.get(id);
@@ -673,11 +666,24 @@ class ContactsHelper {
         }
     }
 
+	public static final HashMap<String, HashSet<StringMap>> removeDuplicatePhoto(HashMap<String, HashSet<StringMap>> contact) {
+		if(contact.get(TYPE_PHOTO).size() <= 1)
+			return contact;
+		else {
+			Iterator it = contact.get(TYPE_PHOTO).iterator();
+			it.next();
+			while(it.hasNext()) {
+				Object object = it.next();
+				contact.get(TYPE_PHOTO).remove(object);
+			}
+			
+			return contact;
+		}
+	}
+	
     public Boolean saveMergedContact(HashMap<String, HashSet<StringMap>> mergedContact) {
         ArrayList<ContentProviderOperation> ops;
         ContentProviderOperation.Builder opBuilder;
-        //String value;
-        //String origValue;
         HashSet<String> accountsUsed = new HashSet<>();
         HashMap<String, HashSet<StringMap>> tmpMContact;
         if (accounts.size() == 0) {
@@ -763,9 +769,7 @@ class ContactsHelper {
                                                     .withValue(Data.MIMETYPE, type)
                                                     .withValue(Data.DATA1, group.get("id"));
                                             ops.add(opBuilder.build());
-                                            //Toast.makeText(main,group.get("id"),Toast.LENGTH_LONG).show();
                                         }
-                                        //Toast.makeText(main,group.toString(),Toast.LENGTH_LONG).show();
                                         break;
                                     default:
                                         opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
