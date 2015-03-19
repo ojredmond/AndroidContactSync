@@ -572,7 +572,7 @@ class ContactsHelper {
         deleteContacts(list);
     }
 
-    void deleteContacts(HashSet<String> delList) {
+    public ArrayList<ContentProviderOperation> deleteContactsBatch(HashSet<String> delList) {
         String where;
         String[] params;
         ArrayList<ContentProviderOperation> ops = null;
@@ -621,7 +621,12 @@ class ContactsHelper {
             contacts.remove(id);
             list.remove(id);
         }
+        
+        return ops;
+    }
 
+    void deleteContacts(HashSet<String> delList) {
+        ArrayList<ContentProviderOperation> ops = deleteContactsBatch(HashSet<String> delList);
         if (ops != null) {
             try {
                 main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
