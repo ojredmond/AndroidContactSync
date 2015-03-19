@@ -667,7 +667,7 @@ class ContactsHelper {
     }
 
     public static final HashMap<String, HashSet<StringMap>> removeDuplicateNamePhoto(HashMap<String, HashSet<StringMap>> contact) {
-        if(contact.get(TYPE_NAME).size() > 1)
+        if(contact.get(TYPE_NAME).size() > 1) {
             Iterator it = contact.get(TYPE_NAME).iterator();
             it.next();
             while(it.hasNext()) {
@@ -676,7 +676,7 @@ class ContactsHelper {
             }
         }
 
-        if(contact.get(TYPE_PHOTO).size() > 1)
+        if(contact.get(TYPE_PHOTO).size() > 1) {
             Iterator it = contact.get(TYPE_PHOTO).iterator();
             it.next();
             while(it.hasNext()) {
