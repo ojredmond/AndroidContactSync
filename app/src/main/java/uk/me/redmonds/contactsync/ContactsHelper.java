@@ -725,6 +725,7 @@ class ContactsHelper {
                 deleteContacts(deList);
             } else {
                 accountsUsed.add(accounts.get(id));
+                Boolean first = true;
                 ops = new ArrayList<>();
                 for (String type : TYPES) {
                     //exclude types based on settings
@@ -741,6 +742,11 @@ class ContactsHelper {
                                 } else if (!type.equals(TYPE_GROUP) || value.get("value") == null || !value.get("value").equals("My Contacts")) {
                                     opBuilder = ContentProviderOperation.newDelete(Data.CONTENT_URI);
                                     opBuilder.withSelection(Data._ID + "=?", new String[]{key.toString()});
+                                    if(first) {
+                                        first = false;
+                                        opBuilder.withYieldAllowed(true);
+                                    }
+                                    
                                     ops.add(opBuilder.build());
                                 }
                             }
@@ -762,6 +768,11 @@ class ContactsHelper {
                                                     .withValue(ContactsContract.Groups.GROUP_VISIBLE, 1)
                                                     .withValue(ContactsContract.Groups.ACCOUNT_TYPE, MainActivity.ACCOUNT_TYPE)
                                                     .withValue(ContactsContract.Groups.ACCOUNT_NAME, accounts.get(id));
+                                                    
+                                            if(first) {
+                                                first = false;
+                                                opBuilder.withYieldAllowed(true);
+                                            }
                                             ops.add(opBuilder.build());
                                             opBuilder = ContentProviderOperation.newInsert(Data.CONTENT_URI)
                                                     .withValueBackReference(Data.DATA1, groupInsertIndex)
@@ -773,6 +784,11 @@ class ContactsHelper {
                                                     .withValue(Data.RAW_CONTACT_ID, id)
                                                     .withValue(Data.MIMETYPE, type)
                                                     .withValue(Data.DATA1, group.get("id"));
+                                                    
+                                            if(first) {
+                                                first = false;
+                                                opBuilder.withYieldAllowed(true);
+                                            }
                                             ops.add(opBuilder.build());
                                         }
                                         break;
@@ -784,6 +800,12 @@ class ContactsHelper {
                                             if (item.getObject(field) != null)
                                                 opBuilder.withValue(field, item.getObject(field));
                                         }
+                                        
+                                        if(first) {
+                                            first = false;
+                                            opBuilder.withYieldAllowed(true);
+                                        }
+                                        ops.add(opBuilder.build());
 
                                         ops.add(opBuilder.build());
                                         break;
@@ -794,7 +816,6 @@ class ContactsHelper {
                 }
 
                 if (ops.size() > 0) {
-                    ops.get(0).withYieldAllowed(true);
                     try {
                         main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
                     } catch (Throwable e) {
