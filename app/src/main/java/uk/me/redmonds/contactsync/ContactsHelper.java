@@ -626,7 +626,7 @@ class ContactsHelper {
     }
 
     void deleteContacts(HashSet<String> delList) {
-        ArrayList<ContentProviderOperation> ops = deleteContactsBatch(HashSet<String> delList);
+        ArrayList<ContentProviderOperation> ops = deleteContactsBatch(delList);
         if (ops != null) {
             try {
                 main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
