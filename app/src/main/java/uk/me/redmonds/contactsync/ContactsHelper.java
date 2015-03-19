@@ -693,7 +693,7 @@ class ContactsHelper {
         HashSet<String> accountsUsed = new HashSet<>();
         HashMap<String, HashSet<StringMap>> tmpMContact;
         if (accounts.size() == 0) {
-            return false;
+            return ops;
         }
 
         Boolean addToUnmatched = true;
@@ -821,11 +821,11 @@ class ContactsHelper {
         else if (!listName.startsWith(Match.DUPKEY))
             addToMatched();
         
-        return 
+        return ops;
     }
 
     public Boolean saveMergedContact(HashMap<String, HashSet<StringMap>> mergedContact) {
-        ArrayList<ContentProviderOperation> ops = saveMergedContact (mergedContact);
+        ArrayList<ContentProviderOperation> ops = saveMergedContactBatch (mergedContact);
         if (ops.size() > 0) {
             try {
                 main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
