@@ -688,7 +688,7 @@ class ContactsHelper {
     }
     
     public Boolean saveMergedContact(HashMap<String, HashSet<StringMap>> mergedContact) {
-        ArrayList<ContentProviderOperation> ops;
+        ArrayList<ContentProviderOperation> ops = new ArrayList<>();
         ContentProviderOperation.Builder opBuilder;
         HashSet<String> accountsUsed = new HashSet<>();
         HashMap<String, HashSet<StringMap>> tmpMContact;
@@ -726,7 +726,6 @@ class ContactsHelper {
             } else {
                 accountsUsed.add(accounts.get(id));
                 Boolean first = true;
-                ops = new ArrayList<>();
                 for (String type : TYPES) {
                     //exclude types based on settings
                     if ((!type.equals(TYPE_GROUP) || groupInc)
@@ -814,16 +813,6 @@ class ContactsHelper {
                         }
                     }
                 }
-
-                if (ops.size() > 0) {
-                    try {
-                        main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
-                    } catch (Throwable e) {
-                        // send error report
-                        TopExceptionHandler.sendReport(main, TopExceptionHandler.generateReport(e));
-                        return false;
-                    }
-                }
             }
         }
 
@@ -832,6 +821,15 @@ class ContactsHelper {
         else if (!listName.startsWith(Match.DUPKEY))
             addToMatched();
 
+        if (ops.size() > 0) {
+            try {
+                main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
+            } catch (Throwable e) {
+                // send error report
+                TopExceptionHandler.sendReport(main, TopExceptionHandler.generateReport(e));
+                return false;
+            }
+        }
         return true;
     }
 
