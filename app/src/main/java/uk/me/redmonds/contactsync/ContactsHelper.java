@@ -687,7 +687,7 @@ class ContactsHelper {
         return contact;
     }
     
-    public Boolean saveMergedContact(HashMap<String, HashSet<StringMap>> mergedContact) {
+    public ArrayList<ContentProviderOperation> saveMergedContactBatch (HashMap<String, HashSet<StringMap>> mergedContact) {
         ArrayList<ContentProviderOperation> ops = new ArrayList<>();
         ContentProviderOperation.Builder opBuilder;
         HashSet<String> accountsUsed = new HashSet<>();
@@ -820,7 +820,12 @@ class ContactsHelper {
             addToUnmatched();
         else if (!listName.startsWith(Match.DUPKEY))
             addToMatched();
+        
+        return 
+    }
 
+    public Boolean saveMergedContact(HashMap<String, HashSet<StringMap>> mergedContact) {
+        ArrayList<ContentProviderOperation> ops = saveMergedContact (mergedContact);
         if (ops.size() > 0) {
             try {
                 main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
