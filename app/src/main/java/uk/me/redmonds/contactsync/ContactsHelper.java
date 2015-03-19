@@ -698,7 +698,6 @@ class ContactsHelper {
 
         Boolean addToUnmatched = true;
         for (String id : list) {
-
             if (list.size() == 1
                     && listName.startsWith(Match.DUPKEY)) {
                 String tmp[] = getListEntries();
@@ -795,6 +794,7 @@ class ContactsHelper {
                 }
 
                 if (ops.size() > 0) {
+                    ops.get(0).withYieldAllowed(true);
                     try {
                         main.getContentResolver().applyBatch(ContactsContract.AUTHORITY, ops);
                     } catch (Throwable e) {
