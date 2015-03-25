@@ -15,8 +15,8 @@ public class StatusFragment extends Fragment {
     //private final static String LOG = "log";
     private OnViewCreatedListener mCallback;
     private TextView log;
-	private ProgressBar progress;
-	private TextView progressText;
+    private ProgressBar progress;
+    private TextView progressText;
 
     @Override
     public void onAttach(Activity activity) {
@@ -44,11 +44,27 @@ public class StatusFragment extends Fragment {
 
         View statusView = inflater.inflate(R.layout.fragment_status, container, false);
 
+        // Part 1: Decode image
+        statusView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
+        int mDstHeight = statusView.getMeasuredHeight();
+        int mDstWidth = statusView.getMeasuredWidth();
+
+        Bitmap unscaledBitmap = ScalingUtilities.decodeResource(getResources(), mSourceId,
+                mDstWidth, mDstHeight, ScalingLogic.FIT);
+
+        // Part 2: Scale image
+        Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, mDstWidth,
+                mDstHeight, ScalingLogic.FIT);
+        unscaledBitmap.recycle();
+
+        // Publish results
+
+
         mCallback.onViewCreated(this);
         log = (TextView) statusView.findViewById(R.id.statuslog);
-		progressText = (TextView) statusView.findViewById(R.id.progresstext);
-		progress = (ProgressBar) statusView.findViewById(R.id.progressbar);
-		refresh();
+        progressText = (TextView) statusView.findViewById(R.id.progresstext);
+        progress = (ProgressBar) statusView.findViewById(R.id.progressbar);
+        refresh();
 
         // Inflate the layout for this fragment
         return statusView;
@@ -58,34 +74,34 @@ public class StatusFragment extends Fragment {
         return log.getText().toString();
     }
 
-	public void refresh () {
-		SharedPreferences logPref = getActivity().getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE);
-		String logText = "";
-		TreeMap<String,Object> map = new TreeMap<String,Object>();
-		map.putAll(logPref.getAll());
-		Map<String,Object> mapR = map.descendingMap();
-		for(Map.Entry <String,?> item: mapR.entrySet())
-			if(item.getKey().startsWith(Match.LOG_TAG))
-				logText += item.getValue() + "\n";
-		
-		log.setText(logText);
-		
-		//update progress bar
-		int prog = logPref.getInt("PROGRESS",-1);
-		int max = logPref.getInt("MAX",0);
-		String account = logPref.getString("ACCOUNT", "");
-		if(prog == -1) {
-			progress.setVisibility(View.GONE);
-			progressText.setVisibility(View.GONE);
-		} else {
-			progress.setVisibility(View.VISIBLE);
-			progressText.setVisibility(View.VISIBLE);
-			progress.setProgress(prog);
-			progress.setMax(max);
-			progressText.setText(account);
-		}
-			
-	}
+    public void refresh () {
+        SharedPreferences logPref = getActivity().getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE);
+        String logText = "";
+        TreeMap<String,Object> map = new TreeMap<String,Object>();
+        map.putAll(logPref.getAll());
+        Map<String,Object> mapR = map.descendingMap();
+        for(Map.Entry <String,?> item: mapR.entrySet())
+            if(item.getKey().startsWith(Match.LOG_TAG))
+                logText += item.getValue() + "\n";
+        
+        log.setText(logText);
+        
+        //update progress bar
+        int prog = logPref.getInt("PROGRESS",-1);
+        int max = logPref.getInt("MAX",0);
+        String account = logPref.getString("ACCOUNT", "");
+        if(prog == -1) {
+            progress.setVisibility(View.GONE);
+            progressText.setVisibility(View.GONE);
+        } else {
+            progress.setVisibility(View.VISIBLE);
+            progressText.setVisibility(View.VISIBLE);
+            progress.setProgress(prog);
+            progress.setMax(max);
+            progressText.setText(account);
+        }
+            
+    }
 
     //Container Activity must implement this interface
     public interface OnViewCreatedListener {
