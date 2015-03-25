@@ -24,8 +24,15 @@ import android.util.*;
 import android.widget.*;
 import java.text.*;
 import java.util.*;
+import android.app.Activity;
 
 class Sync {
+	public static final String LOG_TAG = "SYNC_STATUS";
+	Activity mainActivity;
+	String syncType;
+	StatusFragment status;
+	String account1Name, account2Name, accountsKey;
+	private String syncTimeStamp;
 
     public void startSync(MainActivity main, StatusFragment frag, String type) {
         mainActivity = main;
@@ -48,11 +55,15 @@ class Sync {
 
         @Override
         protected String doInBackground(Void... params) {
+			return "";
         }
 
 		@Override
 		protected void onPreExecute()
 		{
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			syncTimeStamp = dateFormat.format(new Date());
+			
 			super.onPreExecute();
 		}
 

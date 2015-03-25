@@ -267,6 +267,7 @@ class ContactsHelper {
         selection.add(Data.RAW_CONTACT_ID);
         selection.add(Data._ID);
         selection.add(Data.MIMETYPE);
+		selection.add(Data.DATA_VERSION);
         selection.addAll(Arrays.asList(CONTACT_FIELDS));
 
         c = main.getContentResolver().query(Data.CONTENT_URI,
@@ -286,6 +287,7 @@ class ContactsHelper {
                     //only add to content if row has content
                     Boolean hasContent = false;
 
+					Toast.makeText(main, id + c.getString(c.getColumnIndex(Data.MIMETYPE)) + c.getString(c.getColumnIndex(Data.DATA_VERSION)), Toast.LENGTH_SHORT).show();
                     StringMap value = new StringMap();
                     if (c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP)) {
                         if (c.getString(c.getColumnIndex(Data.MIMETYPE)).equals(TYPE_GROUP) && groupNames.containsKey(c.getString(c.getColumnIndex(Data.DATA1)))) {
