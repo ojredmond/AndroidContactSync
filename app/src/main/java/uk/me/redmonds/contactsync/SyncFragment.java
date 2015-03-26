@@ -28,8 +28,8 @@ public class SyncFragment extends ListFragment {
     private final ArrayList<StringMap> values = new ArrayList<>();
     private MainActivity main;
     private SharedPreferences prefMatch;
-	private SharedPreferences prefAccount1;
-	private SharedPreferences prefAccount2;
+    private SharedPreferences prefAccount1;
+    private SharedPreferences prefAccount2;
     private SharedPreferences settings;
     private String list_type;
     private String account1Name;
@@ -50,27 +50,27 @@ public class SyncFragment extends ListFragment {
         settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
         account1Name = settings.getString(MainActivity.ACCOUNT1, null);
         account2Name = settings.getString(MainActivity.ACCOUNT2, null);
-		String accountsKey;
-		int account1Count = 0;
-		int account2Count = 0;
-		if(account1Name != null && account2Name != null) {
-			if(account1Name.compareTo(account2Name) > 0)
-				accountsKey = account1Name + account2Name;
-			else
-				accountsKey = account2Name + account1Name;
+        String accountsKey;
+        int account1Count = 0;
+        int account2Count = 0;
+        if(account1Name != null && account2Name != null) {
+            if(account1Name.compareTo(account2Name) > 0)
+                accountsKey = account1Name + account2Name;
+            else
+                accountsKey = account2Name + account1Name;
 
-			prefAccount1 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
-			prefAccount2 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE);
-			prefMatch = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
+            prefAccount1 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account1Name, Context.MODE_PRIVATE);
+            prefAccount2 = main.getSharedPreferences(Match.PREF_KEY_ACCOUNT+account2Name, Context.MODE_PRIVATE);
+            prefMatch = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
 
-			// get he number of contacts in each account to chek they are not both empty
-			account1Count = prefAccount1.getInt(Match.NUMCONTACTS + account1Name, -1);
-			account2Count = prefAccount2.getInt(Match.NUMCONTACTS + account2Name, -1);
-		}
-		
-		if(list_type.equals(SUMMARY) && !prefMatch.getBoolean(Match.SYNCMATCHED, false))
-			main.onNavigationDrawerItemSelected(2);
-		
+            // get he number of contacts in each account to chek they are not both empty
+            account1Count = prefAccount1.getInt(Match.NUMCONTACTS + account1Name, -1);
+            account2Count = prefAccount2.getInt(Match.NUMCONTACTS + account2Name, -1);
+        }
+        
+        if(list_type.equals(SUMMARY) && !prefMatch.getBoolean(Match.SYNCMATCHED, false))
+            main.onNavigationDrawerItemSelected(2);
+        
         if (list_type.equals(OPTIONS) || !prefMatch.getBoolean(Match.SYNCMATCHED, false)) {
             value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{"Match"});
@@ -109,34 +109,34 @@ public class SyncFragment extends ListFragment {
         }
 
         Boolean hideSync = false;
-		if(account1Name != null && account2Name != null) {
-			for (String type : Match.MIME_TYPE_LIST) {
-				String label = Match.DUPKEY + type + account1Name;
-				HashSet<String> set = (HashSet<String>) prefAccount1.getStringSet(label, null);
-				if (set != null && set.size() > 0) {
-					hideSync = true;
-				}
-				label = Match.DUPKEY + type + account2Name;
-				set = (HashSet<String>) prefAccount2.getStringSet(label, null);
-				if (set != null && set.size() > 0) {
-					hideSync = true;
-				}
-				label = Match.MATCHEDKEY + type + account1Name + ":" + account2Name;
-				set = (HashSet<String>) prefMatch.getStringSet(label, null);
-				if (set != null && set.size() > 0) {
-					hideSync = true;
-				}
-				label = Match.MATCHEDKEY + type + account2Name + ":" + account1Name;
-				set = (HashSet<String>) prefMatch.getStringSet(label, null);
-				if (set != null && set.size() > 0) {
-					hideSync = true;
-				}
-			}
-		}
+        if(account1Name != null && account2Name != null) {
+            for (String type : Match.MIME_TYPE_LIST) {
+                String label = Match.DUPKEY + type + account1Name;
+                HashSet<String> set = (HashSet<String>) prefAccount1.getStringSet(label, null);
+                if (set != null && set.size() > 0) {
+                    hideSync = true;
+                }
+                label = Match.DUPKEY + type + account2Name;
+                set = (HashSet<String>) prefAccount2.getStringSet(label, null);
+                if (set != null && set.size() > 0) {
+                    hideSync = true;
+                }
+                label = Match.MATCHEDKEY + type + account1Name + ":" + account2Name;
+                set = (HashSet<String>) prefMatch.getStringSet(label, null);
+                if (set != null && set.size() > 0) {
+                    hideSync = true;
+                }
+                label = Match.MATCHEDKEY + type + account2Name + ":" + account1Name;
+                set = (HashSet<String>) prefMatch.getStringSet(label, null);
+                if (set != null && set.size() > 0) {
+                    hideSync = true;
+                }
+            }
+        }
         
         if (account1Name != null && account2Name != null
                 && !account1Name.equals(account2Name)
-				&& prefMatch.getBoolean(Match.SYNCMATCHED, false)
+                && prefMatch.getBoolean(Match.SYNCMATCHED, false)
                 && !hideSync) {
             value = new StringMap();
             value.put(FlexibleListAdapter.TEXT, new String[]{"Sync"});
@@ -182,8 +182,8 @@ public class SyncFragment extends ListFragment {
                 Toast.makeText(v.getContext(), "Can not find 2 accounts set, please go to settings", Toast.LENGTH_LONG).show();
                 return;
             }
-			
-			prefMatch.edit().putBoolean(Match.SYNCMATCHED, false).apply();
+            
+            prefMatch.edit().putBoolean(Match.SYNCMATCHED, false).apply();
             main.matchStatus();
         } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)) {
             main.showResults();
