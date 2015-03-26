@@ -16,8 +16,8 @@ import java.util.HashSet;
 public class SyncFragment extends ListFragment {
     public static final String OPTIONS = "options";
     public static final String SUMMARY = "summary";
-    private static final String MATCH = "Perform Matching";
-    private static final String FULL = "Full Sync";
+    public static final String MATCH = "Perform Matching";
+    public static final String FULL = "Full Sync";
     private static final String SYNC = "Sync Changes";
     private static final String DUP = "Duplicates";
     private static final String UNMATCHED = "Unmatched";
