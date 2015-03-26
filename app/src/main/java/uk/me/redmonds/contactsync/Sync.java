@@ -27,12 +27,12 @@ import java.util.*;
 import android.app.Activity;
 
 class Sync {
-	public static final String LOG_TAG = "SYNC_STATUS";
-	Activity mainActivity;
-	String syncType;
-	StatusFragment status;
-	String account1Name, account2Name, accountsKey;
-	private String syncTimeStamp;
+    public static final String LOG_TAG = "SYNC_STATUS";
+    Activity mainActivity;
+    String syncType;
+    StatusFragment status;
+    String account1Name, account2Name, accountsKey;
+    private String syncTimeStamp;
 
     public void startSync(MainActivity main, StatusFragment frag, String type) {
         mainActivity = main;
@@ -55,39 +55,39 @@ class Sync {
 
         @Override
         protected String doInBackground(Void... params) {
-			return "";
+            return "";
         }
 
-		@Override
-		protected void onPreExecute()
-		{
-			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			syncTimeStamp = dateFormat.format(new Date());
-			
-			super.onPreExecute();
-		}
+        @Override
+        protected void onPreExecute()
+        {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            syncTimeStamp = dateFormat.format(new Date());
+            
+            super.onPreExecute();
+        }
 
         @Override
         protected void onProgressUpdate(String... message) {
-			SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
-			String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
+            SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
+            String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
             
-			log += message[0];
-			logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
-			
-			if(message.length > 1) {
-				int progress = Integer.parseInt(message[1]);
-				int max = Integer.parseInt(message[2]);
-				logPref.edit().putInt("PROGRESS",progress)
-					.putInt("MAX",max)
-					.apply();
-			} else
-				logPref.edit().remove("PROGRESS").apply();
-			
-			if (message.length > 3) {
-				logPref.edit().putString("ACCOUNT",message[3]).apply();
-			}
-			status.refresh();
+            log += message[0];
+            logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
+            
+            if(message.length > 1) {
+                int progress = Integer.parseInt(message[1]);
+                int max = Integer.parseInt(message[2]);
+                logPref.edit().putInt("PROGRESS",progress)
+                    .putInt("MAX",max)
+                    .apply();
+            } else
+                logPref.edit().remove("PROGRESS").apply();
+            
+            if (message.length > 3) {
+                logPref.edit().putString("ACCOUNT",message[3]).apply();
+            }
+            status.refresh();
         }
 
         @Override
