@@ -188,7 +188,7 @@ public class SyncFragment extends ListFragment {
         } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)) {
             main.showResults();
         } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(FULL)) {
-            Toast.makeText(v.getContext(), (String) values.get((int) id).get(FlexibleListAdapter.TEXT), Toast.LENGTH_LONG).show();
+            Toast.makeText(v.getContext(), (String[]) values.get((int) id).get(FlexibleListAdapter.TEXT)[0], Toast.LENGTH_LONG).show();
         } else if (clickedItem.containsKey(FlexibleListAdapter.LISTITEM)) {
             main.Compare(list_type, (String) clickedItem.get(FlexibleListAdapter.LISTITEM), null);
         } else {
