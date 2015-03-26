@@ -173,7 +173,9 @@ public class SyncFragment extends ListFragment {
         //HashMap<String, Object> clickedItem = ((FlexibleListAdapter) l.getAdapter()).getItem(position);
         HashMap<String, Object> clickedItem = adapter.getItem(position - 1);
 
-        if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(MATCH)) {
+        if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && 
+                (((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(MATCH)
+                || ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(FULL))) {
             settings = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
             account1Name = settings.getString(MainActivity.ACCOUNT1, null);
             account2Name = settings.getString(MainActivity.ACCOUNT2, null);
@@ -184,11 +186,9 @@ public class SyncFragment extends ListFragment {
             }
             
             prefMatch.edit().putBoolean(Match.SYNCMATCHED, false).apply();
-            main.matchStatus();
-        } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && (
-            ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)
-            || ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(FULL))) {
-            main.showResults(((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0]);
+            main.matchStatus(((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0]);
+        } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)) {
+            main.showResults();
         } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(FULL)) {
             Toast.makeText(v.getContext(), ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0], Toast.LENGTH_LONG).show();
         } else if (clickedItem.containsKey(FlexibleListAdapter.LISTITEM)) {
