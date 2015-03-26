@@ -18,5 +18,5 @@
 
   <!-- background colours -->
   <color name="nav_background">#CCC</color>
-  <color name="50_white">#80FFFFFF</color>
+  <color name="white_50">#80FFFFFF</color>
 </resources>
