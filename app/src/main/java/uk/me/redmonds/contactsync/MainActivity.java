@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle = "";
     private StatusFragment log;
     private String logText = "";
+    private String syncType = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,14 +129,17 @@ public class MainActivity extends ActionBarActivity
         actionBar.setTitle(mTitle);
     }
 
-    public void matchStatus() {
+    public void matchStatus(String type) {
+        syncType = type;
         onNavigationDrawerItemSelected(2);
     }
 
     public void onViewCreated(StatusFragment status) {
-        Match m = new Match();
-        String syncType = "";
-        m.startMatch(this, status, syncType);
+        if(syncType.equals(SyncFragment.MATCH)) {
+            Match m = new Match();
+            m.startMatch(this, status, syncType);
+        }
+        syncType = "";
     }
 
     void showOptions() {
@@ -273,11 +277,11 @@ public class MainActivity extends ActionBarActivity
         super.onSaveInstanceState(outState);
     }
 
-	@Override
-	protected void onDestroy()
-	{
-		getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE).edit().clear().apply();
-		
-		super.onDestroy();
-	}
+    @Override
+    protected void onDestroy()
+    {
+        getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE).edit().clear().apply();
+        
+        super.onDestroy();
+    }
 }
