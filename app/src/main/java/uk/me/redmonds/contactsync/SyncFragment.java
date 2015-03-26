@@ -185,8 +185,10 @@ public class SyncFragment extends ListFragment {
             
             prefMatch.edit().putBoolean(Match.SYNCMATCHED, false).apply();
             main.matchStatus();
-        } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)) {
-            main.showResults();
+        } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && (
+            ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)
+            || ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(FULL))) {
+            main.showResults(((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0]);
         } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(FULL)) {
             Toast.makeText(v.getContext(), ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0], Toast.LENGTH_LONG).show();
         } else if (clickedItem.containsKey(FlexibleListAdapter.LISTITEM)) {
