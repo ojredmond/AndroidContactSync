@@ -59,11 +59,18 @@ class Sync {
             
             if(prefMatch.getBoolean(Match.SYNCMATCHED, false))
                 return "Sync Matched is false, please perform matching first"
+                
+            String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+            String un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
+            String md = Match.MATCHEDKEY + account1Name + ":" + account2Name;
+            HashSet<String> unmatched1 = (HashSet<String>) prefMatch.getStringSet(un1, null);
+            HashSet<String> unmatched2 = (HashSet<String>) prefMatch.getStringSet(un2, null);
+            HashSet<String> matched = (HashSet<String>) prefMatch.getStringSet(md, null);
 
-            HashSet<String> unmatched1 = (HashSet<String>) prefMatch.getStringSet(Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name, null);
-            HashSet<String> unmatched2 = (HashSet<String>) prefMatch.getStringSet(Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name, null);
-            HashSet<String> matched = (HashSet<String>) prefMatch.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
-
+            ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+            for(String idString: matched) {
+                onProgressUpdate(idString + "\n");
+            }
             return "";
         }
 
