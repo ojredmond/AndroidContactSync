@@ -89,10 +89,10 @@ public class CompareDetail extends Fragment {
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 1);
-		
-		int margin = (int)getResources().getDimension(R.dimen.medium_gap);
-		
-		params.setMargins(margin,margin,margin,margin);
+        
+        int margin = (int)getResources().getDimension(R.dimen.medium_gap);
+        
+        params.setMargins(margin,margin,margin,margin);
         buttonBar.addView(bDel, params);
         if (!listItem.startsWith(Match.MATCHEDKEY + account1Name))
             buttonBar.addView(bMerge, params);
