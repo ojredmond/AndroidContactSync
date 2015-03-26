@@ -44,22 +44,6 @@ public class StatusFragment extends Fragment {
 
         View statusView = inflater.inflate(R.layout.fragment_status, container, false);
 
-        // Part 1: Decode image
-        statusView.measure(MeasureSpec.UNSPECIFIED, MeasureSpec.UNSPECIFIED);
-        int mDstHeight = statusView.getMeasuredHeight();
-        int mDstWidth = statusView.getMeasuredWidth();
-
-        Bitmap unscaledBitmap = ScalingUtilities.decodeResource(getResources(), mSourceId,
-                mDstWidth, mDstHeight, ScalingLogic.FIT);
-
-        // Part 2: Scale image
-        Bitmap scaledBitmap = ScalingUtilities.createScaledBitmap(unscaledBitmap, mDstWidth,
-                mDstHeight, ScalingLogic.FIT);
-        unscaledBitmap.recycle();
-
-        // Publish results
-
-
         mCallback.onViewCreated(this);
         log = (TextView) statusView.findViewById(R.id.statuslog);
         progressText = (TextView) statusView.findViewById(R.id.progresstext);
