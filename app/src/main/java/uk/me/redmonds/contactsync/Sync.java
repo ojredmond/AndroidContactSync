@@ -25,6 +25,7 @@ import android.widget.*;
 import java.text.*;
 import java.util.*;
 import android.app.Activity;
+import android.content.*;
 
 class Sync {
     public static final String LOG_TAG = "SYNC_STATUS";
@@ -55,10 +56,10 @@ class Sync {
 
         @Override
         protected String doInBackground(Void... params) {
-            prefMatch = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
+            SharedPreferences prefMatch = mainActivity.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
             
             if(prefMatch.getBoolean(Match.SYNCMATCHED, false))
-                return "Sync Matched is false, please perform matching first"
+                return "Sync Matched is false, please perform matching first";
                 
             String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
             String un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
