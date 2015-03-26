@@ -55,6 +55,15 @@ class Sync {
 
         @Override
         protected String doInBackground(Void... params) {
+            prefMatch = main.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
+            
+            if(prefMatch.getBoolean(Match.SYNCMATCHED, false))
+                return "Sync Matched is false, please perform matching first"
+
+            HashSet<String> unmatched1 = (HashSet<String>) prefMatch.getStringSet(Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name, null);
+            HashSet<String> unmatched2 = (HashSet<String>) prefMatch.getStringSet(Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name, null);
+            HashSet<String> matched = (HashSet<String>) prefMatch.getStringSet(Match.MATCHEDKEY + account1Name + ":" + account2Name, null);
+
             return "";
         }
 
