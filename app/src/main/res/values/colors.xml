@@ -16,6 +16,7 @@
   <color name="material_orange_A400">#FF9100</color>
   <color name="material_orange_A700">#FF6D00</color>
 
-  <!-- Navigation drawer background colour -->
+  <!-- background colours -->
   <color name="nav_background">#CCC</color>
+  <color name="50_white">#80FFFFFF</color>
 </resources>
