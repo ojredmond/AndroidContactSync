@@ -28,7 +28,6 @@ import java.util.*;
 
 class Match {
 	private static final String SYNCING = "syncing";
-	public static final String LOG_TAG = "MATCH_STATUS";
     public static final String SYNCMATCHED = "syncMatched";
     public static final String DUPKEY = "dup:";
     public static final String UNMATCHNAMEKEY = "unmatchedName:";
@@ -601,11 +600,11 @@ class Match {
 
         @Override
         protected void onProgressUpdate(String... message) {
-			SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
-			String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
+			SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
+			String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
             
 			log += message[0];
-			logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
+			logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
 			
 			if(message.length > 1) {
 				int progress = Integer.parseInt(message[1]);
@@ -630,11 +629,11 @@ class Match {
                 return;
             }
             if (!message.equals("")) {
-                SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
-				String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
+                SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
+				String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
 
 				log += message;
-				logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
+				logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
 				logPref.edit().remove("PROGRESS").apply();
 				status.refresh();
             }

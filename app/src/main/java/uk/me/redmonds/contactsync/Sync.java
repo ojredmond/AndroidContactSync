@@ -28,7 +28,6 @@ import android.app.Activity;
 import android.content.*;
 
 class Sync {
-    public static final String LOG_TAG = "SYNC_STATUS";
     Activity mainActivity;
     String syncType;
     StatusFragment status;
@@ -58,10 +57,11 @@ class Sync {
         protected String doInBackground(Void... params) {
             SharedPreferences prefMatch = mainActivity.getSharedPreferences(Match.PREF_KEY_MATCH+accountsKey, Context.MODE_PRIVATE);
             
-            if(prefMatch.getBoolean(Match.SYNCMATCHED, false))
+            if(!prefMatch.getBoolean(Match.SYNCMATCHED, false))
                 return "Sync Matched is false, please perform matching first";
                 
-            String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+
+			String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
             String un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
             String md = Match.MATCHEDKEY + account1Name + ":" + account2Name;
             HashSet<String> unmatched1 = (HashSet<String>) prefMatch.getStringSet(un1, null);
@@ -70,7 +70,7 @@ class Sync {
 
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
             for(String idString: matched) {
-                onProgressUpdate(idString + "\n");
+                publishProgress(idString + "\n");
             }
             return "";
         }
@@ -86,11 +86,11 @@ class Sync {
 
         @Override
         protected void onProgressUpdate(String... message) {
-            SharedPreferences logPref = mainActivity.getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
-            String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
+            SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
+            String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
             
             log += message[0];
-            logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
+            logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
             
             if(message.length > 1) {
                 int progress = Integer.parseInt(message[1]);

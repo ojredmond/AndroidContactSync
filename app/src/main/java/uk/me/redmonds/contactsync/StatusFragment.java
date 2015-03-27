@@ -12,6 +12,7 @@ import android.widget.*;
 import java.util.*;
 
 public class StatusFragment extends Fragment {
+	public static final String LOG_TAG = "MATCH_STATUS";
     //private final static String LOG = "log";
     private OnViewCreatedListener mCallback;
     private TextView log;
@@ -59,21 +60,22 @@ public class StatusFragment extends Fragment {
     }
 
     public void refresh () {
-        SharedPreferences logPref = getActivity().getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE);
+        SharedPreferences logMatchPref = getActivity().getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
         String logText = "";
         TreeMap<String,Object> map = new TreeMap<String,Object>();
-        map.putAll(logPref.getAll());
+        map.putAll(logMatchPref.getAll());
+		
         Map<String,Object> mapR = map.descendingMap();
         for(Map.Entry <String,?> item: mapR.entrySet())
-            if(item.getKey().startsWith(Match.LOG_TAG))
+            if(item.getKey().startsWith(LOG_TAG))
                 logText += item.getValue() + "\n";
         
         log.setText(logText);
         
         //update progress bar
-        int prog = logPref.getInt("PROGRESS",-1);
-        int max = logPref.getInt("MAX",0);
-        String account = logPref.getString("ACCOUNT", "");
+        int prog = logMatchPref.getInt("PROGRESS",-1);
+        int max = logMatchPref.getInt("MAX",0);
+        String label = logMatchPref.getString("ACCOUNT", "");
         if(prog == -1) {
             progress.setVisibility(View.GONE);
             progressText.setVisibility(View.GONE);
@@ -82,7 +84,7 @@ public class StatusFragment extends Fragment {
             progressText.setVisibility(View.VISIBLE);
             progress.setProgress(prog);
             progress.setMax(max);
-            progressText.setText(account);
+            progressText.setText(label);
         }
             
     }

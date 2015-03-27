@@ -185,7 +185,8 @@ public class SyncFragment extends ListFragment {
                 return;
             }
             
-            prefMatch.edit().putBoolean(Match.SYNCMATCHED, false).apply();
+			if(((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(MATCH))
+            	prefMatch.edit().putBoolean(Match.SYNCMATCHED, false).apply();
             main.matchStatus(((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0]);
         } else if (clickedItem.containsKey(FlexibleListAdapter.TEXT) && ((String[]) clickedItem.get(FlexibleListAdapter.TEXT))[0].equals(LAST)) {
             main.showResults();

@@ -280,7 +280,7 @@ public class MainActivity extends ActionBarActivity
     @Override
     protected void onDestroy()
     {
-        getSharedPreferences(Match.LOG_TAG, Context.MODE_PRIVATE).edit().clear().apply();
+        getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE).edit().clear().apply();
         
         super.onDestroy();
     }
