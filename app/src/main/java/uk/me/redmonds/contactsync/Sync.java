@@ -69,8 +69,11 @@ class Sync {
             HashSet<String> matched = (HashSet<String>) prefMatch.getStringSet(md, null);
 
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+            int index = 0;
+            int max = matched.size();
             for(String idString: matched) {
-                publishProgress(idString + "\n");
+                publishProgress(idString + "\n", index, max);
+                index++;
             }
             return "";
         }
@@ -111,12 +114,12 @@ class Sync {
         protected void onPostExecute(String message) {
             if (!message.equals("")) {
                 SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
-				String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
+                String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
 
-				log += message;
-				logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
-				logPref.edit().remove("PROGRESS").apply();
-				status.refresh();
+                log += message;
+                logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
+                logPref.edit().remove("PROGRESS").apply();
+                status.refresh();
             }
 
             super.onPostExecute(message);
