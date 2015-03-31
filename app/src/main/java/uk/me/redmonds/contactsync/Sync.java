@@ -61,7 +61,7 @@ class Sync {
                 return "Sync Matched is false, please perform matching first";
                 
 
-			String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+            String un1 = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
             String un2 = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
             String md = Match.MATCHEDKEY + account1Name + ":" + account2Name;
             HashSet<String> unmatched1 = (HashSet<String>) prefMatch.getStringSet(un1, null);
@@ -109,6 +109,16 @@ class Sync {
 
         @Override
         protected void onPostExecute(String message) {
+            if (!message.equals("")) {
+                SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
+				String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
+
+				log += message;
+				logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
+				logPref.edit().remove("PROGRESS").apply();
+				status.refresh();
+            }
+
             super.onPostExecute(message);
         }
     }
