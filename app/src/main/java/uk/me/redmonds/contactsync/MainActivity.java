@@ -138,7 +138,7 @@ public class MainActivity extends ActionBarActivity
         if(syncType.equals(SyncFragment.MATCH)) {
             Match m = new Match();
             m.startMatch(this, status, syncType);
-        } else if(syncType.equals(SyncFragment.SYNC)) {
+        } else if(syncType.equals(SyncFragment.FULL)) {
             Sync s = new Sync();
             s.startSync(this, status, syncType);
         }
