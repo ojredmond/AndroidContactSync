@@ -12,11 +12,11 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+import android.preference.*;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import android.preference.*;
 
 public class MainActivity extends ActionBarActivity
         implements StatusFragment.OnViewCreatedListener,
@@ -138,7 +138,11 @@ public class MainActivity extends ActionBarActivity
         if(syncType.equals(SyncFragment.MATCH)) {
             Match m = new Match();
             m.startMatch(this, status, syncType);
+        } else if(syncType.equals(SyncFragment.SYNC)) {
+            Sync s = new Sync();
+            s.startSync(this, status, syncType);
         }
+
         syncType = "";
     }
 
