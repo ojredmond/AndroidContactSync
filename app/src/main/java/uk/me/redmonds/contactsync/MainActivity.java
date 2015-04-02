@@ -154,10 +154,12 @@ public class MainActivity extends ActionBarActivity
     }
 
     public void showResults() {
-        showList(SyncFragment.SUMMARY, PACKAGE_NAME + "-" + getString(R.string.title_results));
-        //update the navigation drawer
-        if (mNavigationDrawerFragment != null)
-            mNavigationDrawerFragment.changeItem(3);
+		if(!isChangingConfigurations()&&!isRestricted()&&!isFinishing() && !isDestroyed()) {
+			showList(SyncFragment.SUMMARY, PACKAGE_NAME + "-" + getString(R.string.title_results));
+			//update the navigation drawer
+			if (mNavigationDrawerFragment != null)
+				mNavigationDrawerFragment.changeItem(3);
+		}
     }
 
     void showList(String type, String fragTag) {

@@ -600,48 +600,21 @@ class Match {
 
         @Override
         protected void onProgressUpdate(String... message) {
-			SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
-			String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
-            
-			log += message[0];
-			logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
-			
-			if(message.length > 1) {
-				int progress = Integer.parseInt(message[1]);
-				int max = Integer.parseInt(message[2]);
-				logPref.edit().putInt("PROGRESS",progress)
-					.putInt("MAX",max)
-					.apply();
-			} else
-				logPref.edit().remove("PROGRESS").apply();
-			
-			if (message.length > 3) {
-				logPref.edit().putString("ACCOUNT",message[3]).apply();
-			}
-			status.refresh();
+			status.updateLog(syncTimeStamp, message);
         }
 
         @Override
         protected void onPostExecute(String message) {
             super.onPostExecute(message);
-
+			
+			status.updateLog(syncTimeStamp, new String[]{message});
+			
             if (syncMatched) {
                 return;
             }
-            if (!message.equals("")) {
-                SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
-				String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
-
-				log += message;
-				logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
-				logPref.edit().remove("PROGRESS").apply();
-				status.refresh();
-            }
 
             syncMatched = true;
-
-            if (!mainActivity.isChangingConfigurations()&&!mainActivity.isRestricted()&&!mainActivity.isFinishing() && !mainActivity.isDestroyed())
-                mainActivity.showResults();
+            mainActivity.showResults();
         }
     }
 }

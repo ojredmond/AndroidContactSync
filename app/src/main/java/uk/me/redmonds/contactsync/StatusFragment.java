@@ -59,7 +59,32 @@ public class StatusFragment extends Fragment {
         return log.getText().toString();
     }
 
-    public void refresh () {
+	public void updateLog (String syncTimeStamp, String message[]) {
+		if(syncTimeStamp == null)
+			return;
+		
+		SharedPreferences logPref = getActivity().getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
+		String log = logPref.getString(LOG_TAG+syncTimeStamp,"");
+
+		log += message[0];
+		logPref.edit().putString(LOG_TAG+syncTimeStamp,log).apply();
+
+		if(message.length > 1) {
+			int progress = Integer.parseInt(message[1]);
+			int max = Integer.parseInt(message[2]);
+			logPref.edit().putInt("PROGRESS",progress)
+				.putInt("MAX",max)
+				.apply();
+		} else
+			logPref.edit().remove("PROGRESS").apply();
+
+		if (message.length > 3) {
+			logPref.edit().putString("ACCOUNT",message[3]).apply();
+		}
+		refresh();
+	}
+	
+    void refresh () {
         SharedPreferences logMatchPref = getActivity().getSharedPreferences(LOG_TAG, Context.MODE_PRIVATE);
         String logText = "";
         TreeMap<String,Object> map = new TreeMap<String,Object>();

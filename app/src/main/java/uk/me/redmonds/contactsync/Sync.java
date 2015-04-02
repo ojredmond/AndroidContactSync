@@ -68,14 +68,23 @@ class Sync {
             HashSet<String> unmatched2 = (HashSet<String>) prefMatch.getStringSet(un2, null);
             HashSet<String> matched = (HashSet<String>) prefMatch.getStringSet(md, null);
 
+			String message = syncTimeStamp + "\n\n";
+            message += "Starting " + syncType + "...\n";
+            message += account1Name + " & " + account2Name + "\n";
+			int max = matched.size();
+            publishProgress(message,"0", String.valueOf(max));
+			
             ArrayList<ContentProviderOperation> ops = new ArrayList<>();
             int index = 0;
-            int max = matched.size();
             for(String idString: matched) {
-                publishProgress(idString + "\n", index, max);
-                index++;
+				index++;
+				ContactsHelper contacts = new ContactsHelper(mainActivity,md,null,idString.split(":"));
+				HashMap<String, HashSet<StringMap>> contact = contacts.mergeContact();
+				ContactsHelper.removeDuplicateNamePhoto(contact);
+				ops.addAll(contacts.saveMergedContactBatch(contact));
+                publishProgress(contact.get(ContactsHelper.TYPE_NAME).iterator().next().get("value") + "\n", String.valueOf(index), String.valueOf(max));
             }
-            return "";
+            return "Sync complete\n";
         }
 
         @Override
@@ -89,40 +98,14 @@ class Sync {
 
         @Override
         protected void onProgressUpdate(String... message) {
-            SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
-            String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
-            
-            log += message[0];
-            logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
-            
-            if(message.length > 1) {
-                int progress = Integer.parseInt(message[1]);
-                int max = Integer.parseInt(message[2]);
-                logPref.edit().putInt("PROGRESS",progress)
-                    .putInt("MAX",max)
-                    .apply();
-            } else
-                logPref.edit().remove("PROGRESS").apply();
-            
-            if (message.length > 3) {
-                logPref.edit().putString("ACCOUNT",message[3]).apply();
-            }
-            status.refresh();
+			status.updateLog(syncTimeStamp, message);
         }
 
         @Override
         protected void onPostExecute(String message) {
-            if (!message.equals("")) {
-                SharedPreferences logPref = mainActivity.getSharedPreferences(StatusFragment.LOG_TAG, Context.MODE_PRIVATE);
-                String log = logPref.getString(StatusFragment.LOG_TAG+syncTimeStamp,"");
-
-                log += message;
-                logPref.edit().putString(StatusFragment.LOG_TAG+syncTimeStamp,log).apply();
-                logPref.edit().remove("PROGRESS").apply();
-                status.refresh();
-            }
-
-            super.onPostExecute(message);
+			super.onPostExecute(message);
+			
+			status.updateLog(syncTimeStamp, new String[]{message});
         }
     }
 }
