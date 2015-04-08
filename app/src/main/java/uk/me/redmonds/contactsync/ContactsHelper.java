@@ -435,14 +435,24 @@ class ContactsHelper {
     }
 
     public Bitmap loadContactPhoto(long id) {
-		if(contacts.get(String.valueOf(id)).get(TYPE_PHOTO) != null)
-		Toast.makeText(main, contacts.get(String.valueOf(id)).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
+        /*if(contacts.get(String.valueOf(id)).get(TYPE_PHOTO) != null)
+            Toast.makeText(main, contacts.get(String.valueOf(id)).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
         Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
         InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(main.getContentResolver(), uri, true);
         if (input == null) {
             return null;
         }
-        return BitmapFactory.decodeStream(input);
+        return BitmapFactory.decodeStream(input);*/
+        Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
+        Uri displayPhotoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.DISPLAY_PHOTO);
+        try {
+            AssetFileDescriptor fd =
+            getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
+            return BitmapFactory.decodeStream(fd.createInputStream());
+        } catch (IOException e) {
+            return null;
+        }
+
     }
     
     byte[] getPhoto(String contactId) {
