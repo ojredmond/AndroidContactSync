@@ -464,7 +464,15 @@ class ContactsHelper {
 
         // Display photo if it exists
         if (ContactsHelper.photoInc) {
-            byte[] photoData = getPhoto(id);
+            Bitmap photoBitmap = loadContactPhoto(Long.valueOf(id));
+            if (photoBitmap != null) {
+                View photoView = LayoutInflater.from(main)
+                        .inflate(R.layout.image, layoutContainer, false);
+                ImageView photo = (ImageView) photoView.findViewById(R.id.photo);
+                photo.setImageBitmap(photoBitmap);
+                contactInfo.addView(photoView);
+            }
+            /*byte[] photoData = getPhoto(id);
             if (photoData != null) {
                 View photoView = LayoutInflater.from(main)
                         .inflate(R.layout.image, layoutContainer, false);
@@ -473,7 +481,7 @@ class ContactsHelper {
                 photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight() / 2);
                 photo.setImageBitmap(photoBitmap);
                 contactInfo.addView(photoView);
-            }
+            }*/
         }
 
         // Display account name
