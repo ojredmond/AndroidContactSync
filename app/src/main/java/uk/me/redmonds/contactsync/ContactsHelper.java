@@ -437,6 +437,7 @@ class ContactsHelper {
         if (contacts.get(contactId).get(TYPE_PHOTO) == null)
             return null;
 
+		Toast.makeText(main, contacts.get(contactId).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
         return contacts.get(contactId).get(TYPE_PHOTO).valueAt(0).getByteArray(Data.DATA15);
     }
 
@@ -897,13 +898,11 @@ class ContactsHelper {
         for (String id1 : account1) {
             for (String id2 : account2) {
                 if (listName.startsWith(Match.UNMATCHNAMEKEY)) {
-                    name = contacts.get(id1).get(TYPE_NAME).valueAt(0).get("value");
-                    uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
-                    removeEntry(uName, id1, name);
+					uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+                    removeEntry(uName, id1);
 
-                    name = contacts.get(id2).get(TYPE_NAME).valueAt(0).get("value");
                     uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
-                    removeEntry(uName, id2, name);
+                    removeEntry(uName, id2);
                 } else if (listName.startsWith(Match.MATCHEDKEY)) {
                     removeEntry(listName, id2, id1);
                     for (String type : Match.MIME_TYPE_LIST) {
