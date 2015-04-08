@@ -435,7 +435,7 @@ class ContactsHelper {
 
     public static Bitmap loadContactPhoto(long  id) {
         Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
-        InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(main.getContentResolver(), uri);
+        InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(main.getContentResolver(), uri, true);
         if (input == null) {
             return null;
         }
