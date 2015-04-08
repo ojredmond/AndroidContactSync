@@ -433,11 +433,20 @@ class ContactsHelper {
         return accounts.get(id);
     }
 
+    public static Bitmap loadContactPhoto(long  id) {
+        Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
+        InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(main.getContentResolver(), uri);
+        if (input == null) {
+            return null;
+        }
+        return BitmapFactory.decodeStream(input);
+    }
+    
     byte[] getPhoto(String contactId) {
         if (contacts.get(contactId).get(TYPE_PHOTO) == null)
             return null;
 
-		Toast.makeText(main, contacts.get(contactId).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(main, contacts.get(contactId).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
         return contacts.get(contactId).get(TYPE_PHOTO).valueAt(0).getByteArray(Data.DATA15);
     }
 
@@ -898,7 +907,7 @@ class ContactsHelper {
         for (String id1 : account1) {
             for (String id2 : account2) {
                 if (listName.startsWith(Match.UNMATCHNAMEKEY)) {
-					uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
+                    uName = Match.UNMATCHNAMEKEY + account1Name + ":" + account2Name;
                     removeEntry(uName, id1);
 
                     uName = Match.UNMATCHNAMEKEY + account2Name + ":" + account1Name;
