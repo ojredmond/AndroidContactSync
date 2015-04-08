@@ -51,6 +51,7 @@ import java.util.HashSet;
 import java.util.Map;
 import android.widget.*;
 import java.util.*;
+import java.io.*;
 
 class ContactsHelper {
     public static final String TYPE_NAME = StructuredName.CONTENT_ITEM_TYPE;
@@ -433,7 +434,9 @@ class ContactsHelper {
         return accounts.get(id);
     }
 
-    public static Bitmap loadContactPhoto(long  id) {
+    public Bitmap loadContactPhoto(long id) {
+		if(contacts.get(String.valueOf(id)).get(TYPE_PHOTO) != null)
+		Toast.makeText(main, contacts.get(String.valueOf(id)).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
         Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
         InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(main.getContentResolver(), uri, true);
         if (input == null) {
