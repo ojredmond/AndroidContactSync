@@ -105,6 +105,7 @@ class ContactsHelper {
     private final String listKey;
     private final HashSet<String> list;
     private final HashMap<String, String> accounts = new HashMap<>();
+	private final HashMap<String, Long> contact_ids = new HashMap<>();
     private final HashMap<String, String> listMap = new HashMap<>();
     private final MainActivity main;
     private final HashMap<String, HashMap<String, LongSparseArray<StringMap>>> contacts = new HashMap<>();
@@ -193,13 +194,14 @@ class ContactsHelper {
 
             Uri rawContactUri = ContentUris.withAppendedId(RawContacts.CONTENT_URI, id);
             c = main.getContentResolver().query(rawContactUri,
-                    new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE},
+                    new String[]{RawContacts.ACCOUNT_NAME, RawContacts.ACCOUNT_TYPE, RawContacts.CONTACT_ID},
                     null, null, null);
 
             try {
                 while (c.moveToNext()) {
                     if (!c.isNull(0) && !c.isNull(1)) {
                         accounts.put(i, c.getString(0));
+						contact_ids.put(i, c.getLong(2));
                     }
                 }
             } finally {
@@ -434,33 +436,36 @@ class ContactsHelper {
         return accounts.get(id);
     }
 
-    public Bitmap loadContactPhoto(long id) {
-        /*if(contacts.get(String.valueOf(id)).get(TYPE_PHOTO) != null)
-            Toast.makeText(main, contacts.get(String.valueOf(id)).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
-        Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, id);
+    public Bitmap loadContactPhoto(String id) {
+		if(contacts.get(id).get(TYPE_PHOTO) != null) {
+			String photoKey = contacts.get(id).get(TYPE_PHOTO).valueAt(0).get(Photo.PHOTO_FILE_ID);
+			
+			if(photoKey == null) {
+				byte[] photoData = contacts.get(id).get(TYPE_PHOTO).valueAt(0).getByteArray(Photo.PHOTO);
+				return BitmapFactory.decodeByteArray(photoData,0, photoData.length);
+			} else {
+			Uri displayPhotoUri = ContentUris.withAppendedId(ContactsContract.DisplayPhoto.CONTENT_URI, Long.valueOf(photoKey));
+			try {
+				AssetFileDescriptor fd = main.getContentResolver().openAssetFileDescriptor(
+					displayPhotoUri, "r");
+				return BitmapFactory.decodeStream(fd.createInputStream());
+			} catch (IOException e) {
+				return null;
+			}
+			}
+		}
+		
+		return null;
+		
+		/*
+        Uri uri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, contact_ids.get(id));
+		
         InputStream input = ContactsContract.Contacts.openContactPhotoInputStream(main.getContentResolver(), uri, true);
         if (input == null) {
             return null;
         }
-        return BitmapFactory.decodeStream(input);*/
-        Uri contactUri = ContentUris.withAppendedId(Contacts.CONTENT_URI, contactId);
-        Uri displayPhotoUri = Uri.withAppendedPath(contactUri, Contacts.Photo.DISPLAY_PHOTO);
-        try {
-            AssetFileDescriptor fd =
-            getContentResolver().openAssetFileDescriptor(displayPhotoUri, "r");
-            return BitmapFactory.decodeStream(fd.createInputStream());
-        } catch (IOException e) {
-            return null;
-        }
-
-    }
-    
-    byte[] getPhoto(String contactId) {
-        if (contacts.get(contactId).get(TYPE_PHOTO) == null)
-            return null;
-
-        Toast.makeText(main, contacts.get(contactId).get(TYPE_PHOTO).toString(), Toast.LENGTH_LONG).show();
-        return contacts.get(contactId).get(TYPE_PHOTO).valueAt(0).getByteArray(Data.DATA15);
+        return BitmapFactory.decodeStream(input);
+		*/
     }
 
     int size() {
@@ -477,7 +482,7 @@ class ContactsHelper {
 
         // Display photo if it exists
         if (ContactsHelper.photoInc) {
-            Bitmap photoBitmap = loadContactPhoto(Long.valueOf(id));
+            Bitmap photoBitmap = loadContactPhoto(id);
             if (photoBitmap != null) {
                 View photoView = LayoutInflater.from(main)
                         .inflate(R.layout.image, layoutContainer, false);
@@ -485,16 +490,6 @@ class ContactsHelper {
                 photo.setImageBitmap(photoBitmap);
                 contactInfo.addView(photoView);
             }
-            /*byte[] photoData = getPhoto(id);
-            if (photoData != null) {
-                View photoView = LayoutInflater.from(main)
-                        .inflate(R.layout.image, layoutContainer, false);
-                ImageView photo = (ImageView) photoView.findViewById(R.id.photo);
-                Bitmap photoBitmap = BitmapFactory.decodeByteArray(photoData, 0, photoData.length);
-                photoBitmap = Bitmap.createBitmap(photoBitmap, 0, 0, photoBitmap.getWidth(), photoBitmap.getHeight() / 2);
-                photo.setImageBitmap(photoBitmap);
-                contactInfo.addView(photoView);
-            }*/
         }
 
         // Display account name
